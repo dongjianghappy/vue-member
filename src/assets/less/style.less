@@ -1,0 +1,178 @@
+/* width */
+@0px:0px; // 使用px单位时有个坑，必须采用+的方式，不然编译的不对
+@width_arr: 70, 100, 110, 120, 130, 150, 190, 200, 210, 220, 230, 245, 250, 300, 320, 325, 350, 360, 400, 450, 470, 480, 500, 530,560, 580, 610, 645, 675, 685, 695, 700,
+        725, 750, 770,780, 785, 800, 840, 870, 880, 890, 930, 940, 960, 1000, 1100, 1200, 1230, 1320; 
+		
+.width-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .w@{val}{
+        width:@val + @0px !important;
+    }
+    .width-loop(@list,(@i+1));
+}
+.width-loop(@width_arr);
+
+/* height */ 
+@height_arr: 30, 35, 40, 50, 55, 60, 70, 80, 90, 100, 120, 140, 150,200, 210, 250, 265, 285, 300, 320, 340, 350, 390, 400, 415, 455, 460, 470, 500, 600, 700; 
+		
+.height-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){ 
+    .h@{val}{
+        height:@val + @0px !important;
+    }
+    .height-loop(@list,(@i+1));
+}
+.height-loop(@height_arr);
+
+/* margin */
+@margin_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75;
+		
+.margin-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .m@{val}{
+        margin:@val + @0px !important;
+    }
+    .margin-loop(@list,(@i+1));
+}
+.margin-loop(@margin_arr); 
+
+
+@margin_top_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.margin-top-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .mt@{val}{
+        margin-top:@val + @0px !important;
+    }
+    .margin-top-loop(@list,(@i+1));
+}
+.margin-top-loop(@margin_top_arr); 
+
+
+@margin_right_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.margin-right-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .mr@{val}{
+        margin-right:@val + @0px !important;
+    }
+    .margin-right-loop(@list,(@i+1));
+}
+.margin-right-loop(@margin_right_arr); 
+
+
+@margin_bottom_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.margin-bottom-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .mb@{val}{
+        margin-bottom:@val + @0px !important;
+    }
+    .margin-bottom-loop(@list,(@i+1));
+}
+.margin-bottom-loop(@margin_bottom_arr); 
+
+@margin_left_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.margin-left-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .ml@{val}{
+        margin-left:@val + @0px !important;
+    }
+    .margin-left-loop(@list,(@i+1));
+}
+.margin-left-loop(@margin_left_arr); 
+
+@margin_tb_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.margin-tb-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .mtb@{val}{
+        margin-top:@val + @0px !important;
+		margin-bottom:@val + @0px !important;
+    }
+    .margin-tb-loop(@list,(@i+1));
+}
+.margin-tb-loop(@margin_tb_arr); 
+
+
+@margin_lr_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.margin-lr-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .mlr@{val}{
+        margin-left:@val + @0px !important;
+		margin-right:@val + @0px !important;
+    }
+    .margin-lr-loop(@list,(@i+1));
+}
+.margin-lr-loop(@margin_lr_arr); 
+
+/* padding */
+@padding_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.padding-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .p@{val}{
+        padding:@val + @0px !important;
+    }
+    .padding-loop(@list,(@i+1));
+}
+.padding-loop(@padding_arr); 
+
+@padding_top_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.padding-top-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .pt@{val}{
+        padding-top:@val + @0px !important;
+    }
+    .padding-top-loop(@list,(@i+1));
+}
+.padding-top-loop(@padding_top_arr); 
+
+
+@padding_right_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75, 120; 
+		
+.padding-right-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .pr@{val}{
+        padding-right:@val + @0px !important;
+    }
+    .padding-right-loop(@list,(@i+1));
+}
+.padding-right-loop(@padding_right_arr); 
+
+
+@padding_bottom_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.padding-bottom-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .pb@{val}{
+        padding-bottom:@val + @0px !important;
+    }
+    .padding-bottom-loop(@list,(@i+1));
+}
+.padding-bottom-loop(@padding_bottom_arr); 
+
+
+@padding_left_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.padding-left-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .pl@{val}{
+        padding-left:@val + @0px !important;
+    }
+    .padding-left-loop(@list,(@i+1));
+}
+.padding-left-loop(@padding_left_arr); 
+
+
+@padding_tb_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.padding-tb-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .ptb@{val}{
+        padding-top:@val + @0px !important;
+		padding-bottom:@val + @0px !important;
+    }
+    .padding-tb-loop(@list,(@i+1));
+}
+.padding-tb-loop(@padding_tb_arr); 
+
+
+@padding_lr_arr: 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 64, 70, 75; 
+		
+.padding-lr-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+    .plr@{val}{
+        padding-left:@val + @0px !important;
+		padding-right:@val + @0px !important;
+    }
+    .padding-lr-loop(@list,(@i+1));
+}
+.padding-lr-loop(@padding_lr_arr); 

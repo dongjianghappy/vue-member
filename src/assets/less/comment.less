@@ -1,0 +1,72 @@
+.comment-head{
+    padding: .5rem 1rem;
+    color: #999;
+}
+.feedback-list{
+    background:#f9f9f9;
+    position: relative;
+    box-sizing:border-box;
+    padding: 10px;
+    padding-left: 60px;
+    width: auto;
+    min-height: 60px;
+}
+
+.feedback-list .photos{
+    position:absolute; 
+    left:10px;
+    top: 10px;
+    border-radius:50% ;
+}
+
+
+.feedback-list p {
+    font-size: 13px;
+    color:#333;
+    line-height: 1.5em;
+    margin: .5em 0;
+    word-wrap: break-word;
+    &.time{
+        padding: 0;
+        font-size: .05rem;
+        color:#999;
+    }
+    &.username{
+        color:#999;
+    }
+}
+
+
+
+
+
+.feedback-list .reply_info{
+    position: relative;
+    margin: 5px 0;
+    /*border-bottom:1px dotted #666;*/
+    padding-left: 50px;
+    height: 50px;
+    color:#eee;
+}
+
+.feedback-list .reply_info img{
+    position: absolute;
+    left: 0;
+    width: 30px;
+    height: 30px;
+}
+
+.feedback-list p.reply_default{
+    border: 1px solid #ddd;
+    padding: 5px;
+    width: 400px;
+    display: none;
+}
+
+.feedback-list .reply {
+    cursor: pointer;
+}
+
+.feedback-list .reply_wrap {
+    display: none;
+}

@@ -1,0 +1,66 @@
+{
+  "name": "vue-member",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "core-js": "^3.8.3",
+    "element-plus": "^1.2.0-beta.5",
+    "element-ui": "^2.15.6",
+    "js-sha256": "^0.9.0",
+    "qs": "^6.10.1",
+    "vue": "^3.2.13",
+    "vue-md-editor": "^1.3.3",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.0",
+    "yarn": "^1.22.17"
+  },
+  "devDependencies": {
+    "@kangc/v-md-editor": "^2.3.12",
+    "@types/prismjs": "^1.16.6",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
+    "@vue/cli-plugin-babel": "~5.0.0-rc.0",
+    "@vue/cli-plugin-eslint": "~5.0.0-rc.0",
+    "@vue/cli-plugin-router": "~5.0.0-rc.0",
+    "@vue/cli-plugin-typescript": "~5.0.0-rc.0",
+    "@vue/cli-plugin-vuex": "~5.0.0-rc.0",
+    "@vue/cli-service": "~5.0.0-rc.0",
+    "@vue/eslint-config-standard": "^6.1.0",
+    "@vue/eslint-config-typescript": "^9.0.1",
+    "eslint": "^7.20.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "less": "^4.0.0",
+    "less-loader": "^8.0.0",
+    "typescript": "~4.1.5"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "@vue/standard",
+      "@vue/typescript/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
+}
