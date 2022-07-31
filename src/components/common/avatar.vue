@@ -1,7 +1,7 @@
 <template>
 
   <img :src="data.photos"
-       @click="handleclick(data.account || data.uid)"
+       @click="handleclick(data.from_uid || data.account || data.uid)"
        :style="style">
 </template>
 
@@ -39,7 +39,7 @@ export default defineComponent({
     const {ctx, proxy}:any = getCurrentInstance();
     const router = useRouter();
     const store = useStore();
-    const loginuser = computed(() => store.getters['common/loginuser']);
+    const loginuser = computed(() => store.getters['user/loginuser']);
 
     function handleclick(uid: any){
       debugger

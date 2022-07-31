@@ -2,21 +2,24 @@
   <div>
     <div class="sidebar">
       <HotTalk />
-      <Ranking />
+      <Ranking :style="{width: '300px'}" />
+      <!-- <Visitor /> -->
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, computed } from 'vue'
+import { defineComponent, getCurrentInstance, onMounted, computed } from 'vue'
 import {useStore} from 'vuex'
 import HotTalk from '../../index/components/module/hotTalk.vue'
-import Ranking from '../../../views/activity/components/module/ranking.vue'
+import Ranking from '../../index/components/module/ranking.vue'
+import Visitor from '../../index/components/module/visitor.vue'
 export default defineComponent({
   name: 'AsideView',
   components: {
    HotTalk,
-   Ranking
+   Ranking,
+   Visitor
   },
   data() {
   return {
@@ -36,13 +39,13 @@ export default defineComponent({
   }
 },
 setup(props, context) {
-    const {ctx}:any = getCurrentInstance();
+    const { proxy }:any = getCurrentInstance();
     const store = useStore();
-    const userInfo = computed(() => store.getters['common/userInfo']);
+    const userInfo = computed(() => store.getters['user/userInfo']);
     const messageBoard = computed(() => store.getters['common/messageBoard']);
     const recentJournal = computed(() => store.getters['common/recentJournal']);
     const recentPhotos = computed(() => store.getters['common/recentPhotos']);
-    const currentUser = computed(() => store.getters['common/currentUser']);
+    const currentUser = computed(() => store.getters['user/currentUser']);
 
     function init(){
       store.dispatch('common/MessageBoard', {
@@ -56,6 +59,24 @@ setup(props, context) {
       // })      
 
     }
+
+   onMounted(() => {
+      // const Doc: any = document.getElementsByClassName("aside_fixed")[0];
+      // Doc.offsetTop
+      
+      proxy.$scroll.init({
+        win: {
+          el: window,
+          y: 535,
+          b: 80
+        },
+        doc: {
+          el: 'aside_fixed'
+        },
+        type: "fixed"
+      })
+    })
+
     init()
     return { 
       init,

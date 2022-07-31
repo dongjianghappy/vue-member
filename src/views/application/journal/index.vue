@@ -1,123 +1,109 @@
 <template>
-  <div class="container w1100 clearfix">
-    <div class="w180 left">
-      <v-aside :data="menu"
-               title="我的日志"
-               :render="Grouping">
-        <template v-slot:button>
-          <span class="right"
-                @click="add('add')"
-                v-if="currentUser"><i class="iconfont icon-anonymous-iconfont font24" /></span>
-
-        </template>
-        <template v-slot:aside>
-          <ul>
-            <li v-for="(item, index) in userGroup"
-                :key="index"
-                @click="handleclick(`/journal?item=list&id=${item.id}`)"
-                class="aside">
-              <i class="iconfont icon-dot font20"></i> {{item.name}}({{item.num}})
-              <span class="right"
-                    @click.stop="add('edit', item)"
-                    v-if="currentUser && item.type!=='1'"><i class="iconfont icon-edit"></i></span>
-            </li>
-          </ul>
-        </template>
-
-      </v-aside>
-    </div>
-    <div class="m0 right"
-         style="width: 910px">
-
-      <Action v-if="query.item === 'details'"
-              :action="query.action" />
-      <List v-else
-            :item="query.item" />
-    </div>
+<div class="container w1100 clearfix">
+  <div class="w180 left">
+    <v-aside :data="menu" title="我的日志">
+      <template v-slot:button>
+        <Detail action='add' :data="data" :render="init" />
+      </template>
+      <template v-slot:aside>
+        <ul>
+          <li v-for="(item, index) in userGroup" :key="index" @click="handleclick(`/journal?item=list&id=${item.id}`)" class="aside">
+            <i class="iconfont icon-dot font20"></i> {{item.name}}({{item.num}})
+           <Detail action='edit' :data="data" :render="init" />
+          </li>
+        </ul>
+      </template>
+    </v-aside>
   </div>
-  <AddGroup :showAlbum="true"
-            :render="Grouping"
-            v-model:showFlag="showAlbum"
-            v-if="showAlbum"
-            :data="currentData" />
+  <div class="m0 right" style="width: 910px">
+    <Action v-if="query.item === 'details'" :action="query.action" />
+    <ArticleView v-else-if="query.item === 'view'" />
+    <List ref="list" v-else :item="query.item" />
+  </div>
+</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, onMounted, computed, useStore, useRouter, useRoute, ref, getUid } from '@/utils'
+import {
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  computed,
+  useStore,
+  useRouter,
+  useRoute,
+  ref,
+  getUid
+} from '@/utils'
 import List from "./list.vue"
 import Action from "./article_action.vue"
-import AddGroup from './components/addGroup.vue'
-import * as consts from '@/assets/const'
+import ArticleView from "./article_detail.vue"
+import Detail from './components/detail.vue'
+import {journal} from '@/assets/const'
 
 export default defineComponent({
   name: 'HomeView',
   components: {
-   List,
-   Action,
-   AddGroup
+    List,
+    Action,
+    ArticleView,
+    Detail
   },
-  setup(props,context) {
-    const {ctx, proxy}:any = getCurrentInstance();
+  setup(props, context) {
+    const {
+      proxy
+    }: any = getCurrentInstance();
+    const store = useStore();
     const router = useRouter();
     const route = useRoute();
-    const store = useStore();
-    const currentUser = computed(() => store.getters['common/currentUser']);
-    const groups = computed(() => store.getters['common/groups']);
     let query: any = computed(() => route.query || "");
-    const showAlbum = ref(false)
     const currentData = ref({})
     const userGroup = ref([])
+    const list: any = ref(null);
 
-    const menu: any = consts.journal;
+    const menu: any = journal;
     menu.map((item: any) => {
       item.path = `/journal?item=${item.value}`
-    }) 
-        
-    function Grouping(){
+    })
+
+    function init() {
       store.dispatch('common/Fetch', {
-          api: "JournalCate",
-          data: {
-            uid: getUid()
-          }
+        api: "JournalCate",
+        data: {
+          uid: getUid()
+        }
       }).then(res => {
 
         userGroup.value = res.result
-     
+
       })
     }
 
-    function handleclick(param:any){
+    function handleclick(param: any) {
       router.push(proxy.const.setUrl({
         uid: getUid(),
         query: param
       }))
+
+      setTimeout(() => {
+        list.value.init()
+      }, 100)
+
     }
 
-
-    function add(action: any, item: any){
-      debugger
-      showAlbum.value = true
-      currentData.value = {
-        action,
-        item
-      }
-    }    
-    
-    onMounted(()=>{
-      Grouping()
+    onMounted(() => {
+      init()
     })
 
     return {
-      currentUser,
       handleclick,
-      groups,
       query,
       menu,
-      add,
-      showAlbum,
+      list,
       currentData,
-      userGroup
+      userGroup,
+      init
     }
-  }  
+  }
 })
 </script>

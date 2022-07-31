@@ -89,8 +89,8 @@ const install = (Vue:any) => {
 
   const user: any = sessionStorage.getItem("otherUser");
   const useInfo: any = JSON.parse(user)
-  if(useInfo && useInfo.background_effects){
-    render(useInfo.background_effects)
+  if(useInfo && useInfo.theme &&  useInfo.theme.effects){
+    render(useInfo.theme.effects)
   }
   
 

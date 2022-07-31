@@ -1,13 +1,11 @@
 <template>
 <div class="module-wrap mb15 w180 aside_nav sidebar_fixed">
-  <div class="module-head head p20 font22" v-if="title">{{title}}
-    <slot name="button">
-
-    </slot>
+  <div class="module-head head p20 font14" v-if="title">{{title}}
+    <span class="right"><slot name="button"></slot></span>
   </div>
   <div class="module-content p0 h500">
     <ul>
-      <li v-for="(item, index) in data" :key="index" @click="handleclick(item.path)" class="aside">
+      <li v-for="(item, index) in data" :key="index" @click="handleclick(item.path || item.value)" class="aside">
         <i class="iconfont font20" :class="[item.icon || 'icon-dot']"></i> {{item.name}} <span v-if="item.num">({{item.num}})</span>
       </li>
     </ul>
@@ -20,13 +18,11 @@
 import {
   defineComponent,
   getCurrentInstance,
-  computed,
   useStore,
   useRouter,
   useRoute,
-  onMounted
-} from '@/utils'
-import {
+  onMounted,
+  computed,
   getUid
 } from '@/utils'
 export default defineComponent({
@@ -56,12 +52,9 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store = useStore();
     const router = useRouter();
-    const route = useRoute();
-    const loginuser = computed(() => store.getters['common/loginuser']);
-    const groups = computed(() => store.getters['common/groups']);
 
+    // 初始化数据
     function init() {
-      debugger
       proxy.$scroll.init({
         win: {
           el: window,
@@ -84,15 +77,16 @@ export default defineComponent({
           query: param
         }))
 
-        props.render && props.render()
+        setTimeout(() => {
+          props.render && props.render()
+        }, 100)
       }
     }
 
     onMounted(init)
 
     return {
-      handleclick,
-      groups
+      handleclick
     }
   }
 })

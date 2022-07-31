@@ -38,8 +38,7 @@
 <script lang="ts">
 import { defineComponent, getCurrentInstance, computed, onMounted, ref, reactive } from 'vue'
 import {useStore} from 'vuex'
-import TalkSend from './components/module/talk_send.vue'
-import TalkItem from './components/TalkItem/index.vue'
+import TalkItem from '../index/components/TalkItem/index.vue'
 import RightView from './components/right_aside.vue'
 import Vote from './vote/index.vue'
 
@@ -48,7 +47,6 @@ import {useRouter, useRoute} from 'vue-router'
 export default defineComponent({
   name: 'HomeViewdddf',
   components: {
-  //  TalkSend,
    TalkItem,
    RightView,
    Vote

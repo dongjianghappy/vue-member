@@ -197,34 +197,48 @@ export const information:any = {
 	other: "其他消息"
 }
 
+export const source: any =[
+	{name: "上传素材", value: "details"},
+	{name: "素材管理", value: "audited"},
+	{name: "素材收藏", value: "collect"},
+	{name: "素材点赞", value: "praise"},
+	{name: "素材下载", value: "download"}
+]
+
 export const article: any =[
-	{name: "全部", value: "all"},
-	{name: "已审核", value: "audited"},
-	{name: "未审核", value: "unAudited"},
-	{name: "被退回", value: "returned"},
-	{name: "发布内容", value: "details"}
+	{name: "发布内容", value: "details"},
+	{name: "内容管理", value: "audited"},
+	{name: "收藏管理", value: "collect"},
+	{name: "点赞管理", value: "praise"}
 ]
 
 export const tech: any =[
-	{name: "全部", value: "all"},
-	{name: "已审核", value: "audited"},
-	{name: "未审核", value: "unAudited"},
-	{name: "被退回", value: "returned"},
-	{name: "发布内容", value: "details"}
+	{name: "发布内容", value: "details"},
+	{name: "内容管理", value: "audited"},
+	{name: "收藏管理", value: "collect"},
+	{name: "点赞管理", value: "praise"}
 ]
 
 export const picture: any =[
-	{name: "图片专辑", value: "category"},
-	{name: "图片管理", value: "all"},
 	{name: "上传图片", value: "details"},
+	{name: "我的专辑", value: "category"},
+	{name: "图片管理", value: "audited"},
+	{name: "图片收藏", value: "collect"},
+	{name: "图片点赞", value: "praise"}
 ]
 
 export const funny: any =[
-	{name: "全部", value: "all"},
-	{name: "已审核", value: "audited"},
-	{name: "未审核", value: "unAudited"},
-	{name: "被退回", value: "returned"},
-	{name: "发布内容", value: "details"}
+	{name: "上传段子", value: "details"},
+	{name: "笑话段子", value: "audited"},
+	{name: "段子收藏", value: "collect"},
+	{name: "段子点赞", value: "praise"}
+]
+
+export const notes: any = [
+	{name: "做笔记", value: "details"},
+	{name: "笔记管理", value: "audited"},
+	{name: "笔记收藏", value: "collect"},
+	{name: "笔记点赞", value: "praise"}	
 ]
 
 export const appMenu: any =[
@@ -239,6 +253,30 @@ export const group: any = [
 	{name: "关注我的", url: "concernmy"},
 ]
 
+export const album: any = [
+	{name: "话题", value: "talk"},
+	{name: "头像", value: "photos"}
+]
+
 export const journal: any = [
+	
+	{name: "写日志", value: "details"},
 	{name: "所有日志", value: "all"}
 ]
+
+export const feedback: any = [
+	{names: ['给我留言', '给Ta留言'], value: "tome"},
+	{names: ['我留言的', 'Ta留言的'], value: "meto"}
+]
+
+export const tabs = [
+	{name: "全部", value: ""},
+	{name: "原创", value: "ori"},
+	{name: "图片", value: "img"},
+	{name: "文章", value: "art"},
+	{name: "视频", value: "veo"},
+]
+
+export const noColumns: any = {
+	notes: ['source', 'method']
+}

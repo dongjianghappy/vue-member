@@ -1,3 +1,5 @@
+import { parse } from "querystring";
+
 export const getToken = () => {
   return localStorage.getItem('token')
 }
@@ -18,7 +20,6 @@ export const clearToken = () => {
 }
 
 export const getUid = () => {
-  debugger
  let uid = ""
  const arr = window.location.pathname.split("/u/")
  if(arr.length > 1){
@@ -27,3 +28,50 @@ export const getUid = () => {
  return uid
 }
 
+export const getChannel = () => {
+
+  let channel = ""
+
+ const arr = window.location.pathname.split("/")
+ if(arr.length > 1){
+  channel = arr[arr.length-1]
+ }
+ return channel
+}
+
+
+export const chooseCate = (param: any, coding: any) => {
+  let configData = {}
+  if (param === 'album') {
+    configData = {
+      coding: coding, // 'U40001',
+      api: 'userCategory',
+      type: "album",
+      name: "",
+      value: "",
+      title: "选择专辑"
+    }
+  } else if (param === 'cate') {
+    configData = {
+      coding: coding,
+      api: 'systemCate',
+      type: "cate",
+      name: "",
+      value: "",
+      title: "选择分类"
+    }
+  }
+ return configData
+}
+
+// 将urlquery参数转换成对象形式
+export const getParam = () => {
+  let str = window.location.search.split("?")[1]
+  str = str.split('&')[1]
+  return str ? `&${str}` : '';
+};
+
+// 将urlquery参数转换成对象形式
+export const getQuery = () => {
+  return parse(window.location.search.split("?")[1]);
+};

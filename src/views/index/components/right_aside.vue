@@ -1,11 +1,11 @@
 <template>
 <div>
-  <UserInfo />
-  <Sign />
-  <RecommendUser />
-  <HotTalk />
-  <Visitor />
-  <Ranking :ref="ranking" />
+  <UserInfo :userInfo="userInfo" />
+  <Sign v-if="module.sign" />
+  <RecommendUser v-if="module.recommended_users" />
+  <HotTalk v-if="module.hot_topic" />
+  <Visitor v-if="module.recent_visitors" />
+  <Ranking :ref="ranking" v-if="module.ranking" :style="{width: '280px'}" />
 </div>
 </template>
 
@@ -13,14 +13,16 @@
 import {
   defineComponent,
   getCurrentInstance,
-  onMounted
+  useStore,
+  onMounted,
+  computed
 } from '@/utils'
 import UserInfo from './module/userInfo.vue'
 import Sign from './module/sign.vue'
 import RecommendUser from './module/recommendUser.vue'
 import HotTalk from './module/hotTalk.vue'
 import Visitor from './module/visitor.vue'
-import Ranking from '../../..//views/activity/components/module/ranking.vue'
+import Ranking from './module/ranking.vue'
 
 export default defineComponent({
   name: 'RightView',
@@ -32,16 +34,29 @@ export default defineComponent({
     Visitor,
     Ranking
   },
+  props: {
+    module: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
+  },
   setup() {
     const {
       proxy
     }: any = getCurrentInstance();
+    const store = useStore();
+    const userInfo = computed(() => store.getters['user/loginuser']);
 
-    function init() {
+    onMounted(() => {
+      // const Doc: any = document.getElementsByClassName("aside_fixed")[0];
+      // Doc.offsetTop
+      
       proxy.$scroll.init({
         win: {
           el: window,
-          y: 1590,
+          y: 1005,
           b: 80
         },
         doc: {
@@ -49,10 +64,11 @@ export default defineComponent({
         },
         type: "fixed"
       })
-    }
+    })
 
-    onMounted(init)
-    return {}
+    return {
+      userInfo
+    }    
   },
 })
 </script>

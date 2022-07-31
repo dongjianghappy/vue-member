@@ -34,6 +34,13 @@ const install = (Vue:any) => {
       AA.component("MymodalDa").setup().message()
     },
 
+    // 消息提示
+    close() {
+      const AA = Vue.component("MymodalDa", messageModal)
+      
+      AA.component("MymodalDa").setup().message()
+    },    
+
     // 点赞
     praise() {
       const AA = Vue.component("MymodalDa", praiseModal)

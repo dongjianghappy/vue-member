@@ -3,7 +3,7 @@
        :style="{left: style}">
     <div class="music_box">
       <audio autoplay
-             src="http://localhost/source/public/music/12.mp3"
+             src="http://localhost/source/public/music/12121.mp3"
              loop="loop"
              preload="preload"
              style="display:none;"></audio>

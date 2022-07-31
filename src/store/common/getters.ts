@@ -1,14 +1,7 @@
 const getters = {
-  loginuser: (state: any) => state.user.login.userInfo || {},
-  userInfo: (state: any) => state.user.basic.userInfo || {},
-  groups: (state: any) => state.user.login.groups || {},
-  talkList: (state: any) => state.talkList || [],  
-  talkCollect: (state: any) => state.talkCollect || [],   
-  talkComment: (state: any) => state.talkComment || [],   
-  talkPraise: (state: any) => state.talkPraise || [], 
-  talkForwarding: (state: any) => state.talkForwarding || [], 
   recommendUser: (state: any) => state.recommendUser || [],   
   hotTalk: (state: any) => state.hotTalk || [], 
+  ranking: (state: any) => state.ranking || [], 
   lastestVisitor: (state: any) => state.lastestVisitor || [], 
   appstore: (state: any) => state.appstore || [], 
   integration: (state: any) => state.integration || [], 
@@ -23,7 +16,7 @@ const getters = {
   activityData: (state: any) => state.activity.list || [], 
   concernList: (state: any) => state.concernList || [], 
   albumList: (state: any) => state.albumList || [], 
-  currentUser: (state: any) => (state.user.login.userInfo && state.user.login.userInfo.account) === (state.user.basic.userInfo && state.user.basic.userInfo.account) ? true : false, 
+  
 
   
 

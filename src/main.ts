@@ -3,8 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import views from './controller/component' // 公共组件
+import publics from './controller/public' // 前台公共组件
 import packages from './controller/packages' // 公共组件
 import hlj from './plugin/loading'
+import message from './plugin/message'
 import hljs from './plugin/effects'
 import scroll from './plugin/flxed'
 import move from './plugin/move'
@@ -15,6 +17,8 @@ import '@kangc/v-md-editor/lib/style/base-editor.css';
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 
+import PerfectScrollbar from 'vue3-perfect-scrollbar'
+import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 // Prism
 import Prism from 'prismjs';
 // highlight code
@@ -27,12 +31,15 @@ VueMarkdownEditor.use(vuepressTheme, {
 
 const Vue = createApp(App)
 views(Vue)
+publics(Vue)
 packages(Vue)
 hlj(Vue)
+message(Vue)
 hljs(Vue)
 scroll(Vue)
 move(Vue)
 cons(Vue)
+Vue.use(PerfectScrollbar)
 
 // Vue.config.globalProperties.$aabb = hlj
 Vue.use(store).use(router).use(VueMarkdownEditor).mount('#app')

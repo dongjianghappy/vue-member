@@ -7,8 +7,8 @@
         <v-photos :sourceData="item" v-else />
       </div>
       <div class="user_info pb5"><span class="username">{{item.nickname}}</span>
-        <span class="right">
-          <Popover content="<i class='iconfont icon-down font18'></i>" arrow="tb" offset="right" :move="-30" :keys="`popover-${item.id}`">
+        <span class="right span-icon">
+          <Popover content="<i class='iconfont icon-down font18 icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-${item.id}`">
             <div class="p15 align_center" style="width: 80px; height: 50px">
               <ul class="font14" style="display: block">
                 <li style="height: 32px" @click="deleteTalk(item.id)">删除</li>
@@ -56,13 +56,8 @@
       </div>
     </div>
     <TalkItembar :data="item" />
-
   </div>
-  <div class="con-list pt15" v-if="!isLoading">
-    <div class="load7 h60">
-      <div class="loader">Loading...</div>
-    </div>
-  </div>
+  <v-loding v-if="!loading" />
   <v-layer v-model:isShow="showFlag" :data="currentData" :img="currentImg" v-if="showFlag" />
 </div>
 </template>
@@ -74,13 +69,11 @@ import {
   ref,
   computed,
   useStore,
-  useRouter
+  useRouter,
+  getUid
 } from '@/utils'
 import TalkItembar from './TalkItembar.vue'
 import Popover from '@/components/packages/popover/index.vue';
-import {
-  getUid
-} from '@/utils'
 
 export default defineComponent({
   name: 'TalkItemView',
@@ -112,7 +105,7 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store = useStore();
     const router = useRouter();
-    const loginuser = computed(() => store.getters['common/loginuser']);
+    const loginuser = computed(() => store.getters['user/loginuser']);
     const showFlag = ref(false)
     const currentData = ref()
     const currentImg = ref()

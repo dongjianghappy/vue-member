@@ -11,7 +11,7 @@ export default defineComponent({
     function message (){
       setTimeout(()=>{
         document.querySelectorAll("#screens")[0].remove()
-      },2000)
+      },1000)
     }
     return {
       message

@@ -28,7 +28,7 @@ export default defineComponent({
   const menu: any = basicInfo;
   const route = useRoute();
   const router = useRouter();
-  const loginuser = computed(() => store.getters['common/loginuser']);
+  const loginuser = computed(() => store.getters['user/loginuser']);
   
   
   // 路由跳转 

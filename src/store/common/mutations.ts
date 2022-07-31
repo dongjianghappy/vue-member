@@ -1,11 +1,4 @@
 const mutations = {
-  setUserInfo: (state: any, params: any) => {
-    state.user.login = params
-    state.user.basic = params
-  },
-  setOtherUser: (state: any, params: any) => {
-    state.user.basic = params
-  },  
   setTalkList: (state: any, params: any) => {
     if(params.page === 2){
       state.talkList.list = params.list
@@ -34,10 +27,12 @@ const mutations = {
   },    
   setHotTalk: (state: any, params: any) => {
     const result = [];
-    for(let i=0,len=params.length;i<len;i+=5){
-      result.push(params.slice(i,i+5));
+    for(let i=0,len=params.hotTalk.length;i<len;i+=5){
+      result.push(params.hotTalk.slice(i,i+5));
     }  
+    debugger
     state.hotTalk = result
+    state.ranking = params.ranking
   },  
   setLastestVisitor: (state: any, params: any) => {
     state.lastestVisitor = params

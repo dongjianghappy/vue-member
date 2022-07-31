@@ -29,10 +29,10 @@ export default defineComponent({
     setup(props, context) {
     const {ctx}:any = getCurrentInstance();
     const store = useStore();
-    const talkForwarding = computed(() => store.getters['common/talkForwarding']);
+    const talkForwarding = computed(() => store.getters['talk/TalkForwarding']);
 
     function init(){
-      store.dispatch('common/TalkForwarding', {
+      store.dispatch('talk/TalkForwarding', {
         
       })
     }

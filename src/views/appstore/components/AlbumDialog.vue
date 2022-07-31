@@ -40,7 +40,7 @@ import {useStore} from 'vuex'
 export default defineComponent({
   name: 'HomeViewh',
   components: {
-  //  CategoryDialog
+    
   },
   props: {
     name: {

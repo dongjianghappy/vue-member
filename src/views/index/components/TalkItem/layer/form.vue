@@ -1,30 +1,47 @@
 <template>
-<div class="form-wrap" style="background: rgb(242, 242, 245);">
-  <div class="content comment-content" v-if="!loading">
-    <div class="feedback-list" v-for="(item, index) in dataList" :key="index" style="padding-left: 80px;">
-      <img :src="item.photos" width="30" height="30" class="photos" style="left: 20px">
-      <p class="feedback-user">{{item.nickname}}</p>
-      <p>{{item.time}}</p>
-      <p>{{item.content}}</p>
+  <div class="form-wrap"
+       style="background: rgb(242, 242, 245);">
+    <div class="content comment-content"
+         v-if="!loading">
+      <div class="feedback-list"
+           v-for="(item, index) in dataList"
+           :key="index"
+           style="padding-left: 80px;">
+        <img :src="item.photos"
+             width="30"
+             height="30"
+             class="photos"
+             style="left: 20px">
+        <p class="feedback-user">{{item.nickname}}</p>
+        <p>{{item.time}}</p>
+        <p>{{item.content}}</p>
+      </div>
+    </div>
+    <div v-else>
+      <div class="load7 h60">
+        <div class="loader">Loading...</div>
+      </div>
     </div>
   </div>
-  <div v-else>
-    <div class="load7 h60">
-      <div class="loader">Loading...</div>
+  <div class="layer-form-wrap absolute"
+       style="left: 0; bottom: 0; right: 0">
+    <div class="input-box">
+      <input type="text"
+             v-model="content"
+             placeholder="请输入评论信息"
+             ref="Input">
+      <div class="expression">
+        <v-expression @onEmoji="choose"
+                      move="-100" />
+      </div>
+    </div>
+    <div class="operate">
+      <button @click="sendComment"
+              class="operate-right"
+              :class="{disabled: !content}"
+              :disabled="!content">评论</button>
     </div>
   </div>
-</div>
-<div class="layer-form-wrap absolute" style="left: 0; bottom: 0; right: 0">
-  <div class="input-box">
-    <input type="text" v-model="content" placeholder="请输入评论信息" ref="Input">
-    <div class="expression">
-      <v-expression @onEmoji="choose" move="-100" />
-    </div>
-  </div>
-  <div class="operate">
-    <button @click="sendComment" class="operate-right" :class="{disabled: !content}" :disabled="!content">评论</button>
-  </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -70,7 +87,7 @@ export default defineComponent({
       id: artid,
       uid
     } = reactive(props.data)
-    const userInfo = computed(() => store.getters['common/userInfo']);
+    const userInfo = computed(() => store.getters['user/userInfo']);
     let Input: any = ref(null)
     let dataList: any = ref([])
     let content: any = ref("")

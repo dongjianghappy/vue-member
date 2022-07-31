@@ -19,7 +19,7 @@
 import { defineComponent, getCurrentInstance, ref, reactive, computed } from 'vue'
 import {useStore} from 'vuex'
 import popover from './popover.vue'
-
+import VueEvent from '@/utils/event'
 export default defineComponent({
   name: 'v-Search',
   components: {
@@ -61,6 +61,9 @@ popover
   },
   mounted(){
     document.addEventListener("click", this.close);
+    VueEvent.on("selectColor", (data: any) => {
+        this.close
+      });
   },  
   emits: ['onClick'],
   setup(props,context) {
@@ -148,7 +151,7 @@ popover
       }
     }
     function close(e: any){
-      if(e.target.className.indexOf(props.keys) > -1 || e.target.parentNode.className.indexOf(props.keys) > -1){
+      if((e.target.className && e.target.className.indexOf && e.target.className.indexOf(props.keys) > -1) || e.target.parentNode.className.indexOf(props.keys) > -1){
         return
       }
       let list = document.getElementsByClassName("popover_wrap");

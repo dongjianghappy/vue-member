@@ -6,7 +6,7 @@ const component = require.context(
 )
 
 const install = (Vue:any) => {
-  debugger
+
   component.keys().forEach((fileName: string) => {
     
     if (fileName.endsWith('index.vue')) {

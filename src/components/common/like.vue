@@ -24,14 +24,20 @@ export default defineComponent({
     }
   },
   setup(props,context) {
-    const {ctx}:any = getCurrentInstance();
+    const {proxy}:any = getCurrentInstance();
     const store = useStore();
     const style: any = ref({})
     const isClick = ref(false)
     
     function handleclick(param: any){
-      
       store.dispatch('common/Fetch', param).then(res => {
+        if (res.ifSuccess === 0) {
+          proxy.$hlj.message({
+            msg: res.returnMessage
+          })
+          return
+        }
+
         props.data.haspraise = res.result.num
         if(res.result.num === 1){
           isClick.value = true

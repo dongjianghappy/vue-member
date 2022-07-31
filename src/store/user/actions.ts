@@ -2,6 +2,32 @@ import { Commit } from 'vuex'
 import api from '../../api/index'
 
 const actions = {
+  Detect: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const { result }:any = await api.Detect({
+      ...params 
+    })
+    result.result && sessionStorage.setItem("userInfo", JSON.stringify(result.result.userInfo))
+    context.commit("setUserInfo" , result.result);
+   
+    return result.result
+  },
+  OtherUserInfo: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const { result }:any = await api.OtherUserInfo({
+      ...params 
+    })
+    sessionStorage.setItem("otherUser", JSON.stringify(result.result.userInfo))
+    context.commit("setOtherUser" , result.result);
+   
+    return result.result
+  },
+  Login: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const { result }:any = await api.login({
+      ...params 
+    })
+    debugger
+   
+    return result
+  },  
   UserBaiscInfo: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const { result }:any = await api.UserBaiscInfo({
       ...params 

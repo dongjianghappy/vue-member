@@ -23,7 +23,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const store = useStore();
-    const groups = computed(() => store.getters['common/groups']);
+    const groups = computed(() => store.getters['user/groups']);
     let query: any = computed(() => route.query || "");
         
     function handleclick(param:any){

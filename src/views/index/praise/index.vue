@@ -1,58 +1,64 @@
 <template>
-  <div class="home">
-    <TalkTabs :getData="init"
-              :tabs="[{name: '收到的赞', path: '/?mod=praise'}, {name: '发出的赞', path: '/?mod=praise&item=hot'}]" />
-    <div class="con-list"
-         v-for="(item, index) in talkPraise"
-         :key="index">
-      <div class="con-wrap">
-        <span class="infos demoimg"
-              data-placement="top"
-              data-toggle="tooltip"
-              data-position="30px"
-              style="position:absolute; top:25px; right:15px;"><i class="iconfont icon-down"></i></span>
+<div class="home">
+  <TalkTabs :getData="init" :style="{flex: 1}" :data="[{name: `收到的赞(共${talkPraise.length}条)`, value: '/?mod=praise'}, {name: `发出的赞(共${talkPraise.length}条)`, value: '/?mod=praise&item=hot'}]" />
+  <div class="con-list" v-for="(item, index) in talkPraise" :key="index">
+    <div class="con-wrap">
+      <span class="infos demoimg" data-placement="top" data-toggle="tooltip" data-position="30px" style="position:absolute; top:25px; right:15px;"><i class="iconfont icon-down"></i></span>
 
-        <div class="photos"><a href="//home"><img :src="item.photos"
-                 width="30"
-                 height="30"></a></div>
-        <div class="wb_info"><span class="username">{{item.nickname}}</span></div>
-        <div class="wb_from">
-          {{item.times}}
+      <div class="photos"><a href="//home"><img :src="item.photos" width="30" height="30"></a></div>
+      <div class="user_info pb5"><span class="username">{{item.nickname}}</span></div>
+      <div class="user_from pb5">
+        {{item.times}}
+      </div>
+      <div class="user_text">
+
+        <div style="background: #eee; margin-top:5px; padding:5px 10px; font-size: 12px;">攒了的微博：
+          <span v-html="item.summary"></span>
         </div>
-        <div class="wb_text">
 
-          <div style="background: #eee; margin-top:5px; padding:5px 10px; font-size: 12px;">攒了的微博：
-            <span v-html="item.summary"></span>
-          </div>
-
-        </div>
       </div>
     </div>
   </div>
+  <v-loding v-if="!loading" />
+</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, computed } from 'vue'
-import {useStore} from 'vuex'
-import TalkTabs from '../components/TalkTabs1.vue'
+import {
+  defineComponent,
+  getCurrentInstance,
+  computed,
+  ref
+} from 'vue'
+import {
+  useStore
+} from 'vuex'
+import TalkTabs from '../components/module/TalkTabs.vue'
 
 export default defineComponent({
   name: 'HomeViews',
   components: {
     TalkTabs
   },
-      setup(props, context) {
-    const {ctx}:any = getCurrentInstance();
+  setup(props, context) {
+    const {
+      ctx
+    }: any = getCurrentInstance();
     const store = useStore();
-    const talkPraise = computed(() => store.getters['common/talkPraise']);
+    const talkPraise = computed(() => store.getters['talk/talkPraise']);
+    const loading: any = ref(false)
 
-    function init(){
-      store.dispatch('common/TalkPraise', {
-        
+    function init() {
+      loading.value = false
+      store.dispatch('talk/TalkPraise', {
+
+      }).then(res => {
+        loading.value = true
       })
     }
     init()
-    return { 
+    return {
+      loading,
       init,
       talkPraise
     }

@@ -1,5 +1,6 @@
 export interface State {
-  userInfo: any;
+  user: any;
+  userInfos: any;
   hobby: any;
   blogInfo: any
  
@@ -7,7 +8,11 @@ export interface State {
 
 
 const initState: State = {
-  userInfo: {},
+  user: {
+    login: {},
+    basic: {}
+  },
+  userInfos: {},
   hobby: {},
   blogInfo: {}
 }

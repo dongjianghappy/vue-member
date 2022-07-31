@@ -3,7 +3,7 @@ import {useStore} from 'vuex'
 import {useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { onMounted } from '@vue/runtime-core';
 import codings from "@/assets/coding"
-import { getUid } from './auth'
+import { getUid, getChannel, chooseCate, getParam, getQuery } from './auth'
 
 export {
   defineComponent,
@@ -18,5 +18,9 @@ export {
   watch,
   reactive,
   codings,
-  getUid
+  getUid,
+  getChannel,
+  chooseCate,
+  getParam,
+  getQuery
 };

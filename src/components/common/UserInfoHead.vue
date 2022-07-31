@@ -19,7 +19,7 @@
           <span><strong>{{userInfo.concernmy}}</strong><span>粉丝</span></span>
         </li>
         <li>
-          <a><strong>{{userInfo.talk}}</strong><span>话题</span></a>
+          <a><strong>{{userInfo.talk}}</strong><span>话题111</span></a>
         </li>
       </ul>
     </div>
@@ -30,15 +30,14 @@
         <div class="mb10 font16">
           {{userInfo.nickname}}
           <span style="color: #f67f00;">LV.{{userInfo.level}}</span>
+          <v-concernbutton :data="userInfo" />
         </div>
         <p>{{userInfo.introduction}}</p>
         <p class="ptb10 font12"
            style="color: #8bc34a;">
           <span v-if="userInfo.mood">{{userInfo.mood}}: {{userInfo.mood_description}}</span>
           <span v-else>暂无心情</span>
-          <span class="pointer"
-                @click="setMood"
-                v-if="currentUser"><i class="iconfont icon-write"></i></span>
+          <Mood v-if="currentUser" />
 
         </p>
       </div>
@@ -52,9 +51,6 @@
             @click="handleclick(item.path)">{{item.name}}</li>
       </ul>
     </div>
-
-    <Mood v-model:showFlag="isShow"
-          v-if="isShow" />
   </div>
 </template>
 
@@ -75,11 +71,10 @@ export default defineComponent({
     const {ctx, proxy}:any = getCurrentInstance();
     const store = useStore();
     const router = useRouter();
-    const isShow: any = ref(false)
-    const userInfo = computed(() => store.getters['common/userInfo']);
-    const currentUser = computed(() => store.getters['common/currentUser']);
+    const userInfo = computed(() => store.getters['user/userInfo']);
+    const currentUser = computed(() => store.getters['user/currentUser']);
     const menu: any = ref([
-      {name: "主页", path: "/home"},
+      {name: "留言板", path: "/application?mod=feedback"},
       {name: "日志", path: "/journal"},
       {name: "相册", path: "/album"},
       // {name: "关于我", path: "/"},
@@ -94,11 +89,6 @@ export default defineComponent({
       context.emit('onClick')
     }
 
-    function setMood(){
-      isShow.value = true
-      
-    }
-
     function handleConcern(param:any){
       router.push(proxy.const.setUrl({
         uid: getUid(),
@@ -110,9 +100,7 @@ export default defineComponent({
       handleConcern,
       userInfo,
       currentUser,
-      isShow,
-      menu,
-      setMood
+      menu
     }
   }
 })
