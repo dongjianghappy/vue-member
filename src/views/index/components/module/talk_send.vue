@@ -56,6 +56,7 @@ export default defineComponent({
 
     // 监听图片上传
     function image(a: any) {
+      debugger
       data.img = a
     }
 

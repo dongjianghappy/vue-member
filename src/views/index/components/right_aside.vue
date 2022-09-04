@@ -2,6 +2,7 @@
 <div>
   <UserInfo :userInfo="userInfo" />
   <Sign v-if="module.sign" />
+  <Navigation />
   <RecommendUser v-if="module.recommended_users" />
   <HotTalk v-if="module.hot_topic" />
   <Visitor v-if="module.recent_visitors" />
@@ -19,6 +20,7 @@ import {
 } from '@/utils'
 import UserInfo from './module/userInfo.vue'
 import Sign from './module/sign.vue'
+import Navigation from './module/navigation.vue'
 import RecommendUser from './module/recommendUser.vue'
 import HotTalk from './module/hotTalk.vue'
 import Visitor from './module/visitor.vue'
@@ -29,6 +31,7 @@ export default defineComponent({
   components: {
     UserInfo,
     Sign,
+    Navigation,
     RecommendUser,
     HotTalk,
     Visitor,
@@ -56,7 +59,7 @@ export default defineComponent({
       proxy.$scroll.init({
         win: {
           el: window,
-          y: 1005,
+          y: 1156,
           b: 80
         },
         doc: {

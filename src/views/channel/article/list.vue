@@ -1,6 +1,6 @@
 <template>
   <SelectButton v-if="!isShowBatch" />
-    <v-list :data="dataList" :viewUrl="viewUrl" :editUrl="editUrl" :graphUrl="graphUrl" :isShowBatch="isShowBatch" />
+    <v-list :data="data" :dataList="dataList" :viewUrl="viewUrl" :editUrl="editUrl" :graphUrl="graphUrl" :isShowBatch="isShowBatch" />
 </template>
 
 <script lang="ts">
@@ -23,6 +23,12 @@ export default defineComponent({
     isShowBatch:{
       type: Boolean,
       default: false
+    },
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     dataList: {
       type: Object,

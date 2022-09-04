@@ -42,7 +42,7 @@ import VueEvent from '@/utils/event'
   var paperSmall = new joint.dia.Paper(Object.assign({
     el: document.getElementById('paper-multiple-papers-small'),
     model: graph,
-    width: 200,
+    width: 270,
     height: 200,
     gridSize: 1,
     interactive: false,
@@ -62,7 +62,7 @@ var toolsView = new joint.dia.ToolsView({
     ]
 });
 
-    this.draggable()
+    // this.draggable()
     this.setLink()
     // this.svgPanZooms()
     this.handleMouse()
@@ -87,7 +87,7 @@ var toolsView = new joint.dia.ToolsView({
 
   // 创建节点
   createNode(ftype: any, text: any, position: any, data?: any) {
-
+debugger
     // 如果没有数据则表示新创建的节点，否则是通过数据生成
     if(!data){
       data = new dataModel.start({id: 'null', name: text})
@@ -110,17 +110,21 @@ var toolsView = new joint.dia.ToolsView({
   let targetFtype = target ? target.model.attributes.ftype : ''
   let fontSourceNode = source.model.attributes
   let fontTargetNode = target ? target.model.attributes : null
-debugger
+  let ftype = fontSourceNode.ftype === 'start' || fontTargetNode.ftype === 'end' ? "link" : "intentionLink"
+
   source && linkView.model.source(source.model)
   target && linkView.model.target(target.model)
-  let linkObj = {
+  let linkObj: any = {
     id: linkView.id,
-    name: '连接线',
-    type: 'link',
+    type: ftype,
     source: fontSourceNode.id,
     target: fontTargetNode.id
   }
+  if(ftype === 'intentionLink'){
+    linkObj.name = "意图线"
+  }
   let linkData = new dataModel['linkNode'](linkObj)
+  debugger
   linkView.model.setData(linkData)
   }
 
@@ -160,22 +164,36 @@ debugger
 
 
 
+  // // 允许拖拽
+  // draggable(){
+  //   this.el.addEventListener('dragover', (e: any) => {
+  //     e.preventDefault()
+  //   })
+  //   this.el.addEventListener('drop', (e: any) => {
+  //     let ftype: any = e.dataTransfer.getData('ftype')
+  //     let text: any = e.dataTransfer.getData('text')
+  //     let offsetX: any = Number(e.dataTransfer.getData('offsetX'))
+  //     let offsetY: any = Number(e.dataTransfer.getData('offsetY'))
+  //     let dropPoint: any = this.paper.pageToLocalPoint(e.pageX, e.pageY)
+  //     let x: any = dropPoint.x - offsetX
+  //     let y: any = dropPoint.y - offsetY
+      
+  //     let cellView: any = this.createNode(ftype, text, {x, y})
+  //   })
+  // }
+
   // 允许拖拽
-  draggable(){
-    this.el.addEventListener('dragover', (e: any) => {
-      e.preventDefault()
-    })
-    this.el.addEventListener('drop', (e: any) => {
-      let ftype: any = e.dataTransfer.getData('ftype')
-      let text: any = e.dataTransfer.getData('text')
-      let offsetX: any = Number(e.dataTransfer.getData('offsetX'))
-      let offsetY: any = Number(e.dataTransfer.getData('offsetY'))
+  draggable(e: any, data: any){
+      let ftype: any = data.ftype
+      let text: any = data.text
+      let offsetX: any = Number(data.offsetX)
+      let offsetY: any = Number(data.offsetY)
       let dropPoint: any = this.paper.pageToLocalPoint(e.pageX, e.pageY)
       let x: any = dropPoint.x - offsetX
       let y: any = dropPoint.y - offsetY
       
       let cellView: any = this.createNode(ftype, text, {x, y})
-    })
+
   }
 
 
@@ -195,7 +213,7 @@ debugger
 
    cellsList.cells && cellsList.cells.map((cell: any) => {
 
-    if(cell.ftype === 'link'){
+    if(cell.ftype === 'link' || cell.ftype === 'intentionLink'){
       
       const {id, ftype, source, target, vertices, data} = cell as dataModel.Link
       let sourceCell = thisa.getCell(source.id)
@@ -209,9 +227,10 @@ debugger
       sss.addTo(this.graph);    
     }else{
       const {id, ftype, position, data} = cell as dataModel.Node
+      const datas = new dataModel.start({...data})
       const rect = new (Elements as any)[ftype]({id})
       rect.position(position.x, position.y);
-      rect.render({attrs: cell.attrs, data: cell.data})
+      rect.render({attrs: cell.attrs, data: datas})
       rect.addTo(this.graph);
     }
    })

@@ -279,6 +279,14 @@ LastestVisitor (params: any) {
   articleDetail (params: any) {
     return http.request('channel', 'articleDetail', params)
   },
+  // 分类列表查询接口
+  cateList(params: any) {
+    return http.request('common', 'systemCate', params)
+  },
+  // 简单分类
+  simpleCategory (params: any) {
+    return http.request('common', 'simpleCategory', params)
+  },
   // 选择分类
   systemCate (params: any) {
     return http.request('common', 'systemCate', params)
@@ -440,9 +448,37 @@ LastestVisitor (params: any) {
  // 搜索
  search (params: any) {
   return http.request('user', 'search', params)
-} , 
+  } , 
+
+ // 机器人
+ robot (params: any) {
+  return http.request('robot', 'robotsss', params)
+  } , 
   
+ // 意图库管理
+ speechLib (params: any) {
+  return http.request('robot', 'speechLib', params)
+  } , 
   
+ // 话术管理
+ speech (params: any) {
+  return http.request('robot', 'speech', params)
+  } ,   
+  
+// 开始会话
+begin (params: any) {
+  return http.request('robot', 'begin', params)
+  } , 
+   
+// 开始中
+talking (params: any) {
+  return http.request('robot', 'talking', params)
+  } , 
+  
+// 会话结束
+close (params: any) {
+  return http.request('robot', 'close', params)
+  } ,   
 }
 
 export default api

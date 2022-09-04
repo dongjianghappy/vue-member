@@ -1,7 +1,7 @@
 <template>
 <div class="aside">
   <div class="aside-head ptb10" style="background: #424568; margin-bottom: 1px" @click="handleShow">
-    <i class="iconfont icon-arrow arrow " :class="collapse ? 'deg90' : ''"></i>
+    <span :class="collapse ? 'deg90' : ''" style="display: inline-block;"><i class="iconfont icon-arrow arrow "></i></span>
     <span>{{title}}</span>
   </div>
   <div class="aside-list ptb15 plr20" v-show="collapse">
@@ -63,12 +63,16 @@ export default defineComponent({
     isEmit: {
       type: Boolean,
       default: false
+    },
+    iscollapse: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:index'],
   setup(props, context) {
     const router = useRouter();
-    let collapse: any = ref(true)
+    let collapse: any = ref(props.iscollapse || false)
 
     function handleShow(params: any) {
       collapse.value = !collapse.value

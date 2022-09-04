@@ -60,9 +60,9 @@ popover
     }
   },
   mounted(){
-    document.addEventListener("click", this.close);
+    // document.addEventListener("click", this.close);
     VueEvent.on("selectColor", (data: any) => {
-        this.close
+        // this.close
       });
   },  
   emits: ['onClick'],

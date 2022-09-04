@@ -29,7 +29,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/u/:id/concern/', component: () => import('../views/concern/index.vue')},
       { path: '/u/:id/album/', component: () => import('../views/index/album/index.vue')},
       { path: '/u/:id/information/', component: () => import('../views/information/index.vue')},      
-
+      { path: '/u/:id/haosite/', component: () => import('../views/application/haosite/index.vue')},
     ]
   },
   {

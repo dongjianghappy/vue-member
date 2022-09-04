@@ -7,8 +7,15 @@ export default class http {
   private baseConfig: any
 
   getCookieByName(name: any) {
-    const cookie: any = document.cookie;
-    return cookie.split(`; ${name}=`).pop().split(';').shift();
+    const cookie: any = document.cookie.split(';')
+    let token: any = ""
+    for (let i = 0; i < cookie.length; i++) {
+      if (cookie[i].indexOf('token=') > -1) {
+        token = cookie[i].split('token=')[1]
+      }
+    }
+
+    return token
   }
 
   // 构造函数

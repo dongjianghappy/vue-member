@@ -6,7 +6,9 @@ const actions = {
     const { result }:any = await api.Detect({
       ...params 
     })
-    result.result && sessionStorage.setItem("userInfo", JSON.stringify(result.result.userInfo))
+    if(result.result){
+      sessionStorage.setItem("userInfo", JSON.stringify(result.result.userInfo))
+    }
     context.commit("setUserInfo" , result.result);
    
     return result.result

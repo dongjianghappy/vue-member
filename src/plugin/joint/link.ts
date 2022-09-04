@@ -3,7 +3,7 @@ import * as joint from 'jointjs'
 const defaultLink = {
   attrs: {
     line: {
-        stroke: '#fe854f',
+        stroke: '#999',
         strokeDasharray: 'none',
         // 双向箭头这里线注释
         // sourceMarker: {
@@ -14,7 +14,7 @@ const defaultLink = {
 
         // 监听属性
         targetMarker: {
-            'fill': '#fe854f',
+            'fill': '#999',
             'stroke': 'none',
             'd': 'M 5 -10 L -15 0 L 5 10 Z'
         }
@@ -38,6 +38,10 @@ export const basicLink = joint.shapes.standard.Link.define('custom.basicLink', {
 {
     // 设置节点数据
     setAttr(param: any): void{
+      if(param.value === 'link' || param.value === 'intentionLink'){
+        this.prop('ftype', param.value)
+        return
+      }
       if(param.islabel){
         this.prop(`attrs/text/${param.attr}`, param.value); // Set presentation attribute
       }else{
@@ -50,7 +54,11 @@ export const basicLink = joint.shapes.standard.Link.define('custom.basicLink', {
   setData(data: any, value?: any): void{
     debugger
     this.prop('data', data)
-    // this.prop('attrs/text/text', data.name); // Set presentation attribute
+    this.prop('ftype', data.type)
+    if(data.type === 'intentionLink'){
+      this.prop(`attrs/text/text`, data.name);
+    }
+    
     this.labels([{
       attrs: {
           text: {
@@ -72,11 +80,11 @@ export const basicLink = joint.shapes.standard.Link.define('custom.basicLink', {
     render(param: any, value?: any): void{
 
       const {data} = param
-      debugger
+  
       this.attributes.attrs.line = {...this.attributes.attrs.line, ...param.attrs.line}
       this.attributes.attrs.label = {...this.attributes.attrs.label, ...param.attrs.label}
-      this.attributes.attrs.text = {...this.attributes.attrs.text, ...param.attrs.text}
-      debugger
+      // this.attributes.attrs.text = {...this.attributes.attrs.text, ...param.attrs.text}
+
       // 线条文本设置
       this.labels([{
         attrs: {

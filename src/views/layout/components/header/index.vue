@@ -9,7 +9,7 @@
         <li class="pointer" @click="handleclick('')"><i class="iconfont icon-home"></i>首页</li>
         <li class="pointer" @click="handleclick('/activity')"> <i class="iconfont icon-topic"></i>话题</li>
         <li class="pointer" @click="handleclick(`/appstore`)"><i class="iconfont icon-app"></i>应用中心</li>
-        <li class="pointer" @click="handleclick(`/manage`)"><i class="iconfont icon-app"></i>管理中心</li>
+        <!-- <li class="pointer" @click="handleclick(`/manage`)"><i class="iconfont icon-app"></i>管理中心</li> -->
       </ul>
       <ul class="w600 right align_right">
         <li class="searchbox ptb10" style=" line-height:0">
@@ -116,7 +116,7 @@ export default defineComponent({
         store.dispatch('common/Fetch', {
           api: "signOut"
         }).then(res => {
-          router.push(`/login`)
+          window.location.href = 'http://www.yunxi10.com/login.html'
         })
       } else {
         router.push(proxy.const.setUrl({

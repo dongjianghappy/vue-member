@@ -1,10 +1,9 @@
 <template>
 <ul class="tech-lists">
-  <li class="relative" style="border-bottom: 1px dotted #ddd; padding:15px 0;" v-for="(item, index) in data.list" :key="index" @mouseover="hover(item)" @mouseleave="leave(item)">
+  <li class="relative" style="border-bottom: 1px dotted #ddd; padding:15px 0;" v-for="(item, index) in dataList.list" :key="index" @mouseover="hover(item)" @mouseleave="leave(item)">
     <p class="mb10 relative">
       <span v-if="item.management_checked === '0'"><i class="iconfont icon-shenhe font18 ml0" style="color: #5bc0de"></i></span>
       <span class="art-title font16 mr5 pointer" @click="handleclick(item)">
-        <!-- :style="item.style ? JSON.parse(item.style) : ''"  -->
         {{item.title}}
       </span>
       <span v-if="item.summary !== ''">
@@ -41,6 +40,7 @@
     <div v-if="isShowBatch" style=" position: absolute; left: 0; top: 0; right: 0; bottom: 0"></div>
   </li>
 </ul>
+<Graph v-model:show="isshow" :data="{id: graphid, ...data}" v-if="isshow" />
 </template>
 
 <script lang="ts">
@@ -50,16 +50,25 @@ import {
   computed,
   useStore,
   useRouter,
+  ref,
   getUid
 } from '@/utils'
 import Popover from '@/components/packages/popover/index.vue';
+import Graph from '../../views/graph/index.vue'
 export default defineComponent({
   name: 'v-Search',
   components: {
-    Popover
+    Popover,
+    Graph
   },
   props: {
     data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    dataList: {
       type: Object,
       default: () => {
         return {}
@@ -90,6 +99,8 @@ export default defineComponent({
     const store = useStore();
     const currentUser = computed(() => store.getters['user/currentUser']);
     const loginuser = computed(() => store.getters['user/loginuser']);
+    const isshow = ref(false)
+    const graphid: any = ref('')
 
     function handleclick(param: any) {
       router.push(proxy.const.setUrl({
@@ -99,10 +110,10 @@ export default defineComponent({
     }
 
     function handleGraph(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: loginuser.value.account,
-        query: `${props.graphUrl}&id=${param.id}`
-      }))
+      isshow.value = true
+      graphid.value = param.id
+      const doc: any = document
+      doc.body.parentNode.style.overflowY = "hidden";
     }
 
     function handleedit(param: any) {
@@ -121,12 +132,14 @@ export default defineComponent({
     }
 
     return {
+      graphid,
       currentUser,
       handleclick,
       handleGraph,
       handleedit,
       hover,
-      leave
+      leave,
+      isshow
     }
   }
 })

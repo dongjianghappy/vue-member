@@ -50,10 +50,11 @@ export default defineComponent({
     const isLogin: any = ref(false)
 
     store.dispatch('user/Detect').then((res) => {
+      debugger
       if (res) {
         isLogin.value = true
       } else {
-        router.push('/login')
+        // window.location.href = 'http://www.yunxi10.com/login.html'
       }
     })
 

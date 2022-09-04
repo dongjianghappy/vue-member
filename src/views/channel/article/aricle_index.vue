@@ -15,8 +15,8 @@
         <span class="mr15" @click="operation('moveAlbum')">移动文档</span>
         <span class="mr15" @click="operation('delete')">删除</span>
       </div>
-      <List :channel="channel" :dataList="dataList" :isShowBatch="isShowBatch" v-if="toggleDisplay === 'list'" />
-      <Album :channel="channel" :dataList="dataList" :item="query.item" :isShowBatch="isShowBatch" v-else />
+      <List :data="{name: channel, coding: coding.art}" :dataList="dataList" :isShowBatch="isShowBatch" v-if="toggleDisplay === 'list'" />
+      <Album :data="{name: channel, coding: coding.art}" :dataList="dataList" :item="query.item" :isShowBatch="isShowBatch" v-else />
       <v-loding v-if="!loading" />
     </template>
     <template v-slot:content2>
@@ -76,7 +76,7 @@ export default defineComponent({
     const isShowBatch = ref(false)
     const selectList: any = ref([])
     const dataList = ref([])
-    const codding: any = codings[props.channel]
+    const coding: any = codings[props.channel]
     const loading: any = ref(false)
     let tabMenu: any = ref([{
         name: "文档管理",
@@ -145,7 +145,7 @@ export default defineComponent({
       store.dispatch('common/Fetch', {
         api: 'ArticleList',
         data: {
-          coding: codding['art'],
+          coding: coding['art'],
           uid: getUid(),
           page: 1,
           pagesize: 20,
@@ -160,6 +160,7 @@ export default defineComponent({
     onMounted(init)
 
     return {
+      coding,
       dataList,
       query,
       index,

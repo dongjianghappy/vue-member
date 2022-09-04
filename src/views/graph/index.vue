@@ -1,11 +1,12 @@
 <template>
-<div class="module-wrap m0 p0 fixed" style="top: 0px; left: 0px; bottom: 0px; width: 100%; z-index: 1000">
-  <div class="module-head cl-white p20" style="background: #000">{{channel}}
-    <span class="pointer mlr25" @click="handlePrev">返回</span>
-    <span>{{data.title}} - 流程图</span>
+<div class="module-wrap m0 p0 fixed" style="top: 0px; left: 0px; bottom: 0px; width: 100%; z-index: 100000">
+  <div class="module-head cl-white p20" style="background: #000">{{data.name}}
+    <span>{{detail.title}} - 流程图</span>
+    <span class="right" @click="handleClose">关闭</span>
   </div>
+
   <div class="module-content absolute p0" style="top: 50px; bottom : 0px; width: 100%;">
-    <Graph :data="data.graph" :save="save" />
+    <Graph :data="detail.graph" :save="save" />
   </div>
 </div>
 </template>
@@ -16,15 +17,13 @@ import {
   getCurrentInstance,
   onMounted,
   ref,
-  reactive,
   useStore,
   useRoute,
-  codings,
   useRouter,
   watch,
   getUid
 } from '@/utils'
-import Graph from '../../plugin/joint/index.vue'
+import Graph from '@/plugin/joint/index.vue'
 
 export default defineComponent({
   name: 'ArticleView',
@@ -36,7 +35,18 @@ export default defineComponent({
       type: String,
       default: ""
     },
+    show: {
+      type: Boolean,
+      default: false
+    },
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    }
   },
+  emits: ['update:show'],
   setup(props, context) {
     const {
       proxy
@@ -44,33 +54,40 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
-    const data: any = ref({})
+    const detail: any = ref({})
     const loading: any = ref(false)
-    const channel: any = props.channel;
-    const {
-      art
-    }: any = codings[props.channel]
 
     // 监听
     watch(route, async (newValues, prevValues) => {
       init()
     })
 
+    function handleClose() {
+      const doc: any = document
+      doc.body.parentNode.style.overflowY = "auto";
+      context.emit('update:show', false)
+    }
+
     // 初始化数据
     function init() {
+      const {
+        coding,
+        detailApi,
+        id
+      } = props.data
+
       loading.value = false
       store.dispatch('common/Fetch', {
-        api: 'ArticleView',
+        api: detailApi || 'ArticleView',
         data: {
-          coding: art,
-          id: route.query.id
+          coding: coding,
+          id: id
         }
       }).then(res => {
-        data.value.graph = JSON.parse(res.result.graph || '{}')
+        detail.value.graph = JSON.parse(res.result.graph || '{}')
         loading.value = true
-        data.value = res.result
-        data.value.style = {}
-        // data.value.style = JSON.parse(res.result.style)
+        detail.value = res.result
+        detail.value.style = {}
       })
     }
 
@@ -85,15 +102,16 @@ export default defineComponent({
       }, 100)
     }
 
-    function handlePrev() {
-      router.go(-1)
-    }
-
     // 保存
     function save(graph: any) {
       const {
         id
-      } = data.value
+      } = detail.value
+
+      const {
+        coding,
+        updateApi
+      } = props.data
 
       const param: any = {
         id,
@@ -101,9 +119,9 @@ export default defineComponent({
       }
 
       store.dispatch('common/Fetch', {
-        api: 'UpdateArticle',
+        api: updateApi || 'UpdateArticle',
         data: {
-          coding: art,
+          coding: coding,
           ...param
         }
       }).then(res => {
@@ -118,10 +136,10 @@ export default defineComponent({
       init()
     })
     return {
-      data,
+      handleClose,
+      detail,
       handleclick,
       loading,
-      handlePrev,
       save
     }
   }

@@ -34,12 +34,12 @@
       <li class="li">
         <span class="label">所属分类</span>
         <span class="pr15">{{detail.parent}}</span>
-        <v-category name="选择分类" :data="{data, coding: '123'}" type="text" api="delete"></v-category>
+        <v-category name="选择分类" :data="{item: detail, coding: coding}" type="text"></v-category>
       </li>
       <li class="li" v-if="field.album">
         <span class="label">所属专辑</span>
         <span class="pr15">{{detail.album}}</span>
-        <v-category name="选择分类" :data="{data, coding: '123'}" type="text" api="delete"></v-category>
+        <v-category name="选择分类" :data="{item: detail, coding: '123'}" type="text"></v-category>
       </li>
       <li class="li" v-if="field.color">
         <span class="label">颜色</span>
@@ -115,8 +115,7 @@ export default defineComponent({
       }
     }
   },
-  components: {
-  },
+  components: {},
   setup(props, context) {
     const {
       proxy
@@ -124,14 +123,25 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
+    const checkField = [{
+      name: 'title',
+      message: "标题不能为空"
+    }, {
+      name: 'tag',
+      message: "标签不能为空"
+    }, {
+      name: 'fid',
+      message: "请选择分类"
+    }, {
+      name: 'summary',
+      message: "请输入摘要内容"
+    }]
     const detail: any = ref({})
     const configData: any = ref({})
     const img = ref("")
     const upload: any = ref(null);
     const channel: any = props.channel;
-    const {
-      art
-    }: any = codings[props.channel]
+    const coding: any = codings[props.channel]
     const basic = reactive({
       currentImg: ""
     })
@@ -148,6 +158,7 @@ export default defineComponent({
 
     // 保存
     function save() {
+
       const {
         fid,
         pid,
@@ -162,52 +173,64 @@ export default defineComponent({
         style
       } = detail.value
 
-      const param: any = {
-        fid,
-        pid,
-        title,
-        img: img.value,
-        tag: tag.join(','),
-        method,
-        source,
-        source_url,
-        summary,
-  content: marked.parse(markdown),
-        markdown,
-        style: JSON.stringify(style),
-        coding: art,
-      }
-      if (props.action !== "add") {
-        param.id = detail.value.id
-      }
-      proxy.$hlj.loading()
-      store.dispatch('common/Fetch', {
-        api: props.action !== "add" ? 'UpdateArticle' : "InsertArticle",
-        data: {
-          ...param
+      proxy.$form.validate(detail.value, checkField, (valid: any, message: any) => {
+        if (valid) {
+          proxy.$message.message({
+            msg: message
+          })
+          return false
         }
-      }).then(res => {
-        proxy.$hlj.message({
-          msg: res.returnMessage
+
+        const param: any = {
+          fid,
+          pid,
+          title,
+          img: img.value,
+          tag: tag && tag.join(',') || "",
+          method,
+          source,
+          source_url,
+          summary,
+          content: marked.parse(markdown || "{}"),
+          markdown,
+          style: JSON.stringify(style),
+          coding: coding.art,
+        }
+        if (props.action !== "add") {
+          param.id = detail.value.id
+        }
+        proxy.$hlj.loading()
+        store.dispatch('common/Fetch', {
+          api: props.action !== "add" ? 'UpdateArticle' : "InsertArticle",
+          data: {
+            ...param
+          }
+        }).then(res => {
+          proxy.$hlj.message({
+            msg: res.returnMessage
+          })
         })
       })
+
     }
 
-   function handlePrev(){
+    function handlePrev() {
       router.go(-1)
-    }    
+    }
 
     onMounted(() => {
       if (props.action === "edit") {
         store.dispatch('common/Fetch', {
           api: 'ArticleDetails',
           data: {
-            coding: art,
+            coding: coding.art,
             id: route.query.id
           }
         }).then(res => {
           detail.value = res.result
-          detail.value.style = JSON.parse(res.result.style)
+          // detail.value.style = JSON.parse(res.result.style)
+          let style = JSON.parse(detail.value.style || '{}')
+          detail.value.style = style instanceof Object ? style : {}
         })
       }
     })
@@ -217,6 +240,7 @@ export default defineComponent({
       upload,
       configData,
       channel,
+      coding,
       image,
       basic,
       setStyle,

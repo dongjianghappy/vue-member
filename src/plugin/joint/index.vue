@@ -5,17 +5,20 @@
   </div>
   <div class="graph-main">
     <div class="graph-tools" v-if="!isShow">
+      
       <Tool :graph="App" :save="save" />
+      
     </div>
     <div class="graph-content">
       <div id="paper-wrap" style="flex: 1">
-          <div id="myholder" style="height: 100%"></div>
+        <div id="myholder" style="height: 100%"></div>
       </div>
       <div class="node-info" v-if="!isShow">
         <Attributes :graph="App" />
       </div>
     </div>
   </div>
+  <!-- <Attributes :graph="App" v-model:show="showDrawer" v-if="showDrawer" /> -->
 </div>
 </template>
 
@@ -74,23 +77,21 @@ export default defineComponent({
     const App: any = ref({})
 
     const nodeData: any = computed(() => store.getters['graph/nodeData']);
-
+    const showDrawer: any = ref(false)
     watch([props], (old: any, news: any) => {
-      // let cells = JSON.parse(news)
       App.value.updateGraph(props.data)
     })
 
     onMounted(() => {
       let el: any = document.getElementById('myholder')
-
       App.value = new graphs(el)
       props.isShow && App.value.updateGraph(props.data)
       // 监听点击节点
       VueEvent.on("navbarSetting", (data: any) => {
         const aaa = data.attributes
         currentNodeId.value = data.id
+        showDrawer.value = true
         store.dispatch('graph/NodeDataAction', aaa).then(res => {
-
         })
       });
 
@@ -102,6 +103,7 @@ export default defineComponent({
 
     return {
       App,
+      showDrawer,
       info,
       nodeData,
       colorList,
@@ -117,15 +119,14 @@ export default defineComponent({
   height: 100%;
 
   .graph-aside {
-    width: 240px;
-    height: 100%;
+    width: 180px;
     color: #c6c7e2;
     background: #383b61
   }
 
   .graph-main {
     background: #eee;
-    width: 100%;
+    flex: 1;
     height: 100%;
 
     .graph-tools {
@@ -139,11 +140,6 @@ export default defineComponent({
       height: 100%
     }
 
-    .node-info {
-      background: #383b61;
-      width: 230px;
-      color: #c6c7e2;
-    }
   }
 }
 

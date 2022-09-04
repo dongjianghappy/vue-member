@@ -11,6 +11,7 @@ import hljs from './plugin/effects'
 import scroll from './plugin/flxed'
 import move from './plugin/move'
 import cons from './plugin/const'
+import form from './plugin/validate'
 
 import VueMarkdownEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
@@ -39,6 +40,7 @@ hljs(Vue)
 scroll(Vue)
 move(Vue)
 cons(Vue)
+form(Vue)
 Vue.use(PerfectScrollbar)
 
 // Vue.config.globalProperties.$aabb = hlj

@@ -3,7 +3,7 @@
   <!-- 频道图片上传 -->
   <div class="ablumimg p0" v-if="show">
     <ul>
-      <li v-for="(item, index) in imgList" :key="index" class="album-wraps relative" :style="style" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
+      <li v-for="(item, index) in imgListsss" :key="index" class="album-wraps relative" :style="style" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
         <img draggable="true" :src="item.src" v-if="item.status ==='complete'" />
         <div class="load1" v-else>
           <div class="loader">Loading...</div>
@@ -21,8 +21,8 @@
   </div>
   <!-- 话题图片上传 -->
   <div class="ablumimg p0" v-else>
-    <ul class="p15" v-if="imgList.length" style="overflow: hidden;">
-      <li v-for="(item, index) in imgList" :key="index" style="width: 100px; height: 100px;" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
+    <ul class="p15" v-if="imgListsss.length" style="overflow: hidden;">
+      <li v-for="(item, index) in imgListsss" :key="index" style="width: 100px; height: 100px;" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
         <img draggable="true" :src="item.src" v-if="item.status ==='complete'" />
         <div class="load1" v-else>
           <div class="loader">Loading...</div>
@@ -78,6 +78,10 @@ export default defineComponent({
     show: {
       type: Boolean,
       default: true
+    },
+    emitName: {
+      type: String,
+      default: ""
     }
   },
   emits: ['imgList'],
@@ -89,7 +93,7 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store = useStore();
     const filElem = ref("filElem")
-    let imgList: any = ref([])
+    let imgListsss: any = ref([])
     const dragging = ref(null)
     const box: any = ref(0)
     const isShowCopy = ref(false)
@@ -101,7 +105,7 @@ export default defineComponent({
     // 监听图片初始值
     watch(() => props.dataList, (newValues, prevValues) => {
       props.dataList.map((item) => {
-        imgList.value.push({
+        imgListsss.value.push({
           src: item,
           status: "complete"
         })
@@ -111,10 +115,10 @@ export default defineComponent({
 
     function getFile() {
       let _obj: any = document.getElementById(filElem.value);
-      // var fd = new imgList();
+      // var fd = new imgListsss();
       debugger
       for (let i = 0; i < _obj.files.length; i++) {
-        imgList.value.push({
+        imgListsss.value.push({
           src: _obj.files[i].name,
           status: "upload"
         })
@@ -128,11 +132,10 @@ export default defineComponent({
           data: fd,
         }).then(res => {
           debugger
-          let aaa: any = imgList.value.filter((item: any) => item.status === "upload")
+          let aaa: any = imgListsss.value.filter((item: any) => item.status === "upload")
           aaa[0].status = "complete"
           aaa[0].src = res[0].img
-
-          context.emit('imgList', img(imgList.value))
+          context.emit("imgList", img(imgListsss.value))
         })
       }
     }
@@ -180,7 +183,7 @@ export default defineComponent({
 
         return
       }
-      const newItems = [...imgList.value]
+      const newItems = [...imgListsss.value]
       const src = newItems.indexOf(dragging.value)
       const dst = newItems.indexOf(item)
 
@@ -194,13 +197,13 @@ export default defineComponent({
       console.log(dst);
 
       newItems.splice(dst, 0, ...newItems.splice(src, 1))
-      imgList.value = newItems
-      context.emit('imgList', img(imgList.value))
+      imgListsss.value = newItems
+      context.emit('imgList', img(imgListsss.value))
     }
 
     function remove(index: any) {
-      imgList.value.splice(index, 1)
-      context.emit('imgList', img(imgList.value))
+      imgListsss.value.splice(index, 1)
+      context.emit('imgList', img(imgListsss.value))
     }
 
     // 复制图片
@@ -246,7 +249,7 @@ export default defineComponent({
     return {
       handleclick,
       getFile,
-      imgList,
+      imgListsss,
       handleDragStart,
       handleDragEnd,
       handleDragOver,
