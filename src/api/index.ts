@@ -478,7 +478,15 @@ talking (params: any) {
 // 会话结束
 close (params: any) {
   return http.request('robot', 'close', params)
-  } ,   
+  } ,  
+  
+// 话题查询
+soundList (params: any) {
+  return http.request('talk', 'soundList', params)
+},  
+  
 }
+
+
 
 export default api

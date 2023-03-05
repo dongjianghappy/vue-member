@@ -1,11 +1,10 @@
 <template>
 <ul class="tool-button clearfix" style="width: 100%;">
   <li @click="handelClear"><i class="iconfont icon-amy-Clearcache"></i></li>
-  <li @click="exportImage('svg')">导出SVG</li>
-  <li @click="exportImage('png')">导出PNG</li>
+  <li><v-drawing querySelector="paper-wrap">导出图片</v-drawing></li>
   <li @click="fullScreen">全屏</li>
   <li>
-    <CheckRobot />
+    <CheckRobot :data="data" />
   </li>
   <li @click="handleReset">复位</li>
   <Popover :content="`<span style='
@@ -35,13 +34,11 @@
   <li>
     <v-button @onClick="save">保存</v-button>
   </li>
-  <li class="graph-type right">
-    类型：{{graphTypeMenu[graphType].name}}
-    <!-- <Popover :content="`类型：${graphTypeMenu[graphType].name}`" arrow="tb" offset="right" :move="-10" keys="popover-message">
-      <div class="p10 font14 align_center" style="width: 100px; height: 80px">
-        <div style="height: 32px" @click="chooseType(item.type)" v-for="(item, index) in graphTypeMenu" :key="index">{{item.name}}</div>
-      </div>
-    </Popover> -->
+  <li>
+    <v-button @onClick="handleUndo">撤销</v-button>
+  </li>
+  <li>
+    <v-button @onClick="handleRedo">恢复</v-button>
   </li>
 </ul>
 </template>
@@ -92,25 +89,14 @@ export default defineComponent({
     const colorList = ref(color)
     const currentColor = ref("#fff")
     const App: any = ref({})
-    const graphTypeMenu = [{
-        type: 0,
-        name: "结构图"
-      },
-      {
-        type: 1,
-        name: "机器人"
-      },
-    ]
-    const graphType = ref(0)
+    
+    
 
     // 清空
     function handelClear() {
       props.graph.graph.clear()
     }
 
-    function exportImage() {
-      props.graph.graph.exportImage()
-    }
 
     function choose(color: any) {
       currentColor.value = color
@@ -136,19 +122,24 @@ export default defineComponent({
       props.save(param)
     }
 
+    function handleUndo(){
+      props.graph.undo()
+    }
+
+    function handleRedo(){
+      props.graph.redo()
+    }    
+
     // function chooseType(param: any) {
     //   graphType.value = param
     //   store.commit('graph/setGraphType', param)
     // }
 
     onMounted(() => {
-      let isRobot = window.location.href.indexOf('robot') > -1 ? 1 : 0
-      graphType.value = isRobot
-      store.commit('graph/setGraphType', isRobot)
+     
     })
 
     return {
-      exportImage,
       fullScreen,
       handleReset,
       save,
@@ -156,8 +147,8 @@ export default defineComponent({
       handelClear,
       colorList,
       currentColor,
-      graphType,
-      graphTypeMenu,
+      handleUndo,
+      handleRedo
       // chooseType
     }
   }

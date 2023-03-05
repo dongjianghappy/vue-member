@@ -1,24 +1,32 @@
 <template>
-<div class="graph-wrap">
-  <div class="graph-aside" v-if="!isShow">
-    <Aside :graph="App" />
+<div class="module-wrap m0 p0 fixed" style="top: 0px; left: 0px; bottom: 0px; width: 100%; z-index: 100000">
+  <div class="module-head cl-white p10" style="background: #000">
+    <span>{{graphTypeMenu[graphType].name}} - {{data.title}}</span>
+    <span class="right pointer" @click="handleClose">关闭</span>
   </div>
-  <div class="graph-main">
-    <div class="graph-tools" v-if="!isShow">
-      
-      <Tool :graph="App" :save="save" />
-      
-    </div>
-    <div class="graph-content">
-      <div id="paper-wrap" style="flex: 1">
-        <div id="myholder" style="height: 100%"></div>
+
+  <div class="module-content absolute p0" style="top: 50px; bottom : 0px; width: 100%;">
+    <div class="graph-wrap">
+      <div class="graph-aside" v-if="!isShow">
+        <Aside :graph="App" />
       </div>
-      <div class="node-info" v-if="!isShow">
-        <Attributes :graph="App" />
+      <div class="graph-main">
+        <div class="graph-tools" v-if="!isShow">
+          <Tool :graph="App" :data="{id: data.id}" :save="save" />
+
+        </div>
+        <div class="graph-content">
+          <div id="paper-wrap" style="flex: 1">
+            <div id="myholder" style="height: 100%"></div>
+          </div>
+          <div class="node-info" v-if="!isShow">
+            <Attributes :graph="App" />
+          </div>
+        </div>
       </div>
+      <!-- <Attributes :graph="App" v-model:show="showDrawer" v-if="showDrawer" /> -->
     </div>
   </div>
-  <!-- <Attributes :graph="App" v-model:show="showDrawer" v-if="showDrawer" /> -->
 </div>
 </template>
 
@@ -68,6 +76,7 @@ export default defineComponent({
       }
     }
   },
+  emits: ['close'],
   setup(props, context) {
     const store = useStore()
     const colorList = ref(color)
@@ -78,33 +87,56 @@ export default defineComponent({
 
     const nodeData: any = computed(() => store.getters['graph/nodeData']);
     const showDrawer: any = ref(false)
+    const graphTypeMenu = [{
+        type: 0,
+        name: "结构图"
+      },
+      {
+        type: 1,
+        name: "机器人"
+      },
+    ]
+    const graphType = ref(0)
+
     watch([props], (old: any, news: any) => {
-      App.value.updateGraph(props.data)
+      props.data && App.value.updateGraph(props.data.graph)
     })
+
+    function handleClose() {
+      const doc: any = document
+      doc.body.parentNode.style.overflowY = "auto";
+      context.emit('close', false)
+    }
 
     onMounted(() => {
       let el: any = document.getElementById('myholder')
       App.value = new graphs(el)
-      props.isShow && App.value.updateGraph(props.data)
+      // props.isShow && props.data && App.value.updateGraph(props.data.graph)
       // 监听点击节点
       VueEvent.on("navbarSetting", (data: any) => {
         const aaa = data.attributes
         currentNodeId.value = data.id
         showDrawer.value = true
-        store.dispatch('graph/NodeDataAction', aaa).then(res => {
-        })
+        store.dispatch('graph/NodeDataAction', aaa).then(res => {})
       });
 
       // 监听点击画布空白处
       VueEvent.on("blank", data => {
         App.value.setGraphData(currentNodeId.value)
       });
+
+       let isRobot = window.location.href.indexOf('robot') > -1 ? 1 : 0
+      graphType.value = isRobot
+      store.commit('graph/setGraphType', isRobot)
     })
 
     return {
       App,
       showDrawer,
       info,
+      graphType,
+      graphTypeMenu,
+      handleClose,
       nodeData,
       colorList,
       currentColor

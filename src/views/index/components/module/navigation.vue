@@ -43,6 +43,10 @@
           </div>
           <div>视频教程</div>
       </div>
+    </div>
+
+    <!--  -->
+    <div class="mt15" style="display: flex">
       <div style="flex: 1">
           <div class="pt5 mb10" style="
               background: #eee;
@@ -54,6 +58,31 @@
             <i class="iconfont icon-star font32" style="color: #ff9800"></i>
           </div>
           <div>前端题库</div>
+      </div>
+      <div style="flex: 1">
+          <div class="pt5 mb10" style="
+              background: #eee;
+              margin-left: 7px;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+            ">
+            <i class="iconfont icon-question font32" style="color: #ff9800"></i>
+          </div>
+          <div>CSS3动画</div>
+      </div>
+      <div style="flex: 1">
+        
+          <div class="pt5 mb10" style="
+              background: #eee;
+              margin-left: 7px;
+              border-radius: 50%;
+              width: 40px;
+              height: 40px;
+            ">
+            <i class="iconfont icon-star font32" style="color: #ff9800"></i>
+          </div>
+          <div>Canvas</div>
       </div>
     </div>
   </div>

@@ -65,6 +65,14 @@ export default defineComponent({
   components: {
     Broadcast
   },
+  props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+  },
   setup(props, context) {
     const store = useStore();
     const isShow = ref(false)
@@ -86,7 +94,7 @@ export default defineComponent({
       store.dispatch('common/Fetch', {
         api: "begin",
         data: {
-          id: 10
+          id: props.data.id
         }
       }).then(res => {
         dataList.value.push(res.result.speech[0])
@@ -107,7 +115,7 @@ export default defineComponent({
       store.dispatch('common/Fetch', {
         api: "talking",
         data: {
-          id: 10,
+          id: props.data.id,
           content: content.value
         }
       }).then(res => {

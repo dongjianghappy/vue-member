@@ -4,7 +4,7 @@
   <div id="main" style="padding: 80px 0 0 0;" :style="userInfo.theme && userInfo.theme.theme_background">
     <router-view />
   </div>
-  <!-- <Footer /> -->
+  <Footer />
   <Player />
   <Thme v-if="currentUser && module.theme" />
   <v-gotop />

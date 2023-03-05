@@ -41,7 +41,7 @@ export default defineComponent({
     // 按钮消息发送两种方式: 1、点击事件监听，2、点击响应式切换
     function handleclick() {
       const dom: any = document.getElementById(props.querySelector)
-
+debugger
       html2canvas(dom).then(canvas => {
        let link = document.createElement('a');
         link.download = '123.png'

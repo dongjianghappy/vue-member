@@ -64,6 +64,7 @@ export default defineComponent({
         debugger
         if (res.ifSuccess === 1) {
           sessionStorage.setItem("userInfo", JSON.stringify(res.result.userInfo))
+          document.cookie = `token=${res.result.token};path=/`
           router.push(`/u/${res.result.userInfo.account}`)
         }
       });

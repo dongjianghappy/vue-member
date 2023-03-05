@@ -26,6 +26,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/u/:id/journal/', component: () => import('../views/application/journal/index.vue')},
       { path: '/u/:id/bookmark/', component: () => import('../views/application/bookmark/index.vue')},
       { path: '/activity/', component: () => import('../views/activity/index.vue')},
+      { path: '/sound/', component: () => import('../views/activity/test.vue')},
       { path: '/u/:id/concern/', component: () => import('../views/concern/index.vue')},
       { path: '/u/:id/album/', component: () => import('../views/index/album/index.vue')},
       { path: '/u/:id/information/', component: () => import('../views/information/index.vue')},      
