@@ -36,14 +36,15 @@
         <span class="pr15">{{detail.parent}}</span>
         <v-category name="选择分类" :data="{item: detail, coding: coding}" type="text"></v-category>
       </li>
-      <li class="li" v-if="field.album">
+      <!--  v-if="field.album" -->
+      <li class="li"> 
         <span class="label">所属专辑</span>
         <span class="pr15">{{detail.album}}</span>
         <v-category name="选择分类" :data="{item: detail, coding: '123'}" type="text"></v-category>
       </li>
-      <li class="li" v-if="field.color">
+      <li class="li">
         <span class="label">颜色</span>
-        <v-color />
+        <v-color v-model:color="detail.color" />
       </li>
       <li class="li" style="min-height: 150px;">
         <span class="label">预览图</span>
@@ -60,7 +61,7 @@
       </li>
     </ul>
     <div class="edit-article">
-      <v-blogeditor v-model:contentsss="detail.markdown" />
+      <v-editor v-model:contentsss="detail.markdown" />
     </div>
     <div class="summary mt25">
       <h2 class="mb5 font18 cl-999">摘要说明</h2>

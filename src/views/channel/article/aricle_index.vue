@@ -16,7 +16,7 @@
         <span class="mr15" @click="operation('delete')">删除</span>
       </div>
       <List :data="{name: channel, coding: coding.art}" :dataList="dataList" :isShowBatch="isShowBatch" v-if="toggleDisplay === 'list'" />
-      <Album :data="{name: channel, coding: coding.art}" :dataList="dataList" :item="query.item" :isShowBatch="isShowBatch" v-else />
+      <Album :data="{name: channel, coding: coding.art}" :dataList="dataList" :item="query.item" :isShowBatch="isShowBatch" :type="channel === 'video' ? 'video' : 'image'" v-else />
       <v-loding v-if="!loading" />
     </template>
     <template v-slot:content2>
@@ -97,6 +97,7 @@ export default defineComponent({
       toggleDisplay.value = 'album'
     } else if (props.channel === 'video') {
       // menu.value[0].name = "视频管理"
+      toggleDisplay.value = 'album'
     } else if (props.channel === 'website') {
       // menu.value[0].name = "网站管理"
       toggleDisplay.value = 'album'

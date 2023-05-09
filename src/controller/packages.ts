@@ -1,13 +1,21 @@
 const component = require.context(
   // 其组件目录的相对路径
-  '../packages',
+  '../components/packages',
   // 是否查询其子目录
   true
 )
 
 const install = (Vue:any) => {
 
-  component.keys().forEach((fileName: string) => {
+  let arr: any = []
+  component.keys().map(item=>{
+    if(item.match("./*/index.vue") && item.split("/").length-1 === 2){
+      arr.push(item)
+    }
+  })
+  
+
+  arr.forEach((fileName: string) => {
     
     if (fileName.endsWith('index.vue')) {
       
@@ -18,7 +26,7 @@ const install = (Vue:any) => {
 
       // 转换为短横线分割命名法
       const componentName = `v-${name.replace(/^\.\//, '').replace(/\.\w+$/, '')}`
-      console.log(componentName)
+      console.log(componentName+"====================")
 
       // 全局注册组件
       Vue.component(

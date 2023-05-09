@@ -75,3 +75,12 @@ export const getParam = () => {
 export const getQuery = () => {
   return parse(window.location.search.split("?")[1]);
 };
+
+export const getParent = (current: any, value: any) => {
+  let index = current.findIndex((item: any) => item.value === value)
+  return index > -1 ? true : false
+}
+export const showParent = (current: any) => {
+ 
+  return current
+}

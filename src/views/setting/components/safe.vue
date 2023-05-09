@@ -47,19 +47,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, onMounted, ref } from 'vue'
+import { defineComponent, getCurrentInstance, onMounted, computed, ref } from '@/utils'
 import {useStore} from 'vuex'
 
 export default defineComponent({
   name: 'AsideView',
 setup(props,context) {
     const {ctx, proxy}:any = getCurrentInstance();
+    const userInfo: any = computed(() => store.getters['user/userInfo']);
     const store = useStore();
     const logList: any = ref([])
-
+  
     function init(){
       store.dispatch('common/Fetch', {
-        api: 'LoginLog'
+        api: 'LoginLog',
+        data: {
+          uid: userInfo.value.account
+        }
       }).then(res => {
         logList.value = res.result
       })

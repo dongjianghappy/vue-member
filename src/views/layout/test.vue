@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Graph />
+    <v-graph />
   </div>
 </template>
 
@@ -9,12 +9,8 @@ import {
   defineComponent,
 } from 'vue'
 
-import Graph from '../../plugin/joint/index.vue'
 export default defineComponent({
   name: 'v-Search',
-  components: {
-    Graph
-  },
   props: {
     // 展示状态: 用于弹窗和抽提框
     show: {

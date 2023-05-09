@@ -1,30 +1,47 @@
 <template>
- <span @click="handleclick">
+<span @click="handleClick">
   <i class="iconfont icon-refresh1"></i>点击刷新
- </span>
+</span>
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance } from 'vue'
+import {
+  defineComponent,
+  ref
+} from 'vue'
 
 export default defineComponent({
   name: 'v-Refresh',
   props: {
-    render: {
-      type: Function,
+    data: {
+      type: Array,
       default: () => {
         return
       }
-    }
+    },
+    number: {
+      type: Number,
+      default: 0
+    },
+    size: {
+      type: String,
+      default: 0
+    },
   },
-  setup(props,context) {
-    const {ctx}:any = getCurrentInstance();
+  emits: ['update:number'],
+  setup(props, context) {
+    let current: any = ref(0)
 
-    function handleclick(){
-      props.render()
+    function handleClick() {
+      if (current.value === props.size || current.value === props.data.length - 1) {
+        current.value = 0
+      } else {
+        current.value++
+      }
+      context.emit('update:number', current.value)
     }
     return {
-      handleclick
+      handleClick
     }
   }
 })

@@ -3,18 +3,18 @@
   <div class="con-list" v-for="(item, index) in sourceData" :key="index">
     <div class="con-wrap">
       <div class="photos">
-        <v-avatar :data="item" :style="{width: '50px', height: '50px', borderRadius: '50%'}" v-if="loginuser.account === item.uid" />
+        <v-photo :data="item" :style="{width: '50px', height: '50px', borderRadius: '50%'}" v-if="loginuser.account === item.uid" />
         <v-photos :sourceData="item" v-else />
       </div>
       <div class="user_info pb5"><span class="username">{{item.nickname}}</span>
         <span class="right span-icon">
-          <Popover content="<i class='iconfont icon-down font18 icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-${item.id}`">
+          <v-popover content="<i class='iconfont icon-down font18 icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-${item.id}`">
             <div class="p15 align_center" style="width: 80px; height: 50px">
               <ul class="font14" style="display: block">
                 <li style="height: 32px" @click="deleteTalk(item.id)">删除</li>
               </ul>
             </div>
-          </Popover>
+          </v-popover>
         </span>
       </div>
       <div class="user_from pb5">{{item.times}}</div>
@@ -24,7 +24,7 @@
         <template v-if="item.list">
           <div v-for="(list, i) in item.list" :key="i">
             <div v-if="list.video || list.image" style="background:#eee; margin-top: 5px; margin-left: -80px; margin-right: -15px; margin-bottom: -15px; padding-top: 10px; padding-left: 80px; padding-right:15px;    padding-bottom: 15px;">
-              <span @click="handleclick(list.account || list.uid)" class="showuserinfo" style="color: #eb7350;">@{{list.nickname}}</span>
+              <span @click="handleClick(list.account || list.uid)" class="showuserinfo" style="color: #eb7350;">@{{list.nickname}}</span>
 
               <span v-html="list.summary"></span>
               <!-- 视频预览 -->
@@ -41,24 +41,28 @@
             </div>
             <div v-else>
               <!-- 这部分显示最后转载用户吧 -->
-              <span @click="handleclick(list.account || list.uid)" class="showuserinfo" style="color: #eb7350;">@{{list.nickname}}</span>
+              <span @click="handleClick(list.account || list.uid)" class="showuserinfo" style="color: #eb7350;">@{{list.nickname}}</span>
               <span v-html="list.summary"></span>
             </div>
           </div>
         </template>
         <!--原文渲染-->
-
-        <ul v-else class="img-grid smallimg-wrap clearfix">
-          <li v-for="(img, k) in item.image" :key="k">
-            <img :src="img" class="showimg" @click="showImg(item, img)" data-id="{$sm_talklist[l].id}" data-coding="{$sm_talklist[l].coding}" data-codinglist="collect={$sm_talklist[l].coding5}&comment={$sm_talklist[l].coding3}&praise={$sm_talklist[l].coding4}" data-img="{$sm_talklist[l].imglist[i]}" data-sort="{$smarty.section.i.index}" />
-          </li>
-        </ul>
+        <div v-else>
+          <div v-if="item.image.length === 1">
+            <img :src="item.image[0]" class="showimg" @click="showImg(item, item.image[0])" style="border-radius: 8px;width: 168px; height: 224px; cursor: zoom-in;" />
+          </div>
+          <ul v-else class="img-grid smallimg-wrap clearfix">
+            <li v-for="(img, k) in item.image" :key="k">
+              <img :src="img" class="showimg" @click="showImg(item, img)" style="border-radius: 8px;cursor: zoom-in;" />
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <TalkItembar :data="item" />
   </div>
   <v-loding v-if="!loading" />
-  <v-layer v-model:isShow="showFlag" :data="currentData" :img="currentImg" v-if="showFlag" />
+  <v-layer v-model:isShow="showFlag" :data="currentData" :img="currentImg" v-if="showFlag" type="image" :hasComment="true" />
 </div>
 </template>
 
@@ -73,13 +77,11 @@ import {
   getUid
 } from '@/utils'
 import TalkItembar from './TalkItembar.vue'
-import Popover from '@/components/packages/popover/index.vue';
 
 export default defineComponent({
   name: 'TalkItemView',
   components: {
     TalkItembar,
-    Popover
   },
   props: {
     sourceData: {
@@ -87,10 +89,6 @@ export default defineComponent({
       default: () => {
         return []
       }
-    },
-    isLoading: {
-      type: Boolean,
-      default: false
     },
     deleteTalk: {
       type: Function,
@@ -116,7 +114,7 @@ export default defineComponent({
       showFlag.value = !showFlag.value
     }
 
-    function handleclick(uid: any) {
+    function handleClick(uid: any) {
       if (getUid() !== uid) {
         const path = window.location.pathname.split("/")
         window.location.href = `${path[1] === "app" ? "/app": ""}/u/${uid}/home`;
@@ -131,7 +129,7 @@ export default defineComponent({
       currentImg,
       loginuser,
       showImg,
-      handleclick
+      handleClick
     }
   }
 })

@@ -1,26 +1,22 @@
 <template>
-<input type="checkbox" :class="className" :checked="checkedList.indexOf(data.id) > -1 ? true : false" @click="handleclick(data.id)" :disabled="auth" />
+<input type="checkbox" :class="className" :checked="checkedList.indexOf(data.id) > -1 ? true : false" @click="handleclick(data)" :disabled="auth" />
 </template>
 
 <script lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance
+  defineComponent
 } from 'vue'
 
 export default defineComponent({
-  name: 'v-Search',
-  components: {
-
-  },
+  name: 'v-Checkbox',
   props: {
-    checkedList: {
-      type: Array,
-      default: []
-    },
     className: {
       type: String,
       default: ""
+    },
+    checkedList: {
+      type: Array,
+      default: []
     },
     data: {
       type: String,
@@ -33,18 +29,13 @@ export default defineComponent({
   },
   emits: ['onClick'],
   setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-
-    function handleclick(id: any) {
-
-      if (props.checkedList.indexOf(id) > -1) {
-        let index = props.checkedList.indexOf(id)
-
+    function handleclick(param: any) {
+      context.emit(`onClick`, param)
+      if (props.checkedList.indexOf(param.id) > -1) {
+        let index = props.checkedList.indexOf(param.id)
         props.checkedList.splice(index, 1)
       } else {
-        props.checkedList.push(id)
+        props.checkedList.push(param.id)
       }
     }
     return {

@@ -16,11 +16,11 @@
               <span>留言（{{dataList.length}}）</span>
             </div>
             <div class="feedback-list" style="background: none;" v-for="(item, index) in dataList" :key="index">
-              <v-avatar :data="item" />
+              <v-photo :data="item" />
               <p class="feedback-user">{{item.nickname}} {{item.times}}</p>
               <p><span class="mr10 pointer" @click="handleClick(item)" v-if="item.isreply && currentUser" style="color: #ffc09f">回复</span>{{item.content}}</p>
               <div class="reply_info" v-for="(data, i) in item.reply" :key="i">
-                <v-avatar :data="data" />
+                <v-photo :data="data" />
                 <p>{{data.nickname}} {{data.times}}</p>
                 <p><span class="mr10 pointer" @click="handleClick(data)" v-if="data.isreply && currentUser" style="color: #ffc09f">回复</span> {{data.content}}</p>
               </div>

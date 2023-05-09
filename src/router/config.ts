@@ -14,6 +14,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/search', component: () => import('../views/search/index.vue')},
       { path: '/u/:id/appstore/', component: () => import('../views/appstore/index.vue')},
       { path: '/u/:id/manage/', component: () => import('../views/manage/index.vue')},
+      { path: '/u/:id/content/', component: () => import('../views/content/index.vue')},
       { path: '/u/:id/home/', component: () => import('../views/home/index.vue')},
       { path: '/u/:id/:id/', component: () => import('../views/channel/index.vue')},
       // { path: '/channel/', component: () => import('../views/channel/index.vue')},
@@ -32,14 +33,6 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/u/:id/information/', component: () => import('../views/information/index.vue')},      
       { path: '/u/:id/haosite/', component: () => import('../views/application/haosite/index.vue')},
     ]
-  },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   }
 ]
 

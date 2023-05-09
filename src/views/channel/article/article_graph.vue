@@ -4,7 +4,7 @@
     <span class="pointer ml25" @click="handlePrev">返回</span>
   </div>
   <div class="module-content form-wrap-box detail" style="padding: 25px 50px !important; min-height: 500px;">
-<Graph :data="data.graph" :save="save" />
+<v-graph :data="data.graph" :save="save" />
   </div>
 </div>
 </template>
@@ -23,13 +23,9 @@ import {
   watch,
   getUid
 } from '@/utils'
-import Graph from '../../../plugin/joint/index.vue'
 
 export default defineComponent({
   name: 'ArticleView',
-  components: {
-    Graph
-  },
   props: {
     channel: {
       type: String,

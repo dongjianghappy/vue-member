@@ -7,12 +7,9 @@
         <textarea placeholder="有什么新鲜事想分享给大家？" v-model="data.summary" class="talkcontent-wrap" style="background: transparent; resize: none;"></textarea>
       </div>
     </div>
-    <v-upload ref="upload" @imgList="image" :show="false" />
+    <v-upload ref="upload" @imgList="image" file="talk" />
     <div class="operate">
       <div class="left">
-        <!-- <span class="infos">
-          <v-expression @onEmoji="choose" />
-        </span> -->
         <span class="infos" @click="upload.handleclick()">
           <i class="iconfont icon-pic"></i>图片
         </span>
@@ -56,7 +53,6 @@ export default defineComponent({
 
     // 监听图片上传
     function image(a: any) {
-      debugger
       data.img = a
     }
 
@@ -101,8 +97,8 @@ export default defineComponent({
     return {
       data,
       upload,
-      choose,
       image,
+      choose,
       sendTalk,
     }
   }

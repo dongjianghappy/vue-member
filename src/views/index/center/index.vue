@@ -66,8 +66,6 @@ export default defineComponent({
     })
 
     function init(param: any) {
-      debugger
-      let uid = window.location.pathname.split("/")[1]
       let dispatch = !param.type || param.type === 'ori' || param.type === 'ori' ? 'Talk' : param.type
       store.dispatch(`talk/${dispatch}`, {
         data: {

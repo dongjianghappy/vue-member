@@ -1,16 +1,18 @@
 <template>
 <div>
-  <div class="container w1100 relative clearfix" style="background: rgba(17, 17, 17, 0.2);">
+  <div class="container w1100 relative clearfix">
     <div class="w180 left">
       <v-aside title="相册">
         <template v-slot:button>
-          <Detail action='add' :data="data" :render="init" />
+          <Detail action='add' :data="{ coding: 'U10000' }" :render="aaaa" />
         </template>
         <template v-slot:aside>
           <ul>
             <li v-for="(item, index) in photoAlbum" :key="index" @click="handleclick(item.id)" class="aside">
               <i class="iconfont icon-dot font20"></i> {{item.name}}
-              <span class="right" @click.stop="add('edit', item)" v-if="currentUser && item.id !== 'talk' && item.id !== 'photo'"><i class="iconfont icon-edit"></i></span>
+              <span class="right" v-if="currentUser && item.id !== 'talk' && item.id !== 'photo'">
+                <Detail action='edit' :data="{id: item.id, coding: 'U10000' }" :render="aaaa" />
+              </span>
             </li>
           </ul>
         </template>
@@ -20,30 +22,45 @@
     <div class="right" style="width: 910px;">
       <div class="module-wrap">
         <div class="module-head p20">相册
-          <span class="right pointer" @click="handleSave('add')" v-if="currentUser && current !== 'talk' && current !== 'photo'" :disable="img.length<2">保存</span>
-          <span class="right pointer mr25" @click="handleUpload('add')" v-if="currentUser && current !== 'talk' && current !== 'photo'">上传</span>
-
+          <span class="right pointer" @click="handleSave('add')" v-if="currentUser && current !== 'talk' && current !== 'photo'" :disable="img.length<2">
+            <i class="iconfont icon-mail" />
+            保存
+          </span>
+          <span class="right pointer mr25" @click="handleUpload('add')" v-if="currentUser && current !== 'talk' && current !== 'photo'">
+            <i class="iconfont icon-upload-file" />
+            上传
+          </span>
         </div>
         <div class="module-content p10" style="min-height: 500px">
-          <v-upload ref="upload" uploadtype='album' @imgList="image" />
+          <v-upload ref="upload" uploadtype='album' @imgList="image" v-if="current !== 'talk' && current !== 'photo'" file="talk" />
           <div v-if="current === 'photo'">
-            <div class="col-sm-6 col-md-2" v-for="(img, i) in history" :key="i">
-              <div class="p5"><img :src="img" height="140" style="border-radius: 8px; width: 100%" @click="showImg(img)" /></div>
-            </div>
+            <v-tabs :tabs="[{name: '头像',value: 'photos'},{name: '头像背景',value: 'background'},{name: '主页背景',value: 'banner'}]" :isEmit="true" v-model:index="index">
+              <template v-slot:content1>
+                <List kind="photos" />
+
+              </template>
+              <template v-slot:content2>
+                <List kind="head_background" />
+
+              </template>
+              <template v-slot:content3>
+                <List kind="home_background" />
+              </template>
+            </v-tabs>
           </div>
-          <div v-else-if="current === 'talk'">
+          <div class="plr15" v-else-if="current === 'talk'">
             <div v-for="(item, index) in albumList" :key="index" style="overflow: auto;">
               <div>{{item.month}}</div>
               <div>
-                <div class="col-sm-6 col-md-2" v-for="(img, i) in item.list" :key="i">
-                  <div class="p5"><img :src="img" height="140" style="border-radius: 8px; width: 100%" @click="showImg(img)" /></div>
+                <div class="col-sm-6 col-md-3 p10" v-for="(img, i) in item.list" :key="i">
+                  <v-thumbnail :data="{image: [img]}" />
                 </div>
               </div>
             </div>
           </div>
-          <div v-else>
-            <div class="col-sm-6 col-md-2" v-for="(item, i) in photoList" :key="i">
-              <div class="p5"><img :src="item.image" height="140" style="border-radius: 8px; width: 100%" @click="showImg(item.image)" /></div>
+          <div class="plr15" v-else>
+            <div class="col-sm-6 col-md-3 p10" v-for="(item, i) in photoList" :key="i">
+              <v-thumbnail :data="item" />
             </div>
           </div>
         </div>
@@ -51,31 +68,33 @@
     </div>
   </div>
 </div>
-<v-layer v-model:isShow="showFlag" :data="currentData" :img="currentImg" v-if="showFlag" type="album" />
 </template>
 
 <script lang="ts">
 import {
-  
+
 } from '@/utils'
 import {
   defineComponent,
   getCurrentInstance,
   useStore,
-   useRouter,
-  useRoute,
   computed,
   onMounted,
   ref,
-  getUid
+  getUid,
+  watch
 } from '@/utils'
 import Detail from './components/detail.vue'
-import {album} from '@/assets/const'
+import List from './components/list.vue'
+import {
+  album
+} from '@/assets/const'
 
 export default defineComponent({
   name: 'AlbumView',
   components: {
-    Detail
+    Detail,
+    List
   },
   setup(props, context) {
     const {
@@ -83,6 +102,7 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store = useStore();
     const currentUser = computed(() => store.getters['user/currentUser']);
+    const loginuser = computed(() => store.getters['user/loginuser']);
     const history: any = ref([])
     const current: any = ref("talk")
     const photoAlbum: any = ref([])
@@ -95,6 +115,8 @@ export default defineComponent({
     const currentImg = ref()
     const upload: any = ref(null);
     const img = ref("")
+    const index: any = ref(0)
+    const uid = getUid()
 
     const menu: any = album;
     menu.map((item: any) => {
@@ -112,6 +134,7 @@ export default defineComponent({
         init()
       })
     }
+
 
     // 监听图片上传
     function image(a: any) {
@@ -141,24 +164,10 @@ export default defineComponent({
       })
     }
 
-    function getHistory() {
-      store.dispatch('common/Fetch', {
-        api: "GetHistoryPhotos",
-        data: {
-          type: "album",
-          uid: getUid()
-        }
-      }).then(res => {
-        history.value = res.result
-
-      })
-    }
 
     function handleclick(param: any) {
       current.value = param
-      if (param === 'photo') {
-        getHistory()
-      } else if (param === 'talk') {
+      if (param === 'talk') {
         init()
       } else {
         currentAlbum.value = param
@@ -192,13 +201,14 @@ export default defineComponent({
       showFlag.value = !showFlag.value
     }
 
-    onMounted(() => {
 
+    onMounted(() => {
       aaaa()
     })
 
     return {
       albumList,
+      uid,
       history,
       currentUser,
       handleclick,
@@ -217,7 +227,16 @@ export default defineComponent({
       handleSave,
       showImg,
       menu,
+      aaaa,
+      index,
+      loginuser
     }
   }
 })
 </script>
+
+<style scoped>
+.background {
+  background: rgba(0, 0, 0, 0.7)
+}
+</style>

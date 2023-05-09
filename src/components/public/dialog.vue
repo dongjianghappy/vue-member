@@ -1,11 +1,10 @@
 <template>
 <div class="drawer-wrap align_left" :class="{'drawer-open': show}" style="top: 0">
-  <v-mask v-show="show" v-model:isShow="isShow">
-  </v-mask>
-  <div v-if="show">
-    <div id="detail" class="layer" :class="[{'animation-fadein': isShow}, className]" @click.stop style="left: 534.5px; display: block; z-index: 9001; opacity: 1;" :style="{width: width, height: height, top: top, left: left}">
+  <v-mask v-show="show" v-model:isShow="isShow" />
+  <template v-if="show">
+    <div class="layer" :class="[{'animation-fadein': isShow}, className]" @click.stop style="left: 534.5px; display: block; z-index: 9001; opacity: 1;" :style="{width: `${style.width || 450}px`, height: `${style.height || 380}px`, top: window.top, left: window.left}">
       <div v-if="title" id="msgtitle" class="layer-title" @mousedown="mousedown"><span>{{title}}</span></div><span id="close" v-if="close" class="layer-close" @click="handleCancel"><i class="iconfont icon-close"></i></span>
-      <div id="msgcon" class="layer-content" :class="[className]" style="min-height: 150px;" :style="{height: conheight}">
+      <div id="msgcon" class="layer-content" :class="[className]" style="min-height: 150px;">
         <slot name="content"></slot>
       </div>
       <div class="layer-btngroup" v-if="hasfooter">
@@ -18,115 +17,96 @@
 
       </div>
     </div>
-  </div>
+  </template>
 </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  getCurrentInstance,
   ref,
   watch,
   useStore
 } from '@/utils'
 
 export default defineComponent({
-  name: 'v-Search',
+  name: 'v-Dialog',
   props: {
+    style: {
+      type: Object,
+      default: () => {
+        return {
+          width: "450",
+          height: "380"
+        }
+      }
+    },    
     action: {
       type: String,
       default: "add"
     },
-    // 标题
     className: {
       type: String,
       default: ""
-    },    
-    // 标题
+    },
     title: {
       type: String,
       default: ""
     },
-    // 是否有低部
     hasfooter: {
       type: Boolean,
       default: true
     },
-    // 是否展示
     show: {
       type: Boolean,
       default: false
     },
-    // 是否有确认按钮
     confirm: {
       type: Boolean,
       default: true
     },
-    // 是否有取消按钮
     cancel: {
       type: Boolean,
       default: true
-    },
-    // 宽度
-    width: {
-      type: String,
-      default: '450px'
-    },
-    // 高度
-    height: {
-      type: String,
-      default: '380px'
-    },
-      // 高度
-    conheight: {
-      type: String,
-      default: '150px'
     },
     close: {
       type: Boolean,
       default: true
     },
-        // 列表初始化数据
     render: {
       type: Function,
       default: () => {
         return 'Default function'
       }
     },
-        // 数据
     data: {
       type: Object,
       default: () => {
         return {}
       }
     },
-        // 接口
     api: {
       type: String,
       default: ""
     },
   },
-
   emits: ['update:show', 'submit'],
   setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
     const store = useStore();
-    const top = ref(`${document.documentElement.clientHeight/2-parseInt(props.height)/2}px`)
-    const left = ref(`${document.documentElement.clientWidth/2-parseInt(props.width)/2}px`)
+    const window = {
+      top: `${document.documentElement.clientHeight/2-parseInt(props.style.height)/2}px`,
+      left: `${document.documentElement.clientWidth/2-parseInt(props.style.width)/2}px`
+    }
     const isShow = ref(props.show)
 
-    // 监听弹窗变量
     watch([isShow], (newValues, prevValues) => {
       context.emit('update:show', false)
     })
-
-    // 初始化数据
+    
     async function init(param: any) {
       let data = {}
       if (props.action === 'edit') {
+        
         await store.dispatch('common/Fetch', {
           api: props.api || "detail",
           data: {
@@ -140,22 +120,20 @@ export default defineComponent({
       return data
     }
 
-
-    function handleCancel() {
-      context.emit('update:show', false)
-    }
-
     function handleClick() {
       context.emit('submit')
     }
 
+    function handleCancel() {
+      context.emit('update:show', false)
+    }    
+
     return {
+      isShow,
+      window,
       handleClick,
       handleCancel,
-      init,
-      top,
-      left,
-      isShow
+      init
     }
   }
 })

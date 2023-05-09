@@ -30,7 +30,7 @@
             <div class="app">
               <div class="app-img">
                 <i class="iconfont icon-grade font24 absolute" style=" right: 0; bottom: 0; color:  #ccc "></i>
-                <a class="appstorebtn" data-id="3"><img :src="item.image" width="100%" height="100%" style="float:left"></a>
+                <img :src="item.image" style="width: 156px; height: 150px" >
               </div>
               <div class="app-name">{{item.name}}</div>
             </div>

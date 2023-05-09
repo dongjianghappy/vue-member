@@ -5,7 +5,6 @@
     <router-view />
   </div>
   <Footer />
-  <Player />
   <Thme v-if="currentUser && module.theme" />
   <v-gotop />
 </div>
@@ -14,16 +13,14 @@
 <script lang="ts">
 import {
   defineComponent,
-  computed,
-  ref,
   useStore,
-  useRouter,
-  useRoute
+  useRoute,
+  computed,
+  ref
 } from '@/utils'
 import Header from './components/header/index.vue'
 import Footer from './components/footer/index.vue'
 import Thme from '@/views/thme/index.vue'
-import Player from '@/components/player/index.vue'
 
 export default defineComponent({
   name: 'IndexView ',
@@ -31,14 +28,12 @@ export default defineComponent({
     Header,
     Footer,
     Thme,
-    Player
   },
   setup(props, context) {
     const store = useStore();
-    const router = useRouter();
     const route = useRoute();
-    
-    // 存储token值
+
+    // 如果url带有token时就存储token，并且从新跳转
     if (route.query.token) {
       document.cookie = `token=${route.query.token};path=/`
       window.location.href = window.location.origin + window.location.pathname
@@ -50,19 +45,18 @@ export default defineComponent({
     const isLogin: any = ref(false)
 
     store.dispatch('user/Detect').then((res) => {
-      debugger
       if (res) {
         isLogin.value = true
       } else {
-        // window.location.href = 'http://www.yunxi10.com/login.html'
+
       }
     })
 
     return {
       module,
-      isLogin,
       userInfo,
-      currentUser
+      currentUser,
+      isLogin
     }
   }
 })

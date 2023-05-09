@@ -1,13 +1,13 @@
 <template>
 <ul>
-  <li @click="handleClick('myconcern')" class="pointer">
-    <span><strong>{{userInfo.myconcern}}</strong><span>关注</span></span>
-  </li>
   <li @click="handleClick('concernmy')" class="pointer">
     <span><strong>{{userInfo.concernmy}}</strong><span>粉丝</span></span>
   </li>
-  <li>
-    <a><strong>{{userInfo.talk}}</strong><span>话题</span></a>
+  <li @click="handleClick('myconcern')" class="pointer">
+    <span><strong>{{userInfo.myconcern}}</strong><span>关注</span></span>
+  </li>
+  <li @click="handleClick('praise')" class="pointer">
+    <a><strong>{{userInfo.talk}}</strong><span>获赞</span></a>
   </li>
 </ul>
 </template>
@@ -34,10 +34,17 @@ export default defineComponent({
     const userInfo = computed(() => store.getters['user/userInfo']);
 
     function handleClick(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: getUid(),
-        query: `/concern?mod=${param}`
-      }))
+      if (param === 'praise') {
+        router.push(proxy.const.setUrl({
+          uid: getUid(),
+          query: `?mod=${param}`
+        }))
+      } else {
+        router.push(proxy.const.setUrl({
+          uid: getUid(),
+          query: `/concern?mod=${param}`
+        }))
+      }
     }
     return {
       userInfo,

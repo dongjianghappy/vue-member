@@ -53,7 +53,7 @@ export default defineComponent({
 
     function edit(param: any) {
       store.dispatch('common/Fetch', {
-        api: "EditUserInfo",
+        api: "editUserInfo",
         data: {
           ...param
         }

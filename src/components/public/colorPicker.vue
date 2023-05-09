@@ -1,5 +1,5 @@
 <template>
-<Popover :content="`<span style='
+<v-popover :content="`<span style='
             background: ${color || currentColor};
             margin: 0 5px;
             display: flex;
@@ -22,7 +22,7 @@
       <div style="margin-left: 5px;">{{currentColor}}</div>
     </div>
   </div>
-</Popover>
+</v-popover>
 </template>
 
 <script lang="ts">
@@ -31,15 +31,11 @@ import {
   getCurrentInstance,
   ref
 } from 'vue'
-import Popover from '@/components/packages/popover/index.vue';
 import {
   color
 } from '@/assets/const'
 export default defineComponent({
   name: 'v-ColorPicker',
-  components: {
-    Popover
-  },
   props: {
     islabel: {
       type: Boolean,

@@ -1,6 +1,6 @@
 <template>
 <v-button v-model:show="isShow">
-  <i class="iconfont" :class="`icon-${action === 'add' ? 'add' : 'edit'}`" />
+  <i class="iconfont" :class="`icon-${action === 'add' ? 'anonymous-iconfont' : 'edit'}`" />
 </v-button>
 <v-dialog v-model:show="isShow" ref="form" title="设置状态" width="520px" height="450px" :confirm="true" :cancel="true" @submit="submit">
   <template v-slot:content>

@@ -1,45 +1,37 @@
 <template>
-  <div>
-    <div class="sidebar">
-      <HotTalk />
-      <Ranking :style="{width: '300px'}" />
-      <!-- <Visitor /> -->
-    </div>
+<div>
+  <div class="sidebar">
+    <HotTalk />
+    <Visitor />
+    <Ranking :style="{width: '300px'}" />
   </div>
+</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance, onMounted, computed } from 'vue'
-import {useStore} from 'vuex'
+import {
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  computed
+} from 'vue'
+import {
+  useStore
+} from 'vuex'
 import HotTalk from '../../index/components/module/hotTalk.vue'
 import Ranking from '../../index/components/module/ranking.vue'
 import Visitor from '../../index/components/module/visitor.vue'
 export default defineComponent({
   name: 'AsideView',
   components: {
-   HotTalk,
-   Ranking,
-   Visitor
+    HotTalk,
+    Ranking,
+    Visitor
   },
-  data() {
-  return {
-    menu: [
-      {name: "收藏"},
-      {name: "评论"},
-      {name: "点赞"},
-      {name: "@我的"},
-      {name: "音乐盒"},
-      {name: "相册"},
-      {name: "日志"},
-      {name: "留言板"},
-      {name: "自媒体"},
-      {name: "作品管理"},
-      {name: "我的博客"},
-    ]
-  }
-},
-setup(props, context) {
-    const { proxy }:any = getCurrentInstance();
+  setup(props, context) {
+    const {
+      proxy
+    }: any = getCurrentInstance();
     const store = useStore();
     const userInfo = computed(() => store.getters['user/userInfo']);
     const messageBoard = computed(() => store.getters['common/messageBoard']);
@@ -47,23 +39,16 @@ setup(props, context) {
     const recentPhotos = computed(() => store.getters['common/recentPhotos']);
     const currentUser = computed(() => store.getters['user/currentUser']);
 
-    function init(){
+    function init() {
       store.dispatch('common/MessageBoard', {
-        
+
       })
       store.dispatch('common/RecentJournal', {
-        
-      })
-      // store.dispatch('common/RecentPhotos', {
-        
-      // })      
 
+      })
     }
 
-   onMounted(() => {
-      // const Doc: any = document.getElementsByClassName("aside_fixed")[0];
-      // Doc.offsetTop
-      
+    onMounted(() => {
       proxy.$scroll.init({
         win: {
           el: window,
@@ -78,7 +63,7 @@ setup(props, context) {
     })
 
     init()
-    return { 
+    return {
       init,
       userInfo,
       currentUser,

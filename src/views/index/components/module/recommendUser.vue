@@ -6,7 +6,7 @@
   <div class="module-content plr15 font12">
     <div class="media-wrap mb10 pb10" v-for="(item, index) in dataList" :key="index" style="display: flex">
       <div class="media-left">
-        <v-avatar :data="item" :style="{width: '50px',  height: '50px', borderRadius: '50%'}" />
+        <v-photo :data="item" :style="{width: '50px',  height: '50px', borderRadius: '50%'}" />
       </div>
       <div class="media-body" style="flex: 1">
         <div class="pb5">

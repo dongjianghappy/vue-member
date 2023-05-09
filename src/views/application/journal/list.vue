@@ -4,11 +4,11 @@
     <a class="mr10" style="display:inline-block">文档</a>
   </div>
   <div class="module-content" style="padding: 0 50px !important; min-height: 500px">
-    <v-list :data="dataList" viewUrl="/journal/?item=view" editUrl="/journal/?item=details&action=edit" />
-    <v-loding v-if="!loading" />
-    <div class="pt25" style="padding: 50px;">
+    <!-- <v-list :dataList="dataList" viewUrl="/journal/?item=view" editUrl="/journal/?item=details&action=edit" /> -->
+    <!-- <v-loding v-if="!loading" /> -->
+    <!-- <div class="pt25" style="padding: 50px;" v-if="dataList.list.length > 10">
       <v-pagination :toall="dataList.length" />
-    </div>
+    </div> -->
   </div>
 </div>
 </template>
@@ -44,9 +44,12 @@ export default defineComponent({
         api: 'Journal',
         data: {
           uid: getUid(),
-          id: route.query.id
+          id: route.query.id,
+          pagesize: '10',
+          page: '1'
         }
       }).then(res => {
+        debugger
         loading.value = true
         dataList.value = res.result
       })

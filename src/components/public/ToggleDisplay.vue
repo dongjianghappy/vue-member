@@ -1,42 +1,26 @@
 <template>
-  <span style="color: #eee"><i class="iconfont icon-list pointer" @click="handelClick('list')"></i>|<i class="iconfont icon-app pointer" @click="handelClick('album')"></i></span>
+<span style="color: #eee">
+  <i class="iconfont icon-list pointer" @click="handelClick('list')" v-if="toggle === 'album'"></i>
+  <i class="iconfont icon-app pointer" @click="handelClick('album')" v-else></i>
+</span>
 </template>
 
 <script lang="ts">
-import { defineComponent, getCurrentInstance } from 'vue'
+import {
+  defineComponent,
+} from 'vue'
 
 export default defineComponent({
-  name: 'v-Search',
-  components: {
-
-  },
+  name: 'v-ToggleDisplay',
   props: {
-    // 名称
-    name: {
+    toggle: {
       type: String,
-      default: "按钮"
-    },
-    // 是否展示
-    show: {
-      type: Boolean,
-      default: false
-    },
-    // 是否展示
-    disabled: {
-      type: Boolean,
-      default: false
-    },    
-    // 按钮类型
-    buttonType: {
-      type: String,
-      default: "text"
-    }    
+      default: 'list'
+    }
   },
   emits: ['update:toggle'],
-  setup(props,context) {
-    const {ctx}:any = getCurrentInstance();
-
-    function handelClick(param: any){
+  setup(props, context) {
+    function handelClick(param: any) {
       context.emit('update:toggle', param)
     }
     return {

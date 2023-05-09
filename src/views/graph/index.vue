@@ -1,5 +1,7 @@
 <template>
-<Graph :data="detail" :save="save" @close="handleClose" />
+11111111111111111111
+<v-graph :data="detail" :save="save" @close="handleClose" />
+2222222222
 </template>
 
 <script lang="ts">
@@ -14,13 +16,9 @@ import {
   watch,
   getUid
 } from '@/utils'
-import Graph from '@/plugin/joint/index.vue'
 
 export default defineComponent({
   name: 'ArticleView',
-  components: {
-    Graph
-  },
   props: {
     channel: {
       type: String,

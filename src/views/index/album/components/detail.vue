@@ -1,17 +1,17 @@
 <template>
 <v-button v-model:show="isShow">
-  <i class="iconfont icon-write" />
+  <i class="iconfont" :class="`icon-${action === 'add' ? 'anonymous-iconfont' : 'edit'}`" />
 </v-button>
-<v-dialog v-model:show="isShow" ref="form" title="设置状态" width="520px" height="450px" :confirm="true" :cancel="true" @submit="submit">
+<v-dialog ref="dialog" v-model:show="isShow" :action="action" title="设置状态" width="520px" height="450px" :data="data" :confirm="true" :cancel="true" @submit="submit">
   <template v-slot:content>
     <ul class="edit-list">
       <li class="mb15">
         <div class="mb5">相册名称</div>
-        <input type="text" v-model="formData.name" class="input-mid input-full">
+        <input type="text" v-model="detail.name" class="input-sm input-full">
       </li>
       <li>
         <div class="mb5">相册描述</div>
-        <input type="text" v-model="formData.description" class="input-mid input-full">
+        <input type="text" v-model="detail.description" class="input-sm input-full">
       </li>
     </ul>
   </template>
@@ -24,11 +24,16 @@ import {
   useStore,
   onMounted,
   ref,
+  watch
 } from '@/utils'
 
 export default defineComponent({
   name: 'HomeViewh',
   props: {
+    action: {
+      type: String,
+      default: 'add'
+    },
     data: {
       type: Object,
       default: () => {
@@ -45,54 +50,59 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore();
     const isShow = ref(false)
+    const detail: any = ref({})
+    const dialog: any = ref(null)
+
     const {
       action,
       item
     } = props.data
-    const formData = ref(item || {
-      name: "",
-      description: "",
+
+// 监听
+    watch([isShow], async (newValues, prevValues) => {
+      if (isShow.value) {
+        
+        detail.value = await dialog.value.init()
+        debugger
+      }
     })
 
-    // 初始化数据
-    function init() {
-      console.log("sdsd");
-
-    }
-
     function submit() {
+      debugger
       const {
+        id,
         name,
         description
-      } = formData.value
+      } = detail.value
       const param: any = {
         name,
         description,
         coding: "U0012",
       }
 
-      if (action !== "add") {
-        param.id = item.id
+      if (props.action !== "add") {
+        param.id = id
       }
 
       // proxy.$loading.loading()
       store.dispatch('common/Fetch', {
-        api: action === "add" ? "CreatePhotoAlbum" : "UpdateAlbum",
+        api: props.action === "add" ? "CreatePhotoAlbum" : "UpdateAlbum",
         data: {
           ...param
         }
       }).then(res => {
+        isShow.value = false
         props.render()
         context.emit('update:showFlag', false)
       })
 
     }
 
-    onMounted(init)
     return {
-      formData,
+      dialog,
       submit,
-      isShow
+      isShow,
+      detail
     }
   }
 })

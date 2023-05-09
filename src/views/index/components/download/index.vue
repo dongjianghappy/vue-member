@@ -4,7 +4,7 @@
     <div class="con-list" v-for="(item, index) in dataList" :key="index">
       <div class="con-wrap">
         <div class="photos">
-          <v-avatar :data="item" :style="{width: '50px', height: '50px', borderRadius: '50%'}" v-if="loginuser.account === item.uid" />
+          <v-photo :data="item" :style="{width: '50px', height: '50px', borderRadius: '50%'}" v-if="loginuser.account === item.uid" />
           <v-photos :sourceData="item" v-else />
         </div>
         <div class="user_info pb5"><span class="username">{{item.nickname}}</span></div>

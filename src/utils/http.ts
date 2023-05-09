@@ -22,7 +22,7 @@ export default class http {
   constructor (options?: any) {
     if (!options) {
       this.baseConfig = {
-        baseURL: '/api/', // 设置跨域代理接口统一的前置地址  http://www.dongblog.com
+        baseURL: process.env.NODE_ENV === 'development' ? '/api/' : 'http://www.dongblog.com/api/', // 设置跨域代理接口统一的前置地址  http://www.dongblog.com
         timeout: 300000,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -105,8 +105,9 @@ export default class http {
     })
 
     return new Promise((resolve, reject) => {
+      let dir = process.env.NODE_ENV === 'development' ? 'interface_new.php' : 'interface_vue.php'
       const url = params.uploadtype ? `?&type=${params.uploadtype}` : ''
-      request.post(`interface_new.php${url}`, params) // interface_vue【线上博客接口】，interface_new【本地博客接口】
+      request.post(`${dir}${url}`, params) // interface_vue【线上博客接口】，interface_new【本地博客接口】
         .then(response => {
           resolve({
             result: response

@@ -29,7 +29,6 @@ import Ranking from '../../views/activity/components/module/ranking.vue'
 import Photos from '../../views/index/components/sidebar.vue'
 // import Log from '../../views/setting/components/safe.vue'
 import SDD from '../concern/index.vue'
-import Graph from '../../plugin/joint/index.vue'
 export default defineComponent({
   name: 'TextView',
     components: {
@@ -39,7 +38,6 @@ export default defineComponent({
   // Photos,
   // Log,
   SDD,
-  Graph
   },
   setup() {
     const {ctx, proxy}:any = getCurrentInstance();

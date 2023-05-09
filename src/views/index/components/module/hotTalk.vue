@@ -2,7 +2,8 @@
 <div class="module-wrap">
   <div class="module-head">
     热门话题
-    <span class="right"><v-refresh :render="refresh" /></span>
+    <span class="right">
+      <v-refresh :data="hotTalkList" v-model:number="current" size="4" /></span>
   </div>
   <div class="module-content font12">
     <ul>
@@ -19,12 +20,11 @@
 <script lang="ts">
 import {
   defineComponent,
-  getCurrentInstance,
+  useStore,
+  useRouter,
   computed,
   onMounted,
-  ref,
-  useStore,
-  useRouter
+  ref
 } from '@/utils'
 
 export default defineComponent({
@@ -32,8 +32,8 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore();
     const router = useRouter();
-    let current: any = ref(0)
     const hotTalkList = computed(() => store.getters['common/hotTalk']);
+    let current: any = ref(0)
 
     function init() {
       store.dispatch('common/HotTalk')
@@ -43,19 +43,11 @@ export default defineComponent({
       router.push(`/activity?item=${param}`)
     }
 
-    function refresh() {
-      if (current.value === 4 || current.value === hotTalkList.value.length - 1) {
-        current.value = 0
-      } else {
-        current.value++
-      }
-    }
     onMounted(init)
 
     return {
       hotTalkList,
       huati,
-      refresh,
       current
     }
   },

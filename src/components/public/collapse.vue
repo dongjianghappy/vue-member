@@ -1,10 +1,13 @@
 <template>
-<div class="aside">
-  <div class="aside-head ptb10" style="background: #424568; margin-bottom: 1px" @click="handleShow">
-    <span :class="collapse ? 'deg90' : ''" style="display: inline-block;"><i class="iconfont icon-arrow arrow "></i></span>
+<div class="collapse">
+  <div class="collapse-head ptb10" @click="handleClick">
+    <span :class="{ 'deg90': collapse}" style="display: inline-block;"><i class="iconfont icon-arrow arrow "></i></span>
     <span>{{title}}</span>
+    <span class="right align_right">
+      <slot name="extra"></slot>
+    </span>
   </div>
-  <div class="aside-list ptb15 plr20" v-show="collapse">
+  <div class="collapse-list p15" v-show="collapse">
     <slot></slot>
   </div>
 </div>
@@ -13,9 +16,7 @@
 <script lang="ts">
 import {
   defineComponent,
-  getCurrentInstance,
-  ref,
-  useRouter,
+  ref
 } from '@/utils'
 
 export default defineComponent({
@@ -25,68 +26,25 @@ export default defineComponent({
       type: String,
       default: ""
     },
-    tabs: {
-      type: Array,
-      default: []
-    },
-    icon: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: "level"
-    },
-    className: {
-      type: Object,
-      default: () => {
-        return {
-          nav: '',
-          con: ''
-        }
-      }
-    },
-    aaa: {
-      type: Boolean,
-      default: false
-    },
-    query: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    method: {
-      type: String,
-      default: "route"
-    },
-    isEmit: {
-      type: Boolean,
-      default: false
-    },
-    iscollapse: {
+    disabled: {
       type: Boolean,
       default: false
     }
   },
   emits: ['update:index'],
   setup(props, context) {
-    const router = useRouter();
-    let collapse: any = ref(props.iscollapse || false)
+    let collapse: any = ref(true)
 
-    function handleShow(params: any) {
+    function handleClick(params: any) {
+      if (props.disabled) {
+        return
+      }
       collapse.value = !collapse.value
     }
     return {
-      handleShow,
+      handleClick,
       collapse
     }
   }
 })
 </script>
-
-<style scoped>
-.current {
-  color: #40a9ff !important;
-}
-</style>

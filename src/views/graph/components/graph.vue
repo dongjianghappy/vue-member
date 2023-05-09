@@ -6,7 +6,7 @@
 <v-dialog v-model:show="isShow" ref="form" :title="title || name" width="950px" height="600px" conheight="600px" :hasfooter="false" :confirm="true" :cancel="true" @submit="submit">
   <template v-slot:content v-if="isShow">
     <slot name="content">
-     <Graph :data="data" :isShow="true" />
+     <v-graph :data="data" :isShow="true" />
     </slot>
   </template>
 </v-dialog>
@@ -21,12 +21,8 @@ import {
   useStore,
   watch
 } from '@/utils'
-import Graph from '../../../plugin/joint/index.vue'
 export default defineComponent({
   name: 'v-Category',
-  components: {
-    Graph
-  },
   props: {
     title: {
       type: String,

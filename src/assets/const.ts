@@ -179,6 +179,18 @@ export const setting: any = [
 	{name: "我的订单", url: "order"}
 ]
 
+export const visitor: any = [
+	{name: "访问设置", url: "setting"},
+	{name: "访客列表", url: "list"}
+]
+
+export const content: any = [
+	{name: "首页", url: "index"},
+	{name: "内容管理", url: "channel"},
+	{name: "访客中心", url: "visitor"},
+	{name: "我的心情", url: "mood"}
+]
+
 export const week:any = {
 	0: "周日",
 	1: "周一",

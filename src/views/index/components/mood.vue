@@ -2,7 +2,7 @@
 <v-button v-model:show="isShow">
   <i class="iconfont icon-write" />
 </v-button>
-<v-dialog v-model:show="isShow" ref="form" title="设置状态" width="650px" height="450px" :confirm="true" :cancel="true" @submit="submit">
+<v-dialog v-model:show="isShow" ref="form" title="设置状态" :style="{width: 670, height: 570}" :confirm="true" :hasfooter="false">
   <template v-slot:content>
     <div class="layer-content pt0" style="height: 350px;">
       <perfect-scrollbar>

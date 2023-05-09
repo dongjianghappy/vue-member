@@ -1,20 +1,26 @@
 <template>
-<button :disabled="!auth" type="button" role="switch" aria-checked="false" class="buttom-switch" :class="[{'switch-checked': data.item[data.field] === '1'}, className]" @click="handleclick(data.item)">
+<button v-if="isbutton" :disabled="!auth" type="button" role="switch" aria-checked="false" class="buttom-switch" :class="[{'switch-checked': data.item[data.field] === '1'}, className]" @click="handleclick(data.item)">
   <div class="switch-handle"></div><span class="switch-inner">OFF</span>
 </button>
+<span v-else @click="handleclick(data.item)">
+  <span class="cl-green" v-if="data.item[data.field] === '1'">开启</span>
+  <span class="cl-red" v-else>关闭</span>
+</span>
 </template>
 
 <script lang="ts">
-//  ${className}
 import {
   defineComponent,
-  getCurrentInstance,
   useStore
 } from '@/utils'
 
 export default defineComponent({
-  name: 'v-Search',
+  name: 'v-Switch',
   props: {
+    isbutton: {
+      type: Boolean,
+      default: true
+    },
     data: {
       type: Object,
       default: () => {
@@ -45,11 +51,8 @@ export default defineComponent({
       }
     }
   },
-  emits: ['onClick'],
+  emits: ['toggle'],
   setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
     const store = useStore();
     const {
       data: {
@@ -68,10 +71,13 @@ export default defineComponent({
           ...props.param
         }
       }).then(res => {
-        
-        if(res.result.type){
+        if (res.result.type) {
           item[res.result.type] = res.result.value
-        }else{
+          context.emit('toggle', {
+            field: props.data.item.name,
+            value: res.result.value
+          })
+        } else {
           props.msg(res.returnMessage)
         }
       })

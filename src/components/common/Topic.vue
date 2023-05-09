@@ -1,5 +1,5 @@
 <template>
-  <Popover content="<i class='
+  <v-popover content="<i class='
            iconfont
            icon-topic'></i>话题"
            arrow="tb"
@@ -24,19 +24,15 @@
         </div>
       </div>
     </div>
-  </Popover>
+  </v-popover>
 </template>
 
 <script lang="ts">
 import { defineComponent, getCurrentInstance, ref } from 'vue'
-import Popover from '@/components/packages/popover/index.vue';
 import {useStore} from 'vuex'
 
 export default defineComponent({
   name: 'v-Search',
-  components: {
-    Popover
-  },
   emits: ['onEmoji'],
   setup(props,context) {
     const {ctx}:any = getCurrentInstance();

@@ -1,7 +1,7 @@
 <template>
 <div style="width: 150px; display: flex; justifyItems: flex-start">
 
-  <Popover :content="`<span style='
+  <v-popover :content="`<span style='
             background: ${style.color || currentColor};
             margin: 0 5px;
             display: flex;
@@ -24,7 +24,7 @@
         <div style="margin-left: 5px;">{{style.color || currentColor}}</div>
       </div>
     </div>
-  </Popover>
+  </v-popover>
   <span style="
             margin-right: 5px;
             display: flex;
@@ -65,23 +65,18 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import {
   defineComponent,
   getCurrentInstance,
-  reactive,
   ref
 } from 'vue'
-import Popover from '@/components/packages/popover/index.vue';
 import {
   color
 } from '@/assets/const'
 
 export default defineComponent({
   name: 'v-Search',
-  components: {
-    Popover
-  },
   data() {
     return {
       background: "#f1f1f1"
@@ -102,12 +97,12 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const colorList = ref(color)
-    const currentColor = ref("#fff")
+    const colorList: any = ref(color)
+    const currentColor: any = ref("#fff")
 
-    let attr = ref({})
+    let attr: any = ref({})
 
-    function handleclick(param) {
+    function handleclick(param: any) {
       attr.value = props.style
 
       if (param === 'bold') {
@@ -120,7 +115,7 @@ export default defineComponent({
       props.setStyle(attr)
     }
 
-    function choose(color) {
+    function choose(color: any) {
       attr.value = props.style
       currentColor.value = color
       currentColor.value ? attr.value.color = color : delete attr.value.color

@@ -109,7 +109,9 @@ LastestVisitor (params: any) {
   return http.request('user', 'lastestVisitor', params)
 },  
 
-  
+visitorList   (params: any) {
+  return http.request('user', 'visitorList', params)
+},  
   
   // 收藏
   Collect (params: any) {
@@ -152,10 +154,13 @@ LastestVisitor (params: any) {
     return http.request('user', 'visitCommunity', params)
   },  
   
+  // 心情列表
+  moodList (params: any) {
+    return http.request('user', 'moodList', params)
+  },  
   
-  
-     // 应用中心
-     Integration (params: any) {
+  // 应用中心
+  Integration (params: any) {
     return http.request('user', 'integration', params)
   },  
 
@@ -312,7 +317,7 @@ LastestVisitor (params: any) {
     return http.request('common', 'update', params)
   } ,  
   // 详情内容
-  Detail (params: any) {
+  detail (params: any) {
     return http.request('common', 'detail', params)
   } ,  
 
@@ -325,7 +330,7 @@ LastestVisitor (params: any) {
     return http.request('user', 'userBaiscInfo', params)
   } ,   
   // 更改用户信息
-  EditUserInfo (params: any) {
+  editUserInfo (params: any) {
     return http.request('user', 'editUserInfo', params)
   } ,     
   // 用户兴趣爱好
@@ -352,7 +357,7 @@ LastestVisitor (params: any) {
   EditUserPassword (params: any) {
     return http.request('user', 'editUserPassword', params)
   } ,  
-  // 修改密码
+  // 头像背景
   GetHistoryPhotos (params: any) {
     return http.request('user', 'getHistoryPhotos', params)
   } ,   
@@ -483,6 +488,9 @@ close (params: any) {
 // 话题查询
 soundList (params: any) {
   return http.request('talk', 'soundList', params)
+},  
+choosePhotos (params: any) {
+  return http.request('user', 'choosePhotos', params)
 },  
   
 }

@@ -1,15 +1,14 @@
 <template>
-<div class="drawer-wrap" :class="{'drawer-open': show}" :style="`top: ${top}px`">
-  <v-mask v-show="show" v-model:isShow="isShow"></v-mask>
-
-  <div class="drawer align_left" :style="{width: `${width}px`, right: show ? '0px' : `-${width}px`}">
-    <div class="module-wrap relative" :style="`height:${height}`">
+<div class="drawer-wrap" :class="{'drawer-open': show}" :style="`top: ${style.top || 64}px`">
+  <v-mask v-show="show" v-model:isShow="isShow" />
+  <div class="drawer align_left" :style="{width: `${style.width || 700}px`, right: show ? '0px' : `-${style.width || 700}px`}">
+    <div class="module-wrap relative" :style="`height:${style.height || '100%'}`">
       <div class="module-head" v-if="title">{{title}}
         <span class="right">
           <slot name="extra"></slot>
         </span>
       </div>
-      <div class="module-content absolute plr25" :style="`width: 100%; top: ${title ? '65px;' : '0px'}  bottom: 55px; overflow-y: auto;`">
+      <div class="module-content absolute plr25" :style="`width: 100%; top: ${title ? '65px;' : '0px'}; bottom: ${hasfooter ? '55px;' : '0px' }; overflow-y: auto;`">
         <slot name="content"></slot>
       </div>
       <div class="module-foot absolute align_right" style="bottom: 0" v-if="hasfooter">
@@ -37,39 +36,31 @@ import {
 export default defineComponent({
   name: 'v-Drawer',
   props: {
-    // 操作类型值有: eidt、add
+    style: {
+      type: Object,
+      default: () => {
+        return {
+          top: "64",
+          width: "700",
+          height: "100%"
+        }
+      }
+    },
     action: {
       type: String,
       default: "add"
     },
-    // 是否展示
     show: {
       type: Boolean,
       default: false
     },
-    // 标题
     title: {
       type: String,
       default: ""
     },
-    // 是否有低部
     hasfooter: {
       type: Boolean,
       default: true
-    },
-    // 定位
-    top: {
-      type: String,
-      default: "0"
-    },
-    // 宽度
-    width: {
-      type: String,
-      default: "700"
-    },
-    height: {
-      type: String,
-      default: "100%"
     },
     param: {
       type: Object,
@@ -77,14 +68,12 @@ export default defineComponent({
         return {}
       }
     },
-    // 数据
     data: {
       type: Object,
       default: () => {
         return {}
       }
     },
-    // 接口
     api: {
       type: String,
       default: ""
@@ -96,7 +85,6 @@ export default defineComponent({
     submit: {
       type: Function,
     },
-    // 列表初始化数据
     render: {
       type: Function,
       default: () => {
@@ -104,7 +92,7 @@ export default defineComponent({
       }
     }
   },
-  emits: ['onClick', 'update:show'],
+  emits: ['update:show'],
   setup(props, context) {
     const {
       proxy
@@ -112,12 +100,10 @@ export default defineComponent({
     const store = useStore();
     const isShow = ref(props.show)
 
-    // 监听弹窗变量
     watch([isShow], (newValues, prevValues) => {
       context.emit('update:show', false)
     })
 
-    // 初始化数据
     async function init(param: any) {
       let data = {}
       if (props.action === 'edit') {
@@ -134,12 +120,14 @@ export default defineComponent({
       return data
     }
 
-    // 确认按钮
     function submit(params: any) {
-
       if (props.submit) {
         props.submit({
-          cancel: cancel()
+          cancel: cancel,
+          message: () => {}
+          // message: proxy.$hlj.message({
+          //   msg: props.action !== "add" ? "编辑成功" : "新增成功"
+          // })
         })
       } else {
         store.dispatch('common/Fetch', {
@@ -157,8 +145,7 @@ export default defineComponent({
         })
       }
     }
-
-    // 取消按钮
+    
     function cancel() {
       context.emit('update:show', false)
     }

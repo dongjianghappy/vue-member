@@ -1,12 +1,15 @@
 <template>
 <div class="module-wrap mb15 w180 aside_nav sidebar_fixed">
-  <div class="module-head head p20 font14" v-if="title">{{title}}
-    <span class="right"><slot name="button"></slot></span>
+  <div class="module-head head p20 font14" v-if="title">
+    <span>{{title}}</span>
+    <span class="right">
+      <slot name="button"></slot>
+    </span>
   </div>
   <div class="module-content p0 h500">
-    <ul>
-      <li v-for="(item, index) in data" :key="index" @click="handleclick(item.path || item.value)" class="aside">
-        <i class="iconfont font20" :class="[item.icon || 'icon-dot']"></i> {{item.name}} <span v-if="item.num">({{item.num}})</span>
+    <ul v-if="data.length">
+      <li v-for="(item, index) in data" :key="index" @click="handleClick(item.path || item.value)" class="aside">
+        <i class="iconfont" :class="`icon-${item.icon || 'dot'}`"></i> {{item.name}} <span v-if="item.num">({{item.num}})</span>
       </li>
     </ul>
     <slot name="aside"></slot>
@@ -18,11 +21,8 @@
 import {
   defineComponent,
   getCurrentInstance,
-  useStore,
   useRouter,
-  useRoute,
   onMounted,
-  computed,
   getUid
 } from '@/utils'
 export default defineComponent({
@@ -33,9 +33,9 @@ export default defineComponent({
       default: ""
     },
     data: {
-      type: Object,
+      type: Array,
       default: () => {
-        return
+        return []
       }
     },
     render: {
@@ -50,7 +50,6 @@ export default defineComponent({
     const {
       proxy
     }: any = getCurrentInstance();
-    const store = useStore();
     const router = useRouter();
 
     // 初始化数据
@@ -68,7 +67,7 @@ export default defineComponent({
       })
     }
 
-    function handleclick(param: any) {
+    function handleClick(param: any) {
       if (Number(param) || param === "0") {
         context.emit('route', param)
       } else {
@@ -86,7 +85,7 @@ export default defineComponent({
     onMounted(init)
 
     return {
-      handleclick
+      handleClick
     }
   }
 })

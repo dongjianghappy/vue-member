@@ -1,6 +1,5 @@
 <template>
 <div class="aside-wrap" style="min-height: 650px" v-if="type === 'vertical'">
-
   <div class="aside-nav" :class="{p0: title}">
     <div v-if="title" class="aside-list align_center" style="border-bottom: 1px solid #eee; height: 63px; line-height: 63px;">
       <h3>{{title}}</h3>
@@ -41,14 +40,14 @@
   </div>
 </div>
 <div class="tabs" v-else>
-  <div class="nav-tabs" :class="className.nav">
+  <div class="nav-tabs">
     <div class="tabs-list pointer" :class="[{current: currentIndex === index}]" v-for="(item, index) in tabs" :key="index" @click="handleClick(index)">{{item.name}}</div>
-    <div class="pr15" style="flex: 1; text-align: right;">
+    <div v-if="extra" class="pr15" style="flex: 1; text-align: right;">
       <slot name="extra"></slot>
     </div>
   </div>
 
-  <div class="tab-content" :class="className.con">
+  <div class="tab-content">
     <div class="tabsbox plr15" style="display: block; line-height: 30px;">
       <div v-if="currentIndex === 0">
         <slot name="content1"></slot>
@@ -73,16 +72,12 @@
 <script lang="ts">
 import {
   defineComponent,
-  getCurrentInstance,
   ref,
   useRouter,
 } from '@/utils'
 
 export default defineComponent({
-  name: 'v-Search',
-  components: {
-
-  },
+  name: 'v-Tabs',
   props: {
     title: {
       type: String,
@@ -99,15 +94,6 @@ export default defineComponent({
     type: {
       type: String,
       default: "level"
-    },
-    className: {
-      type: Object,
-      default: () => {
-        return {
-          nav: '',
-          con: ''
-        }
-      }
     },
     aaa: {
       type: Boolean,
@@ -126,7 +112,11 @@ export default defineComponent({
     isEmit: {
       type: Boolean,
       default: false
-    }
+    },
+    extra: {
+      type: Boolean,
+      default: true
+    },
   },
   emits: ['update:index'],
   setup(props, context) {
@@ -135,6 +125,7 @@ export default defineComponent({
 
     function handleClick(index: any) {
       if (props.isEmit === true) {
+        currentIndex.value = index
         context.emit('update:index', index)
       } else {
         if (props.method === 'click') {
@@ -144,7 +135,6 @@ export default defineComponent({
           router.push(props.aaa ? `?${props.query.url}&${props.query.name}=${index}` : `?type=${index}`)
         }
       }
-
     }
     return {
       handleClick,

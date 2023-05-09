@@ -4,7 +4,7 @@ import api from '../../api/index'
 const actions = {
   Fetch: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const data = params.data || {}
-    const { result }:any = await api[params.api]({
+    const { result }:any = await api[params.api || "select"]({
       ...data
     })
     return result

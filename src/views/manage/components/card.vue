@@ -25,14 +25,14 @@
         <span class="concern" @click="concern(item)" style=" width:auto; height:20px; line-height:20px; display:block; text-align:center; cursor:pointer; position: absolute; top: 25px; right: 80px;">
           {{item.concern_status}}</span>
         <span class="infos demoimg" data-placement="top" data-toggle="tooltip17" style="width:60px; height:20px; line-height:20px; display:block; text-align:center; cursor:pointer; position:absolute; top:25px; right:15px;" data-left="-90">
-          <Popover content="<i class='iconfont icon-down font18'></i>" arrow="tb" offset="right" :move="-60" :keys="`popover-${index}`" v-if="mod === 'myconcern'">
+          <v-popover content="<i class='iconfont icon-down font18'></i>" arrow="tb" offset="right" :move="-60" :keys="`popover-${index}`" v-if="mod === 'myconcern'">
 
             <div class="p15" style="width: 150px; height: 250px">
               <ul class="font14" style="display: block">
                 <li style="height: 32px" v-for="(data, i) in group" :key="i" @click="handleClick({ friend_uid: item.friend_uid, grouping: data.id })">{{data.name}}({{data.num}})</li>
               </ul>
             </div>
-          </Popover>
+          </v-popover>
         </span>
       </div>
     </div>
@@ -50,7 +50,6 @@ import {
 import {
   useStore
 } from 'vuex'
-import Popover from '@/components/packages/popover/index.vue';
 import {
   useRouter,
   useRoute,
@@ -62,9 +61,6 @@ import {
 
 export default defineComponent({
   name: 'AsideView',
-  components: {
-    Popover
-  },
   props: {
     data: {
       type: Object,

@@ -7,12 +7,10 @@
 import {
   defineComponent,
 } from '@/utils'
-import Popover from '@/components/packages/popover/index.vue';
 import SelectButton from '../components/SelectButton.vue';
 export default defineComponent({
   name: 'HomeView',
   components: {
-    Popover,
     SelectButton
   },
   props: {

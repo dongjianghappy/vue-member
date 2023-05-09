@@ -56,12 +56,6 @@ export default defineComponent({
     let isShow: any = ref(false)
 
     function onClick(param: any) {
-      // if (fn_talk.value.collect.status !== '1') {
-      //   proxy.$hlj.message({
-      //     msg: fn_talk.value.collect.tips
-      //   })
-      //   return
-      // }
       store.dispatch('common/Fetch', param).then(res => {
         proxy.$hlj.message({
           msg: res.returnMessage

@@ -1,6 +1,6 @@
 <template>
   <div @click="handleclick">
-    <popover :getData="getUserInfo"
+    <v-popover :getData="getUserInfo"
              :content="`<img src='${sourceData.photos}' width='30' height='30' class='showuserinfo'>`"
              arrow="tb"
              offset="right"
@@ -11,7 +11,7 @@
            style="background: #191919;">
         <div class="user-info-photos">
           <div class="blogphotos">
-            <v-avatar :data="userInfo"
+            <v-photo :data="userInfo"
                       :style="{    width: '50px',
     height: '50px',
     borderRadius: '50%'}" />
@@ -38,7 +38,7 @@
         <div class="user-info-art">他很懒，没有更新过内容</div>
         <div class="user-introduction">标签：{{userInfo.concernstatus && userInfo.concernstatus.introduction || "他还没有更新标签哟"}}</div>
       </div>
-    </popover>
+    </v-popover>
   </div>
 </template>
 

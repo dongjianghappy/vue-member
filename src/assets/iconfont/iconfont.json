@@ -6,6 +6,167 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11249797",
+      "name": "play",
+      "font_class": "play",
+      "unicode": "e851",
+      "unicode_decimal": 59473
+    },
+    {
+      "icon_id": "8474316",
+      "name": "music",
+      "font_class": "music",
+      "unicode": "e6c5",
+      "unicode_decimal": 59077
+    },
+    {
+      "icon_id": "7090046",
+      "name": "还原",
+      "font_class": "huanyuan",
+      "unicode": "e70f",
+      "unicode_decimal": 59151
+    },
+    {
+      "icon_id": "4777227",
+      "name": "缩小",
+      "font_class": "suoxiao",
+      "unicode": "ec13",
+      "unicode_decimal": 60435
+    },
+    {
+      "icon_id": "4777229",
+      "name": "放大",
+      "font_class": "fangda",
+      "unicode": "ec14",
+      "unicode_decimal": 60436
+    },
+    {
+      "icon_id": "6151214",
+      "name": "position",
+      "font_class": "position",
+      "unicode": "e7f1",
+      "unicode_decimal": 59377
+    },
+    {
+      "icon_id": "16619483",
+      "name": "type",
+      "font_class": "type",
+      "unicode": "e6de",
+      "unicode_decimal": 59102
+    },
+    {
+      "icon_id": "18991762",
+      "name": "theme",
+      "font_class": "theme1",
+      "unicode": "e889",
+      "unicode_decimal": 59529
+    },
+    {
+      "icon_id": "6988471",
+      "name": "mood",
+      "font_class": "mood",
+      "unicode": "ec4c",
+      "unicode_decimal": 60492
+    },
+    {
+      "icon_id": "11938722",
+      "name": "打勾",
+      "font_class": "dagou",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "26815648",
+      "name": "PSD",
+      "font_class": "PSD",
+      "unicode": "e6e2",
+      "unicode_decimal": 59106
+    },
+    {
+      "icon_id": "2796042",
+      "name": "audio",
+      "font_class": "audio",
+      "unicode": "e76e",
+      "unicode_decimal": 59246
+    },
+    {
+      "icon_id": "219598",
+      "name": "personnel",
+      "font_class": "personnel",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "7712667",
+      "name": "knowledge",
+      "font_class": "knowledge",
+      "unicode": "e72d",
+      "unicode_decimal": 59181
+    },
+    {
+      "icon_id": "1393583",
+      "name": "answer",
+      "font_class": "answer",
+      "unicode": "e6d4",
+      "unicode_decimal": 59092
+    },
+    {
+      "icon_id": "6684789",
+      "name": "basic",
+      "font_class": "basic-info",
+      "unicode": "e72b",
+      "unicode_decimal": 59179
+    },
+    {
+      "icon_id": "2142892",
+      "name": "web",
+      "font_class": "web1",
+      "unicode": "e6c8",
+      "unicode_decimal": 59080
+    },
+    {
+      "icon_id": "15838548",
+      "name": "upload",
+      "font_class": "upload-file",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "15838446",
+      "name": "calendar",
+      "font_class": "calendar",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "4767079",
+      "name": "font-colors",
+      "font_class": "font-colors",
+      "unicode": "e7f7",
+      "unicode_decimal": 59383
+    },
+    {
+      "icon_id": "20817820",
+      "name": "sort-desc",
+      "font_class": "sort-desc",
+      "unicode": "e705",
+      "unicode_decimal": 59141
+    },
+    {
+      "icon_id": "14342023",
+      "name": "server",
+      "font_class": "server1",
+      "unicode": "e7c6",
+      "unicode_decimal": 59334
+    },
+    {
+      "icon_id": "474984",
+      "name": "server",
+      "font_class": "server",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
       "icon_id": "8106259",
       "name": "soundsize",
       "font_class": "soundsize",
@@ -767,13 +928,6 @@
       "font_class": "next",
       "unicode": "e61c",
       "unicode_decimal": 58908
-    },
-    {
-      "icon_id": "1910831",
-      "name": "play",
-      "font_class": "play",
-      "unicode": "e80b",
-      "unicode_decimal": 59403
     },
     {
       "icon_id": "376001",

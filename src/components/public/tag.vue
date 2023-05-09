@@ -1,32 +1,18 @@
 <template>
 <div id="tagInputContainer" class="tagInputContainer pr120" style="position:relative">
-  <div class="tag-box" v-for="(item, index) in tags" :key="index"><span>{{item}}</span> <a class="deltag" href="javascript:;" title="删除" @click="remove(index)" v-if="isEdit">×</a></div>
-  <input id="tInput" type="text" placeholder="请输入标签" style="border:0" v-model="model" v-if="isEdit" @blur="input">
-  <!-- <div class="absolute w110"
-         style="top: 5px; right: 5px;">
-      <input id="open-search"
-             type="checkbox"
-             value="Y"
-             checked="checked">
-      <div class="absolute ml25 cl-ccc"
-           style="top: -2px;">勾选快速检索</div>
-    </div> -->
+  <div class="tag-box" v-for="(item, index) in tags" :key="index" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)"><span>{{item}}</span> <a class="deltag" href="javascript:;" title="删除" @click="remove(index)" v-if="isEdit">×</a></div>
+  <input v-model="model" v-if="isEdit" @blur="input" type="text" placeholder="请输入标签" style="border:0">
 </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  getCurrentInstance,
   ref,
-  reactive
 } from 'vue'
 
 export default defineComponent({
-  name: 'v-Search',
-  components: {
-
-  },
+  name: 'v-Tag',
   props: {
     tags: {
       type: Array,
@@ -39,10 +25,50 @@ export default defineComponent({
   },
   emits: ['update:tags'],
   setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
     let model: any = ref("")
+
+    const dragging: any = ref(null)
+    const box: any = ref(0)
+    const moveIndex: any = ref("")
+    const enterIndex: any = ref("")
+
+    function handleDragStart(e: any, item: any) {
+      dragging.value = item
+    }
+
+    function handleDragEnd(e: any, item: any) {
+      item = props.tags.splice(enterIndex.value, 1, dragging.value)[0]; // 这一步是将要替换的删除，并将移动的插入，最后返回被删除的数组
+      props.tags[moveIndex.value] = item;
+      document.querySelectorAll('ul>li')[box.value].removeAttribute("class")
+    }
+
+    function handleDragOver(e: any) {
+      e.dataTransfer.dropEffect = 'move'
+    }
+
+    function handleDragEnter(e: any, item: any) {
+      e.dataTransfer.effectAllowed = 'move'
+
+      if (item === dragging.value) {
+        return
+      }
+      const newItems = props.tags
+
+      moveIndex.value = newItems.findIndex((i: any) => {
+        return i === dragging.value
+      })
+
+      enterIndex.value = newItems.findIndex((i: any) => {
+        return i === item
+      })
+
+      if (box.value !== enterIndex.value) {
+        document.querySelectorAll('ul>li')[box.value].removeAttribute("class")
+      }
+
+      document.querySelectorAll('ul>li')[enterIndex.value].setAttribute("class", "current")
+      box.value = enterIndex.value
+    }
 
     function input() {
       if (model.value !== "") {
@@ -60,7 +86,11 @@ export default defineComponent({
     return {
       input,
       remove,
-      model
+      model,
+      handleDragStart,
+      handleDragEnd,
+      handleDragOver,
+      handleDragEnter
     }
   }
 })

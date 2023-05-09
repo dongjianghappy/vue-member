@@ -8,15 +8,11 @@
 
 <script lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance
+  defineComponent
 } from 'vue'
 
 export default defineComponent({
-  name: 'v-Search',
-  components: {
-
-  },
+  name: 'v-Select',
   props: {
     enums: {
       type: Object,
@@ -31,23 +27,13 @@ export default defineComponent({
     disabled: {
       type: Boolean,
       default: false
-    },
-    attr: {
-      type: String,
-      default: ""
     }
   },
-  emits: ['update:value', 'onChange', 'setAttr'],
+  emits: ['update:value', 'onChange'],
   setup(props, context) {
-    function handleclick(qqq: any) {
-      debugger
-      context.emit('update:value', qqq.target.value)
-      context.emit('onChange', qqq.target.value)
-      context.emit('setAttr', {
-        attr: props.attr,
-        value: qqq.target.value
-      })
-
+    function handleclick(e: any) {
+      context.emit('update:value', e.target.value)
+      context.emit('onChange', e.target.value)
     }
     return {
       handleclick

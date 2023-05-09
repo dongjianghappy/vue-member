@@ -1,20 +1,14 @@
 <template>
-<div class="mask" @click="handleclick">
-    <slot></slot>
-    </div>
+<div class="mask" @click="handleClick"></div>
 </template>
 
 <script lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance
+  defineComponent
 } from 'vue'
 
 export default defineComponent({
-  name: 'v-Search',
-  components: {
-
-  },
+  name: 'v-Mask',
   props: {
     isShow: {
       type: String,
@@ -23,15 +17,11 @@ export default defineComponent({
   },
   emits: ['update:isShow'],
   setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-
-    function handleclick() {
+    function handleClick() {
       context.emit('update:isShow', !props.isShow)
     }
     return {
-      handleclick
+      handleClick
     }
   }
 })

@@ -1,9 +1,11 @@
 <template>
 <div>
   <div class="container w1100 relative clearfix">
-    <div class="left left-sidebar">
+    <!-- 侧边菜单 -->
+    <div class="left-sidebar left">
       <v-aside :data="module.groups" title="首页" />
     </div>
+    <!-- 主内容 -->
     <div class="main-center left">
       <Collect v-if="component==='collect'" />
       <Comment v-else-if="component==='comment'" />
@@ -11,8 +13,9 @@
       <Forwarding v-else-if="component==='forwarding'" />
       <Center v-else />
     </div>
+    <!-- 右侧 -->
     <div class="w280 right">
-      <RightView :module="module.personal_center" />
+      <RightView :module="module.personal_center" :userInfo="userInfo" />
     </div>
   </div>
 </div>
@@ -21,9 +24,9 @@
 <script lang="ts">
 import {
   defineComponent,
-  computed,
   useStore,
-  useRoute
+  useRoute,
+  computed
 } from '@/utils'
 
 import Center from './center/index.vue'
@@ -34,7 +37,7 @@ import Forwarding from './forwarding/index.vue'
 import RightView from './components/right_aside.vue'
 
 export default defineComponent({
-  name: 'HomeViewdddf',
+  name: 'HomeView',
   components: {
     Center,
     Collect,
@@ -46,11 +49,14 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const route = useRoute();
-    const module = computed(() => store.getters['user/config_talk']);
     const component = computed(() => route.query.mod);
+    const module = computed(() => store.getters['user/config_talk']);
+    const userInfo = computed(() => store.getters['user/loginuser']);
+
     return {
+      component,
       module,
-      component
+      userInfo
     }
   }
 })

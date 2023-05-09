@@ -3,12 +3,12 @@
   <div class="con-list" v-for="(item, index) in dataList" :key="index">
     <div class="con-wrap">
       <div class="photos">
-        <v-avatar :data="item" :style="{width: '50px', height: '50px', borderRadius: '50%'}" v-if="loginuser.account === item.uid" />
+        <v-photo :data="item" :style="{width: '50px', height: '50px', borderRadius: '50%'}" v-if="loginuser.account === item.uid" />
         <v-photos :sourceData="item" v-else />
       </div>
       <div class="user_info pb5"><span class="username">{{item.nickname}}</span></div>
       <span class="right span-icon">
-        <Popover content="<i class='iconfont icon-down font18 icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-${item.id}`">
+        <v-popover content="<i class='iconfont icon-down font18 icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-${item.id}`">
           <div class="p15 align_center" style="width: 80px; height: 100px">
             <ul class="font14" style="display: block">
               <li style="height: 32px" @click="onClick({ api: 'Collect', data: { coding: 'A110005', artid: item.id }})">收藏</li>
@@ -17,7 +17,7 @@
               </li>
             </ul>
           </div>
-        </Popover>
+        </v-popover>
       </span>
       <div class="user_from pb5">
         {{item.times}}
@@ -50,12 +50,10 @@ import {
 import {
   useStore
 } from 'vuex'
-import Popover from '@/components/packages/popover/index.vue';
 import Graph from '../../../graph/components/graph.vue'
 export default defineComponent({
   name: 'HomeViews',
   components: {
-    Popover,
     Graph
   },
   props: {

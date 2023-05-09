@@ -13,22 +13,19 @@
           <span class="absolute cl-ccc " style="top:0 ; right: 0 ">{{item.download}}</span>
         </div>
       </li>
-      
+
     </ul>
   </div>
-  <div class="module-foot"><a href="http://www.yunxi10.com" target="_brank" >查看更多</a></div>
+  <div class="module-foot"><a href="http://www.yunxi10.com" target="_brank">查看更多</a></div>
 </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  getCurrentInstance,
+  useStore,
   computed
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
+} from '@/utils'
 
 export default defineComponent({
   name: 'HomeViewr',
@@ -41,15 +38,10 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
     const store = useStore();
-    const userInfo = computed(() => store.getters['user/userInfo']);
     const rankingList = computed(() => store.getters['common/ranking']);
 
     return {
-      userInfo,
       rankingList
     }
   },
