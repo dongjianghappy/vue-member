@@ -7,6 +7,7 @@ export interface State {
   downloadList: any;
   notesList: any;
   websiteList: any
+  blogList: any
 }
 
 
@@ -22,7 +23,8 @@ const initState: State = {
   talkForwarding: [],
   downloadList: [],
   notesList: [],
-  websiteList: []
+  websiteList: [],
+  blogList: []
 }
 
 export default initState;

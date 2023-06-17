@@ -7,7 +7,7 @@ const mutations = {
     state.user.basic = params
   },    
   setUserBaiscInfo: (state: any, params: any) => {
-    state.userInfo = params
+    state.basicInfo = params
   },
   setHobby: (state: any, params: any) => {
     state.hobby = params

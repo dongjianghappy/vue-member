@@ -5,7 +5,7 @@ const getters = {
   config_talk: (state: any) => state.user.login.config && state.user.login.config.talk || {},
   currentUser: (state: any) => (state.user.login.userInfo && state.user.login.userInfo.account) === (state.user.basic.userInfo && state.user.basic.userInfo.account) ? true : false, 
 
-  userInfos: (state: any) => state.userInfo || {},
+  basicInfo: (state: any) => state.basicInfo || {},
   hobby: (state: any) => state.hobby || {},
   blogInfo: (state: any) => state.blogInfo || {},
   

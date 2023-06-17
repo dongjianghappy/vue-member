@@ -60,7 +60,16 @@ const actions = {
     })
     context.commit("setWebsiteList" , result.result);
     return result
-  },    
+  },  
+  blog: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.blogList({
+      ...data 
+    })
+    context.commit("setBlogList" , result.result);
+    return result
+  }, 
+    
   
   
 }

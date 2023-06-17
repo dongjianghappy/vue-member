@@ -3,13 +3,13 @@
   <div class="w180 left">
     <v-aside :data="menu" title="我的日志">
       <template v-slot:button>
-        <Detail action='add' :data="data" :render="init" />
+        <v-group action='add' :data="data" :group="userGroup" :coding="coding.journal.cate" :render="init" />
       </template>
       <template v-slot:aside>
         <ul>
+          <li class="aside" @click="handleclick(`/journal?item=list&id=0`)"><i class="iconfont icon-dot font20"></i> 未分类</li>
           <li v-for="(item, index) in userGroup" :key="index" @click="handleclick(`/journal?item=list&id=${item.id}`)" class="aside">
-            <i class="iconfont icon-dot font20"></i> {{item.name}}({{item.num}})
-           <Detail action='edit' :data="data" :render="init" />
+            <i class="iconfont icon-dot font20"></i> {{item.name}}
           </li>
         </ul>
       </template>
@@ -18,7 +18,7 @@
   <div class="m0 right" style="width: 910px">
     <Action v-if="query.item === 'details'" :action="query.action" />
     <ArticleView v-else-if="query.item === 'view'" />
-    <List ref="list" v-else :item="query.item" />
+    <List ref="list" :group="userGroup" :query="query" v-else />
   </div>
 </div>
 </template>
@@ -33,26 +33,28 @@ import {
   useRouter,
   useRoute,
   ref,
-  getUid
+  getUid,
+  codings
 } from '@/utils'
-import List from "./list.vue"
+import List from "./article_list.vue"
 import Action from "./article_action.vue"
 import ArticleView from "./article_detail.vue"
-import Detail from './components/detail.vue'
-import {journal} from '@/assets/const'
+import {
+  journal
+} from '@/assets/const'
 
 export default defineComponent({
   name: 'HomeView',
   components: {
     List,
     Action,
-    ArticleView,
-    Detail
+    ArticleView
   },
   setup(props, context) {
     const {
       proxy
     }: any = getCurrentInstance();
+    const coding: any = codings.talk
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
@@ -96,6 +98,7 @@ export default defineComponent({
     })
 
     return {
+      coding,
       handleclick,
       query,
       menu,

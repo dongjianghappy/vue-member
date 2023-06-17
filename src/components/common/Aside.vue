@@ -9,7 +9,7 @@
   <div class="module-content p0 h500">
     <ul v-if="data.length">
       <li v-for="(item, index) in data" :key="index" @click="handleClick(item.path || item.value)" class="aside">
-        <i class="iconfont" :class="`icon-${item.icon || 'dot'}`"></i> {{item.name}} <span v-if="item.num">({{item.num}})</span>
+        <i class="iconfont" :class="`icon-${item.icon || 'dot'}`" v-if="hasIcon" /> {{item.name}} <span v-if="item.num">({{item.num}})</span>
       </li>
     </ul>
     <slot name="aside"></slot>
@@ -37,6 +37,10 @@ export default defineComponent({
       default: () => {
         return []
       }
+    },
+    hasIcon: {
+      type: Boolean,
+      default: true
     },
     render: {
       type: Function,

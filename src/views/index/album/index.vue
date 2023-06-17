@@ -4,15 +4,13 @@
     <div class="w180 left">
       <v-aside title="相册">
         <template v-slot:button>
-          <Detail action='add' :data="{ coding: 'U10000' }" :render="aaaa" />
+          <v-group action='add' :data="data" :group="photoAlbum" :coding="coding.album.list" :render="aaaa" />
+          <!-- <Detail action='add' :data="{ coding: 'U10000' }" :render="aaaa" /> -->
         </template>
         <template v-slot:aside>
           <ul>
             <li v-for="(item, index) in photoAlbum" :key="index" @click="handleclick(item.id)" class="aside">
               <i class="iconfont icon-dot font20"></i> {{item.name}}
-              <span class="right" v-if="currentUser && item.id !== 'talk' && item.id !== 'photo'">
-                <Detail action='edit' :data="{id: item.id, coding: 'U10000' }" :render="aaaa" />
-              </span>
             </li>
           </ul>
         </template>
@@ -82,7 +80,7 @@ import {
   onMounted,
   ref,
   getUid,
-  watch
+  codings
 } from '@/utils'
 import Detail from './components/detail.vue'
 import List from './components/list.vue'
@@ -100,6 +98,7 @@ export default defineComponent({
     const {
       proxy
     }: any = getCurrentInstance();
+    const coding: any = codings.talk
     const store = useStore();
     const currentUser = computed(() => store.getters['user/currentUser']);
     const loginuser = computed(() => store.getters['user/loginuser']);
@@ -207,6 +206,7 @@ export default defineComponent({
     })
 
     return {
+      coding,
       albumList,
       uid,
       history,
@@ -229,7 +229,7 @@ export default defineComponent({
       menu,
       aaaa,
       index,
-      loginuser
+      loginuser,
     }
   }
 })

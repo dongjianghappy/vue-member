@@ -26,6 +26,9 @@
 
 <script lang="ts">
 import {
+  marked
+} from 'marked';
+import {
   defineComponent,
   getCurrentInstance,
   watch,
@@ -130,6 +133,11 @@ export default defineComponent({
           // })
         })
       } else {
+
+        if(props.param.markdown){
+          props.param.content = props.param.markdown ? marked.parse(props.param.markdown) : ""
+        }
+
         store.dispatch('common/Fetch', {
           api: props.action !== "add" ? props.submitApi['update'] || 'update' : props.submitApi['insert'] || "insert",
           data: {

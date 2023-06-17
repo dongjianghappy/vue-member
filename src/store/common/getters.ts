@@ -16,7 +16,7 @@ const getters = {
   activityData: (state: any) => state.activity.list || [], 
   concernList: (state: any) => state.concernList || [], 
   albumList: (state: any) => state.albumList || [], 
-  
+  announcement: (state: any) => state.announcement || []
 
   
 

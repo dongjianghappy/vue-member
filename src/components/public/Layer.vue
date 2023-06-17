@@ -2,8 +2,11 @@
 <div class="mask-wrap">
   <template v-if="type==='image'">
     <div style="flex: 1; display: flex; flex-flow: column;">
-      <div class="relative" style="flex: 1; text-align: center;">
-        <img :src="currentImg" style=" width: 450px; height: 100%; display: inline;" @click.stop />
+      <div class="relative" style="flex: 1; text-align: center; padding: 0 86px;">
+        <!-- <img :src="currentImg" style=" width: 450px; height: 100%; display: inline;" @click.stop /> -->
+        <div>
+        <v-img id="img" :src="currentImg" :length="data.image.length" @click.stop :all="true" />
+        </div>
         <div class="layer-button close absolute" style="line-height: 60px;" @click="handleclick"><i class="iconfont icon-close font20 pointer" /></div>
         <div class="layer-button prev absolute deg180" @click.stop @click="toggle(-1)" v-if="index !== 0">
           <i class="iconfont icon-arrow pointer" style="font-size: 32px !important; line-height: 60px;" />
@@ -14,9 +17,9 @@
       </div>
       <audio :src="data.file" loop autoplay style="display: none"></audio>
       <div style="background: #000; height: 90px" v-if="data.image.length > 1" @click.stop>
-        <ul style="display: flex; justify-content: center; height: 90px; align-items: center;">
-          <li class="picture-viewer p5 " :class="{'picture-viewer-current': index === i}" v-for="(img, i) in data.image" :key="i" style="width: 4.2%;" @click="showImg(img, i)">
-            <img :src="img" style="width: 100%; height: 100%;" />
+        <ul class="p5" style="display: flex; justify-content: center; height: 90px; align-items: center;">
+          <li class="picture-viewer mlr5 " :class="{'picture-viewer-current': index === i}" v-for="(img, i) in data.image" :key="i" style="border-radius: 4px; overflow:hidden; width: 60px; height: 60px;" @click="showImg(img, i)">
+            <v-img :src="img" />
           </li>
         </ul>
       </div>
@@ -104,7 +107,6 @@ export default defineComponent({
         index.value = 0
         currentImg.value = newValues[0].image[0]
       } else {
-        debugger
         currentVideo.value = newValues[0].video
         show_video.value.load().play()
       }
@@ -124,12 +126,14 @@ export default defineComponent({
 
     // 图片预览
     function toggle(num: any) {
+      let img: any = document.getElementById('img')
       let length: any = props.data.image.length - 1
       if ((index.value == "0" && num === -1) || (index.value == length && num === 1)) {
         return
       }
       let i = props.data.image.findIndex((item: any) => item === currentImg.value)
       index.value = i + num
+      img.style.paddingTop = ""
       currentImg.value = props.data.image[index.value]
     }
 

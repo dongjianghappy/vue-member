@@ -37,12 +37,13 @@
                 <li @click="handleClick('/info?mod=basic')" class="h32">基本信息</li>
                 <li @click="handleClick('/setting?mod=basic')" information class="h32">隐私设置</li>
                 <li @click="handleClick('/setting?mod=integration')" class="h32">积分管理</li>
+                <li @click="handleClick('/service')" class="h32">意见反馈</li>
                 <li @click="handleClick('signOut')">退出</li>
               </ul>
             </div>
           </v-popover>
         </li>
-        <li v-if="loginuser.role !== '0'"><a href="http://www.yunxi10.com/admins/admin" style="color: #f67f00;" target="_brank">后台管理</a></li>
+        <li @click="handleSave">保存</li>
       </ul>
     </div>
   </div>
@@ -63,6 +64,7 @@ import {
 import {
   information
 } from '@/assets/const'
+import VueEvent from '@/utils/event'
 
 export default defineComponent({
   name: 'v-Header',
@@ -129,13 +131,18 @@ export default defineComponent({
       document.body.appendChild(script);
     })
 
+    function handleSave(){
+      VueEvent.emit("saveTheme");
+    }
+
     onMounted(init)
 
     return {
       loginuser,
       userInfo,
       messge,
-      handleClick
+      handleClick,
+      handleSave
     }
   }
 })

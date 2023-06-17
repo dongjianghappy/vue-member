@@ -5,6 +5,7 @@
   <Download :dataList="downloadList" v-if="query.mod === 'download'" />
   <Notes :dataList="notesList" v-else-if="query.mod === 'notes'" />
   <website :dataList="websiteList" v-else-if="query.mod === 'website'" />
+  <Blog :dataList="blogList" v-else-if="query.mod === 'blog'" />
   <TalkItem :sourceData="talk.list" :deleteTalk="deleteTalk" v-else />
   <v-loding v-if="!loading" />
 </div>
@@ -27,6 +28,7 @@ import TalkItem from '../components/TalkItem/index.vue'
 import Download from '../components/download/index.vue'
 import Notes from '../components/notes/index.vue'
 import website from '../components/website/index.vue'
+import Blog from '../components/blog/index.vue'
 export default defineComponent({
   name: 'HomeView',
   components: {
@@ -35,7 +37,8 @@ export default defineComponent({
     TalkItem,
     Download,
     Notes,
-    website
+    website,
+    Blog
   },
   setup(props, context) {
     const store = useStore();
@@ -46,6 +49,7 @@ export default defineComponent({
     const downloadList: any = computed(() => store.getters['talk/downloadList']);
     const notesList: any = computed(() => store.getters['talk/notesList']);
     const websiteList: any = computed(() => store.getters['talk/websiteList']);
+    const blogList: any = computed(() => store.getters['talk/blogList']);
     const talktabs: any = ref(null)
     const loading: any = ref(false)
     const page = ref(1);
@@ -66,6 +70,7 @@ export default defineComponent({
     })
 
     function init(param: any) {
+      debugger
       let dispatch = !param.type || param.type === 'ori' || param.type === 'ori' ? 'Talk' : param.type
       store.dispatch(`talk/${dispatch}`, {
         data: {
@@ -111,8 +116,10 @@ export default defineComponent({
     onMounted(() => {
       // 在没有置顶页面时，初始化页面进入到默认tabs项中
       if (!query.value.mod) {
-        const defaultTab = tabs.value.filter((item: any) => item.default === '1')
-        talktabs.value.handelClick(defaultTab[0].value)
+        const defaultTab = tabs.value ? tabs.value.filter((item: any) => item.default === '1') : []
+        if(defaultTab.length > 0){
+          talktabs.value.handelClick(defaultTab[0].value)
+        }
         return
       }
 
@@ -139,7 +146,8 @@ export default defineComponent({
       deleteTalk,
       downloadList,
       notesList,
-      websiteList
+      websiteList,
+      blogList
     }
   },
 })

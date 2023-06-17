@@ -1,5 +1,6 @@
 export interface State {
   recommendUser: any;
+  announcement: any;
   hotTalk: any;
   ranking: any;
   lastestVisitor: any
@@ -19,6 +20,7 @@ export interface State {
 
 const initState: State = {
   recommendUser: [],
+  announcement: [],
   hotTalk: [],
   ranking: [],
   lastestVisitor:[],

@@ -272,8 +272,8 @@ export const album: any = [
 
 export const journal: any = [
 	
-	{name: "写日志", value: "details"},
-	{name: "所有日志", value: "all"}
+	{name: "写日志", value: "details", icon: 'edit'},
+	{name: "所有的", value: "all"}
 ]
 
 export const feedback: any = [

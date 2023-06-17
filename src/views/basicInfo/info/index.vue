@@ -1,10 +1,10 @@
 <template>
 <div>
-  <Basic v-model:user="userInfo" :edit="edit" />
-  <Contact v-model:user="userInfo" :edit="edit" />
-  <Blog v-model:user="userInfo" :edit="edit" />
-  <Industry v-model:user="userInfo" :edit="edit" />
-  <Education v-model:user="userInfo" :edit="edit" />
+  <Basic v-model:basicInfo="basicInfo" :edit="edit" />
+  <Contact v-model:basicInfo="basicInfo" :edit="edit" />
+  <Blog v-model:basicInfo="basicInfo" :edit="edit" />
+  <Industry v-model:basicInfo="basicInfo" :edit="edit" />
+  <Education v-model:basicInfo="basicInfo" :edit="edit" />
 </div>
 </template>
 
@@ -45,7 +45,7 @@ export default defineComponent({
       proxy
     }: any = getCurrentInstance();
     const store = useStore();
-    const userInfo = computed(() => store.getters['user/userInfo']);
+    const basicInfo = computed(() => store.getters['user/basicInfo']);
 
     function init() {
       store.dispatch('user/UserBaiscInfo', {})
@@ -66,7 +66,7 @@ export default defineComponent({
     onMounted(init)
 
     return {
-      userInfo,
+      basicInfo,
       edit
 
     }

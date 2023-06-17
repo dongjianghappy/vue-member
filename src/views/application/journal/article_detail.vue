@@ -6,7 +6,7 @@
       <div class="article-head">
         <h2 class="mb15" :style="[data.style]">{{data.title}}</h2>
         <div class="author font12 cl-999">
-          <span class="mr25">标签：{{data.tag}}</span>
+          <span class="mr25">标签：{{data.tag.join(',')}}</span>
           <span class="mr25">{{data.times}}</span>
         </div>
       </div>
@@ -17,8 +17,7 @@
         <p>
           <span class="operating f-fr font12 cl-999">
             <a class="cl-999">分类：{{data.parent || '未分类'}}</a> |
-            <a title="阅读" class="cl-999">阅读({{data.visit}})</a> |
-            <a title="评论" class="cl-999">评论({{data.comment}})</a>
+            <a title="阅读" class="cl-999">阅读({{data.visit}})</a>
           </span>
         </p>
       </div>
@@ -61,9 +60,8 @@ export default defineComponent({
     function init() {
       loading.value = false
       store.dispatch('common/Fetch', {
-        api: 'Detail',
+        api: 'journalView',
         data: {
-          coding: "U20000",
           id: route.query.id
         }
       }).then(res => {
@@ -76,7 +74,7 @@ export default defineComponent({
     function handleclick(param: any) {
       router.push(proxy.const.setUrl({
         uid: getUid(),
-        query: `/appstore/?mod=${route.query.mod}&item=view&id=${param}`
+        query: `/journal?item=view&id=${param}`
       }))
       setTimeout(() => {
         window.scrollTo(0, 0)

@@ -1,4 +1,8 @@
 const mutations = {
+  setData: (state: any, params: any) => {
+    debugger
+    state[params.state] = params.data
+  },   
   setTalkList: (state: any, params: any) => {
     if(params.page === 2){
       state.talkList.list = params.list

@@ -40,14 +40,14 @@
   </div>
 </div>
 <div class="tabs" v-else>
-  <div class="nav-tabs">
+  <div class="nav-tabs" :class="className.nav">
     <div class="tabs-list pointer" :class="[{current: currentIndex === index}]" v-for="(item, index) in tabs" :key="index" @click="handleClick(index)">{{item.name}}</div>
     <div v-if="extra" class="pr15" style="flex: 1; text-align: right;">
       <slot name="extra"></slot>
     </div>
   </div>
 
-  <div class="tab-content">
+  <div class="tab-content" :class="className.con">
     <div class="tabsbox plr15" style="display: block; line-height: 30px;">
       <div v-if="currentIndex === 0">
         <slot name="content1"></slot>
@@ -79,6 +79,12 @@ import {
 export default defineComponent({
   name: 'v-Tabs',
   props: {
+    className: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     title: {
       type: String,
       default: ""

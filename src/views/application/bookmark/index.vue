@@ -1,33 +1,26 @@
 <template>
-<div class="container w1100">
-  <div class="module-wrap mb15">
-    <div class="module-head p20 ">
-      <span>书签</span>
-      <span class="right" @click="add('add')"><i class="iconfont icon-anonymous-iconfont font24" />书签类型</span>
-      <AddBookmark :render="init" action="edit" />
-      <span class="right"><i class="iconfont icon-write" />编辑</span>
-    </div>
-    <div class="module-content" style="padding: 0 50px !important; min-height: 800px">
-      <div class="cate-wrap">
-        <div>
-          <div style="padding: 10px 0px;">
-            <div style="position: relative;">
-              <div v-for="(item, index) in dataList.list" :key="index">
-                <div style="padding: 6px 0px;"><span class="" style="padding: 6px 10px;">{{item.name}}</span></div>
-                <ul class="pl20 clearfix" syle="display: flex; flex-wrap: wrap;">
-                  <li class="left" style="padding: 6px 10px; display: flex;" v-for="(data, i) in item.list" :key="i">{{data.name}}</li>
-                </ul>
-              </div>
-              
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="container w1100 clearfix">
+  <div class="w180 left">
+    <v-aside title="我的书签">
+      <template v-slot:button>
+        <v-group action='add' :data="data" :group="userGroup" coding="U30004" :render="init" />
+      </template>
+      <template v-slot:aside>
+        <ul>
+          <li class="aside" @click="handleclick(`/bookmark`)"><i class="iconfont icon-dot font20"></i> 所有的</li>
+          <li v-for="(item, index) in userGroup" :key="index" @click="handleclick(`/bookmark?item=list&id=${item.id}`)" class="aside">
+            <i class="iconfont icon-dot font20"></i> {{item.name}}
+          </li>
+        </ul>
+      </template>
+    </v-aside>
+  </div>
+  <div class="m0 right" style="width: 910px">
+    <Action v-if="query.item === 'details'" :action="query.action" />
+    <ArticleView v-else-if="query.item === 'view'" />
+    <List ref="list" :group="userGroup" :query="query" v-else />
   </div>
 </div>
-<AddGroup :showAlbum="true" :render="init" v-model:showFlag="showAlbum" v-if="showAlbum" :data="currentData" />
-
 </template>
 
 <script lang="ts">
@@ -42,75 +35,60 @@ import {
   ref,
   getUid
 } from '@/utils'
-import List from "./list.vue"
+import List from "./article_list.vue"
 import Action from "./article_action.vue"
 import ArticleView from "./article_detail.vue"
-import AddGroup from './components/addGroup.vue'
-import AddBookmark from './components/addBookmark.vue'
-import * as consts from '@/assets/const'
+import {
+  journal
+} from '@/assets/const'
 
 export default defineComponent({
   name: 'HomeView',
   components: {
     List,
     Action,
-    ArticleView,
-    AddGroup,
-    AddBookmark
+    ArticleView
   },
   setup(props, context) {
     const {
-      ctx,
       proxy
     }: any = getCurrentInstance();
+    const store = useStore();
     const router = useRouter();
     const route = useRoute();
-    const store = useStore();
-    const currentUser = computed(() => store.getters['user/currentUser']);
-    const groups = computed(() => store.getters['user/groups']);
     let query: any = computed(() => route.query || "");
-    const showAlbum = ref(false)
     const currentData = ref({})
-    const dataList = ref([])
+    const userGroup = ref([])
     const list: any = ref(null);
 
-    const menu: any = consts.journal;
+    const menu: any = journal;
     menu.map((item: any) => {
-      item.path = `/journal?item=${item.value}`
+      item.path = `/bookmark?item=${item.value}`
     })
 
     function init() {
       store.dispatch('common/Fetch', {
-        api: "bookmark",
+        api: "bookmarkCate",
         data: {
           uid: getUid()
         }
       }).then(res => {
 
-        dataList.value = res.result
+        userGroup.value = res.result
 
       })
     }
 
     function handleclick(param: any) {
-      // router.push(proxy.const.setUrl({
-      //   uid: getUid(),
-      //   query: param
-      // }))
+      router.push(proxy.const.setUrl({
+        uid: getUid(),
+        query: param
+      }))
 
-      // setTimeout(() => {
-      //   list.value.init()
-      // }, 100)
+      setTimeout(() => {
+        list.value.init()
+      }, 100)
 
-    }
-
-    function add(action: any, item: any) {
-      debugger
-      showAlbum.value = true
-      currentData.value = {
-        action,
-        item
-      }
     }
 
     onMounted(() => {
@@ -118,16 +96,13 @@ export default defineComponent({
     })
 
     return {
-      currentUser,
       handleclick,
-      groups,
       query,
       menu,
-      add,
       list,
-      showAlbum,
       currentData,
-      dataList
+      userGroup,
+      init
     }
   }
 })

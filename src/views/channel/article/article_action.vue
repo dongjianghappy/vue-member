@@ -34,7 +34,7 @@
       <li class="li">
         <span class="label">所属分类</span>
         <span class="pr15">{{detail.parent}}</span>
-        <v-category name="选择分类" :data="{item: detail, coding: coding}" type="text"></v-category>
+        <v-category name="选择分类" :data="{item: detail, coding: coding}" :isMore="true" type="text"></v-category>
       </li>
       <!--  v-if="field.album" -->
       <li class="li"> 
@@ -42,22 +42,13 @@
         <span class="pr15">{{detail.album}}</span>
         <v-category name="选择分类" :data="{item: detail, coding: '123'}" type="text"></v-category>
       </li>
-      <li class="li">
+      <li class="li" style="overflow: auto;">
         <span class="label">颜色</span>
         <v-color v-model:color="detail.color" />
       </li>
-      <li class="li" style="min-height: 150px;">
+      <li class="li" style="overflow: auto;">
         <span class="label">预览图</span>
-        <!-- <ul>
-          <li v-for="(img, index) in detail.img" :key="index" style="width:120px; height:120px; display: inline-block;"><img :src="img" style="width:120px; height:120px" @click="handelCopy(img)" /></li>
-        </ul> -->
-        <v-upload ref="upload" :data="{id: detail.id, cover: detail.cover,  coding: 'ddd'}" :dataList="detail.img" :uploadtype="channel" @imgList="image" :style="'width: 135px'" />
-        <!-- <v-upload ref="upload" :data="{id: detail.cover, coding: '123'}" :dataList="detail.img" :uploadtype="channel" @imgList="image" :style="'width: 135px'" /> -->
-        <!-- <v-upload ref="upload" :uploadtype='channel' :img="detail.img" @imgList="image" /> -->
-        <!-- <div>
-          <a data-uploadtype="tech" data-temp="nineimg" class="cl-ccc" @click=" upload.handleclick()">点击上传图片</a>
-          <span style=" margin-left: 25px; color:#ccc">请上传本地图片，大小不超过2MB</span>
-        </div> -->
+        <v-upload ref="upload" :data="{id: detail.id, cover: detail.cover,  coding: 'ddd'}" :dataList="detail.img || []" :uploadtype="channel" @imgList="image" :style="'width: 135px'" />
       </li>
     </ul>
     <div class="edit-article">
@@ -68,7 +59,8 @@
       <textarea v-model="detail.summary" class="w-full"></textarea>
     </div>
     <div class="mt20">
-      <v-button @onClick="save">保存</v-button>
+      <v-button class="btn" @onClick="save">保存</v-button>
+      <v-button class="btn" @onClick="saveTemp">保存到草稿箱</v-button>
     </div>
   </div>
 </div>
@@ -157,6 +149,21 @@ export default defineComponent({
       img.value = a
     }
 
+    // 保存到草稿箱
+    function saveTemp(){
+      store.dispatch('common/Fetch', {
+        api: "articleTempSave",
+        data: {
+          type: props.channel,
+          content: JSON.stringify(detail.value)
+        }
+      }).then(res => {
+        proxy.$hlj.message({
+          msg: res.returnMessage
+        })
+      })
+    }
+
     // 保存
     function save() {
 
@@ -233,9 +240,21 @@ export default defineComponent({
           let style = JSON.parse(detail.value.style || '{}')
           detail.value.style = style instanceof Object ? style : {}
         })
+      }else{
+       store.dispatch('common/Fetch', {
+          api: 'articleTempList',
+          data: {
+            type: props.channel,
+          }
+        }).then(res => {
+          if(res.result !== "" && res.result !== null){
+            detail.value = JSON.parse(res.result)
+          }
+        })
       }
     })
     return {
+      saveTemp,
       save,
       detail,
       upload,

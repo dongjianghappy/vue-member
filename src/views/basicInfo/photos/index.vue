@@ -1,6 +1,6 @@
 <template>
 <div class="module-wrap">
-  <div class="module-content basic-info" style="height: 485px;">
+  <div class="module-content basic-info" style="height: 560px;">
     <h3 class="mb10">会员账号激活</h3>
     <!--激活-->
     <p class="salutation mb10">亲爱的 <span id="username" style="color:#0CC">东江哥</span>，您好!：</p>

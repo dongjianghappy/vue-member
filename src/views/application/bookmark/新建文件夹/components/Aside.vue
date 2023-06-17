@@ -25,7 +25,7 @@ export default defineComponent({
   data() {
   return {
     menu:[
-      {name: "所有日志", path: ""},
+      {name: "所有的", path: ""},
       {name: "发布日志", path: "details"}
     ]
   }

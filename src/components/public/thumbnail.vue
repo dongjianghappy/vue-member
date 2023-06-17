@@ -1,7 +1,10 @@
 <template>
 <v-button v-model:show="isShow" class="relative">
   <i class="iconfont" :class="`icon-${icon}`" @click="showImg(data)" v-if="icon" />
-  <img :src="data.cover || data.image[0]" style="border-radius: 8px; width: 100%; height: 150px;" @click="showImg(data)" v-else>
+  <div style="border-radius: 8px; overflow:hidden; height: 150px"  v-else>
+  <v-img :src="data.cover || data.image[0]" @click="showImg(data)" />
+  </div>
+  <!-- <img :src="data.cover || data.image[0]" style="border-radius: 8px; width: 100%; height: 150px;" @click="showImg(data)" v-else> -->
   <v-audio :data="data" :hasMusic="true" v-if="data.background_music" />
 </v-button>
 <v-layer v-model:isShow="showFlag" :data="Object.keys(detail).length > 0 ? detail : data" @prevOrNext="prevOrNext" v-if="showFlag" :type="type" :getNeighbor="getNeighbor" :hasInfo="hasInfo" :hasComment="hasComment" />

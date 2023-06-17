@@ -9,6 +9,7 @@ import hlj from './plugin/loading'
 import message from './plugin/message'
 import hljs from './plugin/effects'
 import scroll from './plugin/flxed'
+import pendant from './plugin/pendant'
 import move from './plugin/move'
 import cons from './plugin/const'
 import form from './plugin/validate'
@@ -36,8 +37,9 @@ publics(Vue)
 packages(Vue)
 hlj(Vue)
 message(Vue)
-hljs(Vue)
 scroll(Vue)
+pendant(Vue)
+hljs(Vue)
 move(Vue)
 cons(Vue)
 form(Vue)

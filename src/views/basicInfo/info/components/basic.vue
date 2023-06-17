@@ -1,37 +1,37 @@
 <template>
 <div class="module-wrap m0">
   <div class="module-content basic-info">
-    <div class="info-module" :class="{'cancel-module': !isEdit}" >
+    <div class="info-module" :class="{'cancel-module': !isEdit}">
       <span class="name">基本信息</span>
       <div class="line"></div>
       <v-space>
         <span v-show="!isEdit" class="update-info cancelbtn" @click="handelCancel">取消</span>
-        <span  class="update-info editbtn" @click="Edit">{{!isEdit ? "保存" : "编辑"}}</span>
+        <span class="update-info editbtn" @click="Edit">{{!isEdit ? "保存" : "编辑"}}</span>
       </v-space>
     </div>
     <ul class="info">
       <li>
         <label>用户名</label>
-        <div>{{user.username}} ID {{user.account}}</div>
+        <div>{{basicInfo.username}} ID {{basicInfo.account}}</div>
       </li>
       <li>
         <label>昵称</label>
-        <div class="con" v-if="isEdit">{{user.nickname}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.nickname}}</div>
         <input type="text" v-model="userInfo.nickname" class="input-sm" v-else>
       </li>
       <li>
         <label>签名</label>
-        <div class="con" v-if="isEdit">{{user.signature}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.signature}}</div>
         <input type="text" v-model="userInfo.signature" class="input-sm" v-else>
       </li>
       <li>
         <label>真实姓名</label>
-        <div class="con" v-if="isEdit">{{user.realname}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.realname}}</div>
         <input type="text" v-model="userInfo.realname" class="input-sm" v-else>
       </li>
       <li>
         <label>姓别</label>
-        <div class="con" v-if="isEdit">{{user.sex === "1" ? "男" : "女"}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.sex === "1" ? "男" : "女"}}</div>
         <span v-else>
           <input name="sex" type="radio" value="1" class="sex" v-model="userInfo.sex"> 男&nbsp;&nbsp;
           <input name="sex" type="radio" value="0" class="sex" v-model="userInfo.sex"> 女
@@ -40,8 +40,8 @@
 
       <li>
         <label>生日</label>
-        <div class="con" v-if="isEdit"><span id="year">{{user.year}}</span>年 <span id="month">{{user.month}}</span>月 <span id="day">{{user.day}}</span>日</div>
-        <v-birthday :data="{year: user.year, month: user.month, day: user.day}" @choose="chooseBirthday" v-else />
+        <div class="con" v-if="isEdit"><span id="year">{{basicInfo.year}}</span>年 <span id="month">{{basicInfo.month}}</span>月 <span id="day">{{basicInfo.day}}</span>日</div>
+        <v-birthday :data="{year: basicInfo.year, month: basicInfo.month, day: basicInfo.day}" @choose="chooseBirthday" v-else />
 
       </li>
 
@@ -52,11 +52,11 @@
           <span id="city">{{address.city}}</span>
           <span id="area">{{address.area}}</span>
         </div>
-        <v-citylist :data="{province: user.province, city: user.city, area: user.area}" @choose="chooseArea" v-else />
+        <v-citylist :data="{province: basicInfo.province, city: basicInfo.city, area: basicInfo.area}" @choose="chooseArea" v-else />
 
       </li>
       <li><label>血型</label>
-        <div class="con" v-if="isEdit">{{user.bloodtype}} 型</div>
+        <div class="con" v-if="isEdit">{{basicInfo.bloodtype}} 型</div>
         <span class="selectgroup" v-else>
           <select v-model="userInfo.bloodtype" class="">
             <option value="A">A型</option>
@@ -66,9 +66,13 @@
           </select>
         </span>
       </li>
-      <li style="min-height: 95px"><label>简介</label>
-        <div class="con" v-if="isEdit">{{user.introduction}}</div>
+      <li style="height: auto"><label>简介</label>
+        <div class="con" v-if="isEdit">{{basicInfo.introduction}}</div>
         <textarea v-model="userInfo.introduction" v-else></textarea>
+      </li>
+      <li style="height: auto"><label>留言寄语</label>
+        <div class="con" v-if="isEdit">{{basicInfo.message}}</div>
+        <textarea v-model="userInfo.message" v-else></textarea>
       </li>
     </ul>
   </div>
@@ -90,7 +94,7 @@ import citys from '@/assets/cityData'
 export default defineComponent({
   name: 'AsideView',
   props: {
-    user: {
+    basicInfo: {
       type: Object,
       default: () => {
         return {}
@@ -103,14 +107,14 @@ export default defineComponent({
       }
     }
   },
-  emits: ['update:user'],
+  emits: ['update:basicInfo'],
   setup(props, context) {
     const {
       ctx
     }: any = getCurrentInstance();
     let isEdit = ref(true)
     const cityData: any = reactive(citys)
-    const userInfo: any = ref(props.user)
+    const userInfo: any = ref(props.basicInfo)
 
     const address = computed(() => render());
 
@@ -121,13 +125,13 @@ export default defineComponent({
       for (var i in cityData) {
         const arr = i.split(',');
         if (arr.length == 1) {
-          province = cityData[i][props.user.province]
+          province = cityData[i][props.basicInfo.province]
         }
-        if (arr.length == 2 && arr[1] == props.user.province) {
-          city = cityData[i][props.user.city]
+        if (arr.length == 2 && arr[1] == props.basicInfo.province) {
+          city = cityData[i][props.basicInfo.city]
         }
-        if (arr.length == 3 && arr[2] == props.user.city) {
-          area = cityData[i][props.user.area]
+        if (arr.length == 3 && arr[2] == props.basicInfo.city) {
+          area = cityData[i][props.basicInfo.area]
         }
       }
 
@@ -141,8 +145,8 @@ export default defineComponent({
     function Edit() {
       isEdit.value = !isEdit.value
       debugger
-      userInfo.value = props.user
-      context.emit('update:user', userInfo.value)
+      userInfo.value = props.basicInfo
+      context.emit('update:basicInfo', userInfo.value)
 
       if (isEdit.value) {
         const {
@@ -157,8 +161,9 @@ export default defineComponent({
           city,
           area,
           bloodtype,
-          introduction
-        } = props.user
+          introduction,
+          message
+        } = props.basicInfo
         props.edit({
           nickname,
           signature,
@@ -171,8 +176,8 @@ export default defineComponent({
           city,
           area,
           bloodtype,
-          introduction
-
+          introduction,
+          message
         })
       }
 
@@ -193,7 +198,7 @@ export default defineComponent({
     // 取消
     function handelCancel() {
       isEdit.value = !isEdit.value
-    }    
+    }
 
     return {
       isEdit,

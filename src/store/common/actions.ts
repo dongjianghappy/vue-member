@@ -7,6 +7,11 @@ const actions = {
     const { result }:any = await api[params.api || "select"]({
       ...data
     })
+
+    if(params.state){
+      context.commit("setData" , {state: params.state, data: result.result});      
+  }    
+
     return result
   },
   

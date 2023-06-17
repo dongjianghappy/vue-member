@@ -1,19 +1,21 @@
 <template>
 <div class="module-wrap">
   <div class="module-content send_info p0">
-    <div class="sendtitle">休息片刻，有什么新鲜事赶紧和小伙伴们分享?</div>
+    <div class="sendtitle">
+      <v-scrolltext :dataList="announcement" />
+    </div>
     <div class="send-input p15">
       <div style=" background: #f0f1f4; boder: 1px solid #f0f1f4; border-radius: 8px; padding: 6px 11px;">
         <textarea placeholder="有什么新鲜事想分享给大家？" v-model="data.summary" class="talkcontent-wrap" style="background: transparent; resize: none;"></textarea>
       </div>
     </div>
-    <v-upload ref="upload" @imgList="image" file="talk" />
+    <v-upload ref="upload" @imgList="image" file="talk" :mask="true" v-if="module.upload" />
     <div class="operate">
       <div class="left">
-        <span class="infos" @click="upload.handleclick()">
+        <span class="infos" @click="upload.handleclick()" v-if="module.upload">
           <i class="iconfont icon-pic"></i>图片
         </span>
-        <span class="infos">
+        <span class="infos" v-if="module.choose_talk">
           <v-topic @onEmoji="choose" />
         </span>
       </div>
@@ -31,6 +33,7 @@ import {
   getCurrentInstance,
   ref,
   reactive,
+  computed,
   useStore,
   useRoute,
   useRouter
@@ -45,6 +48,8 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute()
     const router = useRouter()
+    const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
+    const announcement = computed(() => store.getters['common/announcement']);
     const upload: any = ref(null);
     const data: any = reactive({
       summary: "",
@@ -100,6 +105,8 @@ export default defineComponent({
       image,
       choose,
       sendTalk,
+      announcement,
+      module
     }
   }
 })

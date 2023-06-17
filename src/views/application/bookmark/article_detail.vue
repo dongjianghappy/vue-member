@@ -6,7 +6,7 @@
       <div class="article-head">
         <h2 class="mb15" :style="[data.style]">{{data.title}}</h2>
         <div class="author font12 cl-999">
-          <span class="mr25">标签：{{data.tag}}</span>
+          <span class="mr25">标签：{{data.tag.join(',')}}</span>
           <span class="mr25">{{data.times}}</span>
         </div>
       </div>
@@ -16,9 +16,8 @@
       <div class="ptb25">
         <p>
           <span class="operating f-fr font12 cl-999">
-            <!-- <a class="cl-999">分类：{{data.parent || '未分类'}}</a> | -->
-            <a title="阅读" class="cl-999">阅读({{data.visit}})</a> |
-            <a title="评论" class="cl-999">评论({{data.comment}})</a>
+            <a class="cl-999">分类：{{data.parent || '未分类'}}</a> |
+            <a title="阅读" class="cl-999">阅读({{data.visit}})</a>
           </span>
         </p>
       </div>
@@ -37,33 +36,15 @@ import {
   defineComponent,
   getCurrentInstance,
   onMounted,
-  watch,
   ref,
-  reactive,
   useStore,
   useRoute,
-  codings,
   useRouter,
   getUid
 } from '@/utils'
 
 export default defineComponent({
   name: 'ArticleView',
-  props: {
-    action: {
-      type: String,
-      default: "add"
-    },
-    field: {
-      type: Object,
-      default: () => {
-        return {
-          album: true,
-          color: true
-        }
-      }
-    }
-  },
   setup(props, context) {
     const {
       proxy
@@ -75,32 +56,30 @@ export default defineComponent({
     const configData: any = ref({})
     const loading: any = ref(false)
 
-
     // 初始化数据
     function init() {
-      loading.value=false
+      loading.value = false
       store.dispatch('common/Fetch', {
-        api: 'Detail',
+        api: 'journalView',
         data: {
-          coding: "U20000",
           id: route.query.id
         }
       }).then(res => {
-        loading.value=true
+        loading.value = true
         data.value = res.result
         data.value.style = JSON.parse(res.result.style)
       })
     }
 
-    function handleclick(param: any){
+    function handleclick(param: any) {
       router.push(proxy.const.setUrl({
         uid: getUid(),
-        query: `/appstore/?mod=${route.query.mod}&item=view&id=${param}`
+        query: `/journal?item=view&id=${param}`
       }))
-        setTimeout(()=>{
-          window.scrollTo(0, 0)
-          init()
-        }, 100)
+      setTimeout(() => {
+        window.scrollTo(0, 0)
+        init()
+      }, 100)
     }
 
     onMounted(() => {

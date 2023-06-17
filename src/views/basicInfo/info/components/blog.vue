@@ -12,12 +12,12 @@
     <ul class="info">
       <li>
         <label>标签</label>
-        <div class="con" v-if="isEdit">{{user.blog_tag}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.blog_tag}}</div>
         <textarea v-model="userInfo.blog_tag" class="" v-else></textarea>
       </li>
       <li>
         <label>描述</label>
-        <div class="con" v-if="isEdit">{{user.blog_desc}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.blog_desc}}</div>
         <textarea v-model="userInfo.blog_desc" class="" v-else></textarea>
       </li>
     </ul>
@@ -39,7 +39,7 @@ import {
 export default defineComponent({
   name: 'AsideView',
   props: {
-    user: {
+    basicInfo: {
       type: Object,
       default: () => {
         return {}
@@ -52,24 +52,24 @@ export default defineComponent({
       }
     }
   },
-  emits: ['update:user'],
+  emits: ['update:basicInfo'],
   setup(props, context) {
     const {
       ctx
     }: any = getCurrentInstance();
     let isEdit = ref(true)
-    const userInfo: any = ref(props.user)
+    const userInfo: any = ref(props.basicInfo)
 
     function Edit() {
       isEdit.value = !isEdit.value
-      userInfo.value = props.user
-      context.emit('update:user', userInfo.value)
+      userInfo.value = props.basicInfo
+      context.emit('update:basicInfo', userInfo.value)
 
       if (isEdit.value) {
         const {
           blog_tag,
           blog_desc
-        } = props.user
+        } = props.basicInfo
         props.edit({
           blog_tag,
           blog_desc

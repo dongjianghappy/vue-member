@@ -2,6 +2,7 @@
 <div>
   <UserInfo :userInfo="userInfo" />
   <Sign v-if="module.sign" />
+  <Calendar v-if="module.calendar" />
   <!-- <Navigation /> -->
   <RecommendUser v-if="module.recommended_users" />
   <HotTalk v-if="module.hot_topic" />
@@ -18,6 +19,7 @@ import {
 } from '@/utils'
 import UserInfo from './module/userInfo.vue'
 import Sign from './module/sign.vue'
+import Calendar from './module/calendar.vue'
 import Navigation from './module/navigation.vue'
 import RecommendUser from './module/recommendUser.vue'
 import HotTalk from './module/hotTalk.vue'
@@ -29,6 +31,7 @@ export default defineComponent({
   components: {
     UserInfo,
     Sign,
+    Calendar,
     Navigation,
     RecommendUser,
     HotTalk,

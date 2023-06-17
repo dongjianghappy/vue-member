@@ -112,6 +112,11 @@ LastestVisitor (params: any) {
 visitorList   (params: any) {
   return http.request('user', 'visitorList', params)
 },  
+
+// 微博公共通知
+announcement (params: any) {
+  return http.request('user', 'announcement', params)
+},  
   
   // 收藏
   Collect (params: any) {
@@ -133,6 +138,14 @@ visitorList   (params: any) {
   Effects (params: any) {
     return http.request('user', 'effects', params)
   },  
+  // 挂件装饰
+  Pendant (params: any) {
+    return http.request('user', 'pendant', params)
+  }, 
+  // 鼠标特效
+  Cursor (params: any) {
+    return http.request('user', 'cursor', params)
+  },    
   
    // 选择主题
    ChooseTheme (params: any) {
@@ -248,6 +261,16 @@ visitorList   (params: any) {
   ArticleDetails (params: any) {
     return http.request('channel', 'articleDetails', params)
   },    
+
+  // 保存到草稿箱
+  articleTempSave (params: any) {
+    return http.request('channel', 'articleTempSave', params)
+  },    
+
+  // 草稿箱查询
+  articleTempList (params: any) {
+    return http.request('channel', 'articleTempList', params)
+  },    
   
   // 发布
   InsertArticle (params: any) {
@@ -304,6 +327,10 @@ visitorList   (params: any) {
   uploadImage (params: any) {
     return http.request('common', 'uploadImage', params)
   },
+  // 设置问题
+  setCover (params: any) {
+    return http.request('channel', 'setCover', params)
+  },  
   // 归档
   Srchive (params: any) {
     return http.request('user', 'srchive', params)
@@ -312,6 +339,10 @@ visitorList   (params: any) {
   Insert (params: any) {
     return http.request('common', 'insert', params)
   } ,  
+  // 删除
+  delete(params: any) {
+    return http.request('common', 'delete', params)
+  },
   // 详情内容
   Update (params: any) {
     return http.request('common', 'update', params)
@@ -450,6 +481,10 @@ visitorList   (params: any) {
   websiteList (params: any) {
     return http.request('user', 'websiteList', params)
   } , 
+  // 博客
+  blogList (params: any) {
+    return http.request('user', 'blogList', params)
+  } , 
  // 搜索
  search (params: any) {
   return http.request('user', 'search', params)
@@ -493,6 +528,33 @@ choosePhotos (params: any) {
   return http.request('user', 'choosePhotos', params)
 },  
   
+// 更新保存
+updateSave(params: any) {
+  return http.request('common', 'updateSave', params)
+},
+spaceImage(params: any) {
+  return http.request('user', 'spaceImage', params)
+},
+journalView(params: any) {
+  return http.request('user', 'journalView', params)
+},
+// 更新状态
+changeData(params: any) {
+  return http.request('common', 'changeData', params)
+},
+
+// 保存挂件饰品
+savePendant(params: any) {
+  return http.request('user', 'savePendant', params)
+},
+
+bookmarkCate(params: any) {
+  return http.request('user', 'bookmarkCate', params)
+},
+// 意见反馈
+feedback (params: any) {
+  return http.request('common', 'feedback', params)
+}
 }
 
 

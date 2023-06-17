@@ -12,22 +12,22 @@
     <ul class="info">
       <li>
         <label>邮箱</label>
-        <div class="con" v-if="isEdit">{{user.email}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.email}}</div>
         <input type="text" v-model="userInfo.email" class="input-sm" v-else>
       </li>
       <li>
         <label>电话</label>
-        <div class="con" v-if="isEdit">{{user.phone}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.phone}}</div>
         <input type="text" v-model="userInfo.phone" class="input-sm" v-else>
       </li>
       <li>
         <label>QQ</label>
-        <div class="con" v-if="isEdit">{{user.qq}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.qq}}</div>
         <input type="text" v-model="userInfo.qq" class="input-sm" v-else>
       </li>
       <li>
         <label>微信</label>
-        <div class="con" v-if="isEdit">{{user.weixin}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.weixin}}</div>
         <input type="text" v-model="userInfo.weixin" class="input-sm" v-else>
       </li>
     </ul>
@@ -49,7 +49,7 @@ import {
 export default defineComponent({
   name: 'AsideView',
   props: {
-    user: {
+    basicInfo: {
       type: Object,
       default: () => {
         return {}
@@ -62,18 +62,18 @@ export default defineComponent({
       }
     }
   },
-  emits: ['update:user'],
+  emits: ['update:basicInfo'],
   setup(props, context) {
     const {
       ctx
     }: any = getCurrentInstance();
     let isEdit = ref(true)
-    const userInfo: any = ref(props.user)
+    const userInfo: any = ref(props.basicInfo)
 
     function Edit() {
       isEdit.value = !isEdit.value
-      userInfo.value = props.user
-      context.emit('update:user', userInfo.value)
+      userInfo.value = props.basicInfo
+      context.emit('update:basicInfo', userInfo.value)
 
       if (isEdit.value) {
         const {
@@ -81,7 +81,7 @@ export default defineComponent({
           phone,
           qq,
           weixin
-        } = props.user
+        } = props.basicInfo
         props.edit({
           email,
           phone,

@@ -2,9 +2,21 @@
 <span @click="handleclick">
   <slot></slot>
 </span>
-<v-dialog v-model:show="isShow" ref="form" title="图片空间" :style="{width: '1200', height: '600'}" @submit="submit">
+<v-dialog v-model:show="isShow" ref="form" title="" :style="{width: '1200', height: '650'}" @submit="submit">
   <template v-slot:content v-if="isShow">
-    <Main type="modal" v-model:data="currentImg" />
+    <v-tabs :tabs="[{name: '话题',value: 'talk'},{name: '相册',value: 'photos'},{name: '图库',value: 'picture'}]" :isEmit="true" v-model:index="index">
+      <template v-slot:content1>
+        <List kind="talk" v-model:currentImg="currentImg" />
+
+      </template>
+      <template v-slot:content2>
+        <List kind="photos" v-model:currentImg="currentImg" />
+
+      </template>
+      <template v-slot:content3>
+        <List kind="picture" v-model:currentImg="currentImg" />
+      </template>
+    </v-tabs>
   </template>
 </v-dialog>
 </template>
@@ -17,12 +29,12 @@ import {
   useStore,
 } from '@/utils'
 
-import Main from './components/list.vue'
+import List from './components/list.vue'
 export default defineComponent({
   name: 'v-Spaces',
   components: {
 
-    Main
+    List
   },
   props: {
     data: {
@@ -53,24 +65,13 @@ export default defineComponent({
     }
 
     function submit() {
+      let image = currentImg.value.replace('thumb', 'view')
       const data = {
         type: 'image',
-        value: `![Description](${currentImg.value.img_url})`
+        value: `![Description](${image})`
       }
       context.emit('selectImage', data)
-      context.emit('update:image', currentImg.value.img_url)
-
-      // store.dispatch('common/Fetch', {
-      //   api: "createfile",
-      //   data: {
-      //     dir: props.data.dir,
-      //     filename: filename.value,
-      //   }
-      // }).then(res => {
-
-      //   props.data.render("init", props.data.currentDir)
       isShow.value = !isShow.value
-      // })
 
     }
 

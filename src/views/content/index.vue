@@ -1,17 +1,8 @@
 <template>
 <div class="container w1100 clearfix">
   <div class="w180 left">
-    <v-aside :data="menu" title="管理中心">
+    <v-aside :data="module.content" title="管理中心">
       <template v-slot:aside>
-
-        <!-- <v-collapse title="私信管理">
-          <ul>
-            <li class="aside"><i class="iconfont font20 icon-dot"></i>自媒体</li>
-            <li class="aside"><i class="iconfont font20 icon-dot"></i> 博客网站</li>
-            <li class="aside"><i class="iconfont font20 icon-dot"></i> 素材网站</li>
-            <li class="aside"><i class="iconfont font20 icon-dot"></i> 图片网站</li>
-          </ul>
-        </v-collapse> -->
       </template>
     </v-aside>
   </div>
@@ -29,7 +20,8 @@
 import {
   defineComponent,
   getCurrentInstance,
-  computed
+  computed,
+  onMounted
 } from 'vue'
 import {
   useStore
@@ -38,10 +30,6 @@ import Index from './components/index.vue'
 import Channel from './components/channel.vue'
 import Visitor from './visitor/index.vue'
 import Mood from './components/mood.vue'
-import {
-  content,
-  information
-} from '@/assets/const'
 import {
   useRouter,
   useRoute
@@ -62,15 +50,25 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
-    const menu: any = content
-    menu.map((item: any) => {
-      item.path = `/content?mod=${item.url}`
-    })
+    const module: any = computed(() => {
+      let site = store.getters['user/config_talk']
+      site.content && site.content.map((item: any) => {
+        item.path = `/content${item.value}`
+      })
+      return site
+    });
     const component = computed(() => route.query.mod);
+
+    onMounted(() => {
+      const side = module.value.content.filter((item: any) => item.default === '1')
+      if(side.length > 0){
+        router.push(window.location.pathname + side[0].value)
+      }
+    })
 
     return {
       component,
-      menu,
+      module,
     }
   }
 })

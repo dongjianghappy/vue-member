@@ -15,9 +15,12 @@
         <span class="mr15" @click="operation('moveAlbum')">移动文档</span>
         <span class="mr15" @click="operation('delete')">删除</span>
       </div>
-      <List :data="{name: channel, coding: coding.art}" :dataList="dataList" :isShowBatch="isShowBatch" v-if="toggleDisplay === 'list'" />
-      <Album :data="{name: channel, coding: coding.art}" :dataList="dataList" :item="query.item" :isShowBatch="isShowBatch" :type="channel === 'video' ? 'video' : 'image'" v-else />
+      <List :data="{channel: channel, coding: coding.art}" :dataList="dataList" :isShowBatch="isShowBatch" v-if="toggleDisplay === 'list'" />
+      <Album :data="{channel: channel, coding: coding.art}" :dataList="dataList" :item="query.item" :isShowBatch="isShowBatch" :type="channel === 'video' ? 'video' : 'image'" v-else />
       <v-loding v-if="!loading" />
+      <div class="pt25 align_right" v-if="dataList.total > 20">
+        <v-pagination :pagination="{total: dataList.total, pages: dataList.pages, page: dataList.page ||  1, pagesize: dataList.pagesize}" :render="init" />
+      </div>
     </template>
     <template v-slot:content2>
       <List :item="query.item" />
@@ -132,25 +135,34 @@ export default defineComponent({
       selectList.value = []
     }
 
-    function init() {
-      let param: any = {}
-      if (route.query.item === 'audited') {
-        param.management_checked = "1"
-      } else if (route.query.item === 'unAudited') {
-        param.management_checked = "0"
-      } else if (route.query.item === 'returned') {
-        param.management_checked = "-1"
-      }
+    function init(param: any = {}) {
       loading.value = false
-      dataList.value = []
+
+      const params: any = {
+        uid: getUid(),
+        id: route.query.id,
+        page: 1,
+        pagesize: 20
+      }
+
+      Object.assign(params, param)
+
+      if (route.query.item === 'audited') {
+        params.management_checked = "1"
+      } else if (route.query.item === 'unAudited') {
+        params.management_checked = "0"
+      } else if (route.query.item === 'returned') {
+        params.management_checked = "-1"
+      }
+
       store.dispatch('common/Fetch', {
         api: 'ArticleList',
         data: {
           coding: coding['art'],
           uid: getUid(),
           page: 1,
-          pagesize: 20,
-          ...param
+          pagesize: 2,
+          ...params
         }
       }).then(res => {
         dataList.value = res.result

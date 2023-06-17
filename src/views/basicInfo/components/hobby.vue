@@ -9,52 +9,52 @@
               @click="Edit">{{isEdit ? "保存" : "编辑"}}</span>
       </div>
       <ul class="info">
-        <li>
+        <li class="mb5">
           <label>明星</label>
           <TagList v-model:tags='hobby.star'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>音乐</label>
           <TagList v-model:tags='hobby.music'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>影视</label>
           <TagList v-model:tags='hobby.television'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>运动</label>
           <TagList v-model:tags='hobby.sports'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>游戏</label>
           <TagList v-model:tags='hobby.game'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>数码</label>
           <TagList v-model:tags='hobby.digital'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>美食</label>
           <TagList v-model:tags='hobby.food'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>旅游</label>
           <TagList v-model:tags='hobby.tourism'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>书籍</label>
           <TagList v-model:tags='hobby.books'
                    :isEdit="isEdit" />
         </li>
-        <li>
+        <li class="mb5">
           <label>其他</label>
           <TagList v-model:tags='hobby.other'
                    :isEdit="isEdit" />

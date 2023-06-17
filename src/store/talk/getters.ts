@@ -8,6 +8,7 @@ const getters = {
   downloadList: (state: any) => state.downloadList || [], 
   notesList: (state: any) => state.notesList || [], 
   websiteList: (state: any) => state.websiteList || [], 
+  blogList: (state: any) => state.blogList || [], 
 }
 
 export default getters;

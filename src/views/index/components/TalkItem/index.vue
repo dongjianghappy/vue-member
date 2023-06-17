@@ -35,7 +35,8 @@
               <!-- 图片预览 -->
               <ul v-else-if="list.image.length > 0" class="img-grid smallimg-wrap clearfix">
                 <li v-for="(img, k) in list.image" :key="k">
-                  <img :src="img" @click="showImg(item, img)" class="_onalbumimg showimg" data-id="{$sm_talklist[l].list[u].id}" data-coding="{$sm_talklist[l].list[u].coding}" data-codinglist="collect={$sm_talklist[l].coding5}&comment={$sm_talklist[l].list[u].coding3}&praise={$sm_talklist[l].list[u].coding4}" data-img="{$sm_talklist[l].list[u].imglist[i]}" />
+                  <!-- <v-img :src="img" @click="showImg(item, img)" /> -->
+                  <!-- <img :src="img" @click="showImg(item, img)" class="_onalbumimg showimg" data-id="{$sm_talklist[l].list[u].id}" data-coding="{$sm_talklist[l].list[u].coding}" data-codinglist="collect={$sm_talklist[l].coding5}&comment={$sm_talklist[l].list[u].coding3}&praise={$sm_talklist[l].list[u].coding4}" data-img="{$sm_talklist[l].list[u].imglist[i]}" /> -->
                 </li>
               </ul>
             </div>
@@ -52,8 +53,9 @@
             <img :src="item.image[0]" class="showimg" @click="showImg(item, item.image[0])" style="border-radius: 8px;width: 168px; height: 224px; cursor: zoom-in;" />
           </div>
           <ul v-else class="img-grid smallimg-wrap clearfix">
-            <li v-for="(img, k) in item.image" :key="k">
-              <img :src="img" class="showimg" @click="showImg(item, img)" style="border-radius: 8px;cursor: zoom-in;" />
+            <li v-for="(img, k) in item.image" :key="k" style="border-radius: 8px; overflow:hidden;">
+              <v-img :src="img" @click="showImg(item, img)" />
+              <!-- <img :src="img" class="showimg" @click="showImg(item, img)" style="border-radius: 8px;cursor: zoom-in;" /> -->
             </li>
           </ul>
         </div>

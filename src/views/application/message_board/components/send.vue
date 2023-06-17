@@ -1,21 +1,20 @@
 <template>
 <div class="module-content" style="margin:0; padding:25px 50px;">
   <div class="font14" style="width:100%;">
-    <div class="goto-write" v-if="!isShow">
-      留言板需要你的足迹哦，
-      <span id="goto-write" class="pointer" style="color: #666;" @click="write(true)">开始留言</span>
+    <div class="goto-write mb5">
+      主人寄语: <span class="cl-999">{{userInfo.message || '无'}}</span>
+      <span class="ml10 pointer" style="color: #f67f00; " @click="()=>isShow = true" v-if="!isShow">
+        
+        开始留言</span>
     </div>
-    <div class="send_info sendform" style=" background:#f9f9f9; margin:0; padding:15px;" v-else>
+    <div class="send_info sendform" style=" background:#f9f9f9; margin:0; border-radius: 8px; padding:15px;" v-if="isShow">
       <div class="send-input bb0">
-        <textarea id="talkcontent" v-model="content" class="talkcontent-wrap"></textarea>
+        <textarea v-model="content" placeholder="请输入留言内容" class="talkcontent-wrap" style="resize: none;"></textarea>
       </div>
-      <div class="operate" style="padding: 15px 0">
-        <div class="left">
-          <v-expression @onEmoji="choose" />
-        </div>
+      <div class="operate plr0">
         <div class="right">
-          <button id="feedbackbtn" class="btn btn-sm" @click="send">发表</button>
-          <button id="cancel-write" class="btn btn-sm" @click="write(false)">取消</button>
+          <button class="btn btn-default mr10" @click="send">发表</button>
+          <button class="btn btn-default" @click="()=>isShow = false">取消</button>
         </div>
       </div>
     </div>
@@ -26,9 +25,9 @@
 <script lang="ts">
 import {
   defineComponent,
-  getCurrentInstance,
   useStore,
   ref,
+  computed,
   getUid,
 } from '@/utils'
 
@@ -44,17 +43,9 @@ export default defineComponent({
   },
   setup(props, context) {
     const store = useStore();
-    const upload: any = ref(null);
     let content = ref("");
-    let dataList: any = ref([])
-    let expressionStatus = ref(false)
-    let topicStatus = ref(false)
     const isShow = ref(false)
-
-
-    function write(param: any) {
-      isShow.value = param
-    }
+    const userInfo: any = computed(() => store.getters['user/userInfo']);
 
     function send() {
       store.dispatch('common/Fetch', {
@@ -70,21 +61,12 @@ export default defineComponent({
       })
     }
 
-    // 选择表情或话题
-    function choose(aa: any) {
-      content.value = content.value + aa
-    }
 
     return {
+      userInfo,
       send,
-      dataList,
       content,
-      upload,
-      expressionStatus,
-      topicStatus,
-      write,
-      isShow,
-      choose
+      isShow
     }
   }
 })

@@ -3,14 +3,21 @@
   <div class="ablumimg p15">
     <!-- 图片上传 -->
     <ul v-if="file === 'image' || (file === 'talk' && imgList.length)">
-      <li v-for="(item, index) in imgList" :key="index" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
-        <img draggable="true" :src="item.src" v-if="item.status ==='complete'" />
+      <li v-for="(item, index) in imgList" :key="index" class="upload-album-wrap relative" :style="style" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
+        <!-- <img draggable="true" :src="item.src" v-if="item.status ==='complete'" /> -->
+         <v-img draggable="true" :src="item.src" v-if="item.status ==='complete'" />
         <div class="load1" v-else>
           <div class="loader">Loading...</div>
         </div>
-        <div class="cover" style="top: 0; display: none;"><i class="iconfont icon-close removeimg" @click="remove(index)"></i></div>
+        <i class="iconfont icon-cover absolute font24" style="top: 0px; right: 0px; color: #999" v-if="cover && item.src.indexOf(cover) > -1"></i>
+        <div class="cover" style="top: 0; display: none;" v-if="mask"><i class="iconfont icon-close removeimg" @click="remove(index)"></i></div>
+        <div class="album-operating" v-else>
+          <span><i class="iconfont icon-copy" title="复制" @click="handleCopy(item.src)"></i></span>
+          <span><i class="iconfont icon-view" title="查看"></i></span>
+          <span><i class="iconfont icon-mail" title="设置封面" @click="handleCover(item.src)"></i></span>
+          <span><i class="iconfont icon-recycle" title="删除" @click="remove(index)"></i></span></div>
       </li>
-      <li class="upfile" @click="handleclick"><i class="iconfont icon-add"></i></li>
+      <li class="upfile" :style="style" @click="handleclick"><i class="iconfont icon-add"></i></li>
     </ul>
     <!-- 音视频上传 -->
     <div class="inline" v-else-if="file === 'music'">
@@ -26,7 +33,9 @@
 <script lang="ts">
 import {
   defineComponent,
-  ref
+  getCurrentInstance,
+  ref,
+  watch
 } from 'vue'
 import {
   useStore
@@ -42,6 +51,10 @@ export default defineComponent({
       type: String,
       default: 'weibo'
     },
+    style: {
+      type: String,
+      default: ""
+    },
     format: {
       type: String,
       default: '.jpg, .jpeg, .bmp, .gif, .png, .heif, .heic, .mp4, .mp3'
@@ -52,15 +65,39 @@ export default defineComponent({
         return {}
       }
     },
+    dataList: {
+      type: Array,
+      default: []
+    },
+    mask: {
+      type: Boolean,
+      default: false
+    }
   },
   emits: ['imgList', 'update:haschoose', 'update:file'],
 
   setup(props, context) {
+    const {
+      ctx,
+      proxy
+    }: any = getCurrentInstance();
     const store = useStore();
     const FileUpload = ref("FileUpload") // 选择文件id
     let imgList: any = ref([]) // 文件内容
     const dragging = ref(null) // 拖拽状态
     const box: any = ref(0)
+    const cover: any = ref("")
+
+    // 监听路由
+    watch(() => props.dataList, (newValues, prevValues) => {
+      props.dataList.map((item) => {
+        imgList.value.push({
+          src: item,
+          status: "complete"
+        })
+      })
+      cover.value = props.data.cover
+    })
 
     // 选择文件
     function getFile() {
@@ -154,6 +191,12 @@ export default defineComponent({
       }
 
       document.querySelectorAll('ul>li')[dst].setAttribute("class", "current")
+
+      let img1: any = document.querySelectorAll('li.upload-album-wrap>img')[src]
+      let img2: any = document.querySelectorAll('li.upload-album-wrap>img')[dst]
+      img1.style = ""
+      img2.style = ""
+
       box.value = dst
       newItems.splice(dst, 0, ...newItems.splice(src, 1))
       imgList.value = newItems
@@ -164,6 +207,48 @@ export default defineComponent({
       imgList.value.splice(index, 1)
       context.emit('imgList', img(imgList.value))
     }
+
+    // 复制图片
+    function handleCopy(param: any) {
+      let transfer = document.createElement('input');
+      document.body.appendChild(transfer);
+      let image = param.replace('thumb', 'view')
+      transfer.value = image; // 这里表示想要复制的内容
+      transfer.focus();
+      transfer.select();
+      if (document.execCommand('copy')) {
+        document.execCommand('copy');
+      }
+      transfer.blur();
+      proxy.$hlj.message({
+        msg: "复制成功"
+      })
+      document.body.removeChild(transfer);
+
+    }
+
+    // 设置封面
+    function handleCover(param: any) {
+
+      const arr = param.split("/")
+
+      store.dispatch('common/Fetch', {
+        api: 'setCover',
+        data: {
+          coding: props.data.coding,
+          id: props.data.id,
+          cover: arr[arr.length - 1]
+        }
+      }).then((res) => {
+        if (res) {
+          cover.value = arr[arr.length - 1]
+          proxy.$hlj.message({
+            msg: "封面设置成功"
+          })
+        }
+      })
+    }
+
     return {
       handleclick,
       getFile,
@@ -172,7 +257,10 @@ export default defineComponent({
       handleDragEnd,
       handleDragOver,
       handleDragEnter,
-      remove
+      remove,
+      handleCover,
+      handleCopy,
+      cover
     }
   }
 })
@@ -184,12 +272,12 @@ export default defineComponent({
   border: 2px dashed #fff;
 }
 
-.ablumimg {
-  li {
-    width: 100px;
-    height: 100px;
-  }
-}
+// .ablumimg {
+//   li {
+//     width: 100px;
+//     height: 100px;
+//   }
+// }
 
 .add-button-file {
   display: inline-block;

@@ -3,6 +3,9 @@
   <div class="collapse-head ptb10" @click="handleClick">
     <span :class="{ 'deg90': collapse}" style="display: inline-block;"><i class="iconfont icon-arrow arrow "></i></span>
     <span>{{title}}</span>
+    <span class="align_left">
+      <slot name="extra_left"></slot>
+    </span>
     <span class="right align_right">
       <slot name="extra"></slot>
     </span>

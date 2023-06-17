@@ -2,7 +2,7 @@
 <div>
   <div class="container w1100 relative clearfix">
     <!-- 侧边菜单 -->
-    <div class="left-sidebar left">
+    <div class="left-sidebar left">{{groups}}
       <v-aside :data="module.groups" title="首页" />
     </div>
     <!-- 主内容 -->

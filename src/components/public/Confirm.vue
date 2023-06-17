@@ -71,6 +71,9 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    submit: {
+      type: Function,
+    },
   },
   setup(props, context) {
     const isShow: any = ref(false)
@@ -95,26 +98,34 @@ export default defineComponent({
     }
 
     function submit() {
-      let id = props.data.id
-      if (typeof data.id === 'object' && data.id.length != 0) {
-        id = data.id.toString()
-      }
-      
-      store.dispatch('common/Fetch', {
-        api: props.api,
-        data: {
-          ...props.data,
-          id: id
-        }
-      }).then(res => {
-        debugger
-        proxy.$hlj.message({
-          msg: message[operating] && message[operating].info
+      if (props.submit) {
+        props.submit({
+          cancel: () => {
+            isShow.value = false
+          },
         })
+      } else {
+        let id = props.data.id
+        if (typeof data.id === 'object' && data.id.length != 0) {
+          id = data.id.toString()
+        }
 
-        props.render()
-        isShow.value = !isShow.value
-      })
+        store.dispatch('common/Fetch', {
+          api: props.api,
+          data: {
+            ...props.data,
+            id: id
+          }
+        }).then(res => {
+          debugger
+          proxy.$hlj.message({
+            msg: message[operating] && message[operating].info
+          })
+
+          props.render()
+          isShow.value = !isShow.value
+        })
+      }
 
     }
     return {

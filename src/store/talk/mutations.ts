@@ -34,6 +34,9 @@ const mutations = {
   },
   setWebsiteList: (state: any, params: any) => {
     state.websiteList = params
+  },
+  setBlogList: (state: any, params: any) => {
+    state.blogList = params
   }
 }
 

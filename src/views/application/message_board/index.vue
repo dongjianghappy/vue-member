@@ -5,34 +5,16 @@
   </div>
   <div class="m0 right" style="width: 910px">
     <div class="module-wrap mb15">
-      <div class="module-head p20">
-        留言板
+      <div class="module-head bd-0 p20">
+        {{isTome ? '给我留言' : '我留言的'}}({{dataList.total || 0}})
       </div>
-      <Send :render="init" v-if="!currentUser" />
-      <div class="module-content" style="padding: 25px 50px !important; min-height: 500px;">
-        <div class="feedback-content-wrap" style="display:block;">
-          <div class="feedback-content feedback-lists">
-            <div style=" border-bottom:1px solid #eee; height:50px; line-height:50px;">
-              <span>留言（{{dataList.length}}）</span>
-            </div>
-            <div class="feedback-list" style="background: none;" v-for="(item, index) in dataList" :key="index">
-              <v-photo :data="item" />
-              <p class="feedback-user">{{item.nickname}} {{item.times}}</p>
-              <p><span class="mr10 pointer" @click="handleClick(item)" v-if="item.isreply && currentUser" style="color: #ffc09f">回复</span>{{item.content}}</p>
-              <div class="reply_info" v-for="(data, i) in item.reply" :key="i">
-                <v-photo :data="data" />
-                <p>{{data.nickname}} {{data.times}}</p>
-                <p><span class="mr10 pointer" @click="handleClick(data)" v-if="data.isreply && currentUser" style="color: #ffc09f">回复</span> {{data.content}}</p>
-              </div>
-            </div>
-            <v-loding v-if="!loading" />
-          </div>
-        </div>
+      <Send :render="init" v-if="!currentUser && isTome" />
+      <div class="module-content" style="padding: 0 50px !important; min-height: 500px;">
+        <List :dataList="dataList" :isTome="isTome" :render="init" />
       </div>
     </div>
   </div>
 </div>
-<Form :showAlbum="true" :render="Grouping" v-model:showFlag="showAlbum" v-if="showAlbum" :data="currentData" />
 </template>
 
 <script lang="ts">
@@ -43,10 +25,11 @@ import {
   computed,
   ref,
   onMounted,
-  getUid
+  getUid,
+  watch
 } from '@/utils'
 import Send from './components/send.vue'
-import Form from './components/form.vue'
+import List from './components/list.vue'
 import {
   feedback
 } from '@/assets/const'
@@ -55,17 +38,14 @@ export default defineComponent({
   name: 'MessageBoardView',
   components: {
     Send,
-    Form
+    List
   },
   setup(props, context) {
     const store = useStore();
     const route = useRoute();
-    const component = computed(() => route.query.mod);
+    const isTome: any = ref(true);
     const currentUser = computed(() => store.getters['user/currentUser']);
-    let dataList: any = ref([])
-    const currentData = ref({})
-    const isreply = ref(false)
-    const showAlbum = ref(false)
+    let dataList: any = ref({})
     const loading: any = ref(false)
     const menu: any = feedback;
     menu.map((item: any) => {
@@ -73,14 +53,26 @@ export default defineComponent({
       item.path = `/application?mod=feedback&item=${item.value}`
     })
 
-    function init() {
+    watch(() => route.query.item, () => {
+      isTome.value = route.query.item === 'tome' ? true : false
+    })
+
+    function init(param: any = {}) {
       loading.value = false
-      dataList.value = []
+
+      const params: any = {
+        item: route.query.item,
+        uid: getUid(),
+        page: 1,
+        pagesize: 2
+      }
+
+      Object.assign(params, param)
+
       store.dispatch('common/Fetch', {
         api: "userMessageBoard",
         data: {
-          item: route.query.item,
-          uid: getUid()
+          ...params
         }
       }).then(res => {
         loading.value = true
@@ -88,24 +80,16 @@ export default defineComponent({
       })
     }
 
-    function handleClick(param: any, item: any) {
-      showAlbum.value = true
-      currentData.value = item ? item : param
-    }
-
     onMounted(init)
 
     return {
-      component,
+      route,
+      isTome,
       dataList,
       loading,
-      isreply,
       currentUser,
       menu,
-      currentData,
       init,
-      handleClick,
-      showAlbum
     }
   }
 })

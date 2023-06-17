@@ -1,47 +1,6 @@
 import { createApp } from 'vue'
 
 const install = (Vue:any) => {
-
-  const obj: any = {
-    baiscUrl: "http://www.lmlblog.com/blog/14/js/jquery-1.10.2.min.js",
-    snow: {
-      js: [
-        'http://www.lmlblog.com/winter/templets/xq/js/snowy.js',
-        'http://www.lmlblog.com/blog/12/js/Snow.js'
-      ],
-      css: [],
-      style: ".snow-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100001;}",
-      attr: "class",
-      attrName: 'snow-container',
-      dom: "div"
-    },
-    galaxy: {
-      js: [
-        'http://www.yunxi10.com/code/11327/js/script.js'
-      ],
-      css: [
-        'http://www.yunxi10.com/code/11327/css/style.css'
-      ],
-      style: "#particle-canvas{background: none !important; z-index: -1 !important; position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100001;}",
-      attr: 'id',
-      attrName: 'particle-canvas',
-      dom: "canvas"
-    },
-    fireworks: {
-      js: [
-        'http://www.07sucai.com/code/16464/js/script.js'
-      ],
-      css: [
-        'http://www.07sucai.com/code/16464/css/style.css'
-      ],
-      style: "#canvas{background: none !important; z-index: -1 !important; position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100001;}",
-      attr: 'id',
-      attrName: 'canvas',
-      dom: "canvas"
-    },
-    
-  }
-
   function createJS(url: any){
     const jsapi=document.createElement("script");
     jsapi.charset="utf-8";
@@ -65,11 +24,43 @@ const install = (Vue:any) => {
   }   
 
   function createHtml(obj: any){
+    if(!obj.attr ){
+      return
+    }
     const el = document.createElement(obj.dom || 'div')
     el.setAttribute(obj.attr, obj.attrName)
-    const aa = document.querySelectorAll("#main")[0]
+    const aa = document.querySelectorAll("body")[0]
     aa && aa.appendChild(el);
   } 
+
+  function createPendant(obj: any){
+    let box = JSON.parse(obj)
+    for(let i=0; i< box.length; i++){
+
+      // 创建图片
+      var img: any = document.createElement('img') //创建ul节点
+      img.style = box[i].img.style
+      img.src = box[i].img.src
+
+      var container: any = document.createElement('div') //创建ul节点
+        container.style = box[i].style
+        container.draggable = true
+        container.classList.add(box[i].class)
+        container.appendChild(img);
+        
+        document.body.appendChild(container)
+
+        
+    }
+    Vue.config.globalProperties.$pendant.init()
+  }   
+
+  function setCursor(obj: any){
+    if(!obj){
+      return
+    }
+    document.body.style.cursor = `url(${obj}),auto`
+  }
 
   function render(obj: any){
     obj.style && createStyle(obj.style)
@@ -92,6 +83,14 @@ const install = (Vue:any) => {
   if(useInfo && useInfo.theme &&  useInfo.theme.effects){
     render(useInfo.theme.effects)
   }
+  if(useInfo && useInfo.theme &&  useInfo.theme.pendant){
+    setTimeout(()=>{
+      setCursor(useInfo.theme.cursor)
+      createPendant(useInfo.theme.pendant)
+    },3000)
+    
+  }
+  
   
 
 

@@ -36,9 +36,9 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const viewUrl: any = `/${props.channel}?item=view`
-    const editUrl: any = `/${props.channel}?item=details&action=edit`
-    const graphUrl: any = `/${props.channel}?item=graph`
+    const viewUrl: any = `/${props.data.channel}?item=view`
+    const editUrl: any = `/${props.data.channel}?item=details&action=edit`
+    const graphUrl: any = `/${props.data.channel}?item=graph`
     return {
       viewUrl,
       editUrl,

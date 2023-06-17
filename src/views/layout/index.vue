@@ -5,7 +5,7 @@
     <router-view />
   </div>
   <Footer />
-  <Thme v-if="currentUser && module.theme" />
+  <Thme v-if="currentUser && module && module.theme" />
   <v-gotop />
 </div>
 </template>
@@ -50,6 +50,11 @@ export default defineComponent({
       } else {
 
       }
+    })
+
+    store.dispatch('common/Fetch', {
+      api: "announcement",
+      state: "announcement"
     })
 
     return {

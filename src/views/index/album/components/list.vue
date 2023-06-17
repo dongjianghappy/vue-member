@@ -1,7 +1,7 @@
 <template>
 <div class="col-sm-6" :class="className" v-for="(img, i) in history" :key="i">
   <div class="m5 relative">
-    <img :src="img" height="140" style="border-radius: 8px; width: 100%" @click="handleChoose(img)" />
+    <img :src="img || require('@/assets/image/default.png')" height="140" style="border-radius: 8px; width: 100%" @click="handleChoose(img)" />
     <i class="iconfont icon-checkbox m0 cl-red" style="right: 0px; top: 0px; padding: 2px; z-index: 1;" v-if="img === loginuser[kind]"></i>
   </div>
 </div>

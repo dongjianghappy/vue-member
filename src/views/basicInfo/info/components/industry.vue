@@ -12,7 +12,7 @@
     <ul class="info">
       <li>
         <label for="username">职业</label>
-        <div class="con" v-if="isEdit">{{user.industry}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.industry}}</div>
         <textarea v-model="userInfo.industry" class="" v-else></textarea>
       </li>
     </ul>
@@ -33,7 +33,7 @@ import {
 export default defineComponent({
   name: 'AsideView',
   props: {
-    user: {
+    basicInfo: {
       type: Object,
       default: () => {
         return {}
@@ -46,23 +46,23 @@ export default defineComponent({
       }
     }
   },
-  emits: ['update:user'],
+  emits: ['update:basicInfo'],
   setup(props, context) {
     const {
       ctx
     }: any = getCurrentInstance();
     let isEdit = ref(true)
-    const userInfo: any = ref(props.user)
+    const userInfo: any = ref(props.basicInfo)
 
     function Edit() {
       isEdit.value = !isEdit.value
-      userInfo.value = props.user
-      context.emit('update:user', userInfo.value)
+      userInfo.value = props.basicInfo
+      context.emit('update:basicInfo', userInfo.value)
 
       if (isEdit.value) {
         const {
           industry
-        } = props.user
+        } = props.basicInfo
         props.edit({
           industry
         })
