@@ -3,14 +3,15 @@
   <div class="module-head p20 font16">
     {{cateName.name}}({{dataList.length || 0}})
     <span class="right">
-      <AddBookmark :render="init" :data="{fid: cateName.id, coding: 'U30005'}" v-if="cateName.id" /></span>
+      <AddBookmark :render="init" :data="{fid: cateName.id, ...data}" v-if="cateName.id" /></span>
   </div>
-  <div class="module-content content-wrap ptb15 pr10 bg-white" style="min-height: 560px">
+  <div class="module-content content-wrap ptb15 pr10 bg-white" style="min-height: 500px">
     <div class="notes-list relative" v-for="(item, index) in dataList" :key="index">
       <div class="notes-content plr5 ptb10" style="background: none; margin-bottom: 0px; border: 0px solid #f3f3f3">
         <div class="pb5 font12">{{item.times}}</div>
-        <span @click="visit(item)">{{item.name}}</span>
-        <AddBookmark :render="init" action="edit" :data="{...item, fid: cateName.id, coding: 'U30005'}" />
+        <span>{{item.name}}</span>
+        <span class="ml10" @click="visit(item)">查看</span>
+        <AddBookmark :render="init" action="edit" :data="{...item, fid: cateName.id, ...data}" />
       </div>
     </div>
   </div>
@@ -36,6 +37,12 @@ export default defineComponent({
     AddBookmark
   },
   props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     group: {
       type: Object,
       default: () => {
@@ -54,7 +61,7 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
     const router = useRouter()
-    const dataList = ref({})
+    const dataList = ref([])
     let m: any = route.query.mod;
     const loading: any = ref(false)
     const cateName: any = ref({
@@ -92,17 +99,17 @@ export default defineComponent({
           cateName.value.name = "未分类"
         } else {
           let arr = props.group.filter((item: any) => item.id === route.query.id)
-          if(arr && arr[0]){
-cateName.value.id = arr[0].id
-          cateName.value.name = arr[0].name
+          if (arr && arr[0]) {
+            cateName.value.id = arr[0].id
+            cateName.value.name = arr[0].name
           }
-          
+
         }
-      }else{
+      } else {
         cateName.value.name = typeName.value || "所有的"
         cateName.value.id = ""
 
-      } 
+      }
 
       typeName.value = ""
 
@@ -123,7 +130,7 @@ cateName.value.id = arr[0].id
       }).then(res => {
         debugger
         loading.value = true
-        dataList.value = res.result
+        dataList.value = res.result || []
       })
     }
 

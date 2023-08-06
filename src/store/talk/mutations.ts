@@ -1,4 +1,8 @@
 const mutations = {
+  setData: (state: any, params: any) => {
+    debugger
+    state[params.state] = params.data
+  },     
   setTalkList: (state: any, params: any) => {
     if(params.page === 2){
       state.talkList.list = params.list
@@ -28,7 +32,9 @@ const mutations = {
   setDownloadList: (state: any, params: any) => {
     state.downloadList = params
   },
-
+  setTechList: (state: any, params: any) => {
+    state.techList = params
+  },
   setNotesList: (state: any, params: any) => {
     state.notesList = params
   },
@@ -37,6 +43,9 @@ const mutations = {
   },
   setBlogList: (state: any, params: any) => {
     state.blogList = params
+  },
+  setwordsList: (state: any, params: any) => {
+    state.wordsList = params
   }
 }
 

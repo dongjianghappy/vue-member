@@ -10,6 +10,7 @@
     <Channel v-if="component === 'channel'" />
     <Visitor v-else-if="component === 'visitor'" />
     <Mood v-else-if="component === 'mood'" />
+    <Statistics v-else-if="component === 'statistics'" />
     <Index v-else />
 
   </div>
@@ -30,6 +31,7 @@ import Index from './components/index.vue'
 import Channel from './components/channel.vue'
 import Visitor from './visitor/index.vue'
 import Mood from './components/mood.vue'
+import Statistics from './statistics/index.vue'
 import {
   useRouter,
   useRoute
@@ -41,7 +43,8 @@ export default defineComponent({
     Index,
     Channel,
     Visitor,
-    Mood
+    Mood,
+    Statistics
   },
   setup(props, context) {
     const {

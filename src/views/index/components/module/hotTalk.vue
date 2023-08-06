@@ -3,7 +3,8 @@
   <div class="module-head">
     热门话题
     <span class="right">
-      <v-refresh :data="hotTalkList" v-model:number="current" size="4" /></span>
+      <v-refresh :data="hotTalkList" v-model:number="current" size="4" />
+      </span>
   </div>
   <div class="module-content font12">
     <ul>

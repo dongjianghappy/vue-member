@@ -1,5 +1,11 @@
 <template>
 <div class="module-wrap">
+  <div class="module-head font12" style="height: 50px;">
+    <span class="mr15">全部</span>
+    <span class="mr15">网站特效</span>
+    <span class="mr15">网站模板</span>
+    <span>TA们下载</span>
+  </div>
   <div class="module-content plr15">
     <div class="con-list" v-for="(item, index) in dataList" :key="index">
       <div class="con-wrap">
@@ -57,13 +63,13 @@ export default defineComponent({
       }
     }
   },
-setup(props, context) {
+  setup(props, context) {
     const store = useStore();
     const loginuser = computed(() => store.getters['user/loginuser']);
 
     return {
       loginuser
     }
-  }  
+  }
 })
 </script>

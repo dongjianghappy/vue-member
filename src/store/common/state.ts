@@ -14,7 +14,8 @@ export interface State {
   activityList: any,
   activity: any,
   concernList: any,
-  albumList: any
+  albumList: any,
+  slideshow: any,
 }
 
 
@@ -34,7 +35,8 @@ const initState: State = {
   activityList: [],
   activity: {},
   concernList: [],
-  albumList: []
+  albumList: [],
+  slideshow: []
 }
 
 export default initState;

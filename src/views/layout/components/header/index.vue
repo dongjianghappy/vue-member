@@ -1,5 +1,5 @@
 <template>
-<header>
+<header class="head-fixed" style="background: #eee">
   <div class="head-wrap w1320">
     <!-- LOGO -->
     <div class="header-left" style="height: 60px; line-height: 60px; color: #333;">
@@ -7,15 +7,15 @@
     </div>
     <!-- 导航 -->
     <div class="header-content">
-      <ul class="w400 left">
-        <li class="pointer" @click="handleClick('')"><i class="iconfont icon-home"></i>首页</li>
-        <li class="pointer" @click="handleClick('/activity')"> <i class="iconfont icon-topic"></i>话题</li>
+      <ul class="w500 left">
+        <li class="pointer" v-for="(item, index) in module" :key="index" @click="handleClick(item.value)"><i class="iconfont icon-home"></i>{{item.name}}</li>
+        <!-- <li class="pointer" @click="handleClick('/activity')"> <i class="iconfont icon-topic"></i>话题</li>
         <li class="pointer" @click="handleClick(`/content`)"><i class="iconfont icon-app"></i>管理中心</li>
-        <li class="pointer" @click="handleClick(`/appstore`)"><i class="iconfont icon-app"></i>应用中心</li>
+        <li class="pointer" @click="handleClick(`/appstore`)"><i class="iconfont icon-app"></i>应用中心</li> -->
       </ul>
-      <ul class="w600 right align_right">
-        <li class="searchbox ptb10" style=" line-height:0">
-          <v-sitesearch />
+      <ul class="w600 right">
+        <li class="relative ptb10" :class="{'bg-white': isSearch}" style=" line-height:0">
+          <v-sitesearch v-model:search="isSearch" />
         </li>
         <li class="plr15"  style="width: 100px; line-height: 60px;">
             <v-play :userInfo="loginuser" :style="{background: 'bg-red',color: 'cl-red', top: '60px'}" />
@@ -24,6 +24,7 @@
           <img :src="loginuser.photos" class="photos p10" style="width:60px; height:60px; border-radius:50%;" />
         </li>
         <li>
+          <v-speaking />
           <v-popover content="<i class='iconfont icon-message font18'></i>" arrow="tb" offset="right" :move="-60" keys="popover-message">
             <div style="width: 150px; height: 250px">
               <ul class="font14" style="display: block">
@@ -34,6 +35,7 @@
           <v-popover content="<i class='iconfont icon-shezhi'></i>" arrow="tb" offset="right" :move="-60" keys="popover-setting">
             <div style="width: 150px; height: 250px">
               <ul class="font14" style="display: block">
+                <li @click="handleClick('/info?mod=setting')" class="h32">设置管理</li>
                 <li @click="handleClick('/info?mod=basic')" class="h32">基本信息</li>
                 <li @click="handleClick('/setting?mod=basic')" information class="h32">隐私设置</li>
                 <li @click="handleClick('/setting?mod=integration')" class="h32">积分管理</li>
@@ -58,6 +60,7 @@ import {
   useRouter,
   onMounted,
   computed,
+  ref,
   onBeforeRouteUpdate,
   getUid
 } from '@/utils'
@@ -77,6 +80,8 @@ export default defineComponent({
     const loginuser = computed(() => store.getters['user/loginuser']);
     const userInfo = computed(() => store.getters['user/userInfo']);
     const messge: any = information;
+    const isSearch: any = ref(false)
+    const module = computed(() => store.getters['user/config_talk'].navigation);
 
     function init() {
       store.dispatch('common/Fetch', {
@@ -122,12 +127,13 @@ export default defineComponent({
     }
 
     onBeforeRouteUpdate(async (to, from) => {
+      let host = process.env.NODE_ENV === 'development' ? 'http://localhost' : 'http://www.yunxi10.com'
       //每次执行前，先移除上次插入的代码
       let star: any = document.getElementById('star')
       star && star.remove()
       const script = document.createElement('script');
       script.id = "star"
-      script.src = `http://localhost/star_talk.html?uid=1101946957&to=${to.fullPath}&from=${from.fullPath}`;
+      script.src = host+`/star.html?type=talk&uid=1101946957&to=${to.fullPath}&from=${from.fullPath}`;
       document.body.appendChild(script);
     })
 
@@ -142,7 +148,9 @@ export default defineComponent({
       userInfo,
       messge,
       handleClick,
-      handleSave
+      handleSave,
+      isSearch,
+      module
     }
   }
 })

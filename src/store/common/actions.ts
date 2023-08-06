@@ -58,6 +58,7 @@ const actions = {
     return result
   },  
   HotTalk: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    debugger
     const { result }:any = await api.HotTalk({
       ...params 
     })

@@ -1,16 +1,14 @@
 <template>
 <div class="container w1100 clearfix">
   <div class="w180 left">
-    <v-aside :data="menu" title="用户组" :render="Grouping">
+    <v-aside :data="module.concern" title="用户组" :render="Grouping">
       <template v-slot:button>
-        <span class="right" @click="add('add')" v-if="currentUser"><i class="iconfont icon-anonymous-iconfont font24" /></span>
-
+        <v-group action='add' :data="data" :group="userGroup" :coding="coding.group" :render="Grouping"  />
       </template>
       <template v-slot:aside v-if="currentUser">
         <ul>
           <li v-for="(item, index) in userGroup" :key="index" @click="handleclick(`/concern?mod=myconcern&ground=${item.id}`)" class="aside">
             <i class="iconfont icon-dot font20"></i> {{item.name}}({{item.num}})
-            <span class="right" @click.stop="add('edit', item)" v-if="item.type!=='1'"><i class="iconfont icon-edit"></i></span>
           </li>
         </ul>
       </template>
@@ -19,7 +17,8 @@
   </div>
   <div class="m0 right" style="width: 910px;">
     <div class="module-wrap">
-      <div class="module-content p10" style="min-height: 570px;">
+      <div class="module-content p15" style="min-height: 570px;">
+        <div class="mb15 font18 bold">粉丝关注</div>
         <Card :data="concern" :mod="mod" :group="userGroup" :render="Grouping" v-if="concern.length> 0 " />
         <v-nodata v-else trip="暂时没有数据" />
       </div>
@@ -37,10 +36,9 @@ import {
   getCurrentInstance,
   computed,
   onMounted,
-  ref
-} from 'vue'
-import {
-  getUid
+  ref,
+  getUid,
+  codings
 } from '@/utils'
 import {
   useStore
@@ -66,6 +64,7 @@ export default defineComponent({
       ctx,
       proxy
     }: any = getCurrentInstance();
+    const coding: any = codings.user
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
@@ -73,9 +72,10 @@ export default defineComponent({
     const userGroup = ref([])
     const menu: any = group
     const userInfo: any = computed(() => store.getters['user/userInfo']);
+    const module = computed(() => store.getters['user/config_talk']);
     const currentData = ref({})
-    menu.map((item: any) => {
-      item.path = `/concern?mod=${item.url}`
+    module.value.concern.map((item: any) => {
+      item.path = `/concern${item.value}`
       if (item.url === 'myconcern') {
         item.num = userInfo.myconcern || '0'
       } else {
@@ -89,11 +89,16 @@ export default defineComponent({
     const concern = computed(() => store.getters['common/concernList']);
     const currentUser = computed(() => store.getters['user/currentUser']);
 
+   
+
     function Grouping() {
       store.dispatch('common/Fetch', {
-        api: "Grouping"
+        api: "customGroup",
+        data: {
+          coding: coding.group,
+          uid: getUid()
+        }
       }).then(res => {
-
         userGroup.value = res.result
         init()
       })
@@ -132,6 +137,7 @@ export default defineComponent({
       Grouping()
     })
     return {
+      coding,
       init,
       mod,
       concern,
@@ -142,7 +148,8 @@ export default defineComponent({
       showAlbum,
       handleclick,
       currentData,
-      currentUser
+      currentUser,
+      module
     }
   }
 })

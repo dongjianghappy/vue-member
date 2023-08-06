@@ -11,6 +11,7 @@
       </div>
       <div class="user_from pb5">{{item.times}}</div>
       <div class="user_text">
+        <h3 class="pb5" v-html="item.title"></h3>
         <div v-html="item.summary" style="min-height: 30px"></div>
         <!--转载渲染-->
         <template v-if="item.list">

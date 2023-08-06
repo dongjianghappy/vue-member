@@ -82,12 +82,15 @@ export default defineComponent({
     })
 
     function init(param: any) {
+      if(!route.query.q){
+        return
+      }
       loading.value = false
       store.dispatch('common/Fetch', {
         api: "search",
         data: {
           page: 1,
-          key: route.query.q,
+          word: route.query.q,
           ...param
         }
       }).then(res => {

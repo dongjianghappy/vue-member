@@ -19,7 +19,10 @@ const api:any =  {
   signOut (params: any) {
     return http.request('user', 'signOut', params)
   },
-  
+  // 查询
+  select(params: any) {
+    return http.request('vue', 'select', params)
+  },  
   // 签到
   Sign (params: any) {
     return http.request('user', 'sign', params)
@@ -287,10 +290,6 @@ announcement (params: any) {
     return http.request('common', 'systemCate', params)
   },     
 
-  // 创建专辑
-  CreateAlbum (params: any) {
-    return http.request('user', 'createAlbum', params)
-  },  
 
   // 专辑查询
   AlbumList (params: any) {
@@ -425,7 +424,7 @@ announcement (params: any) {
   } ,    
   
   // 查询组
-  Grouping (params: any) {
+  grouping (params: any) {
     return http.request('talk', 'grouping', params)
   } , 
   
@@ -439,10 +438,20 @@ announcement (params: any) {
     return http.request('user', 'journal', params)
   } , 
   
-  // 日志分类
-  JournalCate (params: any) {
-    return http.request('user', 'journalCate', params)
+  // 用户自定义组新增
+  insertCustomGroup (params: any) {
+    return http.request('user', 'insertCustomGroup', params)
   } ,   
+
+  // 用户自定义组
+  customGroup (params: any) {
+    return http.request('user', 'customGroup', params)
+  } ,   
+
+  // 用户自定义组更改
+  updateCustomGroup (params: any) {
+    return http.request('user', 'updateCustomGroup', params)
+  } ,     
 
   // 用户书签
   bookmark (params: any) {
@@ -471,23 +480,22 @@ announcement (params: any) {
   // 个人中心下载
   downloadList (params: any) {
     return http.request('user', 'downloadList', params)
-  } ,    
-  // 个人中心笔记
-  notesList (params: any) {
-    return http.request('user', 'notesList', params)
-  } , 
-  
-  // 好站
-  websiteList (params: any) {
-    return http.request('user', 'websiteList', params)
-  } , 
+  } ,  
   // 博客
   blogList (params: any) {
     return http.request('user', 'blogList', params)
+  } ,
+  // 经典语录
+  commonSenseQuotes (params: any) {
+    return http.request('user', 'commonSenseQuotes', params)
+  } ,
+  // 频道模块
+  module (params: any) {
+    return http.request('channel', 'module', params)
   } , 
  // 搜索
  search (params: any) {
-  return http.request('user', 'search', params)
+  return http.request('talk', 'search', params)
   } , 
 
  // 机器人
@@ -548,15 +556,45 @@ savePendant(params: any) {
   return http.request('user', 'savePendant', params)
 },
 
-bookmarkCate(params: any) {
-  return http.request('user', 'bookmarkCate', params)
-},
 // 意见反馈
 feedback (params: any) {
   return http.request('common', 'feedback', params)
-}
+},
+// 日历查询
+Calendar (params: any) {
+  return http.request('common', 'Calendar',  params)
+}, 
+// 幻灯片
+slideBanner (params: any) {
+  return http.request('common', 'slideBanner',  params)
+}, 
+// 用户设置管理
+settingList (params: any) {
+  return http.request('user', 'settingList',  params)
+}, 
+// 用户设置
+userSettinng (params: any) {
+  return http.request('user', 'userSettinng',  params)
+}, 
+// 语音播报
+voiceBroadcast (params: any) {
+  return http.request('user', 'voiceBroadcast', params)
+},  
+// 搜素相关词
+relatedWords (params: any) {
+  return http.request('talk', 'relatedWords', params)
+},  
+// 获取历史搜索词
+historyWords (params: any) {
+  return http.request('talk', 'historyWords', params)
+},  
+// 删除历史搜索
+removehistoryWord (params: any) {
+  return http.request('talk', 'removehistoryWord', params)
+},  
 }
 
+  
 
 
 export default api

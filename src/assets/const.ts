@@ -163,6 +163,7 @@ export const hobbyMenum:any = [
 ]
 
 export const basicInfo: any = [
+	{name: "设置管理", url: "setting"},
 	{name: "头像设置", url: "photos"},
 	{name: "个人信息", url: "basic"},
 	{name: "兴趣爱好", url: "hobby"},

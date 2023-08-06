@@ -1,5 +1,5 @@
 <template>
-<div class="module-wrap">
+<div class="module-wrap mb10">
   <div class="module-content send_info p0">
     <div class="sendtitle">
       <v-scrolltext :dataList="announcement" />

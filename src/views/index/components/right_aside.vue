@@ -2,7 +2,7 @@
 <div>
   <UserInfo :userInfo="userInfo" />
   <Sign v-if="module.sign" />
-  <Calendar v-if="module.calendar" />
+  <Calendar v-if="module.calendar" :render="render" />
   <!-- <Navigation /> -->
   <RecommendUser v-if="module.recommended_users" />
   <HotTalk v-if="module.hot_topic" />
@@ -50,7 +50,13 @@ export default defineComponent({
       default: () => {
         return {}
       }
-    }
+    },
+    render: {
+      type: Function,
+      default: () => {
+        return
+      }
+    },
   },
   setup() {
     const {

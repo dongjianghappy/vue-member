@@ -1,6 +1,8 @@
 <template>
 <div>
-  <Ranking :ref="ranking" v-if="module.ranking" :style="{width: '280px'}" />
+  <!-- <Ranking :ref="ranking" v-if="module.ranking" :style="{width: '280px'}" /> -->
+  <SearchDiscovery :ref="ranking" :style="{width: '280px'}" v-if="module.search_discovery" />
+  <BlogHot :ref="ranking" :style="{width: '280px'}" v-if="module.blog_hotlist" />
 </div>
 </template>
 
@@ -13,11 +15,14 @@ import {
   computed
 } from '@/utils'
 import Ranking from '../../index/components/module/ranking.vue'
-
+import SearchDiscovery from './search_discovery.vue'
+import BlogHot from './blog_hot.vue'
 export default defineComponent({
   name: 'RightView',
   components: {
-    Ranking
+    Ranking,
+    SearchDiscovery,
+    BlogHot
   },
   props: {
     module: {

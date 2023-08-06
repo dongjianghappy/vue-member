@@ -34,6 +34,8 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/u/:id/album/', component: () => import('../views/index/album/index.vue')},
       { path: '/u/:id/information/', component: () => import('../views/information/index.vue')},      
       { path: '/u/:id/haosite/', component: () => import('../views/application/haosite/index.vue')},
+      { path: '/u/:id/solar_terms/', component: () => import('../views/system/jieqi.vue')},
+      { path: '/u/:id/constellation/', component: () => import('../views/system/constellation.vue')},
     ]
   }
 ]

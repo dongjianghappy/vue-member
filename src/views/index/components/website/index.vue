@@ -1,22 +1,13 @@
 <template>
-<div class="con-list" v-for="(item, index) in dataList" :key="index">
-  <div class="con-wrap">
-    <div class="photos">
-      <v-photo :data="item" :style="{width: '50px', height: '50px', borderRadius: '50%'}" v-if="loginuser.account === item.uid" />
-      <v-photos :sourceData="item" v-else />
+<div class="module-wrap">
+  <div class="module-head" style="height: 50px;">
+      <span class="right">
+       </span>
     </div>
-    <div class="user_info pb5"><span class="username">{{item.nickname}}</span></div>
-    <div class="user_from pb5">
-      {{item.times}}
-    </div>
-    <div class="user_text">
-
-      <div class="pb5">
-        <span v-html="item.title"></span>
-        <div>描述: {{item.summary}}</div>
-      </div>
-      <div>
-        <a :href="`http://www.dongblog.com/website/${item.id}.html`" target="_brank"><img :src="item.image" class="w350" /></a>
+  <div class="module-content p5">
+    <div class="col-md-3 p10" v-for="(item, index) in dataList" :key="index">
+      <div class="p15 align_center" @click="visit(item)" style=" background: #f9f9f9; border-radius: 8px;">
+        <div class="ptb10 font6">{{item.title}}</div>
       </div>
     </div>
   </div>
@@ -32,8 +23,9 @@ import {
   defineComponent,
   getCurrentInstance,
   computed,
-  ref
-} from 'vue'
+  ref,
+  codings
+} from '@/utils'
 import {
   useStore
 } from 'vuex'
@@ -60,11 +52,30 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    const coding: any = codings.website
     const store = useStore();
     const loginuser = computed(() => store.getters['user/loginuser']);
 
+        function visit(param: any) {
+      const {
+        id
+      } = param
+
+      store.dispatch('common/Fetch', {
+        api: "VisitCommunity",
+        data: {
+          coding: coding.info,
+          id
+        }
+      }).then(res => {
+        window.open(param.url)
+
+      })
+    }
+
     return {
-      loginuser
+      loginuser,
+      visit
     }
   }
 })

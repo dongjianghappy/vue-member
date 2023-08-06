@@ -21,11 +21,11 @@
       <li class="li">
         <span class="label">所属分类</span>
         <span class="pr15">{{detail.parent}}</span>
-        <v-category name="选择分类" :data="{item: detail, coding: 'U20001' }" :isInt="true" api="simpleCategory" type="text"></v-category>
+        <v-category name="选择分类" :data="{item: detail, coding: coding.cate }" :isInt="true" api="customGroup" type="text"></v-category>
       </li>
       <li class="li" style="overflow: auto;">
         <span class="label">预览图</span>
-        <v-upload ref="upload" :data="{id: detail.id, cover: detail.cover,  coding: 'U20000'}" :dataList="detail.img || []" uploadtype="journal" @imgList="image" :style="'width: 135px'" />
+        <v-upload ref="upload" :data="{id: detail.id, cover: detail.cover,  coding: coding.art}" :dataList="detail.img || []" uploadtype="journal" @imgList="image" :style="'width: 135px'" />
       </li>
     </ul>
     <div class="edit-article">
@@ -37,6 +37,7 @@
     </div>
     <div class="mt20">
       <v-button @onClick="save">保存</v-button>
+      <v-button class="btn" @onClick="saveTemp" v-if="action === 'add'">保存到草稿箱</v-button>
     </div>
   </div>
 </div>
@@ -56,9 +57,11 @@ import {
   ref,
   onMounted,
   reactive,
-  chooseCate
+  chooseCate,
+  codings
 } from '@/utils'
 import TagList from '@/components/tag/index.vue'
+import { journal } from '@/assets/const';
 
 export default defineComponent({
   name: 'HomeViewiiii',
@@ -75,6 +78,7 @@ export default defineComponent({
     const {
       proxy
     }: any = getCurrentInstance();
+    const coding: any = codings.talk.journal
     const route = useRoute();
     const store = useStore();
     const detail: any = ref({})
@@ -112,15 +116,41 @@ export default defineComponent({
         store.dispatch('common/Fetch', {
           api: 'detail',
           data: {
-            coding: "U20000",
+            coding: coding.art,
             id: route.query.id
           }
         }).then(res => {
           detail.value = res.result
           detail.value.style = JSON.parse(res.result.style)
         })
+      }else{
+        store.dispatch('common/Fetch', {
+          api: 'articleTempList',
+          data: {
+            type: 'journal',
+          }
+        }).then(res => {
+          if(res.result !== "" && res.result !== null){
+            detail.value = JSON.parse(res.result)
+          }
+        })
       }
     }
+
+  // 保存到草稿箱
+    function saveTemp(){
+      store.dispatch('common/Fetch', {
+        api: "articleTempSave",
+        data: {
+          type: 'journal',
+          content: JSON.stringify(detail.value)
+        }
+      }).then(res => {
+        proxy.$hlj.message({
+          msg: res.returnMessage
+        })
+      })
+    }    
 
     // 保存
     function save() {
@@ -149,7 +179,7 @@ export default defineComponent({
         style: JSON.stringify(style),
         content: marked.parse(markdown || "{}"),
         markdown,
-        coding: "U20000",
+        coding: coding.art,
       }
       if (props.action !== "add") {
         param.id = detail.value.id
@@ -161,14 +191,15 @@ export default defineComponent({
           ...param
         }
       }).then(res => {
-        // proxy.$hlj.message({
-        //   msg: res.returnMessage
-        // })
+        proxy.$hlj.message({
+          msg: "操作成功"
+        })
       })
     }
 
     onMounted(init)
     return {
+      coding,
       save,
       detail,
       setStyle,
@@ -177,7 +208,8 @@ export default defineComponent({
       configData,
       mod,
       image,
-      basic
+      basic,
+      saveTemp
     }
   }
 })

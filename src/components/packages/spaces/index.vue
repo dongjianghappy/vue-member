@@ -4,16 +4,17 @@
 </span>
 <v-dialog v-model:show="isShow" ref="form" title="" :style="{width: '1200', height: '650'}" @submit="submit">
   <template v-slot:content v-if="isShow">
-    <v-tabs :tabs="[{name: '话题',value: 'talk'},{name: '相册',value: 'photos'},{name: '图库',value: 'picture'}]" :isEmit="true" v-model:index="index">
+    <v-tabs :tabs="[{name: '图片',value: 'image'},{name: '话题',value: 'talk'},{name: '相册',value: 'photos'},{name: '图库',value: 'picture'}]" :isEmit="true" v-model:index="index">
       <template v-slot:content1>
-        <List kind="talk" v-model:currentImg="currentImg" />
-
-      </template>
+        <List kind="upload" v-model:currentImg="currentImg" :data="data" />
+      </template>      
       <template v-slot:content2>
-        <List kind="photos" v-model:currentImg="currentImg" />
-
+        <List kind="talk" v-model:currentImg="currentImg" />
       </template>
       <template v-slot:content3>
+        <List kind="photos" v-model:currentImg="currentImg" />
+      </template>
+      <template v-slot:content4>
         <List kind="picture" v-model:currentImg="currentImg" />
       </template>
     </v-tabs>
@@ -42,7 +43,7 @@ export default defineComponent({
       default: () => {
         return {}
       }
-    }
+    }  
   },
   emits: ['selectImage', 'update:image'],
   setup(props, context) {

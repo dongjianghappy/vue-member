@@ -2,6 +2,14 @@ import { Commit } from 'vuex'
 import api from '../../api/index'
 
 const actions = {
+  Module: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.module({
+      ...data 
+    })
+    context.commit("setData" , {state: params.state, data: result.result});
+    return result
+  },  
   Talk: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const { result }:any = await api.talk({
       ...params 
@@ -45,6 +53,14 @@ const actions = {
     context.commit("setDownloadList" , result.result);
     return result
   },  
+  tech: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.techList({
+      ...data 
+    })
+    context.commit("setTechList" , result.result);
+    return result
+  }, 
   notes: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const data = params.data || {}
     const { result }:any = await api.notesList({
@@ -69,7 +85,14 @@ const actions = {
     context.commit("setBlogList" , result.result);
     return result
   }, 
-    
+  commonSenseQuotes: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.commonSenseQuotes({
+      ...data 
+    })
+    context.commit("sethanyuList" , result.result);
+    return result
+  },     
   
   
 }

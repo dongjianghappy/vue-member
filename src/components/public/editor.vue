@@ -41,7 +41,7 @@
               插入
             </li>
             <li>
-              <v-spaces @selectImage="selectImage">空间</v-spaces>
+              <v-spaces @selectImage="selectImage" :data="{id: data.id, coding: coding}">空间</v-spaces>
             </li>
           </ul>
         </v-popover>
@@ -58,6 +58,12 @@
             <li @click="handelClick({type: 'code', value: 2})">
               JavaScript
             </li>
+            <li @click="handelClick({type: 'code', value: 3})">
+              PHP
+            </li>
+            <li @click="handelClick({type: 'code', value: 4})">
+              Mysql
+            </li>
           </ul>
         </v-popover>
 
@@ -73,7 +79,7 @@
     <div class="relative" style="width: 50%; border-right: 1px solid #eee;">
       <perfect-scrollbar>
 
-        <textarea id="editor" v-model="contentsss" @input="handleInput" style="
+        <textarea id="editor" v-model="content" @input="handleInput" style="
     left: 0;
     width: 100%;
     height: 100p%;
@@ -98,7 +104,8 @@ import {
   getCurrentInstance,
   ref,
   watch,
-  selection
+  selection,
+  computed
 } from '@/utils'
 import {
   marked
@@ -139,6 +146,10 @@ export default defineComponent({
           default: () => {
             return {}
           }
+        },
+        coding: {
+          type: String,
+          default: ""
         }
       },
       emits: ['update:contentsss'],
@@ -150,7 +161,10 @@ export default defineComponent({
         const isScreen: any = ref(false)
         // 预览状态
         const popoverStatus: any = ref(false)
-        const content: any = ref(props.contentsss)
+        const content: any = computed({
+          get: () => props.contentsss,
+          set: (val) => context.emit('update:contentsss', val)
+        });
         const preview: any = ref(marked.parse(props.contentsss))
 
         const Doc: any = document
@@ -180,6 +194,18 @@ ${'```'}`
       {
         name: 'javaScript',
               value: `${'```javaScript'}
+
+${'```'}`
+      },
+      {
+        name: 'php',
+              value: `${'```php'}
+
+${'```'}`
+      },
+      {
+        name: 'mysql',
+              value: `${'```mysql'}
 
 ${'```'}`
       }

@@ -24,6 +24,12 @@ import {
 export default defineComponent({
   name: 'v-Button',
   props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     type: {
       type: String,
       default: "album"
@@ -48,6 +54,7 @@ export default defineComponent({
       store.dispatch('common/Fetch', {
         api: "spaceImage",
         data: {
+          ...props.data,
           kind: props.kind
         }
       }).then(res => {

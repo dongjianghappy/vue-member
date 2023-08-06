@@ -1,13 +1,12 @@
 <template>
 <div class="container w1100 clearfix">
   <div class="w180 left">
-    <v-aside title="我的书签">
+    <v-aside :data="sidebar.groups" title="我的书签">
       <template v-slot:button>
-        <v-group action='add' :data="data" :group="userGroup" coding="U30004" :render="init" />
+        <v-group action='add' :data="data" :group="userGroup" :coding="coding.cate" :render="init" />
       </template>
       <template v-slot:aside>
         <ul>
-          <li class="aside" @click="handleclick(`/bookmark`)"><i class="iconfont icon-dot font20"></i> 所有的</li>
           <li v-for="(item, index) in userGroup" :key="index" @click="handleclick(`/bookmark?item=list&id=${item.id}`)" class="aside">
             <i class="iconfont icon-dot font20"></i> {{item.name}}
           </li>
@@ -18,7 +17,7 @@
   <div class="m0 right" style="width: 910px">
     <Action v-if="query.item === 'details'" :action="query.action" />
     <ArticleView v-else-if="query.item === 'view'" />
-    <List ref="list" :group="userGroup" :query="query" v-else />
+    <List ref="list" :data="{coding: coding.art}" :group="userGroup" :query="query" v-else />
   </div>
 </div>
 </template>
@@ -33,7 +32,8 @@ import {
   useRouter,
   useRoute,
   ref,
-  getUid
+  getUid,
+  codings
 } from '@/utils'
 import List from "./article_list.vue"
 import Action from "./article_action.vue"
@@ -53,6 +53,7 @@ export default defineComponent({
     const {
       proxy
     }: any = getCurrentInstance();
+    const coding: any = codings.talk.favorites
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
@@ -61,15 +62,19 @@ export default defineComponent({
     const userGroup = ref([])
     const list: any = ref(null);
 
-    const menu: any = journal;
-    menu.map((item: any) => {
-      item.path = `/bookmark?item=${item.value}`
-    })
+    const sidebar = computed(() => {
+      const sidebar = store.getters['user/config'].bookmark || []
+      sidebar.groups && sidebar.groups.map((item: any) => {
+        item.path = `/bookmark?item=${item.value}`
+      })
+      return sidebar
+    });
 
     function init() {
       store.dispatch('common/Fetch', {
-        api: "bookmarkCate",
+        api: "customGroup",
         data: {
+          coding: coding.cate,
           uid: getUid()
         }
       }).then(res => {
@@ -96,9 +101,10 @@ export default defineComponent({
     })
 
     return {
+      coding,
       handleclick,
       query,
-      menu,
+      sidebar,
       list,
       currentData,
       userGroup,

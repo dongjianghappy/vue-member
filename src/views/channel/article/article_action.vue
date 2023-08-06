@@ -19,7 +19,10 @@
         <span class="label">标签</span>
         <v-tag v-model:tags="detail.tag" />
       </li>
-
+      <li class="li">
+        <span class="label">描述</span>
+        <textarea v-model="detail.description" class="w-full"></textarea>
+      </li>
       <li class="li" v-if="!columns.includes('method')">
         <span class="label">来源方式</span>
         <v-radio label="网络分享" name="method" value="0" v-model:checked="detail.method" />
@@ -37,10 +40,10 @@
         <v-category name="选择分类" :data="{item: detail, coding: coding}" :isMore="true" type="text"></v-category>
       </li>
       <!--  v-if="field.album" -->
-      <li class="li"> 
+      <li class="li">
         <span class="label">所属专辑</span>
-        <span class="pr15">{{detail.album}}</span>
-        <v-category name="选择分类" :data="{item: detail, coding: '123'}" type="text"></v-category>
+        <span class="pr15">{{detail.group}}</span>
+        <v-category name="选择分类" :data="{item: detail, coding: coding.group }" :isInt="true" isGroup="true" api="customGroup" type="text"></v-category>
       </li>
       <li class="li" style="overflow: auto;">
         <span class="label">颜色</span>
@@ -52,15 +55,15 @@
       </li>
     </ul>
     <div class="edit-article">
-      <v-editor v-model:contentsss="detail.markdown" />
+      <v-editor v-model:contentsss="detail.markdown" :data="detail" :coding="coding.art" />
     </div>
     <div class="summary mt25">
-      <h2 class="mb5 font18 cl-999">摘要说明</h2>
-      <textarea v-model="detail.summary" class="w-full"></textarea>
+      <div class="mb5 font16 cl-999">摘要说明</div>
+      <v-editordesc v-model:contentsss="detail.summary_markdown" :data="detail" :coding="coding.art" />
     </div>
     <div class="mt20">
       <v-button class="btn" @onClick="save">保存</v-button>
-      <v-button class="btn" @onClick="saveTemp">保存到草稿箱</v-button>
+      <v-button class="btn" @onClick="saveTemp" v-if="action === 'add'">保存到草稿箱</v-button>
     </div>
   </div>
 </div>
@@ -125,9 +128,6 @@ export default defineComponent({
     }, {
       name: 'fid',
       message: "请选择分类"
-    }, {
-      name: 'summary',
-      message: "请输入摘要内容"
     }]
     const detail: any = ref({})
     const configData: any = ref({})
@@ -150,7 +150,7 @@ export default defineComponent({
     }
 
     // 保存到草稿箱
-    function saveTemp(){
+    function saveTemp() {
       store.dispatch('common/Fetch', {
         api: "articleTempSave",
         data: {
@@ -175,7 +175,8 @@ export default defineComponent({
         method,
         source,
         source_url,
-        summary,
+        description,
+        summary_markdown,
         markdown,
         content,
         style
@@ -198,7 +199,9 @@ export default defineComponent({
           method,
           source,
           source_url,
-          summary,
+          description,
+          summary: marked.parse(summary_markdown || "{}"),
+          summary_markdown,
           content: marked.parse(markdown || "{}"),
           markdown,
           style: JSON.stringify(style),
@@ -207,7 +210,7 @@ export default defineComponent({
         if (props.action !== "add") {
           param.id = detail.value.id
         }
-        proxy.$hlj.loading()
+        // proxy.$hlj.loading()
         store.dispatch('common/Fetch', {
           api: props.action !== "add" ? 'UpdateArticle' : "InsertArticle",
           data: {
@@ -215,8 +218,9 @@ export default defineComponent({
           }
         }).then(res => {
           proxy.$hlj.message({
-            msg: res.returnMessage
+            msg: "操作成功!"
           })
+          // proxy.$hlj.close()
         })
       })
 
@@ -240,14 +244,14 @@ export default defineComponent({
           let style = JSON.parse(detail.value.style || '{}')
           detail.value.style = style instanceof Object ? style : {}
         })
-      }else{
-       store.dispatch('common/Fetch', {
+      } else {
+        store.dispatch('common/Fetch', {
           api: 'articleTempList',
           data: {
             type: props.channel,
           }
         }).then(res => {
-          if(res.result !== "" && res.result !== null){
+          if (res.result !== "" && res.result !== null) {
             detail.value = JSON.parse(res.result)
           }
         })

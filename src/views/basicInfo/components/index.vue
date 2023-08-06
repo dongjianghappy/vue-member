@@ -1,6 +1,7 @@
 <template>
   <div class="mb25">
-    <Basic v-if="type==='basic'" />
+    <Setting v-if="type==='setting'" />
+    <Basic v-else-if="type==='basic'" />
     <Hobby v-else-if="type==='hobby'" />
     <Blog v-else-if="type==='blog'" />
     <Password v-else-if="type==='password'" />
@@ -11,6 +12,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import Setting from '../setting/index.vue'
 import Photos from '../photos/index.vue'
 import Basic from '../info/index.vue'
 import Hobby from './hobby.vue'
@@ -21,6 +23,7 @@ import Email from './email.vue'
 export default defineComponent({
   name: 'HomeViewdd',
   components: {
+   Setting,
    Photos,
    Basic,
    Hobby,

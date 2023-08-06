@@ -2,7 +2,7 @@
 <div>
   <div class="container w1100 relative clearfix">
     <div class="w180 left">
-      <v-aside title="相册">
+      <v-aside :data="sidebar.groups" title="相册">
         <template v-slot:button>
           <v-group action='add' :data="data" :group="photoAlbum" :coding="coding.album.list" :render="aaaa" />
           <!-- <Detail action='add' :data="{ coding: 'U10000' }" :render="aaaa" /> -->
@@ -116,16 +116,20 @@ export default defineComponent({
     const img = ref("")
     const index: any = ref(0)
     const uid = getUid()
+    const sidebar = computed(() => {
+      const sidebar = store.getters['user/config'].album || []
+      sidebar.groups && sidebar.groups.map((item: any) => {
+        item.path = `/album?item=${item.value}`
+      })
+      return sidebar
+    });    
 
-    const menu: any = album;
-    menu.map((item: any) => {
-      item.path = `/album?item=${item.value}`
-    })
 
     function aaaa() {
       store.dispatch('common/Fetch', {
-        api: "photoAlbum",
+        api: "customGroup",
         data: {
+          coding: coding.album.list,
           uid: getUid()
         }
       }).then(res => {
@@ -195,7 +199,6 @@ export default defineComponent({
         image: [img]
       }
       currentData.value = aaa
-      debugger
       currentImg.value = img
       showFlag.value = !showFlag.value
     }
@@ -226,10 +229,10 @@ export default defineComponent({
       handleUpload,
       handleSave,
       showImg,
-      menu,
       aaaa,
       index,
       loginuser,
+      sidebar
     }
   }
 })

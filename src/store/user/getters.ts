@@ -8,8 +8,8 @@ const getters = {
   basicInfo: (state: any) => state.basicInfo || {},
   hobby: (state: any) => state.hobby || {},
   blogInfo: (state: any) => state.blogInfo || {},
-  
-
+  userSetting: (state: any) => state.user.login.user_setting || {},
+  system: (state: any) => state.user.login.system || {},
   
 
 }

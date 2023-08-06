@@ -94,7 +94,7 @@ export default defineComponent({
       }
 
       store.dispatch('common/Fetch', {
-        api: props.action === 'add' ? "Insert" : 'Update',
+        api: props.action === 'add' ? "insertCustomGroup" : 'updateCustomGroup',
         data: {
           coding: props.data.coding,
           ...param

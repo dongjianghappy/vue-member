@@ -6,11 +6,12 @@
       <i class="week">{{datetime.week}}</i>
       <i class="time">{{datetime.year}}.{{datetime.month}}.{{datetime.day}}</i>
     </div>
-    <div class="span sign-button" @click="sign"><i class="iconfont icon-feedback font18" />
-      <span class="hassign" v-if="userInfo.isSign">
+    <div class="span sign-button" >
+    <qiandao />
+      <!-- <span class="hassign" v-if="userInfo.isSign">
         已签
       </span>
-      <span class="signin" v-else>签到</span>
+      <span class="signin" v-else>签到</span> -->
     </div>
   </div>
 </div>
@@ -27,8 +28,13 @@ import {
   week
 } from '@/assets/const'
 
+import qiandao from './qiandao.vue'
+
 export default defineComponent({
   name: 'SignView',
+  components: {
+qiandao
+  },
   props: {
     userInfo: {
       type: Object,

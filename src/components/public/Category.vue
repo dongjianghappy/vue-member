@@ -114,7 +114,11 @@ export default defineComponent({
     isMore: {
       type: Boolean,
       default: false
-    }
+    },
+    isGroup: {
+      type: Boolean,
+      default: false
+    },
   },
   emits: ['update:cate'],
   setup(props, context) {
@@ -262,8 +266,13 @@ export default defineComponent({
         data.item.fid = fid
         data.item.parent = parent
       } else {
-        data.item.fid = current.value.value
-        data.item.parent = current.value.name
+        if(props.isGroup){
+          data.item.pid = current.value.value
+          data.item.group = current.value.name
+        }else{
+          data.item.fid = current.value.value
+          data.item.parent = current.value.name          
+        }
       }
 
       isShow.value = !isShow.value

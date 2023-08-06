@@ -51,9 +51,9 @@ export default defineComponent({
       store.dispatch('common/MessageBoard', {
 
       })
-      store.dispatch('common/RecentJournal', {
+      // store.dispatch('common/RecentJournal', {
 
-      })
+      // })
     }
 
     onMounted(() => {

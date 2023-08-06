@@ -41,9 +41,11 @@
     </div>
     <div class="cal_m_days">
       <div v-for="(ds, index) in monthData" :key="index" class="cal_m_day_line">
-        <div v-for="d in ds" :key="d.day" class="cal_m_day_cell" :style="{height: height, color: getCellColor(d)}" @mouseenter="mouseenter(d, $event)" @mouseleave="mouseleave(d, $event)" @click="handleClick(d, $event)">
+        <div v-for="d in ds" :key="d.day" class="cal_m_day_cell p5" :style="{color: getCellColor(d)}" @mouseenter="mouseenter(d, $event)" @mouseleave="mouseleave(d, $event)" @click="handleClick(d, $event)">
+          <div class="cell-box" :class="{'choose-cell': (chooseStatus && d === chooseDay)}" style="border: 1px dashed #ccc; border-radius: 5px;" :style="style">
           {{ d.day }}
           <slot :item="d" :index="index" :another-attribute="anotherAttribute"></slot>
+          </div>
         </div>
       </div>
     </div>
@@ -56,8 +58,10 @@
 import {
   defineComponent,
   onMounted,
-  ref
-} from 'vue'
+  ref,
+  watch,
+  useRoute
+} from '@/utils'
 
 export default defineComponent({
   name: 'v-Search',
@@ -80,14 +84,24 @@ export default defineComponent({
       type: String,
       default: "text"
     },
-    height: {
-      type: String,
-      default: '40px'
+    // 展示选择状态，只有请求数据的时候才展示
+    chooseStatus: {
+      type: Boolean,
+      default: false
+    },
+    style: {
+      type: Object,
+      default: () => {
+        return {
+          'height': '30px',
+          'line-height': '30px'
+        }
+      }
     }
   },
   emits: ['changeMonth', 'changeDay'],
   setup(props, context) {
-
+    const route = useRoute();
     let now: any = ref(new Date())
     let year: any = ref(0)
     let month: any = ref(0)
@@ -96,6 +110,14 @@ export default defineComponent({
     let currentYear: any = new Date().getFullYear()
     let currentMonth: any = new Date().getMonth() + 1
     let currentDay: any = new Date().getDate()
+    let chooseDay: any = ref("")
+
+// 监听弹窗变量
+    watch(route, (newValues, prevValues) => {
+      chooseDay.value = ""
+    }, {
+      deep: true
+    })
 
     // 设置年月
     function setYearMonth(now: any) {
@@ -259,7 +281,8 @@ export default defineComponent({
     }
 
     function handleClick(param: any, event: any){
-      context.emit("changeDay", param)
+      chooseDay.value = chooseDay.value === param ? "" : param
+      context.emit("changeDay", chooseDay.value)
     }
 
     onMounted(() => {
@@ -280,7 +303,8 @@ export default defineComponent({
       getCellColor,
       mouseenter,
       mouseleave,
-      handleClick
+      handleClick,
+      chooseDay
     }
   }
 })
@@ -367,9 +391,14 @@ export default defineComponent({
       }
     }
 
-    .cal_m_day_cell:hover {
-      background: #f2f8fe;
+    .cal_m_day_cell .cell-box:hover {
+      background: #eee;
       // color: #409eff;
+    }
+
+    .cal_m_day_cell .choose-cell{
+      background: #ffc09f;
+      color: #fff;
     }
 
     .cal_m_weeks {
@@ -387,7 +416,8 @@ export default defineComponent({
       justify-content: space-around;
       justify-items: center;
       flex-wrap: wrap;
-
+      padding: 5px;
+      padding-bottom: 10px;
       &:nth-child(7n) {
         border-right: 0;
       }

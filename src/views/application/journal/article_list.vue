@@ -42,7 +42,6 @@
     <!-- <v-loding v-if="!loading" /> -->
     <div class="pt25 align_right" v-if="dataList.total > 25">
       <v-pagination :pagination="{total: dataList.total, pages: dataList.pages, page: dataList.page ||  1, pagesize: dataList.pagesize}" :render="init" />
-
     </div>
   </div>
 </div>

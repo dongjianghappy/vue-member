@@ -86,6 +86,7 @@ const codings: any = {
     comment: "U0090003",
     praise: "U0090004",
     collect: "U0090005",
+    group: "U0620036",
   },
   digital: {
     name: "digital",
@@ -296,7 +297,15 @@ const codings: any = {
     praise: "U0270004",
     collect: "U0270005",
   },  
-
+  words: {
+    name: "words",
+    art: "U0280000",
+    info: "U0280001",
+    cate: "U0280002",
+    comment: "U0280003",
+    praise: "U0280004",
+    collect: "U0280005",
+  },
   advertisement: "U0500000",
   advertisement_position: "U0500001",
   appstore: 'U0500002',
@@ -306,6 +315,14 @@ const codings: any = {
   code: {
     art: 'U0520002',
     cate: 'U0520003'
+  },
+  common_sense: {
+    art: "U0520012",
+    cate: "U0520013"
+  },
+  knowledge: {
+    art: 'U0600000',
+    cate: 'U0600001'
   },
   navigation: 'U0520005',
   single: 'U0520006',
@@ -329,7 +346,8 @@ const codings: any = {
   links: 'U0610001',
   mood: {
     list: 'U0620030',
-    cate: 'U0620031'
+    cate: 'U0620031',
+    system: 'U0620037'
   },
   collection: {
     cate: 'U0630000',
@@ -413,11 +431,13 @@ const codings: any = {
     security: 'U0700019',
     sign: 'U0700020',
     cycle: 'U0700021',
+    sign_love: 'U0700027',
     theme: 'U0700022',
     effects: 'U0700023',
     pendant: 'U0700024',
-    cursor: 'U0700025'
-
+    cursor: 'U0700025',
+    setting: 'U0700028',
+    setting_type: 'U0700029'
   }
 };
 

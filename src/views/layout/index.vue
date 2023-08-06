@@ -1,5 +1,6 @@
 <template>
 <div class="relative" v-if="isLogin">
+   <!-- <v-sitesearch /> -->
   <Header />
   <div id="main" style="padding: 80px 0 0 0;" :style="userInfo.theme && userInfo.theme.theme_background">
     <router-view />
@@ -51,6 +52,16 @@ export default defineComponent({
 
       }
     })
+    
+    store.dispatch('common/Fetch', {
+      api: "slideBanner",
+      state: 'slideshow',
+      data: {
+        channel: 1000
+      }
+    })
+
+    
 
     store.dispatch('common/Fetch', {
       api: "announcement",

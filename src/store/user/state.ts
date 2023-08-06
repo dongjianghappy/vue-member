@@ -3,14 +3,14 @@ export interface State {
   basicInfo: any;
   hobby: any;
   blogInfo: any
- 
 }
 
 
 const initState: State = {
   user: {
     login: {},
-    basic: {}
+    basic: {},
+    userSetting: {}
   },
   basicInfo: {},
   hobby: {},

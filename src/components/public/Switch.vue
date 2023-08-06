@@ -68,6 +68,7 @@ export default defineComponent({
           coding,
           id: item.id,
           status: field,
+          value: item[field] == '1' ? '0' : '1',
           ...props.param
         }
       }).then(res => {

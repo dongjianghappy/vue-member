@@ -1,11 +1,11 @@
 <template>
 <div>
-  <div class="container w1100 relative clearfix">
-    <div class="main-center left" style="width: 800px;">
+  <div class="container w1100 relative pb25 clearfix">
+    <div class="main-center bg-white left" style="width: 800px; min-height: 500px">
       <Center />
     </div>
     <div class="w280 right">
-      <RightView :module="module.personal_center" />
+      <RightView :module="module.search" />
     </div>
   </div>
 </div>

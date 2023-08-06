@@ -39,7 +39,7 @@
       <template v-slot:content3>
         <ul class="align_left">
           <li :id="`pendant_${index}`" class="themestyle" draggable="true" @dragstart="(e, fType, style)=>dragstart(e, `pendant_${index}`, item.style)" :class="{current: item.id === currentEffects || (!currentEffects && item.id === theme.effects.id)}" v-for="(item, index) in pendantList" :key="index" @click="choosePendant(item.id)">
-            <img :src="item.file">
+            <img :src="item.image">
             <div class="font12 cl-white align_center">{{item.name}}</div>
           </li>
         </ul>

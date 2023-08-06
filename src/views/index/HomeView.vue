@@ -11,11 +11,11 @@
       <Comment v-else-if="component==='comment'" />
       <Praise v-else-if="component==='praise'" />
       <Forwarding v-else-if="component==='forwarding'" />
-      <Center v-else />
+      <Center ref="talk" v-else />
     </div>
     <!-- 右侧 -->
     <div class="w280 right">
-      <RightView :module="module.personal_center" :userInfo="userInfo" />
+      <RightView :module="module.personal_center" :userInfo="userInfo" :render="init" />
     </div>
   </div>
 </div>
@@ -26,7 +26,8 @@ import {
   defineComponent,
   useStore,
   useRoute,
-  computed
+  computed,
+  ref
 } from '@/utils'
 
 import Center from './center/index.vue'
@@ -52,11 +53,18 @@ export default defineComponent({
     const component = computed(() => route.query.mod);
     const module = computed(() => store.getters['user/config_talk']);
     const userInfo = computed(() => store.getters['user/loginuser']);
+    const talk: any = ref(null)
+
+    function init(param: any = {}){
+      return talk.value.init(param)
+    }
 
     return {
       component,
       module,
-      userInfo
+      userInfo,
+      init,
+      talk
     }
   }
 })

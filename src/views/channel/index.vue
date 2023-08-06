@@ -3,16 +3,16 @@
   <div class="w180 left">
     <v-aside :data="sidebar.groups" :title="sidebar.name">
       <template v-slot:button>
-        <v-group action='add' :data="data" :group="userGroup" :coding="codding.group" :render="init" />
+        <v-group action='add' :data="data" :group="userGroup" :coding="coding.group" :render="init" />
       </template>
     </v-aside>
   </div>
   <div class="mb15 radius-4 right" style="width: 910px; min-height: 650px; background: #fff">
-    <CateList :dataList="userGroup" v-if="query.item === 'category'" :data="{codding: codding}" />
-    <Collect v-else-if="query.item === 'collect'" :channel="channel" :data="{coding: codding}" />
-    <Praise v-else-if="query.item === 'praise'" :channel="channel" :data="{coding: codding}" />
+    <CateList :dataList="userGroup" v-if="query.item === 'category'" :data="{coding: coding}" />
+    <Collect v-else-if="query.item === 'collect'" :channel="channel" :data="{coding: coding}" />
+    <Praise v-else-if="query.item === 'praise'" :channel="channel" :data="{coding: coding}" />
     <Download v-else-if="query.item === 'download'" :channel="channel" />
-    <Article v-else :channel="channel" :data="{codding: codding}" :columns="columns" />
+    <Article v-else :channel="channel" :data="{coding: coding}" :columns="columns" />
   </div>
 </div>
 <Graph v-else :channel="channel" :action="query.action" :field="{album: false, color: false}" />
@@ -28,6 +28,7 @@ import {
   ref,
   useStore,
   onMounted,
+  getUid
 } from '@/utils'
 import CateList from "./cate/index.vue"
 import Article from "./article/index.vue"
@@ -54,7 +55,7 @@ export default defineComponent({
     const route = useRoute();
     let query: any = computed(() => route.query || "");
     const channel: any = getChannel()
-    const codding: any = codings[channel]
+    const coding: any = codings[channel]
     const columns: any = noColumns[channel]
     const userGroup = ref([])
     const sidebar = computed(() => {
@@ -67,12 +68,12 @@ export default defineComponent({
 
     function init() {
       store.dispatch('common/Fetch', {
-        api: "AlbumList",
+        api: "customGroup",
         data: {
-          uid: ''
+          coding: coding.group,
+          uid: getUid()
         }
       }).then(res => {
-
         userGroup.value = res.result
 
       })
@@ -82,11 +83,12 @@ export default defineComponent({
 
     return {
       channel,
-      codding,
+      coding,
       query,
       sidebar,
       columns,
-      userGroup
+      userGroup,
+      init
     }
   }
 })

@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1176955",
+      "name": "note",
+      "font_class": "note",
+      "unicode": "e71a",
+      "unicode_decimal": 59162
+    },
+    {
+      "icon_id": "1898752",
+      "name": "flag",
+      "font_class": "flag",
+      "unicode": "e694",
+      "unicode_decimal": 59028
+    },
+    {
+      "icon_id": "217427",
+      "name": "group",
+      "font_class": "group",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
       "icon_id": "5396990",
       "name": "position",
       "font_class": "positioning",
@@ -344,7 +365,7 @@
     {
       "icon_id": "1242683",
       "name": "blog",
-      "font_class": "ego-blog",
+      "font_class": "blog",
       "unicode": "e647",
       "unicode_decimal": 58951
     },

@@ -14,6 +14,7 @@
 @import "http://dongblog.com/style/css/login.css";
 @import "http://dongblog.com/style/css/member_feedback.css";
 @import "http://dongblog.com/style/css/member_play.css";
+@import "http://www.yunxi10.com//source/plugin/slide/bannerscroll3/css/css.css";
 
 
 #app {
