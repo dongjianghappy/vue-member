@@ -17,6 +17,10 @@ import {
 export default defineComponent({
   name: 'v-Switch',
   props: {
+    storage: {
+      type: Boolean,
+      default: false
+    },
     isbutton: {
       type: Boolean,
       default: true
@@ -62,26 +66,32 @@ export default defineComponent({
     }: any = props
 
     function handleclick(item: any) {
-      store.dispatch('common/Fetch', {
-        api: props.api || "updateStatus",
-        data: {
-          coding,
-          id: item.id,
-          status: field,
-          value: item[field] == '1' ? '0' : '1',
-          ...props.param
-        }
-      }).then(res => {
-        if (res.result.type) {
-          item[res.result.type] = res.result.value
-          context.emit('toggle', {
-            field: props.data.item.name,
-            value: res.result.value
-          })
-        } else {
-          props.msg(res.returnMessage)
-        }
-      })
+      if (!props.storage) {
+        store.dispatch('common/Fetch', {
+          api: props.api || "updateStatus",
+          data: {
+            coding,
+            id: item.id,
+            status: field,
+            value: item[field] == '1' ? '0' : '1',
+            ...props.param
+          }
+        }).then(res => {
+          if (res.result.type) {
+            item[res.result.type] = res.result.value
+            context.emit('toggle', {
+              field: props.data.item.name,
+              value: res.result.value
+            })
+          } else {
+            props.msg(res.returnMessage)
+          }
+        })
+      } else {
+        let name: any = localStorage.getItem(field) == undefined || localStorage.getItem(field) == '1'  ? '0' : '1'
+        localStorage.setItem(field, name)
+        context.emit('toggle', localStorage.getItem(field))
+      }
     }
     return {
       handleclick

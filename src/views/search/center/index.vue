@@ -1,11 +1,15 @@
 <template>
 <div class="home">
-  <TalkTabs ref="talktabs" :data="tabs" :render="init" :loading="loading" :mod="{tab: 'type', value: query.type}" :query="getParam()" />
-  <TalkItem :dataList="data.talk" :loading="loading" v-if="query.type === 'talk'" />
-  <Notes :dataList="data.notes" :loading="loading" v-else-if="query.type === 'notes'" />
-  <Website :dataList="data.website" :loading="loading" v-else-if="query.type === 'website'" />
-  <User :dataList="data.user" :loading="loading" v-else-if="query.type === 'user'" />
-  <Source :dataList="data.source" :loading="loading" v-else />
+  <TalkTabs ref="talktabs" :data="tabs" :render="init" :mod="{tab: 'type', value: query.type}" :query="`&q=${query.q}`" />
+  <TalkItem :sourceData="search.talk" v-if="query.type === 'talk'" />
+  <TalkItem :sourceData="search.article" v-else-if="query.type === 'article'" />
+  <TalkItem :sourceData="search.tech" v-else-if="query.type === 'tech'" />
+  <TalkItem :sourceData="search.picture" v-else-if="query.type === 'picture'" />
+  <TalkItem :sourceData="search.notes" v-else-if="query.type === 'notes'" />
+  <TalkItem :sourceData="search.website" v-else-if="query.type === 'website'" />
+  <TalkItem :sourceData="search.user" v-else-if="query.type === 'user'" />
+  <TalkItem :sourceData="search.source" v-else-if="query.type === 'source'" />
+  <TalkItem :sourceData="search.all" v-else />
   <v-loding v-if="!loading" />
 </div>
 </template>
@@ -20,10 +24,11 @@ import {
   useStore,
   useRoute,
   getUid,
-  getParam
+  getParam,
+  codings
 } from '@/utils'
 import TalkTabs from '../../index/components/module/TalkTabs.vue'
-import TalkItem from '../components/talkItem.vue'
+import TalkItem from '../../index/components/TalkItem/index.vue'
 import User from '../components/user.vue'
 import Source from '../components/source.vue'
 import Website from '../components/website.vue'
@@ -42,7 +47,7 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
     const module = computed(() => store.getters['user/config_talk'].personal_center);
-
+    const coding: any = codings
     const data: any = ref({
       talk: [],
       source: [],
@@ -54,6 +59,7 @@ export default defineComponent({
     const tabs: any = computed(() => store.getters['user/config_talk'].search_tabs);
     const downloadList: any = ref([]);
     const notesList: any = computed(() => store.getters['talk/notesList']);
+    const search: any = computed(() => store.getters['talk/search']);
     const talktabs: any = ref(null)
     const loading: any = ref(false)
     const query: any = ref(route.query)
@@ -82,21 +88,47 @@ export default defineComponent({
     })
 
     function init(param: any) {
-      if(!route.query.q){
+      if (!route.query.q) {
         return
       }
+      let obj: any = {}
+
+      const params: any = {
+        page: 1,
+        pagesize: 10
+      }
+
+      Object.assign(params, param)
+      obj.state = 'all'
       loading.value = false
-      store.dispatch('common/Fetch', {
-        api: "search",
+      let module_arr = ['talk', 'source', 'picture', 'tech', 'funny', 'notes', 'website', "words"]
+
+      if (module_arr.indexOf(param.type) > -1) {
+        obj.state = param.type
+        params.coding = coding[param.type].art
+      }
+
+      store.dispatch(`talk/search`, {
+        ...obj,
         data: {
-          page: 1,
+          uid: getUid(),
           word: route.query.q,
-          ...param
+          ...params
         }
-      }).then(res => {
+      }).then((res) => {
         loading.value = true
-        data.value[param.type] = res.result === true ? [] : res.result
       })
+
+      // store.dispatch('talk/search', {
+      //   data: {
+      //     page: 1,
+      //     word: route.query.q,
+      //     ...param
+      //   }
+      // }).then(res => {
+      //   loading.value = true
+      //   data.value[param.type] = res.result === true ? [] : res.result
+      // })
     }
 
     onMounted(() => {
@@ -114,6 +146,7 @@ export default defineComponent({
       loading,
       data,
       notesList,
+      search,
       getParam
     }
   },

@@ -21,7 +21,7 @@
         </p>
         <p>{{item.signature}}</p>
       </div>
-      <div class="right" style="width:50%" v-if="currentUser">
+      <div class="right" style="width:50%" v-if="loginuser.currentUser">
         <span class="concern" @click="concern(item)" style=" width:auto; height:20px; line-height:20px; display:block; text-align:center; cursor:pointer; position: absolute; top: 25px; right: 80px;">
           {{item.concern_status}}</span>
         <span class="infos demoimg" data-placement="top" data-toggle="tooltip17" style="width:60px; height:20px; line-height:20px; display:block; text-align:center; cursor:pointer; position:absolute; top:25px; right:15px;" data-left="-90">
@@ -92,7 +92,7 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store = useStore();
     const router = useRouter();
-    const currentUser = computed(() => store.getters['user/currentUser']);
+    const loginuser = computed(() => store.getters['user/loginuser']);
 
     // 点击关注
     function concern(item: any) {
@@ -145,8 +145,7 @@ export default defineComponent({
       concern,
       handleClick,
       handleClickss,
-      handleGoto,
-      currentUser
+      handleGoto
     }
   }
 

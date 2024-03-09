@@ -38,12 +38,20 @@ const api:any =  {
     return http.request('user', 'concern', params)
   },
 
-    // 关注列表
-    ConcernList (params: any) {
-      return http.request('talk', 'concernList', params)
-    },
+  // 关注列表
+  ConcernList (params: any) {
+    return http.request('talk', 'concernList', params)
+  },
   
-  
+// 查看关注备注
+concernRemark(params: any) {
+  return http.request('talk', 'concernRemark', params)
+},  
+
+// 更新关注备注
+updateConcernRemark(params: any) {
+  return http.request('talk', 'updateConcernRemark', params)
+},  
   
   // 话题
   talk (params: any) {
@@ -94,14 +102,36 @@ talkAlbum (params: any) {
     return http.request('user', 'commentList', params)
   },
  // 发表评论
- Comment (params: any) {
-    return http.request('user', 'comment', params)
-  },  
-
-
+Comment (params: any) {
+  return http.request('user', 'comment', params)
+},  
+// 评论回复
+commentReply (params: any) {
+  return http.request('user', 'commentReply', params)
+}, 
+// 评论回复列表
+commentReplyList (params: any) {
+  return http.request('user', 'commentReplyList', params)
+}, 
+// 评论点赞
+commentPpraise (params: any) {
+  return http.request('user', 'commentPpraise', params)
+}, 
+// 发表弹幕
+Barrage (params: any) {
+  return http.request('user', 'barrage', params)
+},  
+// 弹幕列表
+barrageList (params: any) {
+  return http.request('user', 'barrageList', params)
+},  
 // 推荐用户
 RecommendUser (params: any) {
   return http.request('user', 'recommendUser', params)
+},  
+// 推荐音频 
+RecommendMusic  (params: any) {
+  return http.request('user', 'RecommendMusic', params)
 },  
 // 热门话题
 HotTalk (params: any) {
@@ -175,9 +205,13 @@ announcement (params: any) {
     return http.request('user', 'moodList', params)
   },  
   
-  // 应用中心
+  // 积分管理
   Integration (params: any) {
     return http.request('user', 'integration', params)
+  },  
+  // 金币管理
+  Goldcoin (params: any) {
+    return http.request('user', 'goldcoin', params)
   },  
 
   // 签到列表
@@ -249,6 +283,11 @@ announcement (params: any) {
   RecommendActivity (params: any) {
     return http.request('talk', 'recommendActivity', params)
   },   
+
+  // 我关注用户列表
+  MyconcernList (params: any) {
+    return http.request('talk', 'myconcernList', params)
+  },
 
   // 列表查询
   ArticleList (params: any) {
@@ -451,7 +490,32 @@ announcement (params: any) {
   // 用户自定义组更改
   updateCustomGroup (params: any) {
     return http.request('user', 'updateCustomGroup', params)
-  } ,     
+  } ,  
+  
+  // 用户自定义组用户
+  userGroup (params: any) {
+    return http.request('user', 'userGroup', params)
+  } ,  
+  
+  // 发送消息
+  chat (params: any) {
+    return http.request('user', 'chat', params)
+  } ,  
+  
+  // 联系用户列表
+  contactuserList (params: any) {
+    return http.request('user', 'contactuserList', params)
+  } , 
+
+  // 聊天内容
+  chatList (params: any) {
+    return http.request('user', 'chatList', params)
+  } , 
+  
+  // 用户自定义组用户
+  userGroupList (params: any) {
+    return http.request('user', 'userGroupList', params)
+  } ,   
 
   // 用户书签
   bookmark (params: any) {
@@ -555,7 +619,10 @@ changeData(params: any) {
 savePendant(params: any) {
   return http.request('user', 'savePendant', params)
 },
-
+// 意见反馈列表
+feedbackList (params: any) {
+  return http.request('common', 'feedbackList', params)
+},
 // 意见反馈
 feedback (params: any) {
   return http.request('common', 'feedback', params)
@@ -592,6 +659,98 @@ historyWords (params: any) {
 removehistoryWord (params: any) {
   return http.request('talk', 'removehistoryWord', params)
 },  
+// 开通博客
+openWeibo (params: any) {
+  return http.request('user', 'openWeibo', params)
+},  
+
+// V认证申请条件
+verifiedCondition (params: any) {
+  return http.request('talk', 'verifiedCondition', params)
+},
+
+// V认证申请
+verifiedApply (params: any) {
+  return http.request('talk', 'verifiedApply', params)
+},
+
+// 投票信息
+voteDetail (params: any) {
+  return http.request('talk', 'voteDetail', params)
+},
+
+// 歌词
+Lrc (params: any) {
+  return http.request('talk', 'Lrc', params)
+},
+
+// 联系方式
+contact (params: any) {
+  return http.request('common', 'contact', params)
+},
+
+// 导航
+haosite (params: any) {
+  return http.request('common', 'haosite', params)
+},
+// 问题列表
+questionsList (params: any) {
+  return http.request('common', 'questionsList', params)
+},
+// 问答列表
+answerList (params: any) {
+  return http.request('common', 'answerList', params)
+},
+
+// 综合的
+comprehensive (params: any) {
+  return http.request('talk', 'comprehensive', params)
+},
+// 活动贡献
+contribution(params: any) {
+  return http.request('common', 'contribution', params)
+},
+// 每日签到
+signDay(params: any) {
+  return http.request('user', 'signDay', params)
+},
+ranking (params: any) {
+  return http.request('talk', 'ranking', params)
+},
+schedule (params: any) {
+  return http.request('talk', 'schedule', params)
+},
+updateSchedule (params: any) {
+  return http.request('talk', 'updateSchedule', params)
+},
+// 微博信息
+talkInfo(params: any) {
+  return http.request('talk', 'talkInfo', params)
+},
+// 微博详情
+talkDetail(params: any) {
+  return http.request('talk', 'talkDetail', params)
+},
+// 微博推荐
+recommendTalk(params: any) {
+  return http.request('talk', 'recommendTalk', params)
+},
+// 摄影
+cameraTalk(params: any) {
+  return http.request('talk', 'cameraTalk', params)
+},
+// vlog
+vlogTalk(params: any) {
+  return http.request('talk', 'vlogTalk', params)
+},
+// 设置展示状态
+setVisible(params: any) {
+  return http.request('talk', 'setVisible', params)
+},
+expression(params: any) {
+  return http.request('user', 'expression', params)
+},
+
 }
 
   

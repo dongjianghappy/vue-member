@@ -22,7 +22,7 @@
       <div class="user_from pb5">
         {{item.times}}
       </div>
-      <div :id="`content_${item.id}`" class="user_text">
+      <div :id="`content_${item.id}`" class="user_text markdown">
 
         <div class="pb5">
           <div class="mb10">

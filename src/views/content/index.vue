@@ -11,6 +11,7 @@
     <Visitor v-else-if="component === 'visitor'" />
     <Mood v-else-if="component === 'mood'" />
     <Statistics v-else-if="component === 'statistics'" />
+    <Contribution v-else-if="component === 'contribution'" />
     <Index v-else />
 
   </div>
@@ -32,6 +33,7 @@ import Channel from './components/channel.vue'
 import Visitor from './visitor/index.vue'
 import Mood from './components/mood.vue'
 import Statistics from './statistics/index.vue'
+import Contribution from './components/contribution.vue'
 import {
   useRouter,
   useRoute
@@ -44,7 +46,8 @@ export default defineComponent({
     Channel,
     Visitor,
     Mood,
-    Statistics
+    Statistics,
+    Contribution
   },
   setup(props, context) {
     const {
@@ -63,10 +66,10 @@ export default defineComponent({
     const component = computed(() => route.query.mod);
 
     onMounted(() => {
-      const side = module.value.content.filter((item: any) => item.default === '1')
-      if(side.length > 0){
-        router.push(window.location.pathname + side[0].value)
-      }
+      // const side = module.value.content.filter((item: any) => item.default === '1')
+      // if(side.length > 0){
+      //   router.push(window.location.pathname + side[0].value)
+      // }
     })
 
     return {

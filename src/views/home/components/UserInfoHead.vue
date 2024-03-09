@@ -1,46 +1,37 @@
 <template>
-<div class="talk-home w1100" style="margin-top: -20px;" :style="userInfo.home_background ? `background: linear-gradient(to right, ${userInfo.theme && userInfo.theme.color}, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0), ${userInfo.theme && userInfo.theme.color}), url(${userInfo.home_background}) no-repeat; background-size: cover` : ''">
-  <div class="user-home-photos">
-    <img id="uploadphotos" :src="userInfo.photos" width="120" height="120" style="border-radius:50%; cursor:pointer; display: inline-block;" class="userphotos">
-    <div class="mb10 bold cl-white">
-      {{userInfo.nickname}}
-      <span style="color: #f67f00;">LV.{{userInfo.level}}</span>
+<div class="container w1100 mb15" style="overflow: hidden; border-radius: 4px; height: 400px">
+  <div class="user-banner relative" :style="`background: url(${userInfo.home_background}) no-repeat; background-size: cover; opacity: 1;`">
+    <!-- <div class="mask-background absolute" style="background: rgba(0, 0, 0, 0.35); top: 0; left: 0; right: 0; bottom: 0"></div> -->
+    <span class="absolute" style="top: 5px; right: 0" v-if="loginuser.currentUser">
+      <v-selectbackground kind="home_background" :style="{width: 1170, height: 570}" :img="{width: 1440}" :size="{width: 1000, height: 300}" /></span>
+  </div>
+  <div class="activity_wrap relative" style="background: var(--module-background);">
+    <div class="absolute align_center" style="left: 25px; bottom: 40px;">
+      <div style="border-radius: 50%; border: 3px solid #fff; width: 150px; height: 150px; overflow: hidden;">
+        <img :src="userInfo.photos" onerror="this.src='http://www.yunxi10.com/source/public/images/head_normal_100.png'" width="150" height="150" style="cursor:pointer; display: inline-block;" class="userphotos">
+      </div>
     </div>
-    <ul class="mt5">
-      <li @click="handleConcern('concernmy')" class="pointer">
-        <span><strong>{{userInfo.concernmy}}</strong><span>粉丝</span></span>
-      </li>
-      <li @click="handleConcern('myconcern')" class="pointer">
-        <span><strong>{{userInfo.myconcern}}</strong><span>关注</span></span>
-      </li>
-      <li @click="handleConcern('praise')" class="pointer">
-        <a><strong>{{userInfo.talk}}</strong><span>获赞</span></a>
-      </li>
-    </ul>
-  </div>
-  <div class="home-info relative" style="bottom:20px;">
-    <div class="absolute" style="left: -45px;">
-
-      <p class="ptb10 font12" style="color: #8bc34a;">
-        <v-selectbackground kind="home_background" :style="{width: 1170, height: 570}" :img="{width: 1440}" :size="{width: 1000, height: 300}" />
-        <span @click="handleMood">
-          <span v-if="userInfo.mood">{{userInfo.mood}}: {{userInfo.mood_description}}</span>
-          <span v-else>暂无心情</span>
-        </span>
-        <Mood v-if="currentUser" />
-      </p>
-      <p class="ptb10 font12">{{userInfo.introduction}}</p>
-      <p class="font12">
-        <i class="iconfont icon-position ml0"></i>
-        {{userInfo.province}} {{userInfo.city}}</p>
+    <div class="pt10" style="padding-left: 200px;">
+      <div class="pb10 font16">
+        <span class="mr5 font18">{{userInfo.nickname}}</span>
+        <span style="color: #f67f00;">LV.{{userInfo.level}}</span>
+        <span class="ml15" :class="userInfo.verified === '1' ? 'cl-eb7350' : 'cl-999'" @click="handleVerified" v-if="loginuser && loginuser.account">V认证</span>
+        <span class="ml15"><v-concernbutton :data="userInfo" type="user" /></span>
+        <span class="ml15">私信</span>
+      </div>
+      <div>
+        <span>粉丝：{{userInfo.concernmy}}</span>
+        <span class="mr15">关注：{{userInfo.myconcern}}</span>
+        <span class="mr15">获赞：{{userInfo.myconcern}}</span>
+        <span class="mr15">IP属地：广州</span>
+      </div>
+      <div class="mt5 pr25 font12 cl-999 multiple-wrap-2">{{userInfo.introduction}}</div>
     </div>
+    <!-- <ul class="mt10 align_right">
+    <li class="inline font14 bold plr25" v-for="(item, index) in home_nav" :key="index" @click="handleclick(item.value)">{{item.name}}</li>
+  </ul> -->
   </div>
-
-  <div class="user-info">
-    <ul class="align_right">
-      <li class="inline font14  current ml10 plr15" v-for="(item, index) in home_nav" :key="index" @click="handleclick(item.value)">{{item.name}}</li>
-    </ul>
-  </div>
+  
 </div>
 </template>
 
@@ -71,25 +62,9 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const userInfo: any = computed(() => store.getters['user/userInfo']);
-    const currentUser = computed(() => store.getters['user/currentUser']);
+    const loginuser = computed(() => store.getters['user/loginuser']);
+    const userSetting: any = computed(() => store.getters['user/userSetting'])
     const home_nav = computed(() => store.getters['user/config_talk'].home_nav);
-    const menu: any = ref([{
-        name: "留言板",
-        path: "/application?mod=feedback"
-      },
-      {
-        name: "日志",
-        path: "/journal"
-      },
-      {
-        name: "相册",
-        path: "/album"
-      },
-      {
-        name: "关于我",
-        path: "/about"
-      }
-    ])
 
     function handleclick(param: any) {
       router.push(proxy.const.setUrl({
@@ -117,15 +92,30 @@ export default defineComponent({
       }
     }
 
+    function handleVerified(){
+      router.push('/verified')
+    }
+
     return {
       handleclick,
       handleConcern,
       userInfo,
-      currentUser,
-      menu,
+      loginuser,
+      userSetting,
       handleMood,
-      home_nav
+      home_nav,
+      handleVerified
     }
   }
 })
 </script>
+
+<style scoped>
+.user-banner {
+  height: 260px;
+}
+
+.activity_wrap {
+  height: 140px
+}
+</style>

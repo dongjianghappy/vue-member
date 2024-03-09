@@ -7,8 +7,7 @@
     <div class="marquee_box">
       <ul class="marquee_list" :class="{marquee_top: animate}">
         <li v-for="(item, index) in dataList" :key="index">
-          <span>{{item.title}}</span>
-
+          <span class="aaaa" @click="handleClick(item)">{{item.title}}</span>
         </li>
       </ul>
     </div>
@@ -22,8 +21,9 @@ import {
   onMounted,
   ref,
   reactive,
-  onBeforeUnmount
+  onBeforeUnmount,
 } from 'vue'
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'v-Button',
@@ -35,6 +35,7 @@ export default defineComponent({
   },
   emits: ['update:show', 'onClick'],
   setup(props, context) {
+    const router = useRouter()
     let timer: number = 0;
     let animate: any = ref(false)
 
@@ -47,6 +48,10 @@ export default defineComponent({
       }, 500)
     }
 
+    function handleClick(param: any){
+      router.push(`/announcement?id=${param.id}`)
+    }
+
     onMounted(() => {
       timer = setInterval(showMarquee, 5000)
     })
@@ -57,7 +62,8 @@ export default defineComponent({
     });
 
     return {
-      animate
+      animate,
+      handleClick
     }
   }
 })

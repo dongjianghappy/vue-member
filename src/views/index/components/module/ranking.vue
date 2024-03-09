@@ -1,9 +1,9 @@
 <template>
-<div class="module-wrap aside_fixed" :style="style">
+<div class="module-wrap" >
   <div class="module-head p15 ">
     <h3 class="nobold">下载排行榜</h3>
   </div>
-  <div class="module-content p0 font12">
+  <div class="module-content p0">
     <ul>
       <li class="item-thum-wrap mb10 " v-for="(item, index) in rankingList" :key="index">
         <div class="item-title relative pl40 pr40 ">
@@ -29,14 +29,6 @@ import {
 
 export default defineComponent({
   name: 'HomeViewr',
-  props: {
-    style: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
   setup(props, context) {
     const store = useStore();
     const rankingList = computed(() => store.getters['common/ranking']);

@@ -69,7 +69,6 @@ export default defineComponent({
 
     // 获取用户信息
     function getUserInfo(){
-      debugger
       store.dispatch('common/Fetch', {
           api: "UserInfo",
           data: {uid: ctx.sourceData.uid}

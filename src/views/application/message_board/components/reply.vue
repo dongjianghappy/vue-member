@@ -1,17 +1,11 @@
 <template>
-<v-button v-model:show="isShow">
-  <span style="color: #ffc09f">回复</span>
+<v-button v-model:show="isShow" :disabled="false" v-if="userInfo.account !== data.from_uid">
+  <!-- <i class="iconfont icon-comment"></i> -->回复
 </v-button>
-<v-dialog ref="dialog" v-model:show="isShow" title="" :style="{width: 520, height: 120}" :hasfooter="false">
+<span v-else><i class="iconfont icon-comment cl-ccc"></i></span>
+<v-dialog v-model:show="isShow" ref="form" className="font16" :title="`回复@${data.nickname}`" :style="{width: 650, height: 350}" width="520px" height="450px" :hasfooter="false">
   <template v-slot:content>
-    <div class="layer-form-wrap mt25 p0">
-      <div class="input-box">
-        <input type="text" v-model="content" :placeholder="`回复${data.nickname}:`">
-      </div>
-      <div class="operate">
-        <button @click="submit" class="operate-right" :class="{disabled: !content}" :disabled="!content">发送</button>
-      </div>
-    </div>
+    <Form :data="data" api="commentReply" :method="method" :keys="`reply_${data.id}`" />
   </template>
 </v-dialog>
 </template>
@@ -19,48 +13,60 @@
 <script lang="ts">
 import {
   defineComponent,
-  useStore,
+  onMounted,
   ref,
-} from '@/utils'
-
+  watch,
+  computed
+} from 'vue'
+import {
+  useStore
+} from 'vuex'
+import Form from "./formsss.vue"
 export default defineComponent({
-  name: 'v-Reply',
+  name: 'HomeViewh',
+  components: {
+    Form
+  },
   props: {
+    title: {
+      type: String,
+      default: "创建组"
+    },
+    action: {
+      type: String,
+      default: "add"
+    },
+    group: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     data: {
       type: Object,
       default: () => {
         return {}
       }
-    }
+    },
+    render: {
+      type: Function,
+      default: () => {
+        return 'Default function'
+      }
+    },
+    method: {
+      type: String,
+      default: ""
+    },
   },
   setup(props, context) {
     const store = useStore();
     const isShow = ref(false)
-    let content: any = ref("")
-
-    function submit() {
-      store.dispatch('common/Fetch', {
-        api: 'replyMessageBoard',
-        data: {
-          coding: "U30003",
-          fid: props.data.fid || props.data.id,
-          reply_id: props.data.fid ? props.data.id : "",
-          uid: props.data.from_uid,
-          content: content.value
-        }
-      }).then(res => {
-        if (!props.data.reply) {
-          props.data.reply = []
-        }
-        props.data.reply.push(res.result)
-        isShow.value = false
-      })
-    }
+    const userInfo: any = computed(() => store.getters['user/userInfo']);
 
     return {
-      submit,
       isShow,
-      content
+      userInfo
     }
   }
 })

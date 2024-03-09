@@ -1,6 +1,10 @@
 const getters = {
- 
+  commentStatus: (state: any) => state.commentStatus,  
+  barrageSetting: (state: any) => state.barrageSetting || {}, 
+  barrageStatus: (state: any) => state.barrageStatus,  
   talkList: (state: any) => state.talkList || [],  
+  comprehensiveList: (state: any) => state.comprehensiveList || [],
+  archive: (state: any) => state.archive || [],
   talkCollect: (state: any) => state.talkCollect || [],   
   talkComment: (state: any) => state.talkComment || [],   
   talkPraise: (state: any) => state.talkPraise || [], 
@@ -14,6 +18,10 @@ const getters = {
   websiteList: (state: any) => state.websiteList || [], 
   blogList: (state: any) => state.blogList || [], 
   wordsList: (state: any) => state.wordsList || [], 
+  questionCate: (state: any) => state.questionCate || [], 
+  questionsList: (state: any) => state.questionsList || [], 
+  channel: (state: any) => state.channel || {}, 
+  search: (state: any) => state.search || {}, 
 }
 
 export default getters;

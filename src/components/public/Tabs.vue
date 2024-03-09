@@ -152,6 +152,6 @@ export default defineComponent({
 
 <style scoped>
 .current {
-  color: #40a9ff !important;
+  color: var(--color-primary) !important;
 }
 </style>

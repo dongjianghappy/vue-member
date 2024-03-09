@@ -1,7 +1,7 @@
 <template>
 <v-popover :content="`<i class='iconfont icon-${icon}' />${name}:${currentSort.name}`" arrow="tb" offset="right" :move="0" :keys="`static_${index}`">
   <ul class="font14" style="display: block">
-    <li v-for="(item, index) in [{name: '默认', value: ''}, ...enums ]" :key="index" style="height: 32px" @click="handleclick(item)">{{item.name}}
+    <li v-for="(item, index) in [defaultValue, ...enums ]" :key="index" style="height: 32px" @click="handleclick(item)">{{item.name}}
     <i class="iconfont icon-right1" v-if="item.value === currentSort.value" />
     </li>
   </ul>
@@ -16,6 +16,12 @@ import {
 export default defineComponent({
   name: 'v-Search',
   props: {
+    defaultValue: {
+      type: Object,
+      default: () => {
+        return {name: '默认', value: ''}
+      }
+    },
     name: {
       type: String,
       default: ""
@@ -42,10 +48,7 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    const currentSort: any = ref({
-      value: '',
-      name: '默认'
-    })
+    const currentSort: any = ref(props.defaultValue)
 
     function handleclick(index: any) {
       currentSort.value = index

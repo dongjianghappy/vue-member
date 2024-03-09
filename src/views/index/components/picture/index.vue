@@ -13,14 +13,14 @@
       <div :id="`content_${item.id}`" class="user_text">
 
         <div v-html="item.title" style="min-height: 30px"></div>
-        <div v-if="item.image.length === 1">
-            <v-img :src="item.image[0]" @click="showImg(item, img)" style="border-radius: 8px;" />
-          </div>
-          <ul v-else class="img-grid smallimg-wrap clearfix">
-            <li v-for="(img, k) in item.image" :key="k" style="border-radius: 8px; overflow:hidden;">
-              <v-img :src="img" @click="showImg(item, img)" />
-            </li>
-          </ul>
+        <div v-if="item.image.length === 1" style="overflow:hidden; border-radius: 8px;width: 168px; height: 224px; cursor: zoom-in;">
+          <v-img :src="item.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" @click="showImg(item, img)" />
+        </div>
+        <ul v-else class="img-grid smallimg-wrap clearfix">
+          <li v-for="(img, k) in item.image" :key="k" style="border-radius: 8px; overflow:hidden;">
+            <v-img :src="img" @click="showImg(item, img)" />
+          </li>
+        </ul>
       </div>
     </div>
   </div>

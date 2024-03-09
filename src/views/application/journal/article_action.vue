@@ -1,9 +1,17 @@
 <template>
 <div class="module-wrap mb15">
   <div class="module-head p20">{{action === 'add' ? '写日志' : '编辑日志'}}
-    <!-- <i class="iconfont icon-huanyuan"></i> -->
+    <span class="pointer right font12" @click="handlePrev">返回日志列表</span>
   </div>
-  <div class="module-content form-wrap-box detail" style="padding: 25px 50px !important;">
+  <div class="module-content form-wrap-box detail" style="padding: 25px 50px !important;" :style="{background: currentPaper.color}">
+    <div class="flex bg-eee p10  ptb5 ">
+      <div class="flex" style="flex: 1">
+        <span style=" display: inline-block;">信纸：</span>
+        <span v-for="(item, index) in paper" :key="index" @click="() => currentPaper=item" style=" display: inline-block; width: 25px; height: 25px" :style="{background: item.color}">
+        </span>
+      </div>
+      <span style=" display: inline-block; width: 70px">写模板日志</span>
+    </div>
     <ul>
       <li class="li">
         <span class="label">标题</span>
@@ -35,6 +43,9 @@
       <div class="mb5 cl-999">摘要说明</div>
       <textarea v-model="detail.summary" class="w-full"></textarea>
     </div>
+    <div>
+      <v-visible v-model:visible="detail.visible" />
+    </div>
     <div class="mt20">
       <v-button @onClick="save">保存</v-button>
       <v-button class="btn" @onClick="saveTemp" v-if="action === 'add'">保存到草稿箱</v-button>
@@ -55,13 +66,16 @@ import {
   useRoute,
   watch,
   ref,
+  useRouter,
   onMounted,
   reactive,
   chooseCate,
   codings
 } from '@/utils'
 import TagList from '@/components/tag/index.vue'
-import { journal } from '@/assets/const';
+import {
+  journal
+} from '@/assets/const';
 
 export default defineComponent({
   name: 'HomeViewiiii',
@@ -78,6 +92,7 @@ export default defineComponent({
     const {
       proxy
     }: any = getCurrentInstance();
+    const router = useRouter();
     const coding: any = codings.talk.journal
     const route = useRoute();
     const store = useStore();
@@ -89,6 +104,8 @@ export default defineComponent({
     const basic = reactive({
       currentImg: ""
     })
+    const paper: any = ref([])
+    const currentPaper: any = ref({})
 
     watch(() => route.query.action, () => {
       detail.value = {}
@@ -123,22 +140,38 @@ export default defineComponent({
           detail.value = res.result
           detail.value.style = JSON.parse(res.result.style)
         })
-      }else{
+      } else {
         store.dispatch('common/Fetch', {
           api: 'articleTempList',
           data: {
             type: 'journal',
           }
         }).then(res => {
-          if(res.result !== "" && res.result !== null){
+          if (res.result !== "" && res.result !== null) {
             detail.value = JSON.parse(res.result)
           }
         })
       }
     }
 
-  // 保存到草稿箱
-    function saveTemp(){
+    // 信纸
+    function stationery() {
+      store.dispatch('common/Fetch', {
+        data: {
+          coding: coding.stationery
+        }
+      }).then(res => {
+        paper.value = res.result
+
+      })
+    }
+
+    function handlePrev() {
+      router.go(-1)
+    }
+
+    // 保存到草稿箱
+    function saveTemp() {
       store.dispatch('common/Fetch', {
         api: "articleTempSave",
         data: {
@@ -150,7 +183,7 @@ export default defineComponent({
           msg: res.returnMessage
         })
       })
-    }    
+    }
 
     // 保存
     function save() {
@@ -161,9 +194,11 @@ export default defineComponent({
         method,
         source,
         source_url,
+        visible,
         summary,
         markdown,
         style,
+        paper,
         content
       } = detail.value
 
@@ -175,10 +210,12 @@ export default defineComponent({
         method,
         source,
         source_url,
+        visible,
         summary,
         style: JSON.stringify(style),
         content: marked.parse(markdown || "{}"),
         markdown,
+        paper: currentPaper.value.id,
         coding: coding.art,
       }
       if (props.action !== "add") {
@@ -197,7 +234,10 @@ export default defineComponent({
       })
     }
 
-    onMounted(init)
+    onMounted(() => {
+      init()
+      stationery()
+    })
     return {
       coding,
       save,
@@ -209,7 +249,10 @@ export default defineComponent({
       mod,
       image,
       basic,
-      saveTemp
+      saveTemp,
+      paper,
+      currentPaper,
+      handlePrev
     }
   }
 })

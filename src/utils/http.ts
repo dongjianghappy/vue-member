@@ -1,7 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
-
-import { getToken } from './auth'
+import VueEvent from '@/utils/event'
 
 export default class http {
   private baseConfig: any
@@ -14,7 +13,6 @@ export default class http {
         token = cookie[i].split('token=')[1]
       }
     }
-
     return token
   }
 
@@ -56,9 +54,11 @@ export default class http {
   // 返回状态判断
   responseHeaders (request: any) {
     request.interceptors.response.use((res: any) => {
+      
       if (!res.data.ifSuccess) {
-        // _.toast(res.data.msg);
         return Promise.reject(res)
+      }else if(res.data.ifSuccess == 2) {
+        VueEvent.emit("login");
       }
       return res
     }, (error: any) => {
@@ -74,32 +74,25 @@ export default class http {
   // 请求方法
   request (m: string, n: string, params: any) {
     params = params || {}
-
     params.n = n
     params.m = params.m ? params.m : m
-
+    let progress: any = params.progress ? params.progress : ()=>{}
     const request = this.axios()
-
     this.requestHeaders(request)
     this.responseHeaders(request)
 
     // 添加请求拦截器
     request.interceptors.request.use(config => {
-      // config.headers.authoriziation = 'Beartr ' + getToken()
       return config
     })
 
     // http响应拦截
     request.interceptors.response.use(response => {
-      if (response.data.ifSuccess === 1) {
-        if (response.data.result === true) {
-          console.log('sd')
-        } else {
+      if (response && response.data.ifSuccess != 0) {
+        if (response.data.result != true) {
           return response.data
         }
-      } else {
-        console.log('sd')
-      }
+      } 
     }, err => {
       return err.data
     })
@@ -107,7 +100,14 @@ export default class http {
     return new Promise((resolve, reject) => {
       let dir = process.env.NODE_ENV === 'development' ? 'interface_new.php' : 'interface_vue.php'
       const url = params.uploadtype ? `?&type=${params.uploadtype}` : ''
-      request.post(`${dir}${url}`, params) // interface_vue【线上博客接口】，interface_new【本地博客接口】
+      request.request({
+        url: `${dir}${url}`,
+        method: 'post',
+        data: params,
+        onUploadProgress: (e: any) => {
+          progress(e)
+        }
+      }) 
         .then(response => {
           resolve({
             result: response

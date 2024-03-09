@@ -10,6 +10,7 @@
         <div class="author font12 cl-999">
           <span class="mr25">标签：{{data.tag}}</span>
           <span class="mr25">{{data.times}}</span>
+          <span class="mr25"><v-broadcast :content="data.content" /></span>
         </div>
       </div>
       <div class="article-content font16 pt25" style="line-height: 25px">

@@ -1,7 +1,9 @@
 <template>
-<div class="form-wrap" style="background: rgb(242, 242, 245);">
+<div class="comment-wrap" style="background: rgb(242, 242, 245);">
   <div class="input-box">
-    <img :src="userInfo.photos">
+    <div class="img-box">
+      <v-photo :data="userInfo" :style="{width: '50px', height: '50px', borderRadius: '50%'}" />
+    </div>
     <input type="text" v-model="summary" placeholder="请输入转载内容" ref="Input">
   </div>
   <div class="operate">
@@ -18,7 +20,7 @@
   <div class="feedback-content content" v-if="!loading">
     <div class="align_center" v-if="dataList.length">还有他们也转发了</div>
     <div class="feedback-list" v-for="(item, index) in dataList" :key="index">
-      <img :src="item.photos" class="photos">
+      <div class="photos"><v-photos :sourceData="item" /></div>
       <p class="feedback-user">{{item.nickname}}</p>
       <p>{{item.time}}</p>
       <p>{{item.summary}}</p>
@@ -78,7 +80,6 @@ export default defineComponent({
     function int() {
       loading.value = true
       store.dispatch('common/Fetch', {
-
         api: 'GetForwarding',
         data: {
           uid: "110506372",

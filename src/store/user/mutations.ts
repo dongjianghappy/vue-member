@@ -1,7 +1,12 @@
+import VueEvent from '../../utils/event'
+
 const mutations = {
   setUserInfo: (state: any, params: any) => {
     state.user.login = params
-    state.user.basic = params
+    if(params.account){
+      state.user.basic = params
+    }
+    VueEvent.emit("setTheme", params);
   },
   setOtherUser: (state: any, params: any) => {
     state.user.basic = params

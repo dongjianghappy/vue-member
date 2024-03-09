@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="ablumimg p15">
+  <div class="ablumimg" :class="('talk' && imgList.length > 0  || file !== 'talk') ? 'p15' : 'p0'">
     <!-- 图片上传 -->
     <ul v-if="file === 'image' || (file === 'talk' && imgList.length)">
       <li v-for="(item, index) in imgList" :key="index" class="upload-album-wrap relative" :style="style" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
@@ -20,13 +20,13 @@
       <li class="upfile" :style="style" @click="handleclick"><i class="iconfont icon-add"></i></li>
     </ul>
     <!-- 音视频上传 -->
-    <div class="inline" v-else-if="file === 'music'">
+    <div class="inline" v-else-if="file === 'music' || file === 'vidoe'">
       <div class="add-button-file"><i class="iconfont icon-upload-file font32" /></div>
       <div>拖拽{{file === 'music' ? '音频' : '视频'}}到此处或点击上传</div>
       <button class="btn btn-default w-full" @click="handleclick">上传{{file === 'music' ? '音频' : '视频'}}</button>
     </div>
   </div>
-  <input type="file" id="FileUpload" :accept="format" multiple="multiple" class="FileUpload_file_27ilM" style="display: none" @change="getFile">
+  <input type="file" ref="FileUpload" :accept="format" multiple="multiple" style="display: none" @change="getFile">
 </div>
 </template>
 
@@ -57,7 +57,7 @@ export default defineComponent({
     },
     format: {
       type: String,
-      default: '.jpg, .jpeg, .bmp, .gif, .png, .heif, .heic, .mp4, .mp3'
+      default: '.jpg, .jpeg, .bmp, .gif, .png, .webp, .heif, .heic, .mp4, .mp3'
     },
     data: {
       type: Object,
@@ -82,7 +82,7 @@ export default defineComponent({
       proxy
     }: any = getCurrentInstance();
     const store = useStore();
-    const FileUpload = ref("FileUpload") // 选择文件id
+    const FileUpload: any = ref(null) // 选择文件id
     let imgList: any = ref([]) // 文件内容
     const dragging = ref(null) // 拖拽状态
     const box: any = ref(0)
@@ -101,14 +101,15 @@ export default defineComponent({
 
     // 选择文件
     function getFile() {
-      let _obj: any = document.getElementById(FileUpload.value);
+      debugger
+      let _obj: any = FileUpload.value
       context.emit('update:haschoose', _obj.files)
       for (let i = 0; i < _obj.files.length; i++) {
         imgList.value.push({
           src: _obj.files[i].name,
           status: "upload"
         })
-
+        
         let fd = new FormData()
         fd.append('upload' + i, _obj.files[i])
         store.dispatch('common/uploadImg', {
@@ -136,6 +137,7 @@ export default defineComponent({
 
           }
         }).then(res => {
+          debugger
           // 上传成功后，将状态改成完成并且展示图片
           let arr: any = imgList.value.filter((item: any) => item.status === "upload")
           arr[0].status = "complete"
@@ -160,7 +162,7 @@ export default defineComponent({
     }
 
     function handleclick() {
-      let _obj: any = document.getElementById(FileUpload.value);
+      let _obj: any = FileUpload.value
       _obj.dispatchEvent(new MouseEvent('click'))
     }
 
@@ -260,7 +262,8 @@ export default defineComponent({
       remove,
       handleCover,
       handleCopy,
-      cover
+      cover,
+      FileUpload
     }
   }
 })

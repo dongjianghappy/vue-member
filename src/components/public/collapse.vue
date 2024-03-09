@@ -10,7 +10,7 @@
       <slot name="extra"></slot>
     </span>
   </div>
-  <div class="collapse-list p15" v-show="collapse">
+  <div class="collapse-list" v-show="collapse">
     <slot></slot>
   </div>
 </div>
@@ -34,7 +34,7 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['update:index'],
+  emits: ['onClick'],
   setup(props, context) {
     let collapse: any = ref(true)
 
@@ -43,6 +43,9 @@ export default defineComponent({
         return
       }
       collapse.value = !collapse.value
+      if(collapse.value){
+        context.emit('onClick')
+      }
     }
     return {
       handleClick,

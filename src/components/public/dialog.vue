@@ -1,24 +1,26 @@
 <template>
-<div class="drawer-wrap align_left" :class="{'drawer-open': show}" style="top: 0">
-  <v-mask v-show="show" v-model:isShow="isShow" />
-  <template v-if="show">
-    <div class="layer" :class="[{'animation-fadein': isShow}, className]" @click.stop style="left: 534.5px; display: block; z-index: 9001; opacity: 1;" :style="{width: `${style.width || 450}px`, height: `${style.height || 380}px`, top: window.top, left: window.left}">
-      <div v-if="title" id="msgtitle" class="layer-title" @mousedown="mousedown"><span>{{title}}</span></div><span id="close" v-if="close" class="layer-close" @click="handleCancel"><i class="iconfont icon-close"></i></span>
-      <div id="msgcon" class="layer-content" :class="[className]" style="min-height: 150px;">
-        <slot name="content"></slot>
-      </div>
-      <div class="layer-btngroup" v-if="hasfooter">
-        <slot name="footer">
-          <v-space>
-            <v-button @onClick="handleCancel" buttonType="button" v-if="cancel" :disabled="true">取消</v-button>
-            <v-button @onClick="handleClick" buttonType="button" v-if="confirm" :style="{'margin-left': '15px'}" :disabled="true">确定</v-button>
-          </v-space>
-        </slot>
+<transition>
+  <div class="drawer-wrap align_left" :class="{'drawer-open': show}" style="top: 0">
+    <v-mask v-show="show" v-model:isShow="isShow" />
+    <template v-if="show">
+      <div class="layer" :class="[className]" @click.stop style="left: 534.5px; display: block; z-index: 9001; opacity: 1;" :style="{width: `${style.width || 450}px`, height: `${style.height || 380}px`, top: window.top, left: window.left}">
+        <div v-if="title" id="msgtitle" class="layer-title" @mousedown="mousedown"><span>{{title}}</span></div><span id="close" v-if="close" class="layer-close" @click="handleCancel"><i class="iconfont icon-close"></i></span>
+        <div id="msgcon" class="layer-content" style="min-height: 150px;" :style="contentStyle">
+          <slot name="content"></slot>
+        </div>
+        <div class="layer-btngroup" v-if="hasfooter">
+          <slot name="footer">
+            <v-space>
+              <v-button @onClick="handleCancel" buttonType="button" v-if="cancel" :disabled="true">取消</v-button>
+              <v-button @onClick="handleClick" buttonType="button" v-if="confirm" :style="{'margin-left': '15px'}" :disabled="true">确定</v-button>
+            </v-space>
+          </slot>
 
+        </div>
       </div>
-    </div>
-  </template>
-</div>
+    </template>
+  </div>
+</transition>
 </template>
 
 <script lang="ts">
@@ -40,7 +42,13 @@ export default defineComponent({
           height: "380"
         }
       }
-    },    
+    },
+    contentStyle: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     action: {
       type: String,
       default: "add"
@@ -102,11 +110,11 @@ export default defineComponent({
     watch([isShow], (newValues, prevValues) => {
       context.emit('update:show', false)
     })
-    
+
     async function init(param: any) {
       let data = {}
       if (props.action === 'edit') {
-        
+
         await store.dispatch('common/Fetch', {
           api: props.api || "detail",
           data: {
@@ -126,7 +134,7 @@ export default defineComponent({
 
     function handleCancel() {
       context.emit('update:show', false)
-    }    
+    }
 
     return {
       isShow,

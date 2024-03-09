@@ -5,9 +5,9 @@
   </li>
   <span class="span-icon absolute" style="top: 12px; right: 15px">
     <v-popover v-if="data.length > 7" content="<i class='iconfont icon-more icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-more`">
-      <div class="p15 align_center" style="width: 70px; height: auto">
+      <div style="width: 100px; height: auto">
         <ul class="font14" style="display: block">
-          <li v-for="(item, index) in data.slice(7, data.length)" :key="index" style="width: 100%; height: 32px" @click="handelClick(item.value)">{{item.name}}</li>
+          <li v-for="(item, index) in data.slice(7, data.length)" :key="index" @click="handelClick(item.value)">{{item.name}}</li>
         </ul>
       </div>
     </v-popover>
@@ -19,8 +19,9 @@
 import {
   defineComponent,
   useRouter,
-  ref,
-  watch
+  useStore,
+  getUid,
+  codings
 } from '@/utils'
 export default defineComponent({
   name: 'TalkTabsView',
@@ -53,22 +54,52 @@ export default defineComponent({
       default: () => {
         return {}
       }
+    },
+    field: {
+      type: String,
+      default: "type"
     }
   },
 
   setup(props, context) {
+    const store = useStore()
     const router = useRouter();
+    const coding: any = codings
 
     function handelClick(type: any) {
-      let query = type ? `?${props.mod.tab}=${type}` : ""
-      router.push(window.location.pathname + query + props.query)
+      let query = ""
+      query = type ? `?${props.mod.tab}=${type}${props.query}` : `?${props.query.substring(1, props.query.length)}`
+      router.push(window.location.pathname + query)
       const param: any = {}
 
       if (type) {
-        param.type = type
+        param[props.field] = type
       }
       props.render(param)
+
+      Archive(param)
     }
+
+    // 时间归档
+    function Archive(param: any) {
+      let params: any = {}
+      let module_arr = ['talk', 'source', 'article', 'picture', 'tech', 'funny', 'notes', 'questions', 'website', "words"]
+      let date: any = new Date()
+      if (module_arr.indexOf(param.type) > -1) {
+        params.coding = coding[param.type].art
+      }
+
+      store.dispatch(`talk/Archive`, {
+        data: {
+          uid: getUid(),
+          type: 'archive',
+          year: date.getFullYear(),
+          month: date.getMonth() + 1,
+          ...params
+        }
+      })
+    }
+
     return {
       handelClick,
     }

@@ -8,7 +8,13 @@
         <a class="inline mr10 batch-button" @click="onBatch">批量管理</a>
       </v-space>
     </template>
-    <template v-slot:content1>
+    <template v-slot:content1 v-if="channel == 'digital'">
+      <Digital :data="{channel: channel, coding: coding.art}" :dataList="dataList" :isShowBatch="isShowBatch" />
+    </template>
+    <template v-slot:content1 v-else-if="channel == 'sound'">
+      <Sound :data="{channel: channel, coding: coding.art}" :dataList="dataList" :isShowBatch="isShowBatch" />
+    </template>    
+    <template v-slot:content1 v-else>
       <div class="batch-btngroup p10" style="background: #eee" v-if="isShowBatch">
         <span class="mr15" @click="operation('all')">全选</span>
         <span class="mr15" @click="operation('moveCate')">移动</span>
@@ -48,11 +54,15 @@ import {
 } from '@/utils'
 import List from "./list.vue"
 import Album from "./album.vue"
+import Sound from "./sound.vue"
+import Digital from "./digital.vue"
 export default defineComponent({
   name: 'HomeView',
   components: {
     List,
-    Album
+    Album,
+    Sound,
+    Digital
   },
   props: {
     channel: {

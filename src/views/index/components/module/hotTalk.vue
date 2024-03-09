@@ -6,11 +6,11 @@
       <v-refresh :data="hotTalkList" v-model:number="current" size="4" />
       </span>
   </div>
-  <div class="module-content font12">
+  <div class="module-content">
     <ul>
       <li v-for="(item, index) in hotTalkList[current]" :key="index">
         <div class="item-title relative pl15 pr40 ">
-          <a class="ptb10 block" @click="huati(item.name)">{{item.name}}<span class="mark vote" v-if="item.vote !=='0'">票</span></a><span class="absolute cl-ccc " style="top: 10px ; right: 15px ">{{item.num}}</span>
+          <a class="ptb10 block" @click="huati(item.name)">{{item.name}}<span class="mark" v-if="item.vote !=='0'">票</span></a><span class="absolute cl-ccc " style="top: 10px ; right: 15px ">{{item.num}}</span>
         </div>
       </li>
     </ul>

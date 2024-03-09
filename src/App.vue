@@ -5,23 +5,22 @@
 <style lang="less">
 @import "./components/public/less/index.less";
 @import "./assets/iconfont/iconfont.css";
+
 // @import "http://localhost/source/public/vue/css/member-new.css";
 // @import "http://localhost/admincms/public/css/login.css";
-// @import "http://localhost/source/plugin/feedback/css/member_feedback.css";
 // @import "http://localhost/source/public/css/member_play.css";
+// @import "http://localhost/source/plugin/slide/bannerscroll3/css/css.css";
 
 @import "http://dongblog.com/style/vue/css/member-new.css";
 @import "http://dongblog.com/style/css/login.css";
-@import "http://dongblog.com/style/css/member_feedback.css";
 @import "http://dongblog.com/style/css/member_play.css";
-@import "http://www.yunxi10.com//source/plugin/slide/bannerscroll3/css/css.css";
+@import "http://www.yunxi10.com/source/plugin/slide/bannerscroll3/css/css.css";
 
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
 }
 
 nav {

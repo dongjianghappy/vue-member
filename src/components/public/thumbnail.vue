@@ -1,8 +1,8 @@
 <template>
 <v-button v-model:show="isShow" class="relative">
   <i class="iconfont" :class="`icon-${icon}`" @click="showImg(data)" v-if="icon" />
-  <div style="border-radius: 8px; overflow:hidden; height: 150px"  v-else>
-  <v-img :src="data.cover || data.image[0]" @click="showImg(data)" />
+  <div class="thumbnail" v-else>
+    <v-img :src="data.cover || data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" @click="showImg(data)" />
   </div>
   <!-- <img :src="data.cover || data.image[0]" style="border-radius: 8px; width: 100%; height: 150px;" @click="showImg(data)" v-else> -->
   <v-audio :data="data" :hasMusic="true" v-if="data.background_music" />
@@ -81,3 +81,17 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="less" scoped>
+.thumbnail {
+  overflow: hidden;
+  height: 220px;
+
+  &:hover {
+    img {
+      transform: scale(1.2);
+      transition: all 0.3s;
+    }
+  }
+}
+</style>

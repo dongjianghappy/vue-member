@@ -7,6 +7,11 @@
   z-index: 101;
 }
 
+.space{
+  display: inline-flex;
+  gap: 8px;
+}
+
 .collapse{
   background: #ddd;
   .collapse-head{
@@ -15,39 +20,6 @@
   }
   .aside-list{
     background: #fff;
-  }
-}
-
-.editor-wrap{
-
-  .editor-button{
-    display: inline-block;
-    padding: 4px;
-    li{
-      display: inline-block;
-      border-radius: 2px;
-      min-width: 32px;
-      height: 32px;
-      margin-right: 8px;
-      line-height: 30px;
-      font-weight: 500;
-      text-align: center;
-      cursor: pointer;
-      &:hover{
-        background: #eee;
-        border-color: #1890ff;
-      }
-      &.current{
-        background: #eee !important;
-        color: #1890ff;
-        border-color: #1890ff;
-      }
-    }
-    .title{
-      li{
-        display: block;
-      }
-    }
   }
 }
 
@@ -127,10 +99,10 @@
   text-align: center;
   cursor: pointer;
   &:hover{
-    background: #fff3db;
-    .icon-btn{
-      color: #f00 !important;
-    }
+    background: var(--tabs-button-background);
+    // .icon-btn{
+    //   color: #f00 !important;
+    // }
   }
 }
 
@@ -361,6 +333,7 @@
 }
 
 .dashed {
+  z-index: 100;
   border: 1px dashed #666;
   .tool {
     background: #666;
@@ -378,5 +351,415 @@
     border-radius: 50%;
     text-align: center;
     line-height: 16px;
+  }
+}
+.aaaa{
+  color: var(--color-primary);
+  border-color: var(--color-light-1);
+}
+
+.integration{
+  z-index: 10;
+  .integration-wrap{
+    background-color: var(--w-input-div-background) !important;
+    box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.05);
+    position: absolute;
+    top: 20px !important;
+    right: -30px;
+    border-radius: 4px;
+    padding: 15px;
+    width: 250px;
+    height: 200px;
+    display: none;
+    overflow: hidden;
+    font-size: 14px;
+    text-align: left;
+    z-index: 1;
+  }
+  &:hover{
+    .integration-wrap{
+      display: block;
+    }
+  }
+}
+
+.aside-wrap {
+  display: flex;
+  min-height: 500px;
+  .aside-nav {
+    background: #fff;
+    margin-right: 5px;
+    width: 110px;
+    padding: 16px;
+    .aside-list {
+      margin-bottom: 10px;
+      padding: 0 10px;
+      height: 32px;
+      line-height: 32px;
+      &.current {
+        background: #fff;
+        color: #40a9ff;
+      }
+      &:hover {
+        color: #40a9ff;
+      }
+    }
+  }
+  .aside-content {
+    background: #fff;
+    flex: 1;
+    // padding: 10px;
+  }
+}
+
+
+.theme-box {
+  position: fixed;
+  bottom: -360px;
+  z-index: 10000;
+  width: 100%;
+  height: 360px;
+  text-align: center;
+  transition: bottom 0.1s ease;
+  .aside-nav {
+    background: #212127;
+    margin-right: 2px;
+    padding: 0;
+    color: #fff;
+    .aside-list{
+      margin-bottom: 2px;
+      padding: 12px 16px;
+      height: auto;
+      color: #666;
+      &.current{
+        background: #3c3c47;
+        color: #ccc !important;
+      }
+      &:hover {
+        background: #3c3c47;
+        color: #ccc;
+    }
+    }
+    .current {
+      color: #fff;
+    }
+    span {
+      display: inline-block;
+      // width: 100px;
+      height: 42px;
+      // line-height: 42px;
+      color: #ccc;
+    }
+    .tabs-list{
+      padding: 0 25px;
+      color: #ccc !important;
+    }
+  }
+  .aside-content {
+    background: #212127;
+    width: 100%;
+    text-align: left;
+    .theme-cate{
+      padding: 15px;
+      span{
+        background: #3c3c47;
+        margin-right: 10px;
+        padding: 5px 10px;
+        font-size: 12px;
+        color: #999;
+        cursor: pointer;
+        &:hover{
+          color: #eee;
+        }
+      }
+    }
+    .theme-wrap{
+      padding: 0 15px;
+      .theme-list{
+        background: #2c2c2c;
+        display: inline-block;
+        position: relative;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        padding: 5px;
+        width: 160px;
+        text-align: center;
+        .theme-name{
+          color: #fff;
+          text-align: center;
+        }
+        .checkbox{
+          margin: 0;
+          right: 0px;
+          top: 0px;
+          padding: 2px;
+          color: #f00;
+          z-index: 1;
+          background: no-repeat;
+        }
+        &.theme-current {
+          background: #f7f8fa;
+          .theme-name{
+            color: #666;
+          }
+        }
+      }
+    }
+  }
+  .tabs{
+    background: #474747;
+    height: 265px;
+    .tabs-list{
+      width: 25%;
+      color: #666;
+      &.current{
+        color: #999 !important;
+      }
+    }
+  }
+  .btngroud {
+    background: #0f1012;
+    height: 80px;
+    line-height: 80px;
+    span {
+      background: #fff;
+      margin: 0 10px;
+      padding: 5px 15px;
+    }
+  }
+}
+
+
+.expression-wrap {
+  background: #212127;
+  padding: 10px;
+  width: 505px;
+  height: 280px;
+  text-align: left;
+  .expression-cate{
+    padding: 0;
+    border-bottom: 1px solid var(--default-border);
+    .expression-tabs{
+      // background: #3c3c47;
+      margin-right: 5px;
+      padding: 5px;
+      font-size: 14px;
+      color: #999;
+      cursor: pointer;
+      &.current{
+        span, i{
+          color: #eee !important;
+        }
+      }
+      &:hover{
+        span, i{
+          color: #eee !important;
+        }
+      }
+    }
+  }
+  .expression-box{
+    padding: 5px 5px 5px 0;
+    .expression-gif{
+      display: inline-block;
+      padding: 4px;
+      width: 32px;
+      height: 32px;
+    }
+  }
+}
+
+.popover_wrap{
+  border: 1px solid var(--default-border);
+  ul{
+    padding: 0;
+    li{
+      margin: 0;
+      padding: 0 15px !important;
+      width: 100% !important;
+      height: 36px !important;
+      line-height: 36px !important;
+      font-size: 14px;
+      cursor: pointer;
+      &.current{
+        background: var(--link-hover-background) !important;
+      }
+      &:hover{
+        background: var(--link-hover-background);
+        transition: all 0.3s;
+      }
+    }
+  }
+}
+
+
+/* 右半圆 */
+.half-circle {
+  position: absolute;
+  top: 50%;
+  margin-top: -24px;
+  width: 24px;
+  height: 48px;
+  background: #292929;
+  border-radius: 0 100px 100px 0;
+  /* 设置右上角和左下角的边框半径为100px，使右侧形成半圆 */
+  text-align: center;
+  padding: 15px 0;
+  cursor: pointer;
+  transition: all 0.3s;
+
+  &:hover {
+    background: #3b3b3b;
+  }
+}
+
+.sidebar-ground {
+  .sidebar-item {
+    padding: 8px 0;
+    cursor: pointer;
+    .photos {
+      width: 50px;
+      height: 50px;
+
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        transition: all 0.3s;
+        &:hover{
+          transform: scale(1.1);
+        }
+      }
+      .concern-button{
+        transition: all 0.3s;
+        &:hover{
+          transform: scale(1.1);
+          i{
+            transform: scale(1.1);
+          }
+        }
+      }
+      
+    }
+    .icon-button{
+      width: 50px;
+      transform-origin: bottom center; 
+      /* 初始状态 */
+      i {
+        font-size: 24px;
+        // rotate(90deg) animation: rotate-scale 4s infinite linear; /* 指定动画名称、持续时间、重复次数和速度曲线等参数 */ 
+      }
+    }
+    &:hover{
+      .icon-button{
+        transform: scale(1.5) rotate(-10deg);
+        transition: all 0.3s;
+        animation: scaleDown 0.3s ease-in-out 0.3s 1 forwards;  
+      }
+    }
+
+    i {
+      // margin-bottom: 5px;
+      color: #fff;
+      &.icon-arrow{
+        font-size: 20px !important;
+      }
+    }
+
+    .text {
+      margin-top: 3px;
+      color: #fff;
+    }
+
+    &.arrow-btn {
+      background: #323442;
+      margin-bottom: 20px;
+      border-radius: 30px;
+      width: 50px;
+      height: 50px;
+      line-height: 50px;
+      transition: all 0.3s;
+      &:hover{
+        background: #474955;
+      }
+
+      &.close {
+        top: 15px;
+        left: 30px;
+      }
+
+      &.prev {
+        top: 50%;
+        left: 30px;
+      }
+
+      &.next {
+        top: 50%;
+        right: 30px;
+      }
+    }
+  }
+}
+
+
+.barrage-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -210px;
+  width: 420px;
+  height: 100%;
+  overflow: hidden;
+  // pointer-events: none;
+  .barrage {
+    position: absolute;
+    white-space: nowrap;
+    color: #fff;
+    font-size: 14px;
+    padding: 5px 10px;
+    // background-color: rgba(0, 0, 0, 0.5);
+    // border-radius: 5px;
+    animation: moveBarrage 10s linear infinite;
+    &:hover{
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+}
+
+@keyframes moveBarrage {
+  from {
+    transform: translateX(420px);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+
+/* 定义缩小动画 */  
+@keyframes scaleDown {  
+  from {  
+    transform: scale(1.5); /* 开始时放大2倍 */  
+  }  
+  to {  
+    transform: scale(1.2); /* 结束时缩小到1.5倍 */  
+  }  
+}
+
+
+.comment-wrap{
+  ::-webkit-scrollbar {
+    width: 4px; /* 设置滚动条的宽度 */
+    background-color: #222; /* 设置滚动条的背景颜色 */
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px; /* 设置滚动条滑块的圆角 */
+    background-color: #45494e; /* 设置滚动条滑块的颜色 */
+  }
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3); /* 为滚动条轨道添加阴影效果 */
   }
 }

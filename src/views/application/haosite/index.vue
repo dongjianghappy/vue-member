@@ -5,23 +5,15 @@
       <template v-slot:button>
         <WebsiteApplication />
       </template>
-      <!-- <template v-slot:aside>
-        <v-collapse title="导航分类">
-          <ul>
-            <li class="aside"><i class="iconfont font20 icon-dot"></i>自媒体</li>
-            <li class="aside"><i class="iconfont font20 icon-dot"></i> 博客网站</li>
-            <li class="aside"><i class="iconfont font20 icon-dot"></i> 素材网站</li>
-            <li class="aside"><i class="iconfont font20 icon-dot"></i> 图片网站</li>
-          </ul>
-        </v-collapse>
-      </template> -->
     </v-aside>
   </div>
   <div class="m0 right" style="width: 910px">
     <div class="module-wrap mb15">
       <div class="module-head p20">收录网站</div>
       <div class="module-content" style="padding: 15px !important; min-height: 500px;">
-        <div class="col-md-4 p10" v-for="(item, index) in dataList.list" :key="index" ><v-card :data="item" /></div>
+        <div class="col-md-4 p10" v-for="(item, index) in dataList.list" :key="index">
+          <v-card :data="item" />
+        </div>
       </div>
     </div>
   </div>
@@ -39,7 +31,6 @@ import {
   onMounted,
   getUid
 } from '@/utils'
-import Send from './components/send.vue'
 import Form from './components/form.vue'
 import WebsiteApplication from './components/websiteApplication.vue'
 export default defineComponent({
@@ -52,26 +43,26 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
     const component = computed(() => route.query.mod);
-    const currentUser = computed(() => store.getters['user/currentUser']);
     let dataList: any = ref([])
     const currentData = ref({})
     const isreply = ref(false)
     const showAlbum = ref(false)
     const loading: any = ref(false)
     const menu: any = [{
-      names: ['收录网站'],
-      value: "tome"
-    },
-    {
-      names: ['审核网站'],
-      value: "tome"
-    }];
+        names: ['收录网站'],
+        value: "tome"
+      },
+      {
+        names: ['审核网站'],
+        value: "tome"
+      }
+    ];
     menu.map((item: any) => {
-      item.name = currentUser.value ? item.names[0] : item.names[1]
+      item.name = item.names[0]
       item.path = `/haosite?mod=feedback&item=${item.value}`
     })
 
-  function init() {
+    function init() {
       let param: any = {}
       if (route.query.item === 'audited') {
         param.management_checked = "1"
@@ -97,7 +88,6 @@ export default defineComponent({
       })
     }
 
-
     function handleClick(param: any, item: any) {
       showAlbum.value = true
       currentData.value = item ? item : param
@@ -110,7 +100,6 @@ export default defineComponent({
       dataList,
       loading,
       isreply,
-      currentUser,
       menu,
       currentData,
       init,

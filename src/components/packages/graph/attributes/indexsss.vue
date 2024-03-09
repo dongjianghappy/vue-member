@@ -167,7 +167,6 @@ export default defineComponent({
           textColor: attr && attr.text.fill,
         }
       } else {
-        debugger
         return {
           stroke: attr && attr.body.stroke,
           strokeDasharray: attr && attr.body.strokeDasharray,
@@ -198,7 +197,6 @@ export default defineComponent({
     const ssss: any = ref([])
 
     function chooseColor(param: any) {
-      debugger
       props.graph.setAttrs({
         id: node.value.id,
         islabel: param.islabel,
@@ -214,7 +212,6 @@ export default defineComponent({
         attr: "text",
         value: e.currentTarget.innerHTML
       })
-      debugger
     }
 
     function choose(param: any, name: any) {

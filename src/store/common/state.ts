@@ -1,11 +1,14 @@
 export interface State {
+  mode: any
+  isEditTheme: any;
   recommendUser: any;
   announcement: any;
   hotTalk: any;
   ranking: any;
-  lastestVisitor: any
+  visitor: any
   appstore: any
   integration: any,
+  goldcoin: any,
   signList: any
   messageBoard: any
   recentJournal: any
@@ -20,13 +23,20 @@ export interface State {
 
 
 const initState: State = {
+  mode: 'sun',
+  isEditTheme: false,
   recommendUser: [],
   announcement: [],
   hotTalk: [],
   ranking: [],
-  lastestVisitor:[],
+  visitor:{
+    today: 0,
+    total: 0,
+    list: []
+  },
   appstore: [],
   integration: [],
+  goldcoin: [],
   signList: [],
   messageBoard: [],
   recentJournal: [],

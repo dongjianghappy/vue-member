@@ -61,6 +61,9 @@
       <div class="mb5 font16 cl-999">摘要说明</div>
       <v-editordesc v-model:contentsss="detail.summary_markdown" :data="detail" :coding="coding.art" />
     </div>
+    <div class="mt15">
+      <v-visible v-model:visible="detail.visible" />
+    </div>
     <div class="mt20">
       <v-button class="btn" @onClick="save">保存</v-button>
       <v-button class="btn" @onClick="saveTemp" v-if="action === 'add'">保存到草稿箱</v-button>
@@ -176,6 +179,7 @@ export default defineComponent({
         source,
         source_url,
         description,
+        visible,
         summary_markdown,
         markdown,
         content,
@@ -200,6 +204,7 @@ export default defineComponent({
           source,
           source_url,
           description,
+          visible,
           summary: marked.parse(summary_markdown || "{}"),
           summary_markdown,
           content: marked.parse(markdown || "{}"),

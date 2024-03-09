@@ -6,8 +6,14 @@
       <span class="art-title font16 mr5 pointer" @click="handleclick(item)">
         {{item.title}}
       </span>
-      <span v-if="item.summary !== ''">
+      <!-- <span v-if="item.summary !== ''">
         <i class="infos demoimg iconfont icon-article"></i>
+      </span> -->
+      <span v-if="item.visible === 'fans'">
+        <i class="iconfont icon-fans" style="color: #de6c92"></i>
+      </span>
+      <span v-if="item.visible === 'privacy'">
+        <i class="iconfont icon-permissions" style="color: #1976d2"></i>
       </span>
       <span v-if="item.image.length">
         <v-popover content="<i class='iconfont icon-img'></i>" arrow="lr" offset="right" :move="-70" :keys="`popover-img$-${index}`" type="hover">
@@ -19,13 +25,13 @@
       </span>
       <span class="font18 cl-ccc">({{item.times}})</span>
       <span class="right">
-        <v-button buttonType="button" class="mr5" style="border-radius: 30px;" v-if="currentUser" @click="handleGraph(item)">
+        <v-button buttonType="button" class="mr5" style="border-radius: 30px;" v-if="loginuser.currentUser" @click="handleGraph(item)">
           <i class="iconfont icon-edit"></i>流程图
         </v-button>
-        <v-button buttonType="button" class="mr5" style="border-radius: 30px;" v-if="currentUser" @click="handleedit(item)">
+        <v-button buttonType="button" class="mr5" style="border-radius: 30px;" v-if="loginuser.currentUser" @click="handleedit(item)">
           <i class="iconfont icon-edit"></i>编辑
         </v-button>
-        <v-button buttonType="button" style="border-radius: 30px;" v-if="currentUser" @click="handleedit(item)">
+        <v-button buttonType="button" style="border-radius: 30px;" v-if="loginuser.currentUser" @click="handleedit(item)">
           <i class="iconfont icon-recycle"></i>删除
         </v-button>
       </span>
@@ -54,6 +60,9 @@ import {
   ref,
   getUid
 } from '@/utils'
+import {
+  visibles
+} from '@/assets/const'
 import Graph from '../../views/graph/index.vue'
 export default defineComponent({
   name: 'v-Search',
@@ -96,7 +105,6 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const router = useRouter();
     const store = useStore();
-    const currentUser = computed(() => store.getters['user/currentUser']);
     const loginuser = computed(() => store.getters['user/loginuser']);
     const isshow = ref(false)
     const graphid: any = ref('')
@@ -131,8 +139,8 @@ export default defineComponent({
     }
 
     return {
+      visibles,
       graphid,
-      currentUser,
       handleclick,
       handleGraph,
       handleedit,

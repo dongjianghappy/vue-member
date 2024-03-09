@@ -43,8 +43,8 @@
       <div v-for="(ds, index) in monthData" :key="index" class="cal_m_day_line">
         <div v-for="d in ds" :key="d.day" class="cal_m_day_cell p5" :style="{color: getCellColor(d)}" @mouseenter="mouseenter(d, $event)" @mouseleave="mouseleave(d, $event)" @click="handleClick(d, $event)">
           <div class="cell-box" :class="{'choose-cell': (chooseStatus && d === chooseDay)}" style="border: 1px dashed #ccc; border-radius: 5px;" :style="style">
-          {{ d.day }}
-          <slot :item="d" :index="index" :another-attribute="anotherAttribute"></slot>
+            {{ d.day }}
+            <slot :item="d" :index="index" :another-attribute="anotherAttribute"></slot>
           </div>
         </div>
       </div>
@@ -112,7 +112,7 @@ export default defineComponent({
     let currentDay: any = new Date().getDate()
     let chooseDay: any = ref("")
 
-// 监听弹窗变量
+    // 监听弹窗变量
     watch(route, (newValues, prevValues) => {
       chooseDay.value = ""
     }, {
@@ -208,7 +208,7 @@ export default defineComponent({
           day: current.getDate()
         })
       }
-      
+
       // 下个月的几天
       for (let i = 0; i < (6 - weeEnd); i++) {
         current = new Date(milsEnd + i * dayMils)
@@ -271,16 +271,16 @@ export default defineComponent({
 
       let startDay = new Date(fullYear, _month, 1)
       let endDay = new Date(fullYear, _month + 1, 0, 23, 59, 59)
-      
+
       context.emit("changeMonth", {
         fullYear,
-        month: month.value ,
+        month: month.value,
         startDay,
         endDay
       })
     }
 
-    function handleClick(param: any, event: any){
+    function handleClick(param: any, event: any) {
       chooseDay.value = chooseDay.value === param ? "" : param
       context.emit("changeDay", chooseDay.value)
     }
@@ -342,6 +342,7 @@ export default defineComponent({
 
     .cal_h_time:hover {
       color: #409eff;
+      transition: all 0.3s;
     }
 
     .cal_h_left {
@@ -356,6 +357,7 @@ export default defineComponent({
 
       .cal_h_btn:hover {
         background-color: #ebeef5;
+        transition: all 0.3s;
       }
 
       .cal_h_l_icon {
@@ -379,12 +381,14 @@ export default defineComponent({
       line-height: 24px;
       cursor: pointer;
       position: relative;
-      &.current{
-          background: #409eff;
-          color: #fff;
-          // border: 2px solid #40a9ff;
-          // width: calc(100% - 6px);
-        }
+
+      &.current {
+        background: #409eff;
+        color: #fff;
+        // border: 2px solid #40a9ff;
+        // width: calc(100% - 6px);
+      }
+
       &.cal_m_day_week {
         min-height: 24px;
         border: 0
@@ -392,12 +396,13 @@ export default defineComponent({
     }
 
     .cal_m_day_cell .cell-box:hover {
-      background: #eee;
+      background: var(--calendar-hover-background);
+      transition: all 0.3s;
       // color: #409eff;
     }
 
-    .cal_m_day_cell .choose-cell{
-      background: #ffc09f;
+    .cal_m_day_cell .choose-cell {
+      background: var(--color-primary);
       color: #fff;
     }
 
@@ -407,7 +412,7 @@ export default defineComponent({
       display: flex;
       justify-content: space-around;
       justify-items: center;
-      border-bottom: 1px solid #e4e7ed;
+      border-bottom: 1px solid var(--default-border);
     }
 
     .cal_m_days {
@@ -418,6 +423,7 @@ export default defineComponent({
       flex-wrap: wrap;
       padding: 5px;
       padding-bottom: 10px;
+
       &:nth-child(7n) {
         border-right: 0;
       }

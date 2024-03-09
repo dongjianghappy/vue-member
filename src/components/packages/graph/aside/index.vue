@@ -240,7 +240,6 @@ export default defineComponent({
       end.addTo(stencilGraph);
 
       stencilPaper.on('cell:pointerdown', function (cellView: any, e, x, y) {
-        debugger
         $('body').append('<div id="flyPaperRobot" style="position:fixed;z-index:100;opacity:.7;pointer-event:none;z-index:100000000000000000"></div>');
         var flyGraph = new joint.dia.Graph,
           flyPaper = new joint.dia.Paper(Object.assign({

@@ -74,6 +74,8 @@ const install = (Vue:any) => {
           dashed.style.top = box.offsetTop-(side - box.clientHeight) / 2 - 24+'px'
           dashed.style.left = box.offsetLeft-(side - box.clientWidth) / 2+'px'
         dashed.innerHTML = `<div class="tool">
+      <div class="tool-btn"><i class="iconfont icon-alpha-desc cl-white"></i></div>
+      <div class="tool-btn"><i class="iconfont icon-alpha-asc font14 cl-white"></i></div>
       <div class="rotate-left tool-btn"><i class="iconfont icon-rotate-left cl-white"></i></div>
       <div class="rotate-right tool-btn"><i class="iconfont icon-rotate-right cl-white"></i></div>
       <div class="positioning tool-btn"><i class="iconfont icon-positioning ${box.style.position === 'fixed' ? 'cl-red' : 'cl-white'}"></i></div>
@@ -85,11 +87,29 @@ const install = (Vue:any) => {
           dashed.remove()
         })
 
-        let rotateLeft = dashed.children[0].children[0]
-        let rotateRight = dashed.children[0].children[1]
-        let positioning = dashed.children[0].children[2]
-        let deletes = dashed.children[0].children[3]
+        let alphaDesc = dashed.children[0].children[0]
+        let alphaAsc = dashed.children[0].children[1]        
+        let rotateLeft = dashed.children[0].children[2]
+        let rotateRight = dashed.children[0].children[3]
+        let positioning = dashed.children[0].children[4]
+        let deletes = dashed.children[0].children[5]
 
+        alphaAsc.addEventListener('click', () => {
+          let opacity = box.children[0].style.opacity
+          if(opacity === 1 || opacity === ""){
+            return
+          }
+          box.children[0].style.opacity = parseFloat(opacity) + 0.05
+        })
+        alphaDesc.addEventListener('click', () => {
+          let opacity = box.children[0].style.opacity
+          if(opacity !== "" && opacity <= 0){
+            return
+          }else if(opacity === ""){
+            opacity = 1
+          }
+          box.children[0].style.opacity = parseFloat(opacity) - 0.05       
+        })        
         rotateLeft.addEventListener('click', () => {
           deg += -15
           box.style.transform = `rotate(${deg}deg)`

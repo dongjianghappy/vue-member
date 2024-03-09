@@ -85,6 +85,7 @@ export default defineComponent({
     })
 
     function handleclick(e: any) {
+      debugger
       isShow.value = !isShow.value
       const doc = document.documentElement
       const el = e.currentTarget;
@@ -100,7 +101,7 @@ export default defineComponent({
       } = el
       style.w = w
       style.h = h
-
+      context.emit('onClick', isShow.value)
       if (props.arrow === 'lr') {
         style._top = top
         if (_w / 2 - e.x <= 0) {

@@ -1,17 +1,24 @@
 <template>
 <div class="module-wrap mb15">
-  <div class="module-head p20 font16">
+  <div class="module-head bd-0 p20 font16">
     {{cateName.name}}({{dataList.length || 0}})
     <span class="right">
-      <AddBookmark :render="init" :data="{fid: cateName.id, ...data}" v-if="cateName.id" /></span>
+      <span class="mr15">
+        <v-condition name="分类" field="id" :enums="sidebar" :defaultValue="{name: '全部', value: ''}" :render="init" />
+      </span>
+      <v-group action='add' :data="data" :group="group" :coding="data.coding.cate" :render="init" />
+      <AddBookmark :render="init" :data="{...data}" :group="sidebar" />
+    </span>
   </div>
-  <div class="module-content content-wrap ptb15 pr10 bg-white" style="min-height: 500px">
+  <div class="module-content content-wrap ptb15 pr10 bg-white" style="min-height: 590px">
     <div class="notes-list relative" v-for="(item, index) in dataList" :key="index">
       <div class="notes-content plr5 ptb10" style="background: none; margin-bottom: 0px; border: 0px solid #f3f3f3">
         <div class="pb5 font12">{{item.times}}</div>
-        <span>{{item.name}}</span>
+        <span class="bold">【{{item.parent}}】</span>
+        <span class="ml10">{{item.name}}</span>
+        <span class="ml10 cl-red">{{visibles[item.visible || 'public']}}</span>
         <span class="ml10" @click="visit(item)">查看</span>
-        <AddBookmark :render="init" action="edit" :data="{...item, fid: cateName.id, ...data}" />
+        <AddBookmark :render="init" action="edit" :data="{...item, ...data}" :group="sidebar" />
       </div>
     </div>
   </div>
@@ -26,11 +33,15 @@ import {
   useRoute,
   watch,
   onMounted,
+  computed,
   ref,
   getUid,
   useRouter
 } from '@/utils'
 import AddBookmark from './components/addBookmark.vue'
+import {
+  visibles
+} from '@/assets/const'
 export default defineComponent({
   name: 'HomeView',
   components: {
@@ -69,6 +80,15 @@ export default defineComponent({
       name: '所有的'
     })
     const typeName: any = ref("")
+    const sidebar = computed(() => {
+      const sidebars = props.group.map((item: any) => {
+        return {
+          name: item.name,
+          value: item.id
+        }
+      })
+      return sidebars
+    });
 
     watch(() => route.query.item, () => {
       init()
@@ -93,29 +113,9 @@ export default defineComponent({
     }
 
     function init(param: any = {}) {
-
-      if (route.query.item == 'list') {
-        if (route.query.id == '0') {
-          cateName.value.name = "未分类"
-        } else {
-          let arr = props.group.filter((item: any) => item.id === route.query.id)
-          if (arr && arr[0]) {
-            cateName.value.id = arr[0].id
-            cateName.value.name = arr[0].name
-          }
-
-        }
-      } else {
-        cateName.value.name = typeName.value || "所有的"
-        cateName.value.id = ""
-
-      }
-
-      typeName.value = ""
-
       const params: any = {
         uid: getUid(),
-        fid: route.query.id,
+        fid: param.id,
       }
 
       Object.assign(params, param)
@@ -128,7 +128,6 @@ export default defineComponent({
           ...params
         }
       }).then(res => {
-        debugger
         loading.value = true
         dataList.value = res.result || []
       })
@@ -136,6 +135,7 @@ export default defineComponent({
 
     onMounted(init)
     return {
+      visibles,
       dataList,
       loading,
       init,
@@ -143,7 +143,8 @@ export default defineComponent({
       typeName,
       handleclick,
       handleedit,
-      visit
+      visit,
+      sidebar
     }
   }
 })

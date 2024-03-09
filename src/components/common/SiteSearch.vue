@@ -23,7 +23,7 @@
       <div></div>
     </div>
   </div>
-  <div class="module-wrap" v-if="module.history_search == '1'">
+  <div class="module-wrap" style="background: none" v-if="module.history_search == '1'">
     <div class="module-head">
       历史搜素
       <span class=" cl-999 right" v-if="isEdit">
@@ -91,7 +91,15 @@ export default defineComponent({
       }
       isEdit.value = false
       context.emit('update:search', false)
-      router.push(`/search?type=${getQuerys().type ? getQuerys().type : 'talk'}&q=${content.value}`)
+
+      let query = ""
+      if (getQuerys().type) {
+        query = `?type=${getQuerys().type}${content.value ? '&q='+content.value : ''}`
+      } else {
+        query = `?q=${content.value}`
+      }
+
+      router.push(`/search${query}`)
     }
 
     function handleFocus(e: any) {
@@ -172,7 +180,7 @@ export default defineComponent({
   .search-box {
     display: flex;
     flex: 1;
-    background: #f7f8fa;
+    background: var(--w-input-div-background);
     border-radius: 50px;
     height: 34px;
     padding: 0 10px;
@@ -207,7 +215,7 @@ export default defineComponent({
   top: 60px;
   left: 0;
   right: 0;
-  background: #fff;
+  background: var(--active-background);
   box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
   width: 100%;
   height: auto;
@@ -219,7 +227,7 @@ export default defineComponent({
       line-height: 16px;
       height: 25px;
       padding: 5px 10px;
-      background: #f3f4f9;
+      background: var(--label-background);
       margin-right: 10px;
       margin-bottom: 10px;
       color: #999;

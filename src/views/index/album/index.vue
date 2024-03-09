@@ -1,52 +1,54 @@
 <template>
 <div>
+  <div class="container w1100">
+    <UserInfoHead />
+  </div>
   <div class="container w1100 relative clearfix">
     <div class="w180 left">
-      <v-aside :data="sidebar.groups" title="相册">
+      <v-aside :data="module.home_nav" :isFixed="false">
         <template v-slot:button>
-          <v-group action='add' :data="data" :group="photoAlbum" :coding="coding.album.list" :render="aaaa" />
-          <!-- <Detail action='add' :data="{ coding: 'U10000' }" :render="aaaa" /> -->
         </template>
-        <template v-slot:aside>
-          <ul>
-            <li v-for="(item, index) in photoAlbum" :key="index" @click="handleclick(item.id)" class="aside">
-              <i class="iconfont icon-dot font20"></i> {{item.name}}
-            </li>
-          </ul>
-        </template>
-
       </v-aside>
     </div>
     <div class="right" style="width: 910px;">
       <div class="module-wrap">
-        <div class="module-head p20">相册
-          <span class="right pointer" @click="handleSave('add')" v-if="currentUser && current !== 'talk' && current !== 'photo'" :disable="img.length<2">
-            <i class="iconfont icon-mail" />
-            保存
-          </span>
-          <span class="right pointer mr25" @click="handleUpload('add')" v-if="currentUser && current !== 'talk' && current !== 'photo'">
-            <i class="iconfont icon-upload-file" />
-            上传
-          </span>
+        <div class="module-content p20">
+          <div style="height: 165px; overflow: hidden;">
+            <div class="mb15 font14">相册({{photoAlbum.length || 0}})
+              <span class="right">
+                <v-group action='add' :data="data" :group="photoAlbum" :coding="coding.album.list" :render="aaaa" /></span>
+            </div>
+            <Album @onClick="handleclick" :dataList="photoAlbum" />
+          </div>
         </div>
-        <div class="module-content p10" style="min-height: 500px">
-          <v-upload ref="upload" uploadtype='album' @imgList="image" v-if="current !== 'talk' && current !== 'photo'" file="talk" />
-          <div v-if="current === 'photo'">
+      </div>
+      <div class="module-wrap">
+        <div class="module-content p20" style="min-height: 500px">
+          <div class="mb15">
+            <span class="right pointer" @click="handleSave('add')" v-if="loginuser.currentUser && current.id !== '0' && current.id !== '-1'" :disable="img.length<2">
+              <i class="iconfont icon-mail" />
+              保存
+            </span>
+            <span class="right pointer mr25" @click="handleUpload('add')" v-if="loginuser.currentUser && current.id !== '0' && current.id !== '-1'">
+              <i class="iconfont icon-upload-file" />
+              上传
+            </span>
+          </div>
+          <v-upload ref="upload" uploadtype='album' @imgList="image" v-if="current !== '0' && current !== 'photo'" file="talk" />
+          <div v-if="current.id === '-1'">
             <v-tabs :tabs="[{name: '头像',value: 'photos'},{name: '头像背景',value: 'background'},{name: '主页背景',value: 'banner'}]" :isEmit="true" v-model:index="index">
               <template v-slot:content1>
                 <List kind="photos" />
-
               </template>
               <template v-slot:content2>
                 <List kind="head_background" />
-
               </template>
               <template v-slot:content3>
                 <List kind="home_background" />
               </template>
             </v-tabs>
           </div>
-          <div class="plr15" v-else-if="current === 'talk'">
+          <div class="plr15" v-else-if="current.id === '0'">
             <div v-for="(item, index) in albumList" :key="index" style="overflow: auto;">
               <div>{{item.month}}</div>
               <div>
@@ -82,17 +84,18 @@ import {
   getUid,
   codings
 } from '@/utils'
+import UserInfoHead from '../../home/components/UserInfoHead.vue'
 import Detail from './components/detail.vue'
 import List from './components/list.vue'
-import {
-  album
-} from '@/assets/const'
+import Album from './components/album.vue'
 
 export default defineComponent({
   name: 'AlbumView',
   components: {
+    UserInfoHead,
     Detail,
-    List
+    List,
+    Album
   },
   setup(props, context) {
     const {
@@ -100,10 +103,9 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const coding: any = codings.talk
     const store = useStore();
-    const currentUser = computed(() => store.getters['user/currentUser']);
     const loginuser = computed(() => store.getters['user/loginuser']);
     const history: any = ref([])
-    const current: any = ref("talk")
+    const current: any = ref({})
     const photoAlbum: any = ref([])
     const photoList: any = ref([])
     const albumList = computed(() => store.getters['common/albumList']);
@@ -116,14 +118,7 @@ export default defineComponent({
     const img = ref("")
     const index: any = ref(0)
     const uid = getUid()
-    const sidebar = computed(() => {
-      const sidebar = store.getters['user/config'].album || []
-      sidebar.groups && sidebar.groups.map((item: any) => {
-        item.path = `/album?item=${item.value}`
-      })
-      return sidebar
-    });    
-
+    const module = computed(() => store.getters['user/config_talk']);
 
     function aaaa() {
       store.dispatch('common/Fetch', {
@@ -134,10 +129,10 @@ export default defineComponent({
         }
       }).then(res => {
         photoAlbum.value = res.result
+        current.value = res.result[0]
         init()
       })
     }
-
 
     // 监听图片上传
     function image(a: any) {
@@ -149,11 +144,10 @@ export default defineComponent({
     }
 
     function handleSave(param: any) {
-      // proxy.$loading.loading()
       store.dispatch('common/Fetch', {
         api: "UploadUserPhoto",
         data: {
-          fid: currentAlbum.value,
+          fid: current.id,
           img: img.value,
         }
       }).then(res => {
@@ -167,23 +161,21 @@ export default defineComponent({
       })
     }
 
-
     function handleclick(param: any) {
       current.value = param
-      if (param === 'talk') {
+      if (param.id == '0') {
         init()
       } else {
         currentAlbum.value = param
         store.dispatch('common/Fetch', {
           api: "photoList",
           data: {
-            id: param
+            id: param.id
           }
         }).then(res => {
           photoList.value = res.result
         })
       }
-
     }
 
     function add(action: any, item: any) {
@@ -203,7 +195,6 @@ export default defineComponent({
       showFlag.value = !showFlag.value
     }
 
-
     onMounted(() => {
       aaaa()
     })
@@ -213,7 +204,6 @@ export default defineComponent({
       albumList,
       uid,
       history,
-      currentUser,
       handleclick,
       current,
       add,
@@ -232,7 +222,8 @@ export default defineComponent({
       aaaa,
       index,
       loginuser,
-      sidebar
+      // sidebar,
+      module
     }
   }
 })

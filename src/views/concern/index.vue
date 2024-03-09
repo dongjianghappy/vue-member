@@ -5,7 +5,7 @@
       <template v-slot:button>
         <v-group action='add' :data="data" :group="userGroup" :coding="coding.group" :render="Grouping"  />
       </template>
-      <template v-slot:aside v-if="currentUser">
+      <template v-slot:aside v-if="loginuser.currentUser">
         <ul>
           <li v-for="(item, index) in userGroup" :key="index" @click="handleclick(`/concern?mod=myconcern&ground=${item.id}`)" class="aside">
             <i class="iconfont icon-dot font20"></i> {{item.name}}({{item.num}})
@@ -87,7 +87,6 @@ export default defineComponent({
 
     const loginuser = computed(() => store.getters['user/loginuser']);
     const concern = computed(() => store.getters['common/concernList']);
-    const currentUser = computed(() => store.getters['user/currentUser']);
 
    
 
@@ -148,7 +147,7 @@ export default defineComponent({
       showAlbum,
       handleclick,
       currentData,
-      currentUser,
+      loginuser,
       module
     }
   }

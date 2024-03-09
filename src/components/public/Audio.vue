@@ -1,6 +1,6 @@
 <template>
-<div>
-  <i class="iconfont icon-music absolute cl-white" @click="handlePlay" style=" background: rgba(0, 0, 0, 0.3); border-radius: 2px; right: 0px; bottom: 0px; padding: 2px; z-index: 1;" v-if="hasMusic"></i>
+<div class="inline">
+  <i class="iconfont icon-music" :class="hasbackground ?'absolute cl-white' : ''" @click="handlePlay" :style=" hasbackground ? 'background: rgba(0, 0, 0, 0.3); border-radius: 2px; right: 0px; bottom: 0px; padding: 2px; z-index: 1;' : ''" v-if="hasMusic"></i>
   <i class="iconfont listen" :class="`icon-${isplay ? 'audio' : 'listen'}`" @click="handlePlay" v-else></i>
 </div>
 </template>
@@ -21,6 +21,10 @@ export default defineComponent({
       }
     },
     hasMusic: {
+      type: Boolean,
+      default: false
+    },
+    hasbackground: {
       type: Boolean,
       default: false
     }

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div v-show="!img" class="align_center" style="padding-top: 170px; background: #f9f9f9;" :style="`height:${mask.h+mask.tb}px;`">
+  <div v-show="!img" class="align_center upload-background" style="padding-top: 170px;" :style="`height:${mask.h+mask.tb}px;`">
     <div class="upfile upphotos" @click="handleChoose">选择图片</div>
   </div>
   <div class="relative" v-show="img">
@@ -199,10 +199,16 @@ export default defineComponent({
     }
 
     function handleScale(scale: any){
-      if(pic.value.width*scale < props.image.width){
-        return 
+      if(pic.value.width == props.image.width && scale == "0.5"){
+        pic.value.width = props.image.width*0.75
+      }else if(pic.value.width < props.image.width && scale == "2"){
+        pic.value.width = props.image.width
+      }else{
+        if(pic.value.width*scale < props.image.width){
+          return 
+        }
+        pic.value.width = pic.value.width*scale
       }
-       pic.value.width = pic.value.width*scale
     }
 
     return {
@@ -221,6 +227,9 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+.upload-background{
+  background: var(--upload-background);
+}
 .pic {
   position: relative;
   overflow: hidden;

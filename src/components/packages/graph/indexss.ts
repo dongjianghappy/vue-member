@@ -102,7 +102,6 @@ var toolsView = new joint.dia.ToolsView({
 
   // 创建节点
   createNode(ftype: any, text: any, position: any, data?: any) {
-debugger
     // 如果没有数据则表示新创建的节点，否则是通过数据生成
     if(!data){
       data = new dataModel.start({id: 'null', name: text})
@@ -139,7 +138,6 @@ debugger
       linkObj.name = "意图线"
     }
     let linkData = new dataModel['linkNode'](linkObj)
-    debugger
     linkView.model.setData(linkData)
     this.undoStackPush('add', 'link', linkView, true)
   }
@@ -334,7 +332,6 @@ this.paper.on('link:mouseleave', (linkView: any) => {
 
   svgPanZooms() {
     let _this = this
-    debugger
     let svgZoom = svgPanZoom('#myholder svg', {
 
       /** 是否可拖拽 */
@@ -375,7 +372,6 @@ this.paper.on('link:mouseleave', (linkView: any) => {
 
   svgPanZooms2() {
     let _this = this
-    debugger
     let svgZoom = svgPanZoom('#paper-multiple-papers-small svg', {
 
       /** 是否可拖拽 */
@@ -416,7 +412,6 @@ this.paper.on('link:mouseleave', (linkView: any) => {
 
   // 设置属性
   setAttrs(param: any){
-    debugger
     const cell = this.graph.getCell(param.id)
     cell.setAttr(param)
   }
@@ -534,7 +529,6 @@ this.paper.on('link:mouseleave', (linkView: any) => {
   // this.undoStackPush('delete', 'node', cell, true)
   // 撤销操作
   undo(){
-    debugger
     if(this.undoStack.length === 0){
       return
     }
@@ -545,7 +539,6 @@ this.paper.on('link:mouseleave', (linkView: any) => {
 
  // 撤销操作
  redo(){
-  debugger
   if(this.redoStack.length === 0){
     return
   }

@@ -52,7 +52,6 @@ export const basicLink = joint.shapes.standard.Link.define('custom.basicLink', {
 
   // 设置节点数据
   setData(data: any, value?: any): void{
-    debugger
     this.prop('data', data)
     this.prop('ftype', data.type)
     if(data.type === 'intentionLink'){

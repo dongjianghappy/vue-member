@@ -93,7 +93,6 @@ export default defineComponent({
 
     const loginuser = computed(() => store.getters['user/loginuser']);
     const concern = computed(() => store.getters['common/concernList']);
-    const currentUser = computed(() => store.getters['user/currentUser']);
 
     function Grouping() {
       store.dispatch('common/Fetch', {
@@ -160,7 +159,6 @@ export default defineComponent({
       showAlbum,
       handleclick,
       currentData,
-      currentUser,
       handleShow
     }
   }

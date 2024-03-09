@@ -14,6 +14,7 @@
           <li>
             <v-button @onClick="login">登录</v-button>
           </li>
+          <li class="cl-red">{{msg}}</li>
         </ul>
 
         <div style="position:absolute; bottom: 15px;"><a href="/api/login.php" class="cl-5bc0de" target="_blank"><i class="iconfont icon-qq font16 cl-5bc0de"></i> QQ登录</a></div>
@@ -26,7 +27,8 @@
 <script lang="ts">
 import {
   defineComponent,
-  getCurrentInstance
+  getCurrentInstance,
+  ref
 } from 'vue'
 import {
   useStore
@@ -50,6 +52,7 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store = useStore();
     const router = useRouter();
+    const msg: any = ref("")
 
     function login() {
 
@@ -61,17 +64,27 @@ export default defineComponent({
         username,
         password
       }).then((res) => {
-        debugger
         if (res.ifSuccess === 1) {
-          sessionStorage.setItem("userInfo", JSON.stringify(res.result.userInfo))
-          document.cookie = `token=${res.result.token};path=/`
-          router.push(`/u/${res.result.userInfo.account}`)
+          if (res.result.userInfo.weibo != '1') {
+            router.push(`/open`)
+          }
+          else if (res.result.config.talk === undefined) {
+            router.push(`/site`)
+          } else {
+            sessionStorage.setItem("userInfo", JSON.stringify(res.result.userInfo))
+            document.cookie = `token=${res.result.token};path=/`
+            router.push(`/u/${res.result.userInfo.account}`)
+            sessionStorage.setItem("loginMessage", 'true')
+          }
+        }else{
+          msg.value = res.returnMessage
         }
       });
 
     }
     return {
-      login
+      login,
+      msg
     }
   }
 })

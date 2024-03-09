@@ -1,6 +1,6 @@
 <template>
 <v-button v-model:show="isShow">
-  <span style="color: #eb7350">管理</span>
+  <span style="color: var(--color-primary)">管理</span>
 </v-button>
 <v-dialog v-model:show="isShow" ref="form" title="自定义分组" :style="{width: 650, height: 450}" :hasfooter="false">
   <template v-slot:content>

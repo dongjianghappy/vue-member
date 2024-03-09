@@ -1,6 +1,6 @@
 <template>
-<div :class="{screen: isScreen}" style="background: #fff; border: 1px solid #eee; width: 100%; height: 100%;">
-  <div class="editor-wrap" style="border-bottom: 1px solid #eee; min-height: 40px;">
+<div :class="{screen: isScreen}" style="background: var(--module-background); border: 1px solid var(--default-border); width: 100%; height: 100%;">
+  <div class="editor-wrap" style="border-bottom: 1px solid var(--default-border); min-height: 40px;">
     <ul class="editor-button">
       <li class="left pl10">
         <v-popover :isShowss="popoverStatus" content='H<i class="iconfont icon-triangle" title="标题">' arrow="tb" offset="right" :move="-10" :keys="`static_${index}`">
@@ -70,7 +70,7 @@
     </ul>
   </div>
   <div :class="{height: isScreen, minHeight: !isScreen}" style="display: flex; flex-direction: row;">
-    <div class="relative" style="width: 50%; border-right: 1px solid #eee;">
+    <div class="relative" style="width: 50%; border-right: 1px solid var(--default-border);">
       <perfect-scrollbar>
 
         <textarea id="editor-desc" v-model="content" @input="handleInput" style="
@@ -362,7 +362,7 @@ ${'```'}`
 textarea {
   box-sizing: border-box;
   padding: 20px 20px 30px;
-  color: #2c3e50;
+  color: var(--default-font);
   font-size: 14px;
   font-family: menlo, Ubuntu Mono, consolas, Courier New, Microsoft Yahei, Hiragino Sans GB, WenQuanYi Micro Hei, sans-serif;
   line-height: 1.5;
@@ -371,6 +371,7 @@ textarea {
 }
 
 .ps {
+  background: var(--w-input-div-background);
   height: 250px;
 }
 </style>

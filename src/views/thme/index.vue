@@ -1,8 +1,21 @@
 <template>
-<div>
-  <div class="theme" @click="onThem"></div>
-  <div id="theme-box" class="theme-box" :style="{bottom: style}">
-    <v-tabs :tabs="[{
+<div class="theme" @click="onThem"></div>
+<div id="theme-box" class="theme-box" :style="{bottom: style}">
+  <div class="p15 align_left cl-white" style="background: rgba(51, 51, 51, 0.9);">
+    <i class="iconfont icon-theme cl-white" />主题设置
+    <v-tooltip :content="information" arrow="top" offset="right" :move="-10" keys="popover-full-screen" type="hover">
+      <i class="iconfont icon-info" style="font-size: 20px !important;" />
+    </v-tooltip>
+    <span class="right">
+      <v-space>
+        <div class="btn btn-xs active cl-white" @click="onThem">取消</div>
+        <div class="btn btn-xs tipsbtn determinetheme cl-white" @click="comfirm">确认</div>
+      </v-space>
+    </span>
+  </div>
+  <div class="flex" style="background: #0f1012">
+    <div style="flex: 1">
+      <v-tabs :tabs="[{
         name: '背景主题'
       },{
         name: '背景特效'
@@ -10,51 +23,67 @@
         name: '挂件装饰'
       },{
         name: '鼠标特效'
-      }]" v-model:index="index" method="click" :className="{nav: 'theme-head', con: 'theme-con'}">
-      <template v-slot:extra>
-        <v-space>
-          <div class="cl-white" style="line-height: 50px;">
-            <div class="btn btn-xs active" @click="onThem">取消</div>
-            <div class="btn btn-xs tipsbtn determinetheme" @click="comfirm">确认</div>
-          </div>
-        </v-space>
-      </template>
-      <template v-slot:content1>
-        <ul class="align_left">
-          <li class="themestyle" :class="{current: item.id === currentThem || (!currentThem && item.id === theme.theme_id)}" v-for="(item, index) in themeList" :key="index" @click="chooseTheme(item.id)">
-            <img :src="item.image" v-if="item.image">
-            <div class="theme-color" :style="{background: item.color}" v-else></div>
-            <div class="font12 cl-white align_center">{{item.name}}</div>
-          </li>
-        </ul>
-      </template>
-      <template v-slot:content2>
-        <ul class="align_left">
-          <li class="themestyle" :class="{current: item.id === currentEffects || (!currentEffects && item.id === theme.effects.id)}" v-for="(item, index) in effectsList" :key="index" @click="chooseEffects(item.id)">
-            <img :src="item.image">
-            <div class="font12 cl-white align_center">{{item.name}}</div>
-          </li>
-        </ul>
-      </template>
-      <template v-slot:content3>
-        <ul class="align_left">
-          <li :id="`pendant_${index}`" class="themestyle" draggable="true" @dragstart="(e, fType, style)=>dragstart(e, `pendant_${index}`, item.style)" :class="{current: item.id === currentEffects || (!currentEffects && item.id === theme.effects.id)}" v-for="(item, index) in pendantList" :key="index" @click="choosePendant(item.id)">
-            <img :src="item.image">
-            <div class="font12 cl-white align_center">{{item.name}}</div>
-          </li>
-        </ul>
-      </template>
-      <template v-slot:content4>
-        <ul class="align_left">
-          <li :id="`pendant_${index}`" class="themestyle" :class="{current: item.id === currentCursor || (!currentCursor && item.file === theme.cursor)}" v-for="(item, index) in cursorList" :key="index" @click="chooseCursor(item.id)">
-            <div class="bg-ccc" style="width: 120px; height: 70px; text-align: center; line-height: 64px;"><img :src="item.file" style="width: auto; height: auto"></div>
-            <div class="font12 cl-white align_center">{{item.name}}</div>
-          </li>
-        </ul>
-      </template>
-      <template v-slot:content5>
-      </template>
-    </v-tabs>
+      }]" v-model:index="index" method="click" :className="{nav: 'theme-head', con: 'theme-con'}" type="vertical">
+        <template v-slot:content1>
+          <Thme :currentData="currentData" :chooseTheme="handleClick" type="theme" />
+        </template>
+        <template v-slot:content2>
+          <Effects :currentData="currentData" :chooseTheme="handleClick" type="effects" />
+        </template>
+        <template v-slot:content3>
+          <Pendant :currentData="currentData" :chooseTheme="handleClick" type="pendant" />
+        </template>
+        <template v-slot:content4>
+          <Cursor :currentData="currentData" :chooseTheme="handleClick" />
+        </template>
+      </v-tabs>
+    </div>
+    <div class="p10" style="background: #212127; margin-left: 2px; width: 300px">
+      <div class="pb10 cl-999">我的主题装扮</div>
+      <div style=" height: 330px">
+        <v-tabs :tabs="[{
+        name: '主题'
+      },{
+        name: '特效'
+      },{
+        name: '挂件'
+      },{
+        name: '鼠标'
+      }]" v-model:index="index" method="click">
+          <template v-slot:content1>
+            <div style=" height: 190px;">
+              <div :style="`background: ${theme.theme_background}; height: 140px;`"></div>
+              <div>{{theme.theme_name}}</div>
+            </div>
+          </template>
+          <template v-slot:content2>
+            <div class="col-md-4 p10" v-for="(item, index) in theme.effects" :key="index">
+              <div class="align_center">
+                <div style="height: 80px;">
+                  <img :src="item.image" style="height: 80px;">
+                </div>
+                {{item.name}}
+              </div>
+            </div>
+          </template>
+          <template v-slot:content3>
+            {{pendants}}
+            <div class="col-md-4 p10" v-for="(item, index) in theme.pendants" :key="index">
+              <div class="align_center">
+                <!-- <img :src="item" style="height: 80px;"> -->
+                <div style="height: 80px;">
+                  <img :src="item.src" style="height: 80px;">
+                </div>
+                {{item.name}}
+              </div>
+            </div>
+          </template>
+          <template v-slot:content4>
+            <img :src="theme.cursor.file">
+          </template>
+        </v-tabs>
+      </div>
+    </div>
   </div>
 </div>
 </template>
@@ -64,105 +93,87 @@ import {
   defineComponent,
   getCurrentInstance,
   ref,
-  computed,
-  onMounted
+  computed
 } from 'vue'
 import {
   useStore
 } from 'vuex'
-import VueEvent from '@/utils/event'
-// import Setting from './components/setting.vue'
+import Thme from './thme/index.vue'
+import Effects from './effects/index.vue'
+import Pendant from './pendant/index.vue'
+import Cursor from './cursor/index.vue'
 export default defineComponent({
   name: 'v-Search',
   components: {
-    // Setting
+    Thme,
+    Effects,
+    Pendant,
+    Cursor
   },
   setup(props, context) {
     const {
       proxy
     }: any = getCurrentInstance();
     const store = useStore();
-
+    const information = "1、背景主题：整体博客风格样式。<br/>2、背景特效：带动画效果的网页特效，可多选。<br/>3、挂件装饰：用来装饰博客小物件风格，直接拖拽到页面，完成设置后点击保存。<br/>4、鼠标特效：自定义博客鼠标样式。<br/>注意：当设置主题时与页面效果不一致，是系统强制配置；当设置完成时，无展示效果，可能配置开关按钮没开启，需要用户前去开启。"
     const showThme = ref(false)
-    const style = ref("-300px")
-    const currentThem = ref()
-    const currentEffects: any = ref()
+    const style = ref("-360px")
+    const currentThem: any = ref({})
     const currentCursor: any = ref()
-    const themeList: any = ref([])
-    const effectsList = ref([])
-    const pendantList = ref([])
-    const cursorList = ref([])
-    const index: any = ref("0")
-    const theme: any = computed(() => store.getters['user/loginuser'].theme);
-    const contentssss: any = ref([])
+    const currentData: any = ref({
+      theme: '',
+      effects: [],
+      cursor: ''
+    })
+    const theme: any = computed(() => {
+      let aa = store.getters['user/loginuser'].theme
+      let bb: any = []
+      let cc: any = []
+      aa.effects.map((item: any) => {
+        bb.push(item.id)
+      })
+      let pendant = JSON.parse(aa.pendant)
+      pendant.map((item: any) => {
+
+        let index = cc.findIndex((list: any) => list.src === item.img.src)
+        if (index === -1) {
+          cc.push({
+            name: item.img.title,
+            src: item.img.src
+          })
+        }
+      })
+      aa.pendants = cc
+      currentData.value.effects = bb
+      currentData.value.theme = aa.theme_id
+      currentData.value.cursor = aa.cursor.id
+      return aa
+    });
+
+    function handleClick(type: any, param: any) {
+      if (type === 'effects') {
+        if (currentData.value[type].indexOf(param.id) > -1) {
+          let index = currentData.value[type].indexOf(param.id)
+          currentData.value[type].splice(index, 1)
+        } else {
+          currentData.value[type].push(param.id)
+        }
+      } else {
+        currentData.value[type] = param.id
+      }
+    }
 
     function onThem() {
       showThme.value = !showThme.value
-      style.value = showThme.value ? "0px" : "-300px"
-      getThem()
-      getEffects()
-      getPendant()
-      getCursor()
-    }
-
-    function getThem() {
-      store.dispatch('common/Fetch', {
-        api: 'Theme'
-      }).then(res => {
-        themeList.value = res.result
-      })
-    }
-
-    function getEffects() {
-      store.dispatch('common/Fetch', {
-        api: 'Effects'
-      }).then(res => {
-        effectsList.value = res.result
-      })
-    }
-
-    function getPendant() {
-      store.dispatch('common/Fetch', {
-        api: 'Pendant'
-      }).then(res => {
-        pendantList.value = res.result
-      })
-    }
-
-    function getCursor() {
-      store.dispatch('common/Fetch', {
-        api: 'Cursor'
-      }).then(res => {
-        cursorList.value = res.result
-      })
-    }
-
-    function chooseTheme(id: any) {
-      currentThem.value = id
-    }
-
-    function chooseEffects(id: any) {
-      currentEffects.value = id
-    }
-
-    function choosePendant(id: any) {
-      currentEffects.value = id
-    }
-
-    function chooseCursor(id: any) {
-      currentCursor.value = id
-    }
-
-    function dragstart(e: any, fType: any, style: any) {
-      e.dataTransfer.setData('ftype', fType)
-      e.dataTransfer.setData('style', style)
+      style.value = showThme.value ? "0px" : "-360px"
     }
 
     function comfirm() {
+
       const aaa: any = {
-        theme: currentThem.value,
-        background_effects: currentEffects.value,
-        cursor_effects: currentCursor.value
+        theme: currentData.value.theme,
+        background_effects: currentData.value.effects && currentData.value.effects.join(',') || "",
+        cursor_effects: currentData.value.cursor
       }
 
       store.dispatch('common/Fetch', {
@@ -172,97 +183,24 @@ export default defineComponent({
         }
       }).then(res => {
         showThme.value = false
-        style.value = "-300px"
+        style.value = "-360px"
         proxy.$hlj.message({
           msg: "设置成功"
         })
         store.dispatch('user/Detect')
       })
-
     }
-
-    function handleSave() {
-
-    }
-    // <div draggable="true" class="pendant-box" style="position: absolute; left: 447px; top: 275px;"><img src="http://127.0.0.1/uploadfile/theme/thumb/f79e110aa5b665ce98ecdb47a97e141f.jpg" style="width: 100px; height: auto;"><span class="remove">x</span></div>
-    onMounted(() => {
-
-      let el: any = document.getElementById('main')
-      el.addEventListener('dragover', (e: any) => {
-        e.preventDefault()
-      })
-      el.addEventListener('drop', (e: any) => {
-        let ftype: any = e.dataTransfer.getData('ftype')
-        let style: any = e.dataTransfer.getData('style')
-        let content: any = document.getElementById(ftype)
-        var y = content.children[0].cloneNode(true);
-
-        y.style = style
-
-        var container = document.createElement('div') //创建ul节点
-        container.style.position = "absolute"
-        container.style.left = e.pageX + "px"
-        container.style.top = e.pageY + "px"
-        // container.draggable = true
-        container.classList.add('pendant-box')
-        container.appendChild(y);
-
-        document.body.appendChild(container)
-
-        proxy.$pendant.init()
-      })
-
-      VueEvent.on("saveTheme", (data: any) => {
-        let pendant: any = document.getElementsByClassName('pendant-box')
-        let dom: any = []
-        for (let i = 0; i < pendant.length; i++) {
-          let box_style: any = ""
-          for (let j = 0; j < pendant[i].style.length; j++) {
-            box_style += `${[pendant[i].style[j]]}: ${pendant[i].style[pendant[i].style[j]]}; `
-          }
-          dom.push({
-            class: 'pendant-box',
-            style: box_style,
-            img: {
-              src: pendant[i].children[0].src,
-              style: 'width: 100px; height: auto;'
-            }
-          })
-        }
-
-        store.dispatch('common/Fetch', {
-          api: 'savePendant',
-          data: {
-            content: JSON.stringify(dom)
-          }
-        }).then(res => {
-          showThme.value = false
-          style.value = "-300px"
-          proxy.$hlj.message({
-            msg: "保存成功"
-          })
-        })
-      });
-    })
 
     return {
+      information,
+      handleClick,
       onThem,
       comfirm,
       theme,
       currentThem,
-      currentEffects,
+      currentData,
       currentCursor,
       style,
-      themeList,
-      effectsList,
-      pendantList,
-      cursorList,
-      index,
-      chooseTheme,
-      chooseEffects,
-      choosePendant,
-      chooseCursor,
-      dragstart
     }
   }
 })
@@ -270,7 +208,7 @@ export default defineComponent({
 
 <style lang="less">
 .pendant-box {
-  z-index: 100;
+  z-index: 101;
 
   &.mouse-enter {
     border: 1px dashed #ccc;
@@ -291,10 +229,5 @@ export default defineComponent({
       color: #fff;
     }
   }
-}
-
-.theme-color {
-  width: 120px;
-  height: 70px;
 }
 </style>

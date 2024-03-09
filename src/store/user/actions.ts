@@ -1,14 +1,20 @@
 import { Commit } from 'vuex'
 import api from '../../api/index'
+import {
+  getUid,
+  writeNewStyle
+} from '../..//utils'
 
 const actions = {
-  Detect: async (context: { commit: Commit; state: any}, params: any = {}) => {
+  Detect: async (context: { commit: Commit; state: any}, params: any = {uid: getUid()}) => {
     const { result }:any = await api.Detect({
       ...params 
     })
-    if(result.result){
+    if(result.result.status != '2'){
       sessionStorage.setItem("userInfo", JSON.stringify(result.result.userInfo))
+      sessionStorage.setItem("theme", JSON.stringify(result.result.userInfo.theme))
     }
+    writeNewStyle()
     context.commit("setUserInfo" , result.result);
    
     return result.result

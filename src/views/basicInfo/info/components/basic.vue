@@ -66,6 +66,10 @@
           </select>
         </span>
       </li>
+      <li style="height: auto"><label>博主说明</label>
+        <div class="con" v-if="isEdit">{{basicInfo.blogger}}</div>
+        <textarea v-model="userInfo.blogger" v-else></textarea>
+      </li>
       <li style="height: auto"><label>简介</label>
         <div class="con" v-if="isEdit">{{basicInfo.introduction}}</div>
         <textarea v-model="userInfo.introduction" v-else></textarea>
@@ -161,6 +165,7 @@ export default defineComponent({
           city,
           area,
           bloodtype,
+          blogger,
           introduction,
           message
         } = props.basicInfo
@@ -176,6 +181,7 @@ export default defineComponent({
           city,
           area,
           bloodtype,
+          blogger,
           introduction,
           message
         })

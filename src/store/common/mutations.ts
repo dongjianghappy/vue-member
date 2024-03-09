@@ -1,4 +1,11 @@
 const mutations = {
+  setMode: (state: any, params: any) => {
+    state.mode = params
+  }, 
+  setTheme: (state: any, params: any) => {
+    state.isEditTheme = params
+    sessionStorage.setItem('editPendant', params)
+  },  
   setData: (state: any, params: any) => {
     debugger
     state[params.state] = params.data
@@ -27,25 +34,39 @@ const mutations = {
   },   
   
   setRecommendUser: (state: any, params: any) => {
-    state.recommendUser = params
+    const result = [];
+    for(let i=0,len=params.length;i<len;i+=4){
+      result.push(params.slice(i,i+4));
+    } 
+    state.recommendUser = result 
   },    
   setHotTalk: (state: any, params: any) => {
     const result = [];
     for(let i=0,len=params.hotTalk.length;i<len;i+=5){
       result.push(params.hotTalk.slice(i,i+5));
-    }  
-    debugger
+    } 
     state.hotTalk = result
     state.ranking = params.ranking
   },  
   setLastestVisitor: (state: any, params: any) => {
-    state.lastestVisitor = params
+    debugger
+    const result = [];
+    for(let i=0,len=params.list.length;i<len;i+=9){
+      result.push(params.list.slice(i,i+9));
+    } 
+    state.visitor.today = params.today 
+    state.visitor.total = params.total
+    state.visitor.list = result   
+    // state.lastestVisitor = params
   },   
   setAppstore: (state: any, params: any) => {
     state.appstore = params
   },   
   setIntegration: (state: any, params: any) => {
     state.integration = params
+  }, 
+  setGoldcoin: (state: any, params: any) => {
+    state.goldcoin = params
   }, 
   setSignList: (state: any, params: any) => {
     state.signList = params

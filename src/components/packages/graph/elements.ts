@@ -38,7 +38,6 @@ export const basicNode = joint.dia.Element.define('custom.basic.Node', {
   {
     // 设置节点数据
     setAttr(param: any): void{
-      debugger
       if(param.islabel){
         this.prop(`attrs/label/${param.attr}`, param.value); // Set presentation attribute
       }else{

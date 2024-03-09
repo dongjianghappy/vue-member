@@ -1,8 +1,11 @@
 <template>
 <div class="module-wrap mb15">
-  <div class="module-head p20">正文</div>
-  <div class="module-content form-wrap-box detail" style="padding: 25px 50px !important; min-height: 500px;">
-    <div class="article" v-if="loading">
+  <div class="module-head bd-0 p20 font16">
+    日志
+    <span class="pointer right font12" @click="handlePrev">返回日志列表</span>
+  </div>
+  <div class="module-content form-wrap-box detail" style="padding: 25px 50px !important; min-height: 500px;" :style="{background: data.paper}">
+    <div class="article nobg" v-if="loading" >
       <div class="article-head">
         <h2 class="mb15" :style="[data.style]">{{data.title}}</h2>
         <div class="author font12 cl-999">
@@ -82,6 +85,10 @@ export default defineComponent({
       }, 100)
     }
 
+    function handlePrev() {
+      router.go(-1)
+    }
+
     onMounted(() => {
       init()
     })
@@ -89,7 +96,8 @@ export default defineComponent({
       data,
       configData,
       handleclick,
-      loading
+      loading,
+      handlePrev
     }
   }
 })

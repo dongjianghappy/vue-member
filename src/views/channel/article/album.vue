@@ -4,31 +4,13 @@
     <div class="row clearfix">
 
       <div class="col-sm-6 col-md-3 p10" v-for="(item, index) in dataList.list" :key="index">
-        <div class="thumbnail p10 relative" style="background: #fff;; overflow: hidden;">
+        <div class="thumbnail p10 relative" style="background: var(--card-background); overflow: hidden;">
           <v-thumbnail :data="item" :type="type" :hasComment="true" />
           <div class="
                  caption
                  relative" style="padding:10px 0; height:40px;">
             <span class="inputline updata nowrap" style="border: 0px dashed rgb(204, 204, 204); width: 100%; background: none; display:block !important">{{item.title}}【{{item.image.length}}张】</span>
-
           </div>
-          <!-- <div class="cover" :class="{active: selectList.indexOf(item.id) !== -1}" @click.stop="select(item.id)" style="position: absolute; top: 0; left: 0; bottom:0; width: 100%;z-index: 10;" v-show="isShowBatch">
-            <i class="iconfont icon-checkbox">
-              <input name="checkbox" type="checkbox" value="6" style="display: none;">
-            </i>
-          </div>
-          <a data-artcoding="C0000" data-catcoding="C0002" data-albumcoding="U40001" data-uid="110506372" data-id="6" data-pid="0" data-checked="0" data-placement="top" data-toggle="tooltip9" style="position:absolute; top:15px; right:15px;" data-left="0" class="infos trip_arrow content_trip bg-white hide">
-            <i class="iconfont icon-down"></i>
-          </a>
-          <img :src="item.image[0]" style="width:  100%;
-                 height:180px">
-          <div class="
-                 caption
-                 relative" style="padding:10px 0; height:40px;">
-            <span class="inputline updata nowrap" data-coding="C0000" data-field="title" data-id="6" contenteditable="true" style="border: 0px dashed rgb(204, 204, 204); width: 100%; background: none; display:block !important">{{item.title}}</span>
-
-          </div> -->
-
         </div>
       </div>
     </div>

@@ -1,16 +1,30 @@
 <template>
-<div class="container w1100 clearfix">
-  <div class="w180 left">
-    <v-aside :data="menu" title="留言板" :render="init" />
+<div>
+  <div class="container w1100">
+    <UserInfoHead />
   </div>
-  <div class="m0 right" style="width: 910px">
-    <div class="module-wrap mb15">
-      <div class="module-head bd-0 p20">
-        {{isTome ? '给我留言' : '我留言的'}}({{dataList.total || 0}})
-      </div>
-      <Send :render="init" v-if="!currentUser && isTome" />
-      <div class="module-content" style="padding: 0 50px !important; min-height: 500px;">
-        <List :dataList="dataList" :isTome="isTome" :render="init" />
+
+  <div class="container w1100 clearfix">
+    <div class="w180 left">
+      <v-aside :data="module.home_nav" :isFixed="false">
+        <template v-slot:button>
+        </template>
+      </v-aside>
+    </div>
+    <div class="m0 right" style="width: 910px">
+      <div class="module-wrap mb15">
+        <div class="module-content" style="min-height: 650px;">
+          <v-tabs :tabs="[{name: '给我留言',value: 'photos'},{name: '我留言的',value: 'background'}]" :isEmit="true" v-model:index="index">
+            <template v-slot:content1>
+              <Send :render="init" v-if="!loginuser.currentUser && isTome" />
+              <List :dataList="dataList" :isTome="isTome" :render="init" />
+            </template>
+            <template v-slot:content2>
+              <List :dataList="dataList" :isTome="isTome" :render="init" />
+            </template>
+          </v-tabs>
+
+        </div>
       </div>
     </div>
   </div>
@@ -28,6 +42,7 @@ import {
   getUid,
   watch
 } from '@/utils'
+import UserInfoHead from '../../home/components/UserInfoHead.vue'
 import Send from './components/send.vue'
 import List from './components/list.vue'
 import {
@@ -37,6 +52,7 @@ import {
 export default defineComponent({
   name: 'MessageBoardView',
   components: {
+    UserInfoHead,
     Send,
     List
   },
@@ -44,12 +60,13 @@ export default defineComponent({
     const store = useStore();
     const route = useRoute();
     const isTome: any = ref(true);
-    const currentUser = computed(() => store.getters['user/currentUser']);
+    const loginuser = computed(() => store.getters['user/loginuser']);
     let dataList: any = ref({})
     const loading: any = ref(false)
     const menu: any = feedback;
+    const module = computed(() => store.getters['user/config_talk']);
     menu.map((item: any) => {
-      item.name = currentUser.value ? item.names[0] : item.names[1]
+      item.name = item.names[0]
       item.path = `/application?mod=feedback&item=${item.value}`
     })
 
@@ -64,7 +81,7 @@ export default defineComponent({
         item: route.query.item,
         uid: getUid(),
         page: 1,
-        pagesize: 2
+        pagesize: 25
       }
 
       Object.assign(params, param)
@@ -87,9 +104,10 @@ export default defineComponent({
       isTome,
       dataList,
       loading,
-      currentUser,
+      loginuser,
       menu,
       init,
+      module
     }
   }
 })

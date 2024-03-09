@@ -43,7 +43,6 @@ export default defineComponent({
     function handleclick(value: any){
       ctx
       context
-      debugger
       context.emit('onEmoji')
     }
     return {

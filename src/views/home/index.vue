@@ -1,11 +1,25 @@
 <template>
-<UserInfoHead />
-<div class="container w1100 clearfix">
-  <div class="w300 left">
-    <Aside :module="module" />
+<div>
+  <div class="container w1100">
+    <UserInfoHead />
   </div>
-  <div class="main-center m0 right" style="width: 790px">
-    <Main />
+  <div class="container w1100 relative clearfix">
+    <!-- 侧边菜单 -->
+    <div class="left">
+      <Aside :data="module.home_nav" title="首页" />
+    </div>
+    <!-- 主内容 -->
+    <div class="main-center left">
+      <Collect v-if="component==='collect'" />
+      <Comment v-else-if="component==='comment'" />
+      <Praise v-else-if="component==='praise'" />
+      <Forwarding v-else-if="component==='forwarding'" />
+      <Center ref="talk" v-else />
+    </div>
+    <!-- 右侧 -->
+    <div class="w280 right">
+      <RightView :module="module.personal_center" :userInfo="userInfo" :render="init" />
+    </div>
   </div>
 </div>
 </template>
@@ -16,27 +30,50 @@ import {
   useStore,
   useRoute,
   computed,
+  ref
 } from '@/utils'
+
 import UserInfoHead from './components/UserInfoHead.vue'
-import Aside from './components/Aside.vue'
-import Main from '../index/center/main.vue'
+import Center from '../index/center/home.vue'
+// import Collect from './collect/index.vue'
+// import Comment from './comment/index.vue'
+// import Praise from './praise/index.vue'
+// import Forwarding from './forwarding/index.vue'
+import Aside from './components/aside.vue'
+import RightView from './components/right_view.vue'
 
 export default defineComponent({
-  name: 'HomeViewwrer',
+  name: 'HomeView',
   components: {
     UserInfoHead,
+    Center,
+    // Collect,
+    // Comment,
+    // Praise,
+    // Forwarding,
     Aside,
-    Main
+    RightView
   },
-  setup(props, context) {
+  setup() {
     const store = useStore();
     const route = useRoute();
-    const module = computed(() => store.getters['user/config_talk'].home_module);
+    const component = computed(() => route.query.mod);
+    const module = computed(() => store.getters['user/config_talk']);
+    // const userInfo = computed(() => store.getters['user/loginuser']);
+    const userInfo: any = computed(() => store.getters['user/userInfo']);
+    const talk: any = ref(null)
 
-    
-    return {
-      module
+    function init(param: any = {}){
+      return talk.value.init(param)
     }
-  },
+
+    return {
+      component,
+      module,
+      userInfo,
+      init,
+      talk
+    }
+  }
 })
 </script>

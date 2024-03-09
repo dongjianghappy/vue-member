@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>博客-记录点滴生活</title>
+    <!-- <title><%= htmlWebpackPlugin.options.title %></title> -->
     <!-- <style type="text/css">
     .snow-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100001;}
     </style> -->
@@ -19,12 +20,14 @@
     <!-- Import component library -->
     <!-- <script src="//unpkg.com/element-plus"></script> -->
   </head>
-  <body>
+  <body allow="web-audio-api">
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
-   
+    <svg stroke="#fff" stroke-linecap="round" class="svg-wrap">
+      <g class="stage"></g>
+    </svg>
     <!-- <div id="screens"></div> -->
     <!-- built files will be auto injected -->
   </body>

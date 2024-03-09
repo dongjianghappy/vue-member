@@ -1,23 +1,21 @@
 <template>
-<div class="container w1100 clearfix">
-  <div class="w180 left">
-    <v-aside :data="sidebar.groups" title="我的日志">
-      <template v-slot:button>
-        <v-group action='add' :data="data" :group="userGroup" :coding="coding.cate" :render="init" />
-      </template>
-      <template v-slot:aside>
-        <ul>
-          <li v-for="(item, index) in userGroup" :key="index" @click="handleclick(`/journal?item=list&id=${item.id}`)" class="aside">
-            <i class="iconfont icon-dot font20"></i> {{item.name}}
-          </li>
-        </ul>
-      </template>
-    </v-aside>
+<div>
+  <div class="container w1100">
+    <UserInfoHead />
   </div>
-  <div class="m0 right" style="width: 910px">
-    <Action v-if="query.item === 'details'" :action="query.action" />
-    <ArticleView v-else-if="query.item === 'view'" />
-    <List ref="list" :group="userGroup" :query="query" v-else />
+
+  <div class="container w1100 clearfix">
+    <div class="w180 left">
+      <v-aside :data="module.home_nav" :isFixed="false">
+        <template v-slot:button>
+        </template>
+      </v-aside>
+    </div>
+    <div class="m0 right" style="width: 910px">
+      <Action v-if="query.item === 'details'" :action="query.action" />
+      <ArticleView v-else-if="query.item === 'view'" />
+      <List ref="list" :group="userGroup" :query="query" :data="{coding}" :render="init" v-else />
+    </div>
   </div>
 </div>
 </template>
@@ -35,6 +33,7 @@ import {
   getUid,
   codings
 } from '@/utils'
+import UserInfoHead from '../../home/components/UserInfoHead.vue'
 import List from "./article_list.vue"
 import Action from "./article_action.vue"
 import ArticleView from "./article_detail.vue"
@@ -45,6 +44,7 @@ import {
 export default defineComponent({
   name: 'HomeView',
   components: {
+    UserInfoHead,
     List,
     Action,
     ArticleView
@@ -68,6 +68,7 @@ export default defineComponent({
       })
       return sidebar
     });
+    const module = computed(() => store.getters['user/config_talk']);
 
     function init() {
       store.dispatch('common/Fetch', {
@@ -106,7 +107,8 @@ export default defineComponent({
       currentData,
       userGroup,
       init,
-      sidebar
+      sidebar,
+      module
     }
   }
 })

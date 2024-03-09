@@ -7,12 +7,15 @@
       </template>
     </v-aside>
   </div>
-  <div class="mb15 radius-4 right" style="width: 910px; min-height: 650px; background: #fff">
+  <div class="mb15 radius-4 right" style="width: 910px; min-height: 650px; background: var(--module-background)">
     <CateList :dataList="userGroup" v-if="query.item === 'category'" :data="{coding: coding}" />
     <Collect v-else-if="query.item === 'collect'" :channel="channel" :data="{coding: coding}" />
     <Praise v-else-if="query.item === 'praise'" :channel="channel" :data="{coding: coding}" />
     <Download v-else-if="query.item === 'download'" :channel="channel" />
-    <Article v-else :channel="channel" :data="{coding: coding}" :columns="columns" />
+    <template v-else>
+      <Haosite :channel="channel" v-if="channel === 'haosite'" />
+      <Article v-else :channel="channel" :data="{coding: coding}" :columns="columns" />
+    </template>
   </div>
 </div>
 <Graph v-else :channel="channel" :action="query.action" :field="{album: false, color: false}" />
@@ -35,6 +38,7 @@ import Article from "./article/index.vue"
 import Collect from './collect/index.vue'
 import Praise from './praise/index.vue'
 import Download from './download/index.vue'
+import Haosite from "./article/haosite/index.vue"
 import Graph from "../graph/index.vue"
 import {
   noColumns
@@ -48,6 +52,7 @@ export default defineComponent({
     Collect,
     Praise,
     Download,
+    Haosite,
     Graph
   },
   setup(props, context) {

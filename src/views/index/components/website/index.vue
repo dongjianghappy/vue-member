@@ -1,9 +1,9 @@
 <template>
 <div class="module-wrap">
   <div class="module-head" style="height: 50px;">
-      <span class="right">
-       </span>
-    </div>
+    <span class="right">
+    </span>
+  </div>
   <div class="module-content p5">
     <div class="col-md-3 p10" v-for="(item, index) in dataList" :key="index">
       <div class="p15 align_center" @click="visit(item)" style=" background: #f9f9f9; border-radius: 8px;">
@@ -56,7 +56,7 @@ export default defineComponent({
     const store = useStore();
     const loginuser = computed(() => store.getters['user/loginuser']);
 
-        function visit(param: any) {
+    function visit(param: any) {
       const {
         id
       } = param

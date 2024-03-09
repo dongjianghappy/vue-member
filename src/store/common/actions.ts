@@ -3,6 +3,7 @@ import api from '../../api/index'
 
 const actions = {
   Fetch: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    debugger
     const data = params.data || {}
     const { result }:any = await api[params.api || "select"]({
       ...data
@@ -11,7 +12,7 @@ const actions = {
     if(params.state){
       context.commit("setData" , {state: params.state, data: result.result});      
   }    
-
+debugger
     return result
   },
   
@@ -58,7 +59,6 @@ const actions = {
     return result
   },  
   HotTalk: async (context: { commit: Commit; state: any}, params: any = {}) => {
-    debugger
     const { result }:any = await api.HotTalk({
       ...params 
     })
@@ -88,6 +88,14 @@ const actions = {
     context.commit("setIntegration" , result.result);
     return result
   },   
+  Goldcoin: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const { result }:any = await api.Goldcoin({
+      ...params 
+    })
+
+    context.commit("setGoldcoin" , result.result);
+    return result
+  }, 
   SignList: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const { result }:any = await api.SignList({
       ...params 

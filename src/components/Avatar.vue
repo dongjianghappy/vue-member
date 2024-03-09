@@ -72,7 +72,6 @@ Infos
  
     }
     function getUserInfo(){
-      debugger
       store.dispatch('common/Fetch', {
           api: "UserInfo",
           data: {uid: props.sourceData.uid}

@@ -1,5 +1,5 @@
 <template>
-<span @click="handleClick">
+<span @click="handleClick" class="cl-999">
   <i class="iconfont icon-refresh1"></i>点击刷新
 </span>
 </template>

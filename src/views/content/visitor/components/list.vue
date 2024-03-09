@@ -1,15 +1,15 @@
 <template>
-<div style="display: flex" v-for="(item, index) in dataList" :key="index">
+<div style="display: flex" v-for="(item, index) in dataList.list" :key="index">
   <div style="width: 60px; height: 60px;">
-    <v-avatar :data="item" />
+    <v-photos :sourceData="item" />
   </div>
   <div style="flex: 1">
     <div>{{item.nickname}}</div>
     <div class="font12 cl-999">访问时间 {{item.times[item.times.length-1]}}</div>
   </div>
-  <div class="align_right" style="width: 150px; height: 60px;">
-    <v-concernbutton :data="item" :render="init" />
-  </div>
+</div>
+<div class="pt25 align_right" v-if="dataList.total > 20">
+  <v-pagination :pagination="{total: dataList.total, pages: dataList.pages, page: dataList.page ||  1, pagesize: dataList.pagesize}" :render="init" />
 </div>
 </template>
 
@@ -37,12 +37,20 @@ export default defineComponent({
     const store = useStore();
     const dataList: any = ref([])
 
-    function init() {
+    function init(param: any = {}) {
+
+      const params: any = {
+        page: 1,
+        pagesize: 50
+      }
+      Object.assign(params, param)
+
       store.dispatch('common/Fetch', {
         api: 'visitorList',
         data: {
           type: props.type,
-          uid: getUid()
+          uid: getUid(),
+          ...params
         }
       }).then(res => {
         dataList.value = res.result

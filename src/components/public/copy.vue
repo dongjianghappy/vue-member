@@ -1,5 +1,6 @@
 <template>
-<i class="iconfont icon-copy" title="复制" @click="handleCopy($event, data)"></i>
+<span v-if="title" @click="handleCopy($event, data)">{{title}}</span>
+<i class="iconfont" :class="`icon-${icon}`" :title="name" @click="handleCopy($event, data)" v-else></i>
 </template>
 
 <script lang="ts">
@@ -11,6 +12,18 @@ import {
 export default defineComponent({
   name: 'v-Button',
   props: {
+    title: {
+      type: String,
+      default: ''
+    },
+    icon: {
+      type: String,
+      default: 'copy'
+    },
+    name: {
+      type: String,
+      default: '复制'
+    },
     data: {
       type: String,
       default: ""

@@ -1,12 +1,12 @@
 <template>
 <v-button v-model:show="isShow">
-  <i class="iconfont icon-shezhi" />
+  <div class="zhejiao"><i class="iconfont icon-zhejiao" /></div>
 </v-button>
 <v-dialog ref="dialog" v-model:show="isShow" :style="style" :data="data" :confirm="true" :cancel="true" @submit="submit">
   <template v-slot:content>
     <v-tabs :tabs="[{name: '本地上传',value: 'photos'},{name: '相册',value: 'background'}]" :isEmit="true">
       <template v-slot:content1>
-        <v-listsss ref="aaaaaaaaa" :kind="kind" :image="img" :size="size" :mask="kind === 'head_background' ? { w: 550, h: 300, tb: 100, lr: 50 } : { w: 1050, h: 350, tb: 50, lr: 50 }" />
+        <v-listsss ref="aaaaaaaaa" :kind="kind" :image="img" :size="size" :mask="kind === 'head_background' ? { w: 550, h: 350, tb: 50, lr: 50 } : { w: 1050, h: 350, tb: 50, lr: 50 }" />
       </template>
       <template v-slot:content2>
         <List :kind="kind" />
@@ -75,9 +75,8 @@ export default defineComponent({
     let offX: any = 0 // 图片默认x坐标
     let offY: any = 0 // 图片默认y坐标
 
-
     function submit() {
-      let src = aaaaaaaaa.value.cutPicture() 
+      let src = aaaaaaaaa.value.cutPicture()
       store.dispatch('common/Fetch', {
         api: "UploadPhotos",
         data: {

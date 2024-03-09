@@ -10,6 +10,38 @@ const actions = {
     context.commit("setData" , {state: params.state, data: result.result});
     return result
   },  
+  comprehensive: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.comprehensive({
+      ...data 
+    })
+    context.commit("setComprehensiveList" , {state: params.state, data: result.result});
+    return result
+  },
+  recommendTalk: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.recommendTalk({
+      ...data 
+    })
+    context.commit("setRecommendTalk" , {state: params.state, data: result.result});
+    return result
+  },
+  Archive: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.Calendar({
+      ...data 
+    })
+    context.commit("setArchive" , result.result);
+    return result
+  },
+  search: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.search({
+      ...data 
+    })
+    context.commit("setSearchList" , {state: params.state, data: result.result});
+    return result
+  },  
   Talk: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const { result }:any = await api.talk({
       ...params 
@@ -92,8 +124,23 @@ const actions = {
     })
     context.commit("sethanyuList" , result.result);
     return result
-  },     
-  
+  },    
+  questionCate: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.select({
+      ...data 
+    })
+    context.commit("setQuestionsCate" , result.result);
+    return result
+  }, 
+  questions: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.questionsList({
+      ...data 
+    })
+    context.commit("setQuestionsList" , result.result);
+    return result
+  },    
   
 }
 

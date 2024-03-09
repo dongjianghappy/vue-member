@@ -1,4 +1,11 @@
 export interface State {
+  commentStatus: any;
+  barrageSetting: any;
+  barrageStatus: any;
+  comprehensiveList: any;
+  archive: any;
+  channel: any;
+  search: any;
   talkList: any;
   talkCollect: any;
   talkComment: any;
@@ -13,10 +20,53 @@ export interface State {
   websiteList: any
   blogList: any
   wordsList: any
+  questionCate: any
+  questionsList: any
 }
 
 
 const initState: State = {
+  comprehensiveList: [],
+  commentStatus: false,
+  barrageSetting: { item: {barrage: ''}, field: 'barrage'},
+  barrageStatus: false,
+  archive: [],
+  channel: {
+    all: [],
+    talk: [],
+    concern: [],
+    friend: [],
+    article: [],
+    picture: [],
+    tech: [],
+    notes: [],
+    funny: [],
+    source: [],
+    website: [],
+    words: [],
+    questions: [],
+    recommend: [],
+    camera: [],
+    vlog: [],
+    checked_num: 0,
+    page: 1,
+    pages: 0
+  },
+  search: {
+    all: [],
+    talk: [],
+    article: [],
+    picture: [],
+    tech: [],
+    notes: [],
+    funny: [],
+    source: [],
+    website: [],
+    words: [],
+    questions: [],
+    page: 1,
+    pages: 0
+  },  
   talkList: {
     list: [],
     page: 1,
@@ -34,7 +84,9 @@ const initState: State = {
   notesList: [],
   websiteList: [],
   blogList: [],
-  wordsList: []
+  wordsList: [],
+  questionCate: [],
+  questionsList: []
 }
 
 export default initState;

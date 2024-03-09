@@ -1,8 +1,8 @@
 <template>
-<div class="banner" :style="{width: `${data.attr.width}px`}">
+<div class="banner" style="border-radius: 4px; overflow: hidden;" :style="{width: `${data.attr.width}px`}">
   <div class="_container" :style="{
-        width: `620px`,
-        height: `80px`,
+        width: `${data.attr.width}px`,
+        height: `${data.attr.height}px`,
         left: '50%',
         marginLeft: `${-620 / 2}px`
       }">
@@ -15,9 +15,9 @@
     </div>
   </div>
   <!-- 焦点 -->
-  <div class="ctr" :style="{right: `${data.attr.focus_right}px`, bottom: `${data.attr.focus_bottom}px`}">
+  <div class="ctr" :style="{right: `${data.attr.focus_right}px`, bottom: `${data.attr.focus_bottom}px`}" v-if="data.value.length > 1">
     <ul class="iconlist">
-      <li v-for="(item, i) in data.value" :key="i" :style="{background: i==index ? '#f00' : '#eee'}" @mousemove="handleHover(i)" @mouseout="time"></li>
+      <li v-for="(item, i) in data.value" :key="i" :style="{background: i==index ? 'var(--color-primary)' : '#eee'}" @mousemove="handleHover(i)" @mouseout="time"></li>
     </ul>
   </div>
 </div>

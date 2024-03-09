@@ -27,7 +27,7 @@
   </template>
   <div class="relative" style="flex:1; text-align: center; height: 100%;" v-else>
     <video ref="show_video" controlslist="nodownload" controls="" autoplay="" loop name="media" style="width: inherit; height: inherit;">
-      <source :src="`http://localhost//uploadfile/music/original/${currentVideo}`" type="video/mp4">
+      <source :src="currentVideo" type="video/mp4">
     </video>
     <div class="layer-button close absolute" style="line-height: 60px;" @click="handleclick"><i class="iconfont icon-close font20 pointer" /></div>
   </div>
@@ -46,7 +46,7 @@
             <div class="bold mb10" v-html="data.title"></div>
             <p class="mb10">分类: {{data.parent}}</p>
             <div class="mb10"> 标签: {{data.tag}}</div>
-            <div>摘要: {{data.summary}}</div>
+            <div>摘要: <span v-html="data.summary"></span></div>
           </div>
         </div>
       </div>

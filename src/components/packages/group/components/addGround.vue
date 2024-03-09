@@ -2,18 +2,21 @@
 <v-button v-model:show="isShow">
   {{title}}
 </v-button>
-<v-dialog v-model:show="isShow" ref="form" :title="action === 'add' ? '创建组' : '编辑组'" :style="{width: 450, height: 320}" width="520px" height="450px" :confirm="true" :cancel="true" @submit="submit">
+<v-dialog v-model:show="isShow" ref="form" :title="action === 'add' ? '创建组' : '编辑组'" :style="{width: 450, height: 350}" :confirm="true" :cancel="true" @submit="submit">
   <template v-slot:content>
     <ul class="edit-list">
       <li class="mb15">
         <div class="mb5">分组名称</div>
-        <input type="text" v-model="form.name" class="input-sm input-full">
+        <input type="text" v-model="detail.name" class="input-sm input-full">
       </li>
       <li>
         <div class="mb5">分组描述</div>
-        <textarea v-model="form.description" placeholder="请输入分组描述" class="w-full"></textarea>
+        <textarea v-model="detail.description" placeholder="请输入分组描述" class="w-full"></textarea>
       </li>
     </ul>
+    <div class="mt15">
+      <v-visible v-model:visible="detail.visible" />
+    </div>
   </template>
 </v-dialog>
 </template>
@@ -62,7 +65,7 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore();
     const isShow = ref(false)
-    const form: any = ref({
+    const detail: any = ref({
       id: "",
       name: "",
       description: ""
@@ -71,9 +74,9 @@ export default defineComponent({
     // 监听
     watch([isShow], async (newValues, prevValues) => {
       if (isShow.value) {
-        form.value.id = props.data.id
-        form.value.name = props.data.name
-        form.value.description = props.data.description
+        detail.value.id = props.data.id
+        detail.value.name = props.data.name
+        detail.value.description = props.data.description
       }
     })
 
@@ -82,11 +85,13 @@ export default defineComponent({
         id,
         name,
         description,
-      } = form.value
+        visible,
+      } = detail.value
 
       const param: any = {
         name: name,
         description: description,
+        visible
       }
 
       if (props.action === 'edit') {
@@ -107,7 +112,7 @@ export default defineComponent({
 
     return {
       isShow,
-      form,
+      detail,
       submit
     }
   }

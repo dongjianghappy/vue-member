@@ -1,9 +1,17 @@
 <template>
-<div>
-  <div class="sidebar">
-    <HotTalk v-if="module.hot_topic" />
-    <Visitor v-if="module.recent_visitors" />
-    <Ranking :style="{width: '300px'}" v-if="module.ranking" />
+<div class="module-wrap mb15 w180">
+  <div class="module-head head bd-0 p15" v-if="title && loginuser.currentUser">
+    <span class="right">
+      <slot name="button"></slot>
+    </span>
+  </div>
+  <div class="module-content p0" :style="{height: loginuser.currentUser ? '500px' : '560px'}">
+    <ul v-if="data.length">
+      <li v-for="(item, index) in data" :key="index" @click="handleClick(item.path || item.value)" class="aside">
+        <i class="iconfont" :class="`icon-${item.icon || 'dot'}`" v-if="hasIcon" /> {{item.name}} <span v-if="item.num">({{item.num}})</span>
+      </li>
+    </ul>
+    <slot name="aside"></slot>
   </div>
 </div>
 </template>
@@ -12,73 +20,90 @@
 import {
   defineComponent,
   getCurrentInstance,
+  useRouter,
   onMounted,
-  computed
-} from 'vue'
-import {
+  getUid,
+  computed,
   useStore
-} from 'vuex'
-import HotTalk from '../../index/components/module/hotTalk.vue'
-import Ranking from '../../index/components/module/ranking.vue'
-import Visitor from '../../index/components/module/visitor.vue'
+} from '@/utils'
 export default defineComponent({
   name: 'AsideView',
-  components: {
-    HotTalk,
-    Ranking,
-    Visitor
-  },
   props: {
-    module: {
-      type: Object,
+    title: {
+      type: String,
+      default: ""
+    },
+    data: {
+      type: Array,
       default: () => {
-        return {}
+        return []
+      }
+    },
+    hasIcon: {
+      type: Boolean,
+      default: true
+    },
+    isRoot: {
+      type: Boolean,
+      default: true
+    },
+    render: {
+      type: Function,
+      default: () => {
+        return
       }
     }
   },
+  emits: ['route'],
   setup(props, context) {
     const {
       proxy
     }: any = getCurrentInstance();
-    const store = useStore();
-    const userInfo = computed(() => store.getters['user/userInfo']);
-    const messageBoard = computed(() => store.getters['common/messageBoard']);
-    const recentJournal = computed(() => store.getters['common/recentJournal']);
-    const recentPhotos = computed(() => store.getters['common/recentPhotos']);
-    const currentUser = computed(() => store.getters['user/currentUser']);
-
+    const store = useStore()
+    const router = useRouter();
+    const loginuser = computed(() => store.getters['user/loginuser']);
+    const userInfo: any = computed(() => store.getters['user/userInfo']);
+    // 初始化数据
     function init() {
-      store.dispatch('common/MessageBoard', {
-
-      })
-      // store.dispatch('common/RecentJournal', {
-
-      // })
-    }
-
-    onMounted(() => {
       proxy.$scroll.init({
         win: {
           el: window,
-          y: 535,
+          y: 0,
           b: 80
         },
         doc: {
-          el: 'aside_fixed'
+          el: 'sidebar_fixed'
         },
         type: "fixed"
       })
-    })
-
-    init()
-    return {
-      init,
-      userInfo,
-      currentUser,
-      messageBoard,
-      recentJournal,
-      recentPhotos,
     }
-  },
+
+    function handleClick(param: any) {
+      if (Number(param) || param === "0") {
+        context.emit('route', param)
+      } else {
+        if (props.isRoot) {
+          router.push(proxy.const.setUrl({
+            uid: getUid(),
+            query: param
+          }))
+        } else {
+          router.push(param)
+        }
+
+        setTimeout(() => {
+          props.render && props.render()
+        }, 100)
+      }
+    }
+
+    onMounted(init)
+
+    return {
+      loginuser,
+      userInfo,
+      handleClick
+    }
+  }
 })
 </script>
