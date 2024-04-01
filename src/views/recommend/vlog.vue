@@ -1,6 +1,6 @@
 <template>
 <div v-if="dataList.length">
-  <div class="col-sm-6 col-md-3 p10" v-for="(item, index) in dataList" :key="index">
+  <div class="col-sm-6 col-md-3 p10" v-for="(item, index) in dataList" :key="index" @click="showImg(item)">
     <Video :data="item" />
   </div>
 </div>
@@ -13,6 +13,7 @@
 import {
   defineComponent
 } from '@/utils'
+import VueEvent from '@/utils/event'
 import Video from '../index/components/TalkItem/components/video2.vue'
 export default defineComponent({
   name: 'HomeView',
@@ -29,8 +30,14 @@ export default defineComponent({
   },
   setup(props, context) {
 
-    return {
+    function showImg(param: any) {
+      VueEvent.emit("screen", {
+        data: param
+      });
+    }
 
+    return {
+      showImg
     }
   }
 })

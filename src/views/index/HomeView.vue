@@ -1,24 +1,27 @@
 <template>
-<div>
-  <div class="container w1100 relative clearfix">
-    <!-- 侧边菜单 -->
-    <div class="left-sidebar left">
-      <v-aside :data="module.groups" title="首页" :render="init" />
-    </div>
-    <!-- 主内容 -->
-    <div class="main-center left">
-      <Collect v-if="component==='collect'" />
-      <Comment v-else-if="component==='comment'" />
-      <Praise v-else-if="component==='praise'" />
-      <Forwarding v-else-if="component==='forwarding'" />
-      <Center ref="talk" v-else />
-    </div>
-    <!-- 右侧 -->
-    <div class="w280 right">
-      <RightView :render="init" />
+  <div>
+    <div class="container w1100 relative clearfix">
+      <!-- 侧边菜单 -->
+      <div class="left-sidebar left">
+        <v-aside :data="module.groups"
+                 title="首页"
+                 :render="init" />
+      </div>
+      <!-- 主内容 -->
+      <div class="main-center left">
+        <Collect v-if="component==='collect'" />
+        <Comment v-else-if="component==='comment'" />
+        <Praise v-else-if="component==='praise'" />
+        <Forwarding v-else-if="component==='forwarding'" />
+        <Center ref="talk"
+                v-else />
+      </div>
+      <!-- 右侧 -->
+      <div class="w280 right">
+        <RightView :render="init" />
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

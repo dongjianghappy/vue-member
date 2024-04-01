@@ -8,7 +8,12 @@
       <img :src="item.image" style="width: 100%; height: 80px" v-if="item.image">
       <i class="iconfont icon-checkbox checkbox" v-if="item.id === currentData.theme"></i>
     </div>
-    <div class="theme-name ptb10 font12">{{item.name}}</div>
+    <div class="theme-name ptb10 font12">{{item.name}}
+      <Custom :data="{id: item.id, coding: coding}" action="edit" :render="init" v-if="module.custom_theme && item.custom === '1'" />
+    </div>
+  </div>
+  <div class="theme-list left" v-if="module.custom_theme">
+    <Custom :data="{coding: coding}" :render="init" />
   </div>
 </div>
 </template>
@@ -18,10 +23,16 @@ import {
   defineComponent,
   ref,
   onMounted,
-  useStore
+  computed,
+  useStore,
+  codings
 } from '@/utils'
+import Custom from '../components/custom.vue'
 export default defineComponent({
-  name: 'v-Theme',
+  name: 'v-Custom',
+  components: {
+    Custom
+  },
   props: {
     currentData: {
       type: Object,
@@ -43,6 +54,8 @@ export default defineComponent({
   emits: ['onClick'],
   setup(props, context) {
     const store = useStore();
+    const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
+    const coding = codings.user.theme
     const currentCate = ref([])
     const currentIndex: any = ref()
     const themeList: any = ref([])
@@ -71,6 +84,8 @@ export default defineComponent({
     onMounted(init)
 
     return {
+      coding,
+      module,
       currentCate,
       currentIndex,
       themeList,

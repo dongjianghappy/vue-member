@@ -1,11 +1,23 @@
 <template>
-<div class="home">
-  <TalkTabs ref="talktabs" :data="tabs" :render="init" :mod="{tab: 'mod', value: query.mod}" v-if="query.mod !== 'friend' && query.mod !== 'concern'" />
-  <div class="p10 align_center" style="color: #808080" v-if="channel.checked_num">您有{{channel.checked_num}}条微博内容待审核。</div>
-  <TalkItem :sourceData="channel[query.mod]" :deleteTalk="deleteTalk" :render="init" v-if="query.mod" />
-  <TalkItem :sourceData="channel.all" :deleteTalk="deleteTalk" :render="init" v-else />
-  <v-loding v-if="!loading" />
-</div>
+  <div class="home">
+    <TalkTabs ref="talktabs"
+              :data="tabs"
+              :render="init"
+              :query="{tab: 'mod', value: query.mod || ''}"
+              v-if="query.mod !== 'friend' && query.mod !== 'concern'" />
+    <div class="p10 align_center"
+         style="color: #808080"
+         v-if="channel.checked_num">您有{{channel.checked_num}}条微博内容待审核。</div>
+    <TalkItem :sourceData="channel[query.mod]"
+              :deleteTalk="deleteTalk"
+              :render="init"
+              v-if="query.mod" />
+    <TalkItem :sourceData="channel.all"
+              :deleteTalk="deleteTalk"
+              :render="init"
+              v-else />
+    <v-loding v-if="!loading" />
+  </div>
 </template>
 
 <script lang="ts">

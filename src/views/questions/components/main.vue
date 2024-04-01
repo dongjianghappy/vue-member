@@ -1,18 +1,24 @@
 <template>
-<TalkTabs ref="talktabs" :data="module.question_Tabs" :render="init" />
-<div class="module-wrap bg-white" style=" min-height:630px">
-  <div class="module-content p0">
-    <div class="questions-list p25" v-for="(item, index) in dataList.list" :key="index">
-      <div class="font16" @click="handleClick(item)">{{item.title}}</div>
-      <div class="pt10">
-        <span class="mr15 cl-ccc">{{item.parent || '未分类'}}</span>
-        <span class="mr15 cl-ccc">回答：{{item.answer_num}}</span>
-        <span class="mr15 cl-ccc">浏览：{{item.visit || 0}}</span>
-        <span class="cl-ccc">{{item.times}}</span>
+  <TalkTabs ref="talktabs"
+            :data="module.question_Tabs"
+            :render="init" />
+  <div class="module-wrap"
+       style=" min-height:630px">
+    <div class="module-content p0">
+      <div class="questions-list p25"
+           v-for="(item, index) in dataList.list"
+           :key="index">
+        <div class="font16"
+             @click="handleClick(item)">{{item.title}}</div>
+        <div class="pt10">
+          <span class="mr15 cl-ccc">{{item.parent || '未分类'}}</span>
+          <span class="mr15 cl-ccc">回答：{{item.answer_num}}</span>
+          <span class="mr15 cl-ccc">浏览：{{item.visit || 0}}</span>
+          <span class="cl-ccc">{{item.times}}</span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -96,7 +102,6 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .questions-list {
-  background: #fff;
   padding: 25px 15px;
   height: 100px;
   font-size: 14px;
@@ -163,7 +168,7 @@ export default defineComponent({
   }
 
   &:hover {
-    background: #fafbfc;
+    background: var(--link-hover-background);
   }
 }
 </style>

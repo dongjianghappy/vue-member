@@ -3,7 +3,7 @@
   <i class="iconfont icon-chart" style="color: #f67f00;"></i>
 </v-button>
 <span v-else @click="handleclick" v-html="name" class="cursor"></span>
-<v-dialog v-model:show="isShow" ref="form" :title="title || name" width="950px" height="600px" conheight="600px" :hasfooter="false" :confirm="true" :cancel="true" @submit="submit">
+<v-dialog v-model:show="isShow" ref="form" :title="title || name" width="950px" :style="{width: 600, height: 600}" :hasfooter="false" :confirm="true" :cancel="true" @submit="submit">
   <template v-slot:content v-if="isShow">
     <slot name="content">
      <v-graph :data="data" :isShow="true" />

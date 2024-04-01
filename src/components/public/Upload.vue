@@ -5,7 +5,7 @@
     <ul v-if="file === 'image' || (file === 'talk' && imgList.length)">
       <li v-for="(item, index) in imgList" :key="index" class="upload-album-wrap relative" :style="style" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
         <!-- <img draggable="true" :src="item.src" v-if="item.status ==='complete'" /> -->
-         <v-img draggable="true" :src="item.src" v-if="item.status ==='complete'" />
+        <v-img draggable="true" :src="item.src" v-if="item.status ==='complete'" />
         <div class="load1" v-else>
           <div class="loader">Loading...</div>
         </div>
@@ -17,7 +17,7 @@
           <span><i class="iconfont icon-mail" title="设置封面" @click="handleCover(item.src)"></i></span>
           <span><i class="iconfont icon-recycle" title="删除" @click="remove(index)"></i></span></div>
       </li>
-      <li class="upfile" :style="style" @click="handleclick"><i class="iconfont icon-add"></i></li>
+      <li class="upfile" :style="style" @click="handleclick" v-if="imgList.length < maxLength"><i class="iconfont icon-add"></i></li>
     </ul>
     <!-- 音视频上传 -->
     <div class="inline" v-else-if="file === 'music' || file === 'vidoe'">
@@ -69,6 +69,10 @@ export default defineComponent({
       type: Array,
       default: []
     },
+    maxLength: {
+      type: String,
+      default: "50"
+    },
     mask: {
       type: Boolean,
       default: false
@@ -109,7 +113,7 @@ export default defineComponent({
           src: _obj.files[i].name,
           status: "upload"
         })
-        
+
         let fd = new FormData()
         fd.append('upload' + i, _obj.files[i])
         store.dispatch('common/uploadImg', {
@@ -137,7 +141,10 @@ export default defineComponent({
 
           }
         }).then(res => {
-          debugger
+          if (res == null || res.ifSuccess === 2) {
+            imgList.value = []
+            return
+          }
           // 上传成功后，将状态改成完成并且展示图片
           let arr: any = imgList.value.filter((item: any) => item.status === "upload")
           arr[0].status = "complete"

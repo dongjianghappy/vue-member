@@ -12,12 +12,18 @@
         <img :src="data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style=" width: 100%; height: auto; cursor: zoom-in;" />
       </div>
       <img :src="data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 4px; width: 125px; height: 125px; cursor: zoom-in;" v-else-if="kind=='comment'" />
-      <img :src="data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 8px;width: 250px; height: auto; cursor: zoom-in;" v-else />
+      <img :src="data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 8px;width: 400px; height: auto; cursor: zoom-in;" v-else />
     </div>
 
     <ul v-else class="img-grid smallimg-wrap clearfix">
       <template v-for="(img, k) in data.image" :key="k">
-        <li class="relative" style="border-radius: 8px; overflow:hidden;" @click="showImg(data, img)" v-if="k < 9">
+        <li class="relative" style="border-radius: 8px; overflow:hidden; width: 200px; height: 200px;" @click="showImg(data, img)" v-if="data.image.length == 2 || data.image.length == 4">
+          <v-img :src="img" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" />
+          <div class="absolute align_center pt45" style="background: rgba(0, 0, 0, 0.75); top: 0; right: 0; bottom: 0; left: 0; z-index: 1" v-if="k=== 8 && data.image.length > 9">
+            <span class="font18 cl-white">+{{data.image.length-9}}</span>
+          </div>
+        </li>
+        <li class="relative" style="border-radius: 8px; overflow:hidden;" @click="showImg(data, img)" v-else-if="k < 9">
           <v-img :src="img" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" />
           <div class="absolute align_center pt45" style="background: rgba(0, 0, 0, 0.75); top: 0; right: 0; bottom: 0; left: 0; z-index: 1" v-if="k=== 8 && data.image.length > 9">
             <span class="font18 cl-white">+{{data.image.length-9}}</span>
@@ -27,7 +33,8 @@
     </ul>
   </div>
 </div>
-<v-layer v-model:isShow="showFlag" :data="currentData" :img="currentImg" v-if="showFlag" type="image" :hasComment="true" />
+<!-- <v-layer v-model:isShow="showFlag" :data="currentData" :img="currentImg" v-if="showFlag" type="image" :hasComment="false" /> -->
+<v-layer v-model:isShow="showFlag" :data="currentData" v-if="showFlag" type="image" :hasInfo="false" :hasComment="false" />
 </template>
 
 <script lang="ts">
@@ -35,7 +42,7 @@ import {
   defineComponent,
   ref
 } from '@/utils'
-
+import VueEvent from '@/utils/event'
 import Slideshow from './slide.vue'
 export default defineComponent({
   name: 'v-Image',
@@ -61,9 +68,10 @@ export default defineComponent({
     const isSlide = ref(false)
 
     function showImg(data: any, img: any) {
-      currentData.value = data
-      currentImg.value = img
-      showFlag.value = !showFlag.value
+      VueEvent.emit("layout", {
+        data,
+        img
+      });
     }
 
     return {

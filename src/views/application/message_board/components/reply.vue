@@ -1,9 +1,8 @@
 <template>
-<v-button v-model:show="isShow" :disabled="false" v-if="userInfo.account !== data.from_uid">
-  <!-- <i class="iconfont icon-comment"></i> -->回复
+<v-button v-model:show="isShow" :disabled="false">
+  <span class="cl-666">回复</span>
 </v-button>
-<span v-else><i class="iconfont icon-comment cl-ccc"></i></span>
-<v-dialog v-model:show="isShow" ref="form" className="font16" :title="`回复@${data.nickname}`" :style="{width: 650, height: 350}" width="520px" height="450px" :hasfooter="false">
+<v-dialog v-model:show="isShow" ref="form" className="font16" :title="`回复`" :style="{width: 650, height: 350}" width="520px" height="450px" :hasfooter="false">
   <template v-slot:content>
     <Form :data="data" api="commentReply" :method="method" :keys="`reply_${data.id}`" />
   </template>

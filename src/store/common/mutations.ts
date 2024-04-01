@@ -49,7 +49,7 @@ const mutations = {
     state.ranking = params.ranking
   },  
   setLastestVisitor: (state: any, params: any) => {
-    debugger
+    params.list = params.list || []
     const result = [];
     for(let i=0,len=params.list.length;i<len;i+=9){
       result.push(params.list.slice(i,i+9));

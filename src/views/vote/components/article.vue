@@ -7,7 +7,7 @@
       </span>
       {{detail.name}}</div>
     <div class="p25" style=" text-indent: 30px; line-height: 25px;">{{detail.content}}</div>
-    <div class="bg-f7f8fa p25 align_center">
+    <div class="p25 align_center">
       <div class="plr25 pb25 align_right" v-if="detail.user_voting && detail.user_voting.times">您在
         <span class="cl-red bold">
         {{detail.user_voting && detail.user_voting.times}}
@@ -15,7 +15,7 @@
         参与了投票</div>
       <Vote2 :data="detail" @value="(e) => detail.option = e" />
       <div class="mt10">
-        <div class="bg-ccc cl-white p15 inline" style="border-radius: 4px; width: 100px;" @click="handelclick">确认提交</div>
+        <div class="bg-ccc cl-white p15 inline" style="border-radius: 4px; width: 100px;" @click="handelclick">我要投票</div>
       </div>
     </div>
   </div>

@@ -1,20 +1,31 @@
 <template>
-<v-button v-model:show="isShow">
-  <div class="zhejiao"><i class="iconfont icon-zhejiao" /></div>
-</v-button>
-<v-dialog ref="dialog" v-model:show="isShow" :style="style" :data="data" :confirm="true" :cancel="true" @submit="submit">
-  <template v-slot:content>
-    <v-tabs :tabs="[{name: '本地上传',value: 'photos'},{name: '相册',value: 'background'}]" :isEmit="true">
-      <template v-slot:content1>
-        <v-listsss ref="aaaaaaaaa" :kind="kind" :image="img" :size="size" :mask="kind === 'head_background' ? { w: 550, h: 350, tb: 50, lr: 50 } : { w: 1050, h: 350, tb: 50, lr: 50 }" />
-      </template>
-      <template v-slot:content2>
-        <List :kind="kind" />
-      </template>
-    </v-tabs>
+  <v-button v-model:show="isShow">
+    <div class="zhejiao"><i class="iconfont icon-zhejiao" /></div>
+  </v-button>
+  <v-dialog ref="dialog"
+            v-model:show="isShow"
+            :style="style"
+            :data="data"
+            :confirm="true"
+            :cancel="true"
+            @submit="submit">
+    <template v-slot:content>
+      <v-tabs :tabs="[{name: '本地上传',value: 'photos'},{name: '相册',value: 'background'}]"
+              :isEmit="true">
+        <template v-slot:content1>
+          <v-listsss ref="aaaaaaaaa"
+                     :kind="kind"
+                     :image="img"
+                     :size="size"
+                     :mask="mask" />
+        </template>
+        <template v-slot:content2>
+          <List :kind="kind" />
+        </template>
+      </v-tabs>
 
-  </template>
-</v-dialog>
+    </template>
+  </v-dialog>
 </template>
 
 <script lang="ts">
@@ -32,9 +43,19 @@ export default defineComponent({
     List
   },
   props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     kind: {
       type: String,
       default: 'head_background'
+    },
+    mask: {
+      type: Object,
+      default: { w: 1050, h: 350, tb: 50, lr: 50 }
     },
     size: {
       type: Object,
@@ -84,6 +105,7 @@ export default defineComponent({
           type: 0,
           root: 1,
           img: src,
+          ...props.data
         }
       }).then(res => {
         isShow.value = false

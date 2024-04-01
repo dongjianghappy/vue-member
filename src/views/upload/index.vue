@@ -1,66 +1,110 @@
 <template>
-<div class="container w1100 p15">
-  <div class="module-wrap">
-    <div class="module-content ptb50 plr100">
-      <div class="font20 bold">上传视频</div>
-      <div class="mtb25">
-        请上传10MB以下的视频，请勿上传违法视频。
-      </div>
-      <div class="p50" style="overflow: auto; border: 1px dashed #ddd; text-align: center;" v-show="!file">
-        <v-upload ref="upload" @imgList="image" v-model:haschoose="file" :show="false" file="vidoe" v-model:file="fileInfo" uploadtype="video" format=".mp4" />
-      </div>
-      {{fileInfo}}
-      <div v-if="file">
-        <div class="mt25" style="border-bottom: 1px solid #eee; line-height: 25px;">
+  <div class="container w1100 p15">
+    <div class="module-wrap">
+      <div class="module-content ptb50 plr100">
+        <div class="font20 bold">上传视频</div>
+        <div class="mtb25">
+          请上传10MB以下的视频，请勿上传违法视频。
+        </div>
+        <div class="p50"
+             style="overflow: auto; border: 1px dashed #ddd; text-align: center;"
+             v-show="!file">
+          <v-upload ref="upload"
+                    @imgList="image"
+                    v-model:haschoose="file"
+                    :show="false"
+                    file="vidoe"
+                    v-model:file="fileInfo"
+                    uploadtype="video"
+                    format=".mp4" />
+        </div>
+        <div v-if="file">
+          <div class="mt25"
+               style="border-bottom: 1px solid #eee; line-height: 25px;">
+            <div style="display: flex">
+              <div style="flex: 1;">文件名: {{fileInfo.name}} <span class="ml5">{{fileInfo.size}}</span></div>
+              <div style="width: 100px; text-align: right"
+                   @click="upload.handleclick()">重新上传</div>
+            </div>
+            <div>
+              <v-progress :data="fileInfo" />
+            </div>
+          </div>
           <div style="display: flex">
-            <div style="flex: 1;">文件名: {{fileInfo.name}} <span class="ml5">{{fileInfo.size}}</span></div>
-            <div style="width: 100px; text-align: right" @click="upload.handleclick()">重新上传</div>
-          </div>
-          <div>
-            <v-progress :data="fileInfo" />
-          </div>
-        </div>
-        <div style="display: flex">
-          <div style="width: 50%; height: 300px; text-align: center; background: #000;">
-            <video ref="show_video" controlslist="nodownload" controls="" autoplay loop name="media" style="width: inherit; height: inherit;">
-              <source :src="fileInfo.fileUrl || data.video" type="video/mp4">
-            </video>
-          </div>
-          <div style="flex: 1; height: 300px; text-align: center; background: #000;">
-            <img :src="fileInfo.cover || data.cover" alt="" style="height: inherit">
-          </div>
-        </div>
-        <div class="send_info mt25">
-          <div class="send-input">
-            <div class="send-input-box relative">
-              <textarea placeholder="有什么新鲜事想分享给大家？" v-model="data.summary" @focus="handleFocus($event)" @keyup="handleKeyup" class="talkcontent-wrap" style="background: transparent; resize: none;"></textarea>
+            <div style="width: 50%; height: 300px; text-align: center; background: #000;">
+              <video ref="show_video"
+                     controlslist="nodownload"
+                     controls=""
+                     autoplay
+                     loop
+                     name="media"
+                     style="width: inherit; height: inherit;">
+                <source :src="fileInfo.fileUrl || data.video"
+                        type="video/mp4">
+              </video>
+            </div>
+            <div style="flex: 1; height: 300px; text-align: center; background: #000;">
+              <img :src="fileInfo.cover || data.cover"
+                   alt=""
+                   style="height: inherit">
             </div>
           </div>
+          <div class="mtb25">
+            <div class="pb10">分类</div>
+            <div>
+              <v-select :enums="dataList"
+                        v-model:value="data.cid"
+                        :defaultValue="data.cid = data.cid ? data.cid : '1'" />
+            </div>
+          </div>
+          <div class="send_info mt25">
+            <div class="send-input">
+              <div class="send-input-box relative">
+                <textarea placeholder="有什么新鲜事想分享给大家？"
+                          v-model="data.summary"
+                          @focus="handleFocus($event)"
+                          @keyup="handleKeyup"
+                          class="talkcontent-wrap"
+                          style="background: transparent; resize: none;"></textarea>
+              </div>
+            </div>
 
-          <!-- 操作 -->
-          <div class="operate">
-            <div class="operate-left">
-              <span class="infos p0">
-                <v-expression @onEmoji="choose" v-if="module.choose_expression" />
-              </span>
-              <span class="infos" v-if="module.choose_activity">
-                <v-topic ref="reftopic" :data="{topicFlag: topicFlag, content: data.summary}" @onEmoji="choose" @onClick="(e)=>topicFlag = e" />
-              </span>
-              <span class="infos" v-if="module.choose_user">
-                <v-aite ref="refaite" :data="{flag: sssss, content: data.summary}" @onEmoji="choose" @onClick="(e)=>sssss = e" />
-              </span>
-            </div>
-            <div class="operate-right" style=" width: 200px;">
-              <v-visible v-model:visible="visible" />
-              <button @click="sendTalk" class="btn" :class="{disabled: !data.summary}">发送</button>
+            <!-- 操作 -->
+            <div class="operate">
+              <div class="operate-left">
+                <span class="infos p0">
+                  <v-expression @onEmoji="choose"
+                                v-if="module.choose_expression" />
+                </span>
+                <span class="infos"
+                      v-if="module.choose_activity">
+                  <v-topic ref="reftopic"
+                           :data="{topicFlag: topicFlag, content: data.summary}"
+                           @onEmoji="choose"
+                           @onClick="(e)=>topicFlag = e" />
+                </span>
+                <span class="infos"
+                      v-if="module.choose_user">
+                  <v-aite ref="refaite"
+                          :data="{flag: sssss, content: data.summary}"
+                          @onEmoji="choose"
+                          @onClick="(e)=>sssss = e" />
+                </span>
+              </div>
+              <div class="operate-right"
+                   style=" width: 200px;">
+                <v-visible v-model:visible="visible" />
+                <button @click="sendTalk"
+                        class="btn"
+                        :class="{disabled: !data.summary}">发送</button>
+              </div>
             </div>
           </div>
         </div>
+
       </div>
-
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -72,7 +116,9 @@ import {
   watch,
   computed,
   reactive,
-  durationTrans
+  durationTrans,
+  onMounted,
+  codings
 } from '@/utils'
 
 export default defineComponent({
@@ -83,6 +129,7 @@ export default defineComponent({
       proxy
     }: any = getCurrentInstance();
     const store = useStore();
+    const coding: any = codings.talk
     const img = ref("")
     const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
     const fileInfo: any = ref({})
@@ -95,6 +142,7 @@ export default defineComponent({
     const refaite: any = ref(null)
     const visible: any = ref('public')
     const sssss: any = ref(false)
+    const dataList: any = ref([])
     const data: any = reactive({
       title: "",
       summary: "",
@@ -216,13 +264,29 @@ export default defineComponent({
       }
     }
 
+    function init() {
+      dataList.value = []
+      store.dispatch('common/Fetch', {
+        data: {
+          coding: coding.cate
+        }
+      }).then(res => {
+        res.result.map((item: any) => {
+          dataList.value.push({
+            name: item.name,
+            value: item.id
+          })
+        })
+      })
+    }
+
     // 话题发布
     function sendTalk() {
       // proxy.$hlj.loading()
       store.dispatch('common/Fetch', {
         api: 'InsertTalk',
         data: {
-          coding: "M0000",
+          cid: `|${data.cid}|`,
           visible: visible.value,
           type: "video",
           img: data.img,
@@ -250,9 +314,12 @@ export default defineComponent({
       })
     }
 
+    onMounted(init)
+
     return {
       data,
       module,
+      dataList,
       handleClose,
       imgNum,
       image,

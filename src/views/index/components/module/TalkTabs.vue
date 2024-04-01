@@ -1,18 +1,30 @@
 <template>
-<ul class="tab_ul relative">
-  <li v-for="(item, index) in (data.length >5 ? data.slice(0, 7) : data)" :key="index" :style="style" :class="{current: (mod.value || '') == item.value}">
-    <span @click="handelClick(item.value)">{{item.name}}</span>
-  </li>
-  <span class="span-icon absolute" style="top: 12px; right: 15px">
-    <v-popover v-if="data.length > 7" content="<i class='iconfont icon-more icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-more`">
-      <div style="width: 100px; height: auto">
-        <ul class="font14" style="display: block">
-          <li v-for="(item, index) in data.slice(7, data.length)" :key="index" @click="handelClick(item.value)">{{item.name}}</li>
-        </ul>
-      </div>
-    </v-popover>
-  </span>
-</ul>
+  <ul class="tab_ul relative">
+    <li v-for="(item, index) in (data.length >5 ? data.slice(0, 7) : data)"
+        :key="index"
+        :style="style"
+        :class="{current: (query.value || '') == item.value}">
+      <span @click="handelClick(item)">{{item.name}}</span>
+    </li>
+    <span class="span-icon absolute"
+          style="top: 12px; right: 15px">
+      <v-popover v-if="data.length > 7"
+                 content="<i class='iconfont icon-more icon-btn'></i>"
+                 arrow="tb"
+                 offset="right"
+                 :move="-50"
+                 :keys="`popover-more`">
+        <div style="width: 100px; height: auto">
+          <ul class="font14"
+              style="display: block">
+            <li v-for="(item, index) in data.slice(7, data.length)"
+                :key="index"
+                @click="handelClick(item)">{{item.name}}</li>
+          </ul>
+        </div>
+      </v-popover>
+    </span>
+  </ul>
 </template>
 
 <script lang="ts">
@@ -29,15 +41,14 @@ export default defineComponent({
     mod: {
       type: Object,
       default: () => {
-        return {
-          tab: 'mod',
-          value: ''
-        }
+        return {}
       }
     },
     query: {
-      type: String,
-      default: ""
+      type: Object,
+      default: () => {
+        return {}
+      }
     },
     data: {
       type: Array,
@@ -66,18 +77,28 @@ export default defineComponent({
     const router = useRouter();
     const coding: any = codings
 
-    function handelClick(type: any) {
+    function handelClick(param: any) {
+      debugger
       let query = ""
-      query = type ? `?${props.mod.tab}=${type}${props.query}` : `?${props.query.substring(1, props.query.length)}`
-      router.push(window.location.pathname + query)
-      const param: any = {}
+      if (props.mod.tab == undefined && param.value) {
+        query = `?${props.query.tab}=${param.value}`
+      } else {
+        if (props.mod.tab) {
+          query = `?${props.mod.tab}=${props.mod.value}`
+          if (param.value) {
+            query += `&${props.query.tab}=${param.value}`
+          }
+        }
 
-      if (type) {
-        param[props.field] = type
       }
-      props.render(param)
 
-      Archive(param)
+      router.push(window.location.pathname + query)
+      const params: any = {}
+      if (param.value) {
+        params[props.field] = param.value
+      }
+      props.render(params)
+      Archive(params)
     }
 
     // 时间归档

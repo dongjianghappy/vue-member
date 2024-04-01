@@ -23,7 +23,8 @@
     </div>
     <v-nodata v-else trip="暂时还没有人评论" />
   </div>
-  <div class="half-circle" @click="expand"><i class="iconfont icon-arrow" style="margin: 0 !important" /></div>
+  <div class="half-circle-left deg180" @click="expand" v-if="data.displayType === 'layer' && !data.commentStatus"><i class="iconfont icon-arrow" style="margin: 0 !important" /></div>
+  <div class="half-circle" @click="expand" v-if="data.displayType === 'layer' && data.commentStatus || !data.displayType"><i class="iconfont icon-arrow" style="margin: 0 !important" /></div>
 </div>
 </template>
 

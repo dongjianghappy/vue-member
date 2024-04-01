@@ -20,18 +20,26 @@
               <div style="width: 150px">
                 <ul class="font14">
                   <template v-if="loginuser.account === item.uid">
-                    <li @click="handleRouter('istop', item)">{{item.istop === '1' ? '取消置顶' : '置顶'}}</li>
-                    <li @click="handleVisible('public', item)" v-if="item.visible !=='public'">转为公开</li>
-                    <li @click="handleVisible('fans', item)" v-if="item.visible !=='fans'">转为粉丝可见</li>
-                    <li @click="handleVisible('friend', item)" v-if="item.visible !=='friend'">转为好友可见</li>
-                    <li @click="handleVisible('privacy', item)" v-if="item.visible !=='privacy'">转为自己可见</li>
-                    <li @click="deleteTalk(item.id)">删除</li>
+                    <li v-if="module.edit">
+                      <Detail :data="item" />
+                    </li>
+                    <li @click="handleRouter('istop', item)" v-if="module.istop">{{item.istop === '1' ? '取消置顶' : '置顶'}}</li>
+                    <li  v-if="module.vote">
+                      <VoteSetting :data="item" />
+                    </li>
+                    <template v-if="module.visible">
+                      <li @click="handleVisible('public', item)" v-if="item.visible !=='public'">转为公开</li>
+                      <li @click="handleVisible('fans', item)" v-if="item.visible !=='fans'">转为粉丝可见</li>
+                      <li @click="handleVisible('friend', item)" v-if="item.visible !=='friend'">转为好友可见</li>
+                      <li @click="handleVisible('privacy', item)" v-if="item.visible !=='privacy'">转为自己可见</li>
+                    </template>
+                    <li @click="deleteTalk(item.id)" v-if="module.delete">删除</li>
                   </template>
                   <template v-else>
-                    <li @click="handleRouter('surrogate', item)">帮上置顶</li>
-                    <li @click="handleRouter('complaint', item)">投诉</li>
+                    <li @click="handleRouter('surrogate', item)" v-if="module.help_istop">帮上置顶</li>
+                    <li @click="handleRouter('complaint', item)" v-if="module.complain">投诉</li>
                   </template>
-                  <li class="share">
+                  <li class="share" v-if="module.share">
                     <span class="shares">分享</span>
                     <span class="copy">
                       <v-copy title="点我复制地址" :data="item.shortUrl" /></span>
@@ -42,6 +50,9 @@
           </span>
         </div>
         <div class="user_from pb5">{{item.times}}
+          <span v-if="item.vote">
+            <Vote :data="item" />
+          </span>
           <span class="ml5 cl-eb7350" v-if="item.istop === '1'">置顶</span>
         </div>
         <div class="user_text markdown">
@@ -112,6 +123,10 @@ import Images from './components/image.vue'
 import Video from './components/video.vue'
 import Audio from './components/audio.vue'
 import TalkItembar from './TalkItembar.vue'
+import Graph from '../../../graph/components/button.vue'
+import Vote from './vote/index.vue'
+import VoteSetting from './vote/setting.vue'
+import Detail from './components/detail.vue'
 
 export default defineComponent({
   name: 'TalkItemView',
@@ -120,6 +135,10 @@ export default defineComponent({
     Video,
     Audio,
     TalkItembar,
+    Graph,
+    Vote,
+    VoteSetting,
+    Detail
   },
   props: {
     sourceData: {
@@ -152,6 +171,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const loginuser = computed(() => store.getters['user/loginuser']);
+    const module = computed(() => store.getters['user/config_talk'].talk_operation || []);
     const showFlag = ref(false)
     const currentData = ref()
     const currentImg = ref()
@@ -196,6 +216,7 @@ export default defineComponent({
     }
 
     return {
+      module,
       showFlag,
       currentData,
       currentImg,

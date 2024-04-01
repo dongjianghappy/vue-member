@@ -1,19 +1,17 @@
 <template>
 <v-button v-model:show="isShow" class="relative">
-  <i class="iconfont" :class="`icon-${icon}`" @click="showImg(data)" v-if="icon" />
-  <div class="thumbnail" v-else>
+  <div class="thumbnail">
     <v-img :src="data.cover || data.image[0].replace(/thumb/g, 'view')" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" @click="showImg(data)" />
   </div>
 </v-button>
-<v-layer1 v-model:isShow="showFlag" :dataList="[{...data}]" @prevOrNext="prevOrNext" v-if="showFlag" :type="type" :getNeighbor="getNeighbor" :hasInfo="hasInfo" :hasComment="hasComment" />
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
-  ref,
-  useStore,
+  ref
 } from '@/utils'
+import VueEvent from '@/utils/event'
 export default defineComponent({
   name: 'v-Thumbnail',
   props: {
@@ -23,58 +21,19 @@ export default defineComponent({
         return {}
       }
     },
-    type: {
-      type: String,
-      default: "image"
-    },
-    coding: {
-      type: String,
-      default: ""
-    },
-    icon: {
-      type: String,
-      default: ""
-    },
-    hasInfo: {
-      type: Boolean,
-      default: false
-    },
-    hasComment: {
-      type: Boolean,
-      default: false
-    }
   },
   setup(props, context) {
-    const store = useStore()
     const isShow: any = ref(false)
-    const detail: any = ref({})
-    const drawer: any = ref(null)
-    const showFlag = ref(false)
 
-    function showImg(param: any, i: any) {
-      showFlag.value = !showFlag.value
-    }
-
-    function getNeighbor(type: any, callBack: any) {
-      store.dispatch('common/Fetch', {
-        api: "getNeighbor",
-        data: {
-          coding: props.coding,
-          type: type,
-          id: detail.value.id || props.data.id
-        }
-      }).then(res => {
-        detail.value = res.result
-      })
+    function showImg(param: any) {
+      VueEvent.emit("screen", {
+        data: param
+      });
     }
 
     return {
       isShow,
-      detail,
-      drawer,
-      showFlag,
-      showImg,
-      getNeighbor
+      showImg
     }
   }
 })

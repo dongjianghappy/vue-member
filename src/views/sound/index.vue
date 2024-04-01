@@ -1,5 +1,5 @@
 <template>
-<div class="container w1100 bg-white mb25" style="min-height: 600px">
+<div class="container w1100 mb25" style="min-height: 600px">
   <div class="module-wrap">
     <div class="module-head">
       <span class="bold">音效素材</span>

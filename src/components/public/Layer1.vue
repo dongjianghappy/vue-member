@@ -9,8 +9,7 @@
 import {
   defineComponent,
   onMounted,
-  ref,
-  watch
+  ref
 } from 'vue'
 import VueEvent from '@/utils/event'
 import Screen from '../../views/recommend/recommend.vue'
@@ -24,16 +23,6 @@ export default defineComponent({
       type: Object,
       default: () => {
         return {}
-      }
-    },
-    type: {
-      type: String,
-      default: ""
-    },
-    getNeighbor: {
-      type: Function,
-      default: () => {
-        return
       }
     },
     isShow: Boolean,
@@ -55,14 +44,14 @@ export default defineComponent({
 
     onMounted(() => {
       keyStatus.value = true
-      document.onkeydown = (e: any) => {
+      document.addEventListener("keydown", (e: any) => {
         if (!keyStatus.value) {
           return
         }
         if (e.keyCode == '27') {
           handleclick()
         }
-      }
+      });
     })
 
     return {
@@ -79,7 +68,7 @@ export default defineComponent({
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 2, 6, .85);
+  background: rgba(0, 2, 6, 1);
   display: flex;
   min-height: 100vh;
   z-index: 100000;
@@ -91,25 +80,41 @@ export default defineComponent({
   }
 
   .layer-button {
-    background: #645855;
+    background: rgba(0, 0, 0, .5);
+    position: absolute;
     border-radius: 30px;
     width: 56px;
     height: 56px;
     line-height: 50px;
+    cursor: pointer;
+    text-align: center;
+
+    i {
+      font-size: 24px !important;
+      color: #fff !important;
+      line-height: 60px;
+    }
 
     &.close {
       top: 15px;
       left: 30px;
+      line-height: 60px;
     }
 
     &.prev {
       top: 50%;
       left: 30px;
+      margin-top: 15px;
     }
 
     &.next {
       top: 50%;
       right: 30px;
+      margin-top: 15px;
+    }
+
+    &:hover {
+      background: rgba(0, 0, 0, .8);
     }
   }
 

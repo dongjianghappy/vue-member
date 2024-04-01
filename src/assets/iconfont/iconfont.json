@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "12339033",
+      "name": "topic",
+      "font_class": "topic",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "22547308",
+      "name": "template",
+      "font_class": "template",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "3262276",
+      "name": "guide",
+      "font_class": "guide",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "36914963",
+      "name": "blog-1",
+      "font_class": "blog-1",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
       "icon_id": "19189766",
       "name": "barrage-2",
       "font_class": "barrage-2",
@@ -1799,8 +1827,8 @@
     },
     {
       "icon_id": "1697872",
-      "name": "topic",
-      "font_class": "topic",
+      "name": "topic-2",
+      "font_class": "topic-2",
       "unicode": "e66f",
       "unicode_decimal": 58991
     }

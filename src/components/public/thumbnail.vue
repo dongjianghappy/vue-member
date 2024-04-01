@@ -1,13 +1,29 @@
 <template>
-<v-button v-model:show="isShow" class="relative">
-  <i class="iconfont" :class="`icon-${icon}`" @click="showImg(data)" v-if="icon" />
-  <div class="thumbnail" v-else>
-    <v-img :src="data.cover || data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" @click="showImg(data)" />
-  </div>
-  <!-- <img :src="data.cover || data.image[0]" style="border-radius: 8px; width: 100%; height: 150px;" @click="showImg(data)" v-else> -->
-  <v-audio :data="data" :hasMusic="true" v-if="data.background_music" />
-</v-button>
-<v-layer v-model:isShow="showFlag" :data="Object.keys(detail).length > 0 ? detail : data" @prevOrNext="prevOrNext" v-if="showFlag" :type="type" :getNeighbor="getNeighbor" :hasInfo="hasInfo" :hasComment="hasComment" />
+  <v-button v-model:show="isShow"
+            class="relative">
+    <i class="iconfont"
+       :class="`icon-${icon}`"
+       @click="showImg(data)"
+       v-if="icon" />
+    <div class="thumbnail"
+         v-else>
+      <v-img :src="data.cover || data.image[0]"
+             onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'"
+             @click="showImg(data)" />
+    </div>
+    <!-- <img :src="data.cover || data.image[0]" style="border-radius: 8px; width: 100%; height: 150px;" @click="showImg(data)" v-else> -->
+    <v-audio :data="data"
+             :hasMusic="true"
+             v-if="data.background_music" />
+  </v-button>
+  <!-- <v-layer v-model:isShow="showFlag"
+           :data="Object.keys(detail).length > 0 ? detail : data"
+           @prevOrNext="prevOrNext"
+           v-if="showFlag"
+           :type="type"
+           :getNeighbor="getNeighbor"
+           :hasInfo="hasInfo"
+           :hasComment="hasComment" /> -->
 </template>
 
 <script lang="ts">
@@ -16,6 +32,7 @@ import {
   ref,
   useStore,
 } from '@/utils'
+import VueEvent from '@/utils/event'
 export default defineComponent({
   name: 'v-Thumbnail',
   props: {
@@ -54,6 +71,11 @@ export default defineComponent({
     const showFlag = ref(false)
 
     function showImg(param: any, i: any) {
+      VueEvent.emit("layout", {
+        data: param,
+        img: param.image[0],
+        hasInfo: props.hasInfo
+      });
       showFlag.value = !showFlag.value
     }
 

@@ -1,5 +1,5 @@
 <template>
-<div :id="`barrage_${data.id}`" class="barrage-container" style="z-index: 1000000001"></div>
+<div :id="`barrage_${data.id}`" class="barrage-container" style="z-index: 10"></div>
 </template>
 
 <script lang="ts">
@@ -24,6 +24,7 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore()
     const barrageSetting: any = computed(() => store.getters['talk/barrageSetting']);
+    const trip = Array({content: "弹幕已开启，赶紧来一发弹幕吧"})
 
     function sendBarrage(param: any) {
       if (barrageSetting.value.item.barrage == '0') {
@@ -35,8 +36,7 @@ export default defineComponent({
       }
       const barrageContainer: any = document.getElementById(`barrage_${props.data.id}`)
       barrageContainer.innerHTML = '';
-      console.log(JSON.stringify(props.data.barrageList));
-      props.data.barrageList && props.data.barrageList.map((item: any) => {
+      (props.data.barrageList && props.data.barrageList || trip).map((item: any) => {
         const barrageText = item.content
         if (barrageText) {
           const barrage = document.createElement('div')

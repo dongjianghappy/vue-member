@@ -26,7 +26,7 @@
             <div class="icon-button"><i class="iconfont icon-love-1" /></div>
             <div class="text">{{data.praise}}</div>
           </div>
-          <div class="sidebar-item" @click="handleClick">
+          <div class="sidebar-item" @click="handleClick" v-if="module.talk_comment">
             <div class="icon-button"><i class="iconfont icon-comment-1" /></div>
             <div class="text">{{data.comment}}</div>
           </div>
@@ -38,13 +38,21 @@
             <div class="icon-button"><i class="iconfont icon-share-1" /></div>
             <div class="text">{{data.forwarding}}</div>
           </div>
-          <div class="sidebar-item" @click="handleBarrage">
+          <div class="sidebar-item" @click="handleBarrage" v-if="module.talk_barrage">
             <div class="icon-button"><i class="iconfont" :class="`icon-barrage-${barrageSetting.item.barrage == '0' ? '2' : '1'}`" /></div>
           </div>
         </div>
+
       </div>
       <div class="userInfo" :style="{bottom: data.type == 'video' ? '50px' : '25px'}">
-        <div class="user-name">@{{data.nickname}} <span class="font12 cl-white">{{data.times}}</span></div>
+        <div class="user-name">@{{data.nickname}} <span class="font12 cl-white">{{data.times}}</span>
+
+          <span class="ml10 font12 cl-white pointer" @click="showImg(data, data.image[0])" v-if="data.type == 'img'">
+            <i class="iconfont icon-img font12 cl-white m0" />
+            查看大图</span>
+          <span v-if="data.vote">
+            <Vote :data="data" /></span>
+        </div>
         <div class="user-summary" v-html="data.summary"></div>
       </div>
       <div class="control-wrap" style="z-index: 1000000001" v-if="data.type === 'video'">
@@ -56,7 +64,7 @@
     <div @wheel.stop class="absolute ptb15" :class="{'screen-right': commentStatus, 'screen-left': !commentStatus}" style=" background: #222; top: 0; width: 360px" :style="{height: `${height}px`}">
       <Comment ref="comment" :data="{fn: fn_talk, ...data}" :render="getComment" :expand="handleClick" />
     </div>
-    <div @wheel.stop class="absolute ptb15" :class="{'screen-right': barrageStatus, 'screen-left': !barrageStatus}" style=" background: #222; top: 0; width: 360px" :style="{height: `${height}px`}">
+    <div @wheel.stop class="absolute ptb15" :class="{'screen-right': barrageStatus, 'screen-left': !barrageStatus}" style=" background: #222; top: 0; width: 360px" :style="{height: `${height}px`}" v-if="module.talk_barrage">
       <Barrage ref="comment" :data="{fn: fn_talk, ...data}" :render="getBarrage" @switch="barrageSwitch" :expand="handleBarrage" />
     </div>
   </div>
@@ -76,11 +84,14 @@ import {
 } from 'lodash';
 import Comment from '../comment/recommend.vue'
 import Barrage from '../comment/barrage.vue'
+import VueEvent from '@/utils/event'
+import Vote from '../vote/index.vue'
 export default defineComponent({
   name: 'v-Screen',
   components: {
     Comment,
-    Barrage
+    Barrage,
+    Vote
   },
   props: {
     dataList: {
@@ -108,6 +119,7 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore()
     const loginuser = computed(() => store.getters['user/loginuser']);
+    const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
     const fn_talk: any = computed(() => store.getters['user/config_talk'].fn_talk);
     const commentStatus = computed(() => store.getters['talk/commentStatus']);
     const barrageSetting: any = computed(() => store.getters['talk/barrageSetting']);
@@ -122,6 +134,9 @@ export default defineComponent({
 
     function toggle(num: any, number: any) {
       let height = swiper.value.clientHeight
+      if (num == 1 && props.number == props.dataList.length - 1) {
+        return
+      }
       swiper.value.parentNode.style.top = `-${(num+number) * height}px`
       let talk: any = props.dataList[num + props.number]
       currentTalk.value = talk
@@ -136,7 +151,9 @@ export default defineComponent({
       let height = swiper.value.clientHeight
       let num: any = 0
       num = event.deltaY > 0 ? 1 : -1
-
+      if (num == 1 && props.number == props.dataList.length - 1) {
+        return
+      }
       swiper.value.parentNode.style.top = `-${(num + props.number) * height}px`
       let talk: any = props.dataList[num + props.number]
       currentTalk.value = talk
@@ -253,6 +270,16 @@ export default defineComponent({
       barrage.value.sendBarrage()
     }
 
+    function showImg(data: any, img: any) {
+      VueEvent.emit("layout", {
+        data,
+        img
+      });
+
+      // currentData.value = data
+      // currentImg.value = img
+    }
+
     onUnmounted(() => {
       document.removeEventListener('wheel', handleScroll);
     });
@@ -261,6 +288,7 @@ export default defineComponent({
       comment,
       barrage,
       loginuser,
+      module,
       fn_talk,
       commentStatus,
       barrageSetting,
@@ -276,7 +304,8 @@ export default defineComponent({
       getBarrage,
       barrageSwitch,
       handlePraise,
-      handleCollect
+      handleCollect,
+      showImg
     }
   }
 })
@@ -298,6 +327,10 @@ export default defineComponent({
   .user-summary {
     font-size: 16px;
     color: #fff;
+
+    a {
+      color: #eb7340 !important;
+    }
   }
 }
 

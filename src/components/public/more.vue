@@ -1,5 +1,5 @@
 <template>
-<div class="secondary-wrap absolute" style="background-color: var(--active-background) !important; box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05); border-radius: initial; margin-left: -23px; width: 350px; height: 220px; ">
+<div class="secondary-wrap absolute" style="background-color: var(--active-background) !important; box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05); border-radius: initial; margin-left: -23px; width: 350px; min-height: 220px; ">
   <div class="col-md-3" v-for="(item, index) in module" :key="index">
     <div class="mb10 align_center" style="flex: 1" @click="handleClick(item)">
       <div class="icon-wrap" :style="`background: ${item.color}`" >

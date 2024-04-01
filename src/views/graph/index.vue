@@ -1,7 +1,5 @@
 <template>
-11111111111111111111
 <v-graph :data="detail" :save="save" @close="handleClose" />
-2222222222
 </template>
 
 <script lang="ts">
@@ -65,7 +63,7 @@ export default defineComponent({
 
       loading.value = false
       store.dispatch('common/Fetch', {
-        api: detailApi || 'ArticleView',
+        api: detailApi || 'getGraph',
         data: {
           coding: coding,
           id: id
@@ -78,17 +76,6 @@ export default defineComponent({
       })
     }
 
-    function handleclick(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: getUid(),
-        query: `/${props.channel}?item=view&id=${param}`
-      }))
-      setTimeout(() => {
-        window.scrollTo(0, 0)
-        init()
-      }, 100)
-    }
-
     // 保存
     function save(graph: any) {
       const {
@@ -99,14 +86,13 @@ export default defineComponent({
         coding,
         updateApi
       } = props.data
-
       const param: any = {
         id,
         graph
       }
 
       store.dispatch('common/Fetch', {
-        api: updateApi || 'UpdateArticle',
+        api: updateApi || 'updateGraph',
         data: {
           coding: coding,
           ...param
@@ -125,7 +111,6 @@ export default defineComponent({
     return {
       handleClose,
       detail,
-      handleclick,
       loading,
       save
     }

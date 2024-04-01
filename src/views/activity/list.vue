@@ -1,25 +1,51 @@
 <template>
 <div>
-  <!-- <div class="w-full" style="background: linear-gradient(45deg ,#020031,#6d3353); height: 180px;">
-    <div class="container w1100 cl-white">
-      <div class="pt30" style="font-size:30px;">程序员的话题讨论、技术交流、知识分享、解决问题</div>
-      <div class="pt30 font18">在这里，我们为爱好开发者提供技术话题讨论区。并助力他们在技术能力、职业生涯、影响力上获得提升。</div>
+  <div class="container w1100 relative clearfix">
+    <div class="w180 left">
+      <v-aside :data="[]" :isFixed="true" title="话题">
+        <template v-slot:button>
+        </template>
+      </v-aside>
     </div>
-  </div> -->
-
-  <div class="container w1100 relative pt15 clearfix">
-    <div class="col-md-2 p10" v-for="(item, index) in activity" :key="index">
-      <div class="thumbnail p10 relative"  style="background: rgb(255, 255, 255); overflow: hidden;" @click="show(item.name)">
-        <img :src="item.image" style="width: 100%; height: 160px;">
-        <div class="caption relative" style="padding: 10px 0px; height: 40px;">
-          <span>{{item.name}}
-            <span class="mark vote" v-if="item.vote !=='0'">票</span>
-          </span>
+    <div class="right" style="width: 910px;">
+      <!-- <div class="module-wrap">
+          <div class="module-content p20">
+            <div style="height: 165px; overflow: hidden;">
+              <div class="mb15 font14">分类
+              </div>
+              <Album @onClick="handleclick"
+                     :dataList="dataList.new" />
+            </div>
+          </div>
+        </div> -->
+      <div class="module-wrap">
+        <div class="module-content p20" style="min-height: 500px">
+          <div class="mb15 font14">
+            <span class="right">
+              <Detail :data="{coding: coding.activity}" :render="init" v-if="userInfo.account && module.create" />
+            </span>
+          </div>
+          <div class="clearfix">
+            <div class="col-md-3 p10" v-for="(item, index) in dataList.list" :key="index">
+              <div class="thumbnail p10 relative radius-4" style="background: var(--card-background);" @click="show(item.name)">
+                <div class="radius-4" style="overflow: hidden;">
+                  <img :src="item.image" onerror="this.src='http://www.yunxi10.com/source/public/images/topic_page_2x.png'" class="img-scale" style="width: 100%; height: 160px;">
+                </div>
+                <div class="caption relative" style="padding: 10px 0px; height: 40px;">
+                  <span>#{{item.name}}#
+                    <span class="mark vote" v-if="item.vote !=='0'">票</span>
+                  </span>
+                </div>
+                <div class="relative" style="border-top: 1px dotted var(--default-border); padding: 10px 0px; height: 40px;"> {{item.num}} 人次参与</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt25 align_center" v-if="dataList.total > 10">
+            <v-pagination :pagination="{total: dataList.total, pages: dataList.pages, page: dataList.page ||  1, pagesize: dataList.pagesize}" :render="init" :simple="true" />
+          </div>
         </div>
-        <div class="relative" style="border-top: 1px dotted rgb(234, 234, 234); padding: 10px 0px; height: 40px;"> {{item.num}}参与</div>
       </div>
     </div>
-
   </div>
 </div>
 </template>
@@ -29,11 +55,12 @@ import {
   defineComponent,
   getCurrentInstance,
   computed,
-  onMounted
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
+  onMounted,
+  useStore,
+  codings
+} from '@/utils'
+import Album from './components/album.vue'
+import Detail from './components/detail.vue'
 import {
   useRouter,
   useRoute
@@ -42,7 +69,8 @@ import {
 export default defineComponent({
   name: 'HomeViewdddf',
   components: {
-
+    Album,
+    Detail
   },
   setup(props, context) {
     const {
@@ -51,12 +79,23 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
+    const coding = codings.talk
     const component = computed(() => route.query.mod);
-    const activity = computed(() => store.getters['common/activityList']);
+    const dataList = computed(() => store.getters['common/activityList']);
+    const module = computed(() => store.getters['user/config_talk'].activity || []);
+    const userInfo = computed(() => store.getters['user/loginuser']);
 
-    function init() {
+    function init(param: any = {}) {
+      const params: any = {
+        page: 1,
+        pagesize: 16
+      }
+
+      Object.assign(params, param)
       store.dispatch('common/ActivityList', {
-
+        data: {
+          ...params
+        }
       })
     }
 
@@ -66,9 +105,13 @@ export default defineComponent({
     onMounted(init)
 
     return {
+      coding,
       component,
-      activity,
-      show
+      dataList,
+      show,
+      module,
+      init,
+      userInfo
     }
   }
 })

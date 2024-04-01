@@ -131,7 +131,7 @@ const codings: any = {
       stationery: 'U0620040'
     },
     message_board: {
-      message: 'U0620017',
+      list: 'U0620017',
       reply: 'U0620018'
     },
     search: {
@@ -147,12 +147,14 @@ const codings: any = {
       ip_lib: 'U0620026'
     },
     activity: "U0620027",
+    activity_collect: "U0620047",
     config: 'U0620009',
     visit: "U0620029",
     video_group: "U0620028",
     article_group: "U0620007",
     blog_group: "U0620008",
     picture_group: "U0620019",
+    background_music: 'U0620048'
   },
   questions: {
     name: "questions",
@@ -457,6 +459,7 @@ const codings: any = {
     sign: 'U0700020',
     cycle: 'U0700021',
     sign_love: 'U0700027',
+    theme_cate: 'U0700037',
     theme: 'U0700022',
     effects: 'U0700023',
     pendant: 'U0700024',

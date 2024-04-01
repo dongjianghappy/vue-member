@@ -26,7 +26,7 @@
 
       <div>
         边框样式
-        <v-select :enums="borderStyle" @setAttr="chooseColor" attr="strokeDasharray" :value="attrs.strokeDasharray" />
+        <v-select :enums="borderStyle" v-model:value="attrs.strokeDasharray" :defaultValue="attrs.strokeDasharray = attrs.strokeDasharray ? attrs.strokeDasharray : 'solid'" />
       </div>
     </v-collapse>
 
@@ -54,9 +54,9 @@
       <LinkLine :data="node.data" v-else />
     </v-collapse>
   </perfect-scrollbar>
-  <div class="p15">
+  <!-- <div class="p15">
     <div id="paper-multiple-papers-small" class="bg-white" style="width: 200px; height: 200px;"></div>
-  </div>
+  </div> -->
 </div>
 </template>
 
@@ -125,8 +125,9 @@ export default defineComponent({
     margin-bottom: 1px;
     padding: 15px;
   }
-  .aside-list{
-    background: #fff;
+  .collapse-list{
+    background: #383b61;
+    padding: 10PX 25px;
   }
 }
 .node-info {
@@ -178,6 +179,6 @@ export default defineComponent({
 }
 
 .ps {
-  height: 435px;
+  height: 635px;
 }
 </style>

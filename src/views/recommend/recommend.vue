@@ -3,8 +3,8 @@
   <div class="swiper absolute" style=" left: 0; right: 0; transition: top 0.1s ease; z-index: 1000000">
     <template v-if="dataList.length">
       <screen ref="screens" :dataList="dataList" :data="item" v-model:currentIndex="currentIndex" v-for="(item, index) in dataList" :key="index" :number="index" :height="height">
-        <Video :sourceData="[]" :data="item" :style="{width: '420px', height: 'calc(100vh - 150px)'}" :mask="false" v-if="item.type === 'video'" />
-        <Slideshow :data="item.image" :style="{width: '420px', height: 'inherit'}" :mask="false" v-if="item.type == 'img'" />
+        <Video :sourceData="[]" :data="item" :style="{width: '420px', height: 'calc(100vh - 150px)'}" :mask="false" :number="index" v-if="item.type === 'video'" />
+        <Slideshow ref="slide" :data="item.image" :style="{width: '420px', height: 'inherit'}" :mask="false" :number="index" v-if="item.type == 'img'" />
       </screen>
     </template>
     <div :style="`padding: ${height/2}px`" v-else>
@@ -45,6 +45,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const screens: any = ref(null)
+    const slide: any = ref(null)
     let height: any = ref("")
     let currentIndex: any = ref(0)
     const keyStatus: any = ref(false)
@@ -55,17 +56,33 @@ export default defineComponent({
 
     onMounted(() => {
       keyStatus.value = true
-      document.onkeydown = (e: any) => {
+      document.addEventListener("keydown", (e: any) => {
         if (!keyStatus.value) {
+          return
+        }
+
+        let _slide = slide.value && slide.value.filter((item: any) => item.number === currentIndex.value)
+
+        if (e.keyCode == '37' && (_slide && _slide.length > 0)) {
+          const number = _slide[0].index == 0 ? _slide[0].data.length - 1 : _slide[0].index - 1
+          _slide[0].handleHover(number)
+          _slide[0].time()
+        }
+        if (e.keyCode == '39' && (_slide && _slide.length > 0)) {
+          const number = _slide[0].data.length - 1 == _slide[0].index ? 0 : _slide[0].index + 1
+          _slide[0].handleHover(number)
+          _slide[0].time()
+        }
+        if (screens.value.length < 2) {
           return
         }
         if (e.keyCode == '38' && currentIndex.value != '0') {
           screens.value[currentIndex.value].toggle(-1, currentIndex.value)
         }
-        if (e.keyCode == '40') {
+        if (e.keyCode == '40' && currentIndex.value < screens.value.length - 1) {
           screens.value[currentIndex.value].toggle(1, currentIndex.value)
         }
-      }
+      });
     })
 
     onMounted(() => {
@@ -76,7 +93,8 @@ export default defineComponent({
       screens,
       height,
       init,
-      currentIndex
+      currentIndex,
+      slide
     }
   }
 })

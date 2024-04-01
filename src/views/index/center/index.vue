@@ -1,16 +1,19 @@
 <template>
-<div class="home">
-  <TalkSend v-if="loginuser.account" />
-  <div class="module-wrap mb10" v-else>
-    <div class="module-content send_info p0" style="overflow: inherit;">
-      <v-scrolltext :dataList="announcement" />
+  <div class="home">
+    <TalkSend v-if="loginuser.account" />
+    <div class="module-wrap mb10"
+         v-else>
+      <div class="module-content send_info p0"
+           style="overflow: inherit;">
+        <v-scrolltext :dataList="announcement" />
+      </div>
     </div>
+    <div class="mb10"
+         v-if="module && module.slideshow && Object.keys(slideshow).length > 0">
+      <v-slideshow :data="slideshow" />
+    </div>
+    <Main ref="main" />
   </div>
-  <div class="mb10" v-if="module && module.slideshow && Object.keys(slideshow).length > 0">
-    <v-slideshow :data="slideshow" />
-  </div>
-  <Main ref="main" />
-</div>
 </template>
 
 <script lang="ts">

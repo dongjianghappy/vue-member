@@ -55,15 +55,15 @@ export default defineComponent({
     });
 
     const borderStyle = [{
-        value: 'none',
+        value: 'solid',
         name: '实线',
       },
       {
-        value: '5',
+        value: 'dotted',
         name: '点线',
       },
       {
-        value: '10, 5',
+        value: 'dashed',
         name: '虚线',
       }
     ]

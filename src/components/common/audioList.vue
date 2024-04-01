@@ -1,22 +1,35 @@
 <template>
-<v-popover content="<i class='iconfont icon-music'></i>音频" arrow="tb" offset="right" :move="-10" keys="popover-music" @onClick="handleclick">
-  <div style="width: 450px; height: 260px;">
-    <template v-if="dataList.length">
-      <div class="module-wrap">
-        <div class="module-head nobd font16">
-          推荐音频：
-        </div>
-        <div class="module-content plr15" style="height: 205px; overflow-y: auto;">
-            <div class="col-md-4 pb15" v-for="(item, index) in dataList" :key="index" @click="chooseTopic(item)">
+  <v-popover content="<i class='iconfont icon-music'></i>音频"
+             arrow="tb"
+             offset="right"
+             :move="-10"
+             keys="popover-music"
+             @onClick="handleclick">
+    <div style="width: 550px; height: 260px;">
+      <template v-if="dataList.length">
+        <div class="module-wrap">
+          <div class="module-head nobd font16">
+            推荐音频：
+          </div>
+          <div class="module-content plr15"
+               style="height: 205px; overflow-y: auto;">
+            <div class="col-md-4 pb15"
+                 v-for="(item, index) in dataList"
+                 :key="index">
               <v-audio :data="{...item, index, number: dataList.length}" />
-              {{item.title}}
+              <span @click="chooseTopic(item)">
+                {{item.title}}
+              </span>
+              <span @click="handleCollect(item)">
+                {{item.hascollect == '1' ? '取消' : '收藏'}}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-    </template>
-    <v-loding v-else />
-  </div>
-</v-popover>
+      </template>
+      <v-loding v-else />
+    </div>
+  </v-popover>
 </template>
 
 <script lang="ts">
@@ -80,6 +93,25 @@ export default defineComponent({
       context.emit('onEmoji', data)
     }
 
+    function handleCollect(param: any){
+      store.dispatch('common/Fetch', {
+        api: 'collect_music',
+        data: {
+          music: param.id
+        }
+      }).then(res => {
+        if (res.ifSuccess === 2) {
+          return
+        }
+         if (res.result.state === 1) {
+          param.hascollect = 1
+        } else {
+          param.hascollect = 0
+        }
+
+      })
+    }
+
     function handleclick(param: any) {
       context.emit('onClick', param)
       if (!param) {
@@ -91,7 +123,8 @@ export default defineComponent({
       chooseTopic,
       dataList,
       click,
-      handleclick
+      handleclick,
+      handleCollect
     }
   }
 })

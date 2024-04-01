@@ -1,14 +1,21 @@
 <template>
-<div class="home">
-  <TalkTabs :getData="init" :style="{flex: 1}" :data="[{name: `我的收藏(共${talkCollect.length}条)`, value: 'collect&item=my'}, {name: '热门收藏', value: 'collect&item=hot'}]" />
-  <TalkItem :sourceData="talkCollect" :isLoading="Loading" />
-  <div class="con-list" v-if="talkCollect.length === 0 && Loading === false">
-    <div class="con-wrap" style=" padding-top:100px; height:350px; text-align: center;">
-      <p>你还没有收藏任何作品呢！</p>
-      <p style="font-size: 12px; color: #999;">当你发现有意思的、有价值的作品时，赶紧收藏下来哦！</p>
+  <div class="home">
+    <TalkTabs :getData="init"
+              :style="{flex: 1}"
+              :mod="{tab: 'mod', value: 'collect'}"
+              :data="[{name: `我的收藏(共${talkCollect.length}条)`, value: ''}, {name: '热门收藏', value: 'hot'}]"
+              :query="{tab: 'item', value: route.query.item}" />
+    <TalkItem :sourceData="talkCollect"
+              :isLoading="Loading" />
+    <div class="con-list"
+         v-if="talkCollect.length === 0 && Loading === false">
+      <div class="con-wrap"
+           style=" padding-top:100px; height:350px; text-align: center;">
+        <p>你还没有收藏任何作品呢！</p>
+        <p style="font-size: 12px; color: #999;">当你发现有意思的、有价值的作品时，赶紧收藏下来哦！</p>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -23,6 +30,7 @@ import {
 } from 'vuex'
 import TalkTabs from '../components/module/TalkTabs.vue'
 import TalkItem from '../components//TalkItem/index.vue'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'HomeViewsss',
@@ -35,6 +43,7 @@ export default defineComponent({
       ctx
     }: any = getCurrentInstance();
     const store = useStore();
+    const route = useRoute()
     const Loading: any = ref(false)
     const talkCollect = computed(() => store.getters['talk/talkCollect']);
 
@@ -47,6 +56,7 @@ export default defineComponent({
     }
     init()
     return {
+      route,
       init,
       Loading,
       talkCollect

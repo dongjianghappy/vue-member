@@ -123,7 +123,7 @@ export default defineComponent({
           y1 = oevent.clientY - distanceY
         distanceX = oevent.clientX
         distanceY = oevent.clientY
-
+        debugger
         let left_p = pic.value.getBoundingClientRect().left
         let top_p = pic.value.getBoundingClientRect().top
 
@@ -228,7 +228,7 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .upload-background{
-  background: var(--upload-background);
+  background: var(--card-background);
 }
 .pic {
   position: relative;

@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, getCurrentInstance, computed, useStore, useRouter, useRoute, onMounted } from '@/utils'
-import List from "./list.vue"
+import List from "./list11.vue"
 import Article from "./article.vue"
 
 export default defineComponent({

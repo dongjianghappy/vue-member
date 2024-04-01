@@ -1,27 +1,37 @@
 <template>
-<div class="music-wrap">
-  <div class="music-left">
-    <div class="music-list nowrap ptb10 plr15" :class="{'music-current': item.id === data.id}" style="line-height: 20px;" v-for="(item, index) in dataList" :key="index" @click="handlePlay(item)">
-      <i class="iconfont icon-music m0" />
-      {{item.music_name}}</div>
-  </div>
-  <div class="music-content">
+  <div class="music-wrap">
+    <div class="music-left">
+      <div class="music-list nowrap ptb10 plr15"
+           :class="{'music-current': item.id === data.id}"
+           style="line-height: 20px;"
+           v-for="(item, index) in dataList"
+           :key="index"
+           @click="handlePlay(item)">
+        <i class="iconfont icon-music m0" />
+        {{item.music_name}}
+      </div>
+    </div>
+    <div class="music-content">
 
-    <div class="align_center ptb25" style="height: 365px">
-      <div class="inline" :class="{animate: data.isplay}" style="border-radius: 50%;
+      <div class="align_center ptb25"
+           style="height: 365px">
+        <div class="inline"
+             :class="{animate: data.isplay}"
+             style="border-radius: 50%;
     width: 200px;
     height: 200px;
         overflow: hidden;
 }">
-        <v-img src="http://yunxi10.com/source/public/images/music.png" />
+          <v-img src="http://yunxi10.com/source/public/images/music.png" />
+        </div>
+        <div>{{data.music_name}}</div>
       </div>
-      <div>{{data.music_name}}</div>
-    </div>
-    <div class="music-control">
-      <Control :dataList="dataList" :data="data" />
+      <div class="music-control">
+        <Control :dataList="dataList"
+                 :data="data" />
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -65,26 +75,26 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .music-wrap {
-  background: #2c2c2c;
+  background: var(--card-background);
   display: flex;
   width: 600px;
   height: 500px;
 
   .music-left {
-    background: rgba(0, 0, 0, 0.15);
+    background: var(--module-background);
     width: 150px;
     height: 500px;
     .music-list {
       cursor: pointer;
       &.music-current {
-        background: #2c2c2c;
+        background: var(--card-background);
         color: #f00;
         i{
           color: #f00;
         }
       }
       &:hover {
-        background: #2c2c2c;
+        background: var(--card-background);
       }
     }
   }

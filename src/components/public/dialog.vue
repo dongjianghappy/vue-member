@@ -3,7 +3,7 @@
   <div class="drawer-wrap align_left" :class="{'drawer-open': show}" style="top: 0">
     <v-mask v-show="show" v-model:isShow="isShow" />
     <template v-if="show">
-      <div class="layer" :class="[className]" @click.stop style="left: 534.5px; display: block; z-index: 9001; opacity: 1;" :style="{width: `${style.width || 450}px`, height: `${style.height || 380}px`, top: window.top, left: window.left}">
+      <div class="layer" :class="[className]" @click.stop style=" background: #191919; left: 534.5px; display: block; z-index: 9001; opacity: 1;" :style="{width: `${style.width || 450}px`, height: `${style.height || 380}px`, top: window.top, left: window.left}">
         <div v-if="title" id="msgtitle" class="layer-title" @mousedown="mousedown"><span>{{title}}</span></div><span id="close" v-if="close" class="layer-close" @click="handleCancel"><i class="iconfont icon-close"></i></span>
         <div id="msgcon" class="layer-content" style="min-height: 150px;" :style="contentStyle">
           <slot name="content"></slot>

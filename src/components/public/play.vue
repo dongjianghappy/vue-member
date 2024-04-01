@@ -1,58 +1,79 @@
 <template>
-<div class="relative sssss" style="display: flex;">
-  <i class="iconfont listen font20" :class="`icon-${music.isplay ? 'stop' : 'play'} ${style.color}`" @click="handlePlay($event)"></i>
-  <div :class="{box: music.isplay, 'stop-box': !music.isplay}">
-    <ul>
-      <p :class="style.background"></p>
-      <p :class="style.background"></p>
-      <p :class="style.background"></p>
-      <p :class="style.background"></p>
-    </ul>
-  </div>
-  <div class="music-name absolute cl-999" :style="{top: style.top, width: (collapse ? '600px' : '300px')}" style="right: 0; z-index: 100; box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2); height: auto">
-    <div class="music-header p15 h50 clearfix">
-      <div class="left">音乐盒</div>
-      <div class="right">
-        <v-space>
-          <span @click="handleMusicList">
-            播放列表
-          </span>
-          <span @click="handleLrc">
-            歌词
-          </span>
-          <span @click="handleSetting" v-if="userInfo.account">
-            设置
-          </span>
-          <span @click="handleRouter" v-if="hasMusicList">
-            音乐管理
-          </span>
-        </v-space>
+  <div class="relative sssss"
+       style="display: flex;">
+    <i class="iconfont listen font20"
+       :class="`icon-${music.isplay ? 'stop' : 'play'} ${style.color}`"
+       @click="handlePlay($event)"></i>
+    <div :class="{box: music.isplay, 'stop-box': !music.isplay}">
+      <ul>
+        <p :class="style.background"></p>
+        <p :class="style.background"></p>
+        <p :class="style.background"></p>
+        <p :class="style.background"></p>
+      </ul>
+    </div>
+    <div class="music-name absolute cl-999"
+         :style="{top: style.top, width: (collapse ? '600px' : '300px')}"
+         style="right: 0; z-index: 100; box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2); height: auto">
+      <div class="music-header p15 h50 clearfix">
+        <div class="left">音乐盒</div>
+        <div class="right">
+          <v-space>
+            <span @click="handleMusicList">
+              播放列表
+            </span>
+            <span @click="handleLrc">
+              歌词
+            </span>
+            <!-- <span @click="handleRouter('my_music')"
+                  v-if="userInfo.account">
+              收藏
+            </span> -->
+            <span @click="handleSetting"
+                  v-if="userInfo.account">
+              设置
+            </span>
+            <span @click="handleRouter"
+                  v-if="hasMusicList">
+              音乐管理
+            </span>
+          </v-space>
+        </div>
+      </div>
+      <template v-if="collapse">
+        <div class="plr15"
+             v-if="isSetting">
+          <Setting :userInfo="userInfo" />
+        </div>
+        <div v-else>
+          <MusicList :dataList="musicList"
+                     :data="music" />
+        </div>
+      </template>
+      <div class="plr15 align_left"
+           v-if="!collapse || collapse && isSetting">
+        <i class="iconfont icon-music"></i>
+        {{(music.music_name) || '暂无歌曲'}}
       </div>
     </div>
-    <template v-if="collapse">
-      <div class="plr15" v-if="isSetting">
-        <Setting :userInfo="userInfo" />
-      </div>
-      <div v-else>
-        <MusicList :dataList="musicList" :data="music" />
-      </div>
-    </template>
-    <div class="plr15 align_left" v-if="!collapse || collapse && isSetting">
-      <i class="iconfont icon-music"></i>
-      {{(music.music_name) || '暂无歌曲'}}
-    </div>
+    <audio id='listen_music'
+           ref="audio"
+           :src="userInfo.music_url"
+           loop
+           style="display: none"></audio>
   </div>
-  <audio id='listen_music' ref="audio" :src="userInfo.music_url" loop style="display: none"></audio>
-</div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
+  getCurrentInstance,
   ref,
   onMounted,
   useStore,
-  durationTrans
+  durationTrans,
+  useRouter,
+  getUid
 } from '@/utils'
 import VueEvent from '@/utils/event'
 import Setting from '../packages/music/setting.vue'
@@ -92,7 +113,11 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    const {
+      proxy
+    }: any = getCurrentInstance();
     const store = useStore();
+    const router = useRouter()
     const isplay: any = ref(false)
     const audio: any = ref(null)
     const musicList: any = ref([])
@@ -103,6 +128,7 @@ export default defineComponent({
     const lrcObj: any = ref({})
     const isSetting = ref(true)
     var time_array: any = ref([]);
+    const background_music: any = ref([])
 
     function handlePlay(e: any) {
       music.value.isplay = !music.value.isplay
@@ -135,10 +161,10 @@ export default defineComponent({
       store.dispatch('common/Fetch', {
         api: 'Lrc',
         data: {
-          lrc: param
+          ...param
         }
       }).then(res => {
-        if(!res.result){
+        if (!res.result) {
           return
         }
         lrc.value = res.result.content
@@ -179,7 +205,13 @@ export default defineComponent({
       }, 1000)
     }
 
-    function handleRouter() {
+    function handleRouter(param: any = "") {
+      if (param === 'my_music') {
+        router.push(proxy.const.setUrl({
+          uid: getUid(),
+          query: `/my_music`
+        }))
+      }
       props.router('music/list', 'music')
     }
 
@@ -190,11 +222,18 @@ export default defineComponent({
       music.value.isplay = true
       audio.value.load()
       audio.value.play()
-      lrcInit(param.music_lrc)
+      lrcInit({
+        lrc: param.music_lrc,
+        name: param.music_name
+      })
       settime()
     }
 
-    onMounted(() => {
+    function getMusic() {
+
+    }
+
+    onMounted(async () => {
       let ddddd = props.userInfo.music || []
       ddddd.map(((item: any) => {
         let index = musicList.value.findIndex((list: any) => list.id === item.id)
@@ -208,10 +247,29 @@ export default defineComponent({
           })
         }
       }))
+      await store.dispatch('common/Fetch', {
+        api: 'getMusic',
+        data: {
+          uid: getUid(),
+          background_music: '1'
+        }
+      }).then(res => {
+        res.result &&  res.result.map(((item: any) => {
+          let index = musicList.value.findIndex((list: any) => list.id === item.id)
+          if (index === -1) {
+            musicList.value.push({
+              id: item.music_id,
+              music_name: item.music_name,
+              file: item.file,
+              music_lrc: item.music_lrc,
+              time: item.music_time
+            })
+          }
+        }))
+      })
       currentMusic(musicList.value[0])
       // 点击歌曲播放，并加入到歌曲列表中
       VueEvent.on("musicPley", (data: any) => {
-        debugger
         let m = {
           id: data.music_id || data.id,
           music_name: data.music_name,

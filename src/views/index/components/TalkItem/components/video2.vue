@@ -1,32 +1,46 @@
 <template>
-<div class="video-wrap relative" style="background: #252632; height: 300px; z-index: 1; border-radius: 8px;
-    overflow: hidden;"  @mousemove="handleHover(data)" @mouseout="mouseout(data)">
-  <div style="position: absolute;
+  <div class="video-wrap relative"
+       style="background: #252632; height: auto; z-index: 1; border-radius: 8px;
+    overflow: hidden;"
+       @mousemove="handleHover(data)"
+       @mouseout="mouseout(data)">
+    <div style="position: absolute;
     top: 0;
     left: 0;
     overflow: hidden;
     width: 100%;
     height: 220px; z-index: 100;">
-    <!-- <img class="cover" :src="data.cover" style="width: 100%;
+      <!-- <img class="cover" :src="data.cover" style="width: 100%;
     height: 100%;" > -->
-    <v-img :src="data.cover" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" v-if="!data.isplay" />
-  </div>
-  <div class="relative">
-    <div class="control-wrap">
-      <v-control2 ref="control" :data="data" />
+      <v-img :src="data.cover"
+             onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'"
+             v-if="!data.isplay" />
     </div>
-    <video :src="data.video" class="playmp4" :class="`video_${item.id || data.id}`" @click="handlePlay(data)" style="width: 100%; height: 220px;">
-      您的浏览器不支持HTML5
-    </video>
-  </div>
-  <div class="ptb15 plr10">
-    <div class="mb10" v-html="data.summary"></div>
-    <div class="flex font12">
-      <div class="cl-666" style="flex: 1">@{{data.nickname}}</div>
-      <div class="cl-666" style="flex: 1">{{data.times}}</div>
+    <div class="relative">
+      <div class="control-wrap">
+        <v-control2 ref="control"
+                    :data="data" />
+      </div>
+      <video :src="data.video"
+             class="playmp4"
+             :class="`video_${item.id || data.id}`"
+             @click="handlePlay(data)"
+             style="width: 100%; height: 220px;">
+        您的浏览器不支持HTML5
+      </video>
+    </div>
+    <div class="ptb15 plr10"
+         v-if="hasName">
+      <div class="mb10"
+           v-html="data.summary"></div>
+      <div class="flex font12">
+        <div class="cl-666"
+             style="flex: 1">@{{data.nickname}}</div>
+        <div class="cl-666"
+             style="flex: 1">{{data.times}}</div>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -50,6 +64,10 @@ export default defineComponent({
       default: () => {
         return {}
       }
+    },
+    hasName: {
+      type: Boolean,
+      default: true
     },
     data: {
       type: Array,

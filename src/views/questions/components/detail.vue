@@ -1,7 +1,7 @@
 <template>
 <div class="container w1100 mb20 clearfix">
-  <div class=" bg-white left" style="width: 805px; min-height:350px; border-radius: 4px;">
-    <div class="module-wrap bg-white" style=" min-height:630px">
+  <div class="left" style="width: 805px; min-height:350px; border-radius: 4px;">
+    <div class="module-wrap" style=" min-height:630px">
       <div class="module-head">
         <span class="font16" @click="handleBack">
           <i class="iconfont icon-back" />

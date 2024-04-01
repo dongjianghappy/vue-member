@@ -1,45 +1,64 @@
 <template>
-<v-button v-model:show="isShow" v-if="displayButton">
-  <span class="btn-login">{{title}}</span>
-</v-button>
-<v-dialog v-model:show="isShow" ref="form" title="" :hasfooter="false" :style="{width: 800, height: 450}" :contentStyle="{padding: 0, borderRadius: '4px', overflow: 'hidden', boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.5)'}" :confirm="true" :cancel="true" @submit="submit">
-  <template v-slot:content>
-    <div class="login-wrap">
-      <div class="login-left">
-        <div class="font28">东江博客</div>
-        <div class="title mtb20">一个记录与分享的个人博客...</div>
-        <ul>
-          <li><i class="iconfont icon-right1"></i>动态发布</li>
-          <li><i class="iconfont icon-right1"></i>技术分享</li>
-          <li><i class="iconfont icon-right1"></i>开发笔记</li>
-          <li><i class="iconfont icon-right1"></i>在线问答</li>
-          <li><i class="iconfont icon-right1"></i>博客收录</li>
-        </ul>
-      </div>
-      <div class="login-box">
-        <div class="popup-content align_center clearfix h455" style="padding: 50px !important">
-          <div style="padding: 40px 15px; height: 335px">
-            <div class="w150 h150 left">
-              <div class="userLogin bg-eee w150 h150 bd-radius-50" @click="handleClick('qq')"><i class="iconfont icon-qq" style="font-size: 48px; color: #ff3766; line-height: 150px"></i>
+  <v-button v-model:show="isShow"
+            v-if="displayButton">
+    <span class="btn-login">{{title}}</span>
+  </v-button>
+  <v-dialog v-model:show="isShow"
+            ref="form"
+            title=""
+            :hasfooter="false"
+            :style="{width: 800, height: 450}"
+            :contentStyle="{padding: 0, borderRadius: '4px', overflow: 'hidden', boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.5)'}"
+            :confirm="true"
+            :cancel="true"
+            @submit="submit">
+    <template v-slot:content>
+      <div class="login-wrap">
+        <div class="login-left">
+          <div class="font28">东江博客</div>
+          <div class="title mtb20">一个记录与分享的个人博客...</div>
+          <ul>
+            <li><i class="iconfont icon-right1"></i>动态发布</li>
+            <li><i class="iconfont icon-right1"></i>技术分享</li>
+            <li><i class="iconfont icon-right1"></i>开发笔记</li>
+            <li><i class="iconfont icon-right1"></i>在线问答</li>
+            <li><i class="iconfont icon-right1"></i>博客收录</li>
+          </ul>
+        </div>
+        <div class="login-box">
+          <div class="popup-content align_center clearfix h455"
+               style="padding: 50px !important">
+            <div style="padding: 40px 15px; height: 335px">
+              <div class="w150 h150 left">
+                <div class="userLogin bg-eee w150 h150 bd-radius-50"
+                     @click="handleClick('qq')"><i class="iconfont icon-qq"
+                     style="font-size: 48px; color: #ff3766; line-height: 150px"></i>
+                </div>
+                <div class="font16 mt25"
+                     @click="handleClick('qq')">QQ登录</div>
               </div>
-              <div class="font16 mt25" @click="handleClick('qq')">QQ登录</div>
-            </div>
-            <div class="w150 h150 right">
-              <div class="userLogin bg-eee w150 h150 font24 bd-radius-50 pointer" @click="handleClick" style="line-height: 145px; color: #ff3766" data-url="http://www.yunxi10.com/login.html">
-                账号登录
+              <div class="w150 h150 right">
+                <div class="userLogin bg-eee w150 h150 font24 bd-radius-50 pointer"
+                     @click="handleClick"
+                     style="line-height: 145px; color: #ff3766"
+                     data-url="http://www.yunxi10.com/login.html">
+                  账号登录
+                </div>
+                <div class="font16 mt25"
+                     @click="handleClick">账号登录</div>
               </div>
-              <div class="font16 mt25" @click="handleClick">账号登录</div>
             </div>
-          </div>
-          <div class="font12">
-            登录即表示您同意并遵守
-            <a href="/user-agreement.html " target="_blank " rel="nofollow">《用户协议》</a>
+            <div class="font12">
+              登录即表示您同意并遵守
+              <a href="/user-agreement.html "
+                 target="_blank "
+                 rel="nofollow">《用户协议》</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </template>
-</v-dialog>
+    </template>
+  </v-dialog>
 </template>
 
 <script lang="ts">
@@ -164,7 +183,7 @@ export default defineComponent({
   height: 450px;
 
   .login-left {
-    background: #252525;
+    background: var(--module-background);
     // background-image: linear-gradient(0deg, #ff5656, #ff9b70, #ff3766);
     padding: 50px;
     width: 300px;
@@ -180,7 +199,7 @@ export default defineComponent({
   }
 
   .login-box {
-    background: #2c2c2c;
+    background: var(--card-background);
     flex: 1
   }
 }

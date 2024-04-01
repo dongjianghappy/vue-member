@@ -1,7 +1,8 @@
 <template>
 <div class="module-wrap">
   <div class="module-head">
-    最近访客
+    <span class="pointer" :class="{'opacity': tabIndex == 1}" @click="handleTabs(0)">最近访客</span>
+    <span class="ml15 pointer" :class="{'opacity': tabIndex == 0}" @click="handleTabs(1)">我的足迹</span>
   </div>
   <div class="module-content plr15 font12" v-if="visitor.list.length > 0">
     <ul class="visit-list clearfix">
@@ -13,12 +14,12 @@
         <div class="ptb10 align_center">{{item.times}}</div>
       </li>
     </ul>
-    
+
     <div>
       <v-space>
         <i class="iconfont icon-arrow deg180" :class="{disabled: current === 0}" style="margin: 8px !important" @click="handleToggle(-1)"></i>
-        <i class="iconfont icon-arrow" :class="{disabled: current === 4 || current === visitor.list.length-1}"  style="margin: 8px !important" @click="handleToggle(1)"></i>
-        <i class="iconfont icon-more1" @click="handleMore"></i>
+        <i class="iconfont icon-arrow" :class="{disabled: current === 4 || current === visitor.list.length-1}" style="margin: 8px !important" @click="handleToggle(1)"></i>
+        <i class="iconfont icon-more1" title="更多" @click="handleMore"></i>
       </v-space>
     </div>
   </div>
@@ -51,26 +52,42 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const visitor: any = computed(() => store.getters['common/visitor']);
+    const tabIndex: any = ref(0)
     let current: any = ref(0)
 
     function handleMore() {
       router.push(`/u/${props.userInfo.account}/content?mod=visitor`)
     }
 
-    function handleToggle(param: any){
+    function handleToggle(param: any) {
       debugger
-      if((param === -1 && current.value === 0) || (param === 1 && current.value === 4) || (param === 1 && visitor.value.list.length-1 == current.value)){
+      if ((param === -1 && current.value === 0) || (param === 1 && current.value === 4) || (param === 1 && visitor.value.list.length - 1 == current.value)) {
         return
       }
       current.value += param
     }
 
+    function handleTabs(index: any){
+      tabIndex.value = index
+      innit()
+    }
+
+    function innit(){
+      store.dispatch('common/LastestVisitor',{
+        data: {
+          type: (tabIndex.value === 0 ? 'visitor' : 'visit')
+        }
+      })
+    }
+
     onMounted(() => {
-      store.dispatch('common/LastestVisitor')
+      innit()
     })
-    
+
     return {
       visitor,
+      tabIndex,
+      handleTabs,
       handleToggle,
       current,
       handleMore
@@ -80,7 +97,10 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.disabled{
+.disabled {
   color: #ccc;
+}
+.opacity{
+  opacity: 0.5
 }
 </style>

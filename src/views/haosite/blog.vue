@@ -11,7 +11,7 @@
         </li>
       </ul>
       <div class="site-more absolute" style="right: 0; top: 0">
-        <a href="#">更多</a>
+        更多
       </div>
     </div>
   </div>
@@ -78,7 +78,7 @@ export default defineComponent({
   .head-name {
     width: 65px;
     padding: 8px 0 8px 15px;
-    color: #5bc0de;
+    color: var(--color-primary);
   }
 
   ul {

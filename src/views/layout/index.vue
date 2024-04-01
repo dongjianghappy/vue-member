@@ -1,21 +1,16 @@
 <template>
 <div class="relative" v-if="isComplete">
   <Header />
-  <div>
-  <v-login :displayButton="false" />
-  </div>
-  <v-chat />
+
   <v-message v-if="loginMessage == 'true'" />
   <div id="main" class="talk-main" style="padding: 80px 0 0 0; overflow: hidden;">
+    <!-- <div class="fixed" style="top: 0; right: 0; bottom: 0; left: 0" :style="`background: rgba(0, 0, 0, ${background_transparent})`"></div> -->
     <div class="mask-background"></div>
     <div class="relative" style="z-index: 9;">
-    <router-view />
+      <router-view />
     </div>
   </div>
-  <v-letter />
-  
-  <Thme v-if="loginuser.currentUser && module && module.theme" />
-  <v-gotop />
+  <Index :loginuser="loginuser" :module="module" />
 </div>
 <div class="p15" v-else>正在加载...</div>
 </template>
@@ -29,17 +24,16 @@ import {
   computed,
   ref
 } from '@/utils'
-
+import Index from './components/index.vue'
 import Header from './components/header/index.vue'
 import Footer from './components/footer/index.vue'
-import Thme from '@/views/thme/index.vue'
 
 export default defineComponent({
   name: 'IndexView ',
   components: {
+    Index,
     Header,
-    Footer,
-    Thme
+    Footer
   },
   setup(props, context) {
     const store = useStore();
@@ -77,13 +71,13 @@ export default defineComponent({
     })
 
     // if (module.slideshow) {
-      store.dispatch('common/Fetch', {
-        api: "slideBanner",
-        state: 'slideshow',
-        data: {
-          channel: 1000
-        }
-      })
+    store.dispatch('common/Fetch', {
+      api: "slideBanner",
+      state: 'slideshow',
+      data: {
+        channel: 1000
+      }
+    })
     // }
 
     store.dispatch('common/Fetch', {
@@ -109,6 +103,7 @@ export default defineComponent({
 }
 
 .mask-background {
+  background: rgba(0, 0, 0, var(--page-transparent));
   position: fixed;
   top: 0;
   right: 0;

@@ -130,10 +130,14 @@ const generateClolors = (primary: any) => {
 }
 
 // 设置颜色变量值、替换变量为相对应的颜色值
-export const writeNewStyle = () => {
+export const writeNewStyle = (param: any = "") => {
   
   let theme: any = sessionStorage.getItem("theme")
   theme = JSON.parse(theme)
+debugger
+  if(param){
+    theme = param
+  }
 
   if(theme === null){
     return
@@ -145,6 +149,7 @@ export const writeNewStyle = () => {
     
     cssProperties = {
       '--page-background': '#000',
+      '--page-transparent': '0',
       '--color-primary': "#5c5c5c",
       '--color-primary-5': "#383838",
       '--color-primary-2': "#b1722e",
@@ -186,13 +191,14 @@ export const writeNewStyle = () => {
     
     cssProperties = {
       '--page-background': theme ? theme.theme_background : "",
+      '--page-transparent': theme ? theme.background_transparent : '0',
       '--color-primary': primary || "#f67f00",
       '--color-primary-5': rgb.replace(')', ', 0.5)'),
       '--color-primary-2': rgb.replace(')', ', 0.2)'),
       '--default-font': theme.font_color,
       '--default-border': rgb.replace(')', ', 0.1)') || "#f9f9f9",
       '--default-border-dotted': "#f9f9f9",
-      '--card-background': '#f9f9f9',
+      '--card-background': rgb.replace(')', ', 0.1)') || '#f9f9f9',
       '--active-background': theme.module_background || "#fff",
       '--label-background': "#f3f4f9",
       '--label-hover-background': primary || "#f67f00",
@@ -202,7 +208,7 @@ export const writeNewStyle = () => {
       '--datetime-font': "#fff",
       '--vertical-line': '#d9d9d9',
       '--w-input-div-background': theme.input_color || '#f0f1f4',
-      '--w-input-background': '#fff',
+      '--w-input-background': theme.input_color || '#f0f1f4',
       '--nav-hover-background': primary,
       '--nav-hover-font': "#fff",    
       '--module-background': theme.module_background,

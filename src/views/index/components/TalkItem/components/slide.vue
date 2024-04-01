@@ -45,6 +45,10 @@ export default defineComponent({
         return {}
       }
     },
+    number: {
+      type: Number,
+      default: 0
+    },
     style: {
       type: Object,
       default: () => {
@@ -90,26 +94,24 @@ export default defineComponent({
       const imgul: any = banner.children[0]
       const imgli: any = banner.children[0].children[index]
       var imgwidth = parseInt(imgli.style.width)
-      if (document.getElementsByClassName("_container").length > 0) {
-        let _height = document.getElementsByClassName("_container")[0].clientHeight
-        if (_height - imgli.children[0].clientHeight > 0) {
-          if (_height - imgli.children[0].clientHeight > 50) {
-            let padding = `${(_height - imgli.children[0].clientHeight)/2}px`
-            imgli.style.paddingTop = padding
-            imgli.style.paddingBottom = padding
-          } else {
-            imgli.children[0].style.height = `${_height}px`
-          }
-        }else{
-          if(imgli.children[0].clientWidth > 420){
-            imgli.children[0].style.height = `${_height}px`
-          }else{
-            imgli.children[0].style.width = `420px`
-            imgli.children[0].style.height = `auto`
-            let margin = `-${(imgli.children[0].clientHeight-_height)/2}px`
-            imgli.style.marginTop = margin
-          }
-          
+      const container: any = banner.parentNode
+      let _height = container.clientHeight
+      if (_height - imgli.children[0].clientHeight > 0) {
+        if (_height - imgli.children[0].clientHeight > 50) {
+          let padding = `${(_height - imgli.children[0].clientHeight)/2}px`
+          imgli.style.paddingTop = padding
+          imgli.style.paddingBottom = padding
+        } else {
+          imgli.children[0].style.height = `${_height}px`
+        }
+      } else {
+        if (imgli.children[0].clientWidth > props.style.width) {
+          imgli.children[0].style.height = `${_height}px`
+        } else {
+          imgli.children[0].style.width = `${props.style.width}px`
+          imgli.children[0].style.height = `auto`
+          let margin = `-${(imgli.children[0].clientHeight-_height)/2}px`
+          imgli.style.paddingTop = margin
         }
       }
 

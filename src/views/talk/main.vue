@@ -1,16 +1,26 @@
 <template>
-<div class="home">
-  <TalkTabs ref="talktabs" field="category" :data="[{name: '全部', value: ''}, {name: '图集', value: 'img'}, {name: '视频', value: 'video'}, {name: '文本', value: 'art'}]" :render="init" :mod="{tab: 'mod', value: query.mod}"  />
-  <div class="p10 align_center" style="color: #808080" v-if="channel.checked_num">您有{{channel.checked_num}}条微博内容待审核。</div>
-  <TalkItem :sourceData="channel.talk" :deleteTalk="deleteTalk" :render="init" />
-  <!-- <v-loding v-if="!loading" /> -->
-  <div class="con-list" v-if="channel.talk.length === 0">
-    <div class="con-wrap" style=" padding-top:100px; height:350px; text-align: center;">
-      <p>你还没有收藏任何作品呢！</p>
-      <p style="font-size: 12px; color: #999;">当你发现有意思的、有价值的作品时，赶紧收藏下来哦！</p>
+  <div class="home">
+    <TalkTabs ref="talktabs"
+              field="category"
+              :data="[{name: '全部', value: ''}, {name: '图集', value: 'img'}, {name: '视频', value: 'video'}, {name: '文本', value: 'art'}]"
+              :render="init"
+              :query="{tab: 'mod', value: route.query.mod || ''}" />
+    <div class="p10 align_center"
+         style="color: #808080"
+         v-if="channel.checked_num">您有{{channel.checked_num}}条微博内容待审核。</div>
+    <TalkItem :sourceData="channel.talk"
+              :deleteTalk="deleteTalk"
+              :render="init" />
+    <!-- <v-loding v-if="!loading" /> -->
+    <div class="con-list"
+         v-if="channel.talk.length === 0">
+      <div class="con-wrap"
+           style=" padding-top:100px; height:350px; text-align: center;">
+        <p>你还没有收藏任何作品呢！</p>
+        <p style="font-size: 12px; color: #999;">当你发现有意思的、有价值的作品时，赶紧收藏下来哦！</p>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -122,8 +132,8 @@ export default defineComponent({
       init()
     })
     return {
+      route,
       module,
-      query,
       talktabs,
       tabs,
       init,

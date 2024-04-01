@@ -1,6 +1,6 @@
 <template>
 <div class="home">
-  <TalkTabs :getData="init" :style="{flex: 1}" :data="[{name: `我的评论(共${talkComment.length}条)`, value: '/?mod=comment'}, {name: '我评论的', value: '/?mod=comment&item=hot'}]" />
+  <TalkTabs :getData="init" :style="{flex: 1}" :mod="{tab: 'mod', value: 'comment'}" :data="[{name: `我的评论(共${talkComment.length}条)`, value: ''}, {name: '我评论的', value: 'hot'}]" :query="{tab: 'item', value: route.query.item}" />
   <div class="con-list" v-for="(item, index) in talkComment" :key="index">
     <div class="con-wrap">
 
@@ -27,11 +27,10 @@ import {
   defineComponent,
   getCurrentInstance,
   computed,
-  ref
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
+  ref,
+  useStore,
+  useRoute
+} from '@/utils'
 import TalkTabs from '../components/module/TalkTabs.vue'
 
 export default defineComponent({
@@ -44,6 +43,8 @@ export default defineComponent({
       ctx
     }: any = getCurrentInstance();
     const store = useStore();
+    const route = useRoute()
+
     const talkComment = computed(() => store.getters['talk/talkComment']);
     const loading: any = ref(false)
 
@@ -51,12 +52,13 @@ export default defineComponent({
       loading.value = false
       store.dispatch('talk/TalkComment', {
 
-      }).then(res=>{
+      }).then(res => {
         loading.value = true
       })
     }
     init()
     return {
+      route,
       loading,
       init,
       talkComment

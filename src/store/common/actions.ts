@@ -3,7 +3,6 @@ import api from '../../api/index'
 
 const actions = {
   Fetch: async (context: { commit: Commit; state: any}, params: any = {}) => {
-    debugger
     const data = params.data || {}
     const { result }:any = await api[params.api || "select"]({
       ...data
@@ -12,7 +11,6 @@ const actions = {
     if(params.state){
       context.commit("setData" , {state: params.state, data: result.result});      
   }    
-debugger
     return result
   },
   
@@ -66,8 +64,9 @@ debugger
     return result
   },  
   LastestVisitor: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
     const { result }:any = await api.LastestVisitor({
-      ...params 
+      ...data 
     })
     context.commit("setLastestVisitor" , result.result);
     return result
@@ -140,8 +139,9 @@ debugger
     
   },
   ActivityList: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
     const { result }:any = await api.ActivityList({
-      ...params 
+      ...data 
     })
     context.commit("setactivityList" , result.result);
     return result

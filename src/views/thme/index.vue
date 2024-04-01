@@ -93,11 +93,10 @@ import {
   defineComponent,
   getCurrentInstance,
   ref,
-  computed
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
+  computed,
+  useStore,
+  writeNewStyle
+} from '@/utils'
 import Thme from './thme/index.vue'
 import Effects from './effects/index.vue'
 import Pendant from './pendant/index.vue'
@@ -133,7 +132,7 @@ export default defineComponent({
         bb.push(item.id)
       })
       let pendant = JSON.parse(aa.pendant)
-      pendant.map((item: any) => {
+      pendant && pendant.map((item: any) => {
 
         let index = cc.findIndex((list: any) => list.src === item.img.src)
         if (index === -1) {
@@ -166,6 +165,7 @@ export default defineComponent({
     function onThem() {
       showThme.value = !showThme.value
       style.value = showThme.value ? "0px" : "-360px"
+      writeNewStyle()
     }
 
     function comfirm() {

@@ -4,7 +4,7 @@
   <div class="send-input p0">
     <div>
       <div style="
-          background: rgb(240, 241, 244);
+          background: var(--w-input-div-background);;
           border-radius: 8px;
           padding: 6px 11px;
         ">
@@ -15,7 +15,12 @@
   <div class="operate p0 pt15">
     <div class="left"></div>
     <div class="right">
-      <button class="btn btn-submit" @click="handleClick">
+      <button class="btn" style="background: var(--color-primary-5);
+    border-radius: 30px;
+    color: var(--button-font);
+    width: auto;
+    height: 32px;
+    text-align: center;" @click="handleClick">
         提交答案
       </button>
     </div>

@@ -11,7 +11,8 @@
               :key="index"
               @click="handelclick(item)"
               class="m10 align_center cl-white"
-              :class="{voted: item.status}">
+              :class="{voted: item.status}"
+              :style="{background: item.color}">
             <div class="pt25">{{item.vote}}票</div>
             <div class="pb25">{{item.votetitle}}</div>
           </li>

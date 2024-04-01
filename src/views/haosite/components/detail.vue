@@ -40,7 +40,12 @@
           </li> -->
         </ul>
         <div class="mt25">
-          <button @click="save" class="btn btn-default cl-white" style="background: #ffc09f; border-radius: 4px;">提交</button>
+          <button @click="save" class="btn" style="background: var(--color-primary-5);
+    border-radius: 30px;
+    color: var(--button-font);
+    width: auto;
+    height: 32px;
+    text-align: center;">提交</button>
         </div>
       </div>
     </div>

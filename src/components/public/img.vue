@@ -34,7 +34,6 @@ export default defineComponent({
       if(!e.currentTarget.parentNode){
         return
       }
-      debugger
       // 获取九宫格其中一格的宽高
       const width = e.currentTarget.parentNode.clientWidth
       const height = e.currentTarget.parentNode.clientHeight

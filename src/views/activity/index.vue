@@ -1,8 +1,9 @@
 <template>
-<div class="container w1100">
-  <Article v-if="query.item" />
-  <List v-else :item="query.item" />
-</div>
+  <div class="container w1100">
+    <Article v-if="query.item" />
+    <List v-else
+          :item="query.item" />
+  </div>
 </template>
 
 <script lang="ts">

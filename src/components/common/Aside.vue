@@ -1,20 +1,29 @@
 <template>
-<div class="module-wrap mb15 w180" :class="{'aside_nav sidebar_fixed' :isFixed}">
-  <div class="module-head head bd-0 p15" v-if="title && loginuser.currentUser">
-    <span class="font22">{{title}}</span>
-    <span class="right">
-      <slot name="button"></slot>
-    </span>
+  <div class="module-wrap mb15 w180"
+       :class="{'aside_nav sidebar_fixed' :isFixed}">
+    <div class="module-head head bd-0 p15"
+         v-if="title">
+      <!-- && loginuser.currentUser -->
+      <span class="font22">{{title}}</span>
+      <span class="right">
+        <slot name="button"></slot>
+      </span>
+    </div>
+    <div class="module-content p0"
+         :style="{height: loginuser.currentUser ? '650px' : '560px'}">
+      <ul v-if="data.length">
+        <li v-for="(item, index) in data"
+            :key="index"
+            @click="handleClick(item.path || item.value)"
+            class="aside">
+          <i class="iconfont"
+             :class="`icon-${item.icon || 'dot'}`"
+             v-if="hasIcon" /> {{item.name}} <span v-if="item.num">({{item.num}})</span>
+        </li>
+      </ul>
+      <slot name="aside"></slot>
+    </div>
   </div>
-  <div class="module-content p0" :style="{height: loginuser.currentUser ? '650px' : '560px'}">
-    <ul v-if="data.length">
-      <li v-for="(item, index) in data" :key="index" @click="handleClick(item.path || item.value)" class="aside">
-        <i class="iconfont" :class="`icon-${item.icon || 'dot'}`" v-if="hasIcon" /> {{item.name}} <span v-if="item.num">({{item.num}})</span>
-      </li>
-    </ul>
-    <slot name="aside"></slot>
-  </div>
-</div>
 </template>
 
 <script lang="ts">

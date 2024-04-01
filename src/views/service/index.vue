@@ -1,52 +1,68 @@
 <template>
-<div class="container w1100 pb25" style=" background: var(--label-background); border-radius: 4px;">
-  <div class="module-wrap">
-    <div class="module-head p15">
-      意见反馈
-    </div>
-    <div class="module-content plr30">
-      <div class="mb10">
-        给博主提需求、反馈 bug。请在下面填写意见建议或问题描述(500字以内)，感谢您对本博客的支持!
+  <div class="container w1100 pb25"
+       style=" background: var(--module-background); border-radius: 4px;">
+    <div class="module-wrap">
+      <div class="module-head p15">
+        意见反馈
       </div>
-      <ul class="form-wrap-box">
-        <li class="vertical send_info">
-          <div class="send-input ptb0">
-            <div class="send-input-box relative">
-              <textarea placeholder="" v-model="detail.content" class="talkcontent-wrap" style="background: transparent; resize: none;"></textarea>
+      <div class="module-content plr30">
+        <div class="mb10">
+          给博主提需求、反馈 bug。请在下面填写意见建议或问题描述(500字以内)，感谢您对本博客的支持!
+        </div>
+        <ul class="form-wrap-box">
+          <li class="vertical send_info">
+            <div class="send-input ptb0">
+              <div class="send-input-box relative">
+                <textarea placeholder=""
+                          v-model="detail.content"
+                          class="talkcontent-wrap"
+                          style="background: transparent; resize: none;"></textarea>
+              </div>
             </div>
-          </div>
-          <v-upload ref="upload" @imgList="image" file="talk" uploadtype="feedback" :mask="true" maxLength="3" />
-          <div class="operate">
-            <div class="operate-left">
-              <span class="infos" @click="upload.handleclick()">
-                上传图片附件
-              </span>
-              (<span class="mt5 font12">{{`共${imgNum}张，还可以上传${3-imgNum}张`}}</span>)
+            <v-upload ref="upload"
+                      @imgList="image"
+                      file="talk"
+                      uploadtype="feedback"
+                      :mask="true"
+                      maxLength="3" />
+            <div class="operate">
+              <div class="operate-left">
+                <span class="infos"
+                      @click="upload.handleclick()">
+                  上传图片附件
+                </span>
+                (<span class="mt5 font12">{{`共${imgNum}张，还可以上传${3-imgNum}张`}}</span>)
+              </div>
+              <div class="operate-right"
+                   style=" width: 200px;">
+                <button @click="save"
+                        class="btn"
+                        :class="{disabled: !detail.content}"
+                        :disabled="!detail.content">提交</button>
+              </div>
             </div>
-            <div class="operate-right" style=" width: 200px;">
-              <button @click="save" class="btn" :class="{disabled: !detail.content}" :disabled="!detail.content">提交</button>
-            </div>
-          </div>
-          <!-- <textarea v-model="detail.content" class="w-full h150" placeholder="请输入描述(必填)" style="resize: inherit;"></textarea> -->
-        </li>
-        <!-- <li class="vertical">
+            <!-- <textarea v-model="detail.content" class="w-full h150" placeholder="请输入描述(必填)" style="resize: inherit;"></textarea> -->
+          </li>
+          <!-- <li class="vertical">
           <div class="label">附件上传</div>
           <v-upload :dataList="detail.img || []" @imgList="image" uploadtype="feedback" :show="true"  />
           <span class="mt5 font12">{{`共${imgNum}张，还可以上传${3-imgNum}张`}}</span>
         </li> -->
-      </ul>
-      <!-- <div class="mt10">
+        </ul>
+        <!-- <div class="mt10">
         <button @click="save" class="btn btn-default cl-white" style="background: var(--color-primary-5); border-radius: 4px;">提交反馈</button>
       </div> -->
+      </div>
+    </div>
+    <div class="home plr15">
+      <List :sourceData="dataList.list" />
+      <div class="pt25 align_right"
+           v-if="dataList.total > 25">
+        <v-pagination :pagination="{total: dataList.total, pages: dataList.pages, page: dataList.page ||  1, pagesize: dataList.pagesize}"
+                      :render="init" />
+      </div>
     </div>
   </div>
-  <div class="home plr15">
-    <List :sourceData="dataList.list" />
-    <div class="pt25 align_right" v-if="dataList.total > 25">
-      <v-pagination :pagination="{total: dataList.total, pages: dataList.pages, page: dataList.page ||  1, pagesize: dataList.pagesize}" :render="init" />
-    </div>
-  </div>
-</div>
 </template>
 
 <script lang="ts">

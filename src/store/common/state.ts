@@ -43,7 +43,11 @@ const initState: State = {
   recentPhotos: [],
   tripsStatus: false,
   activityList: [],
-  activity: {},
+  activity: {
+    basic: {},
+    vote: {},
+    list: []
+  },
   concernList: [],
   albumList: [],
   slideshow: []

@@ -79,9 +79,24 @@ updateConcernRemark(params: any) {
     return http.request('user', 'TalkForwarding', params)
   },
 
+  // 创建话题
+  insertActivity (params: any) {
+    return http.request('talk', 'insertActivity', params)
+  },
+
+  // 修改话题
+  updateActivity (params: any) {
+    return http.request('talk', 'updateActivity', params)
+  },
+
  // 话题查询
  ActivityList (params: any) {
   return http.request('talk', 'activityList', params)
+},
+
+// 话题收藏
+ActivityCollectList (params: any) {
+  return http.request('talk', 'activityCollectList', params)
 },
 
 // 话题内容
@@ -94,7 +109,10 @@ talkAlbum (params: any) {
   return http.request('talk', 'talkAlbum', params)
 },
 
-
+// 更新状态
+updateStatus(params: any) {
+  return http.request('common', 'updateStatus', params)
+},
   
 
  // 评论
@@ -219,10 +237,14 @@ announcement (params: any) {
     return http.request('user', 'signList', params)
   },   
 
-  // 最新留言
-  MessageBoard (params: any) {
-    return http.request('user', 'recentMessage', params)
-  },      
+  // 站长留言
+  messageBoard (params: any) {
+    return http.request('common', 'messageBoard', params)
+  } , 
+  // // 最新留言
+  // MessageBoard (params: any) {
+  //   return http.request('user', 'recentMessage', params)
+  // },      
 
   // 留言板
   userMessageBoard (params: any) {
@@ -278,6 +300,11 @@ announcement (params: any) {
   InsertTalk (params: any) {
     return http.request('talk', 'insertTalks', params)
   },  
+
+  // 更改发布
+  updateTalk (params: any) {
+    return http.request('talk', 'updateTalk', params)
+  },    
 
   // 推荐话题
   RecommendActivity (params: any) {
@@ -750,7 +777,32 @@ setVisible(params: any) {
 expression(params: any) {
   return http.request('user', 'expression', params)
 },
-
+getGraph(params: any) {
+  return http.request('common', 'getGraph', params)
+},
+updateGraph(params: any) {
+  return http.request('common', 'updateGraph', params)
+},
+getVote(params: any) {
+  return http.request('talk', 'getVote', params)
+},
+setVote(params: any) {
+  return http.request('talk', 'setVote', params)
+},
+UploadActivity(params: any) {
+  return http.request('user', 'UploadActivity', params)
+},
+getVideo(params: any) {
+  return http.request('talk', 'getVideo', params)
+},
+// 收藏
+collect_music (params: any) {
+  return http.request('user', 'collect_music', params)
+},  
+// 音乐列表
+getMusic (params: any) {
+  return http.request('talk', 'getMusic', params)
+},  
 }
 
   

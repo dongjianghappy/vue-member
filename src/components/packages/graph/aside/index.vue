@@ -1,16 +1,8 @@
 <template>
-<div id="stencil" v-show="graphType === 0">
-</div>
-<div id="chatbot" v-show="graphType === 1">
-</div>
-<!-- <ul class="clearfix">
-  <li style="padding: 10px">
-    <div class="rect" draggable="true" @dragstart="(e, fType, text)=>dragstart(e, 'rect', '矩形')">矩形</div>
-  </li>
-  <li style="padding: 10px">
-    <div class="round" draggable="true" @dragstart="(e, fType, text)=>dragstart(e, 'start', '圆形')">圆形</div>
-  </li>
-</ul> -->
+<!-- 绘图工具栏 -->
+<div id="stencil" v-show="graphType === 0"></div>
+<!-- 机器人工具栏 -->
+<div id="chatbot" v-show="graphType === 1"></div>
 </template>
 
 <script lang="ts">
@@ -50,6 +42,7 @@ export default defineComponent({
       e.dataTransfer.setData('offsetY', e.offsetY)
     }
 
+    // 绘图工具栏
     function initGraph() {
       var stencilGraph = new joint.dia.Graph,
         stencilPaper = new joint.dia.Paper(
@@ -71,11 +64,10 @@ export default defineComponent({
       circle.resize(100, 100);
       circle.position(40, 20);
       circle.attr('root/title', 'joint.shapes.standard.Circle');
-      circle.attr('label/text', '圆形');
+      circle.attr('label/text', '圆形1');
       circle.attr('body/stroke', config.circle.borderColor);
       circle.prop('ftype', 'circle')
       circle.addTo(stencilGraph);
-
 
       var rectangle = new joint.shapes.standard.Rectangle();
       rectangle.resize(100, 50);
@@ -145,13 +137,6 @@ export default defineComponent({
           });
         });
         $('body').on('mouseup.fly', function (e: any) {
-
-          // Dropped over paper ?
-          // if (x > target.left && x < target.left + paper.$el.width() && y > target.top && y < target.top + paper.$el.height()) {
-          //   var s = flyShape.clone();
-          //   s.position(x - target.left - offset.x, y - target.top - offset.y);
-          //   graph.addCell(s);
-          // }
           props.graph.draggable(e, {
             ftype: flyShape.attributes.ftype,
             text: flyShape.attributes.attrs.label.text,
@@ -159,16 +144,6 @@ export default defineComponent({
             offsetY: e.offsetY
 
           })
-          // var x = e.pageX,
-          //   y = e.pageY,
-          //   target = paper.$el.offset();
-
-          // // Dropped over paper ?
-          // if (x > target.left && x < target.left + paper.$el.width() && y > target.top && y < target.top + paper.$el.height()) {
-          //   var s = flyShape.clone();
-          //   s.position(x - target.left - offset.x, y - target.top - offset.y);
-          //   graph.addCell(s);
-          // }
           $('body').off('mousemove.fly').off('mouseup.fly');
           flyShape.remove();
           $('#flyPaper').remove();
@@ -222,14 +197,6 @@ export default defineComponent({
       polygon.prop('ftype', 'polygon')
       polygon.addTo(stencilGraph);
 
-      // var ellipse = new joint.shapes.standard.Ellipse();
-      // ellipse.resize(100, 60);
-      // ellipse.position(20, 310);
-      // ellipse.attr('root/title', 'joint.shapes.standard.Ellipse');
-      // ellipse.attr('label/text', 'Ellipse');
-      // ellipse.attr('body/fill', 'lightblue');
-      // ellipse.addTo(stencilGraph);
-
       var end = new joint.shapes.standard.Circle();
       end.resize(50, 50);
       end.position(65, 320);
@@ -269,17 +236,7 @@ export default defineComponent({
           });
         });
         $('body').on('mouseup.fly', function (e: any) {
-          //     e.dataTransfer.setData('ftype', fType)
-          // e.dataTransfer.setData('text', text)
-          // e.dataTransfer.setData('offsetX', e.offsetX)
-          // e.dataTransfer.setData('offsetY', e.offsetY)
           flyShape
-          // Dropped over paper ?
-          // if (x > target.left && x < target.left + paper.$el.width() && y > target.top && y < target.top + paper.$el.height()) {
-          //   var s = flyShape.clone();
-          //   s.position(x - target.left - offset.x, y - target.top - offset.y);
-          //   graph.addCell(s);
-          // }
           props.graph.draggable(e, {
             ftype: flyShape.attributes.ftype,
             text: flyShape.attributes.attrs.label.text,
@@ -287,16 +244,6 @@ export default defineComponent({
             offsetY: e.offsetY
 
           })
-          // var x = e.pageX,
-          //   y = e.pageY,
-          //   target = paper.$el.offset();
-
-          // // Dropped over paper ?
-          // if (x > target.left && x < target.left + paper.$el.width() && y > target.top && y < target.top + paper.$el.height()) {
-          //   var s = flyShape.clone();
-          //   s.position(x - target.left - offset.x, y - target.top - offset.y);
-          //   graph.addCell(s);
-          // }
           $('body').off('mousemove.fly').off('mouseup.fly');
           flyShape.remove();
           $('#flyPaperRobot').remove();
