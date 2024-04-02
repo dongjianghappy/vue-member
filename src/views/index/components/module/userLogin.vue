@@ -10,7 +10,7 @@
       <div class="name-box">
         <v-login title="立即登录" />
       </div>
-      <div class="mt15 mb25 font18 align_center">博客记录点滴生活！</div>
+      <div class="mt15 mb25 font18 align_center">记录生活，回忆总是美好的！</div>
     </div>
   </div>
 </div>

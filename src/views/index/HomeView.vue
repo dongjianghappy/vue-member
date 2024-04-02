@@ -1,10 +1,12 @@
 <template>
   <div>
+    <SpaceName v-if="module.personal_center.space_name" />
     <div class="container w1100 relative clearfix">
       <!-- 侧边菜单 -->
       <div class="left-sidebar left">
         <v-aside :data="module.groups"
                  title="首页"
+                 :isFixed="false"
                  :render="init" />
       </div>
       <!-- 主内容 -->
@@ -32,7 +34,7 @@ import {
   computed,
   ref
 } from '@/utils'
-
+import SpaceName from '../../views/layout/components/name/index.vue'
 import Center from './center/index.vue'
 import Collect from './collect/index.vue'
 import Comment from './comment/index.vue'
@@ -43,6 +45,7 @@ import RightView from './components/right_aside.vue'
 export default defineComponent({
   name: 'HomeView',
   components: {
+    SpaceName,
     Center,
     Collect,
     Comment,

@@ -11,7 +11,7 @@
 <v-layer1 v-model:isShow="displayScreen" :dataList="[{...currentData.data}]" v-if="displayScreen" />
 <Graph v-model:show="displayGraph" :data="currentData" v-if="displayGraph" />
 <v-gotop />
-<!-- <Happy /> -->
+<MessagePrompt v-if="module.message_prompt" />
 </template>
 
 <script lang="ts">
@@ -23,13 +23,13 @@ import {
 import VueEvent from '@/utils/event'
 import Thme from '@/views/thme/index.vue'
 import Graph from '@/views/graph/index.vue'
-import Happy from './happy.vue'
+import MessagePrompt from './MessagePrompt.vue'
 export default defineComponent({
   name: 'v-Button',
   components: {
     Thme,
     Graph,
-    Happy
+    MessagePrompt
   },
   props: {
     loginuser: {

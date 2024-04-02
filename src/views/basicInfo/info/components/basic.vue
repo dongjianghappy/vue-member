@@ -20,6 +20,11 @@
         <input type="text" v-model="userInfo.nickname" class="input-sm" v-else>
       </li>
       <li>
+        <label>空间名称</label>
+        <div class="con" v-if="isEdit">{{basicInfo.space_name}}</div>
+        <textarea v-model="userInfo.space_name" v-else></textarea>
+      </li>
+      <li>
         <label>签名</label>
         <div class="con" v-if="isEdit">{{basicInfo.signature}}</div>
         <input type="text" v-model="userInfo.signature" class="input-sm" v-else>
@@ -155,6 +160,7 @@ export default defineComponent({
       if (isEdit.value) {
         const {
           nickname,
+          space_name,
           signature,
           realname,
           sex,
@@ -171,6 +177,7 @@ export default defineComponent({
         } = props.basicInfo
         props.edit({
           nickname,
+          space_name,
           signature,
           realname,
           sex,

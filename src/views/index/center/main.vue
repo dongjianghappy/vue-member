@@ -1,23 +1,11 @@
 <template>
-  <div class="home">
-    <TalkTabs ref="talktabs"
-              :data="tabs"
-              :render="init"
-              :query="{tab: 'mod', value: query.mod || ''}"
-              v-if="query.mod !== 'friend' && query.mod !== 'concern'" />
-    <div class="p10 align_center"
-         style="color: #808080"
-         v-if="channel.checked_num">您有{{channel.checked_num}}条微博内容待审核。</div>
-    <TalkItem :sourceData="channel[query.mod]"
-              :deleteTalk="deleteTalk"
-              :render="init"
-              v-if="query.mod" />
-    <TalkItem :sourceData="channel.all"
-              :deleteTalk="deleteTalk"
-              :render="init"
-              v-else />
-    <v-loding v-if="!loading" />
-  </div>
+<div class="home">
+  <TalkTabs ref="talktabs" :data="tabs" :render="init" :query="{tab: 'mod', value: query.mod || ''}" v-if="query.mod !== 'friend' && query.mod !== 'concern'" />
+  <div class="p10 align_center" style="color: #808080" v-if="channel.checked_num">您有{{channel.checked_num}}条微博内容待审核。</div>
+  <TalkItem :sourceData="channel[query.mod]" :deleteTalk="deleteTalk" :render="init" v-if="query.mod" />
+  <TalkItem :sourceData="channel.all" :deleteTalk="deleteTalk" :render="init" v-else />
+  <v-loding v-if="!loading" />
+</div>
 </template>
 
 <script lang="ts">
@@ -97,11 +85,11 @@ export default defineComponent({
         dispatch = 'comprehensive'
       }
 
-      if(query.value.mod == 'concern'){
+      if (query.value.mod == 'concern') {
         params.coding = coding['talk'].art
         params.list_id = '2'
         obj.state = 'concern'
-      }else if(query.value.mod == 'friend'){
+      } else if (query.value.mod == 'friend') {
         params.coding = coding['talk'].art
         params.list_id = '3'
         obj.state = 'friend'

@@ -1,10 +1,8 @@
 <template>
 <div class="relative" v-if="isComplete">
   <Header />
-
   <v-message v-if="loginMessage == 'true'" />
   <div id="main" class="talk-main" style="padding: 80px 0 0 0; overflow: hidden;">
-    <!-- <div class="fixed" style="top: 0; right: 0; bottom: 0; left: 0" :style="`background: rgba(0, 0, 0, ${background_transparent})`"></div> -->
     <div class="mask-background"></div>
     <div class="relative" style="z-index: 9;">
       <router-view />
