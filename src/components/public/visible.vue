@@ -19,22 +19,8 @@ import {
 } from '@/assets/const'
 
 export default defineComponent({
-  name: 'v-Refresh',
+  name: 'v-Visible',
   props: {
-    data: {
-      type: Array,
-      default: () => {
-        return
-      }
-    },
-    number: {
-      type: Number,
-      default: 0
-    },
-    size: {
-      type: String,
-      default: 0
-    },
     visible: {
       type: String,
       default: "public"

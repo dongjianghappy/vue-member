@@ -1,5 +1,5 @@
 <template>
-<div class="module-wrap mb15 w180">
+<div class="module-wrap mb15 w180 aside_nav sidebar_fixed">
   <div class="module-head head bd-0 p15" v-if="title && loginuser.currentUser">
     <span class="right">
       <slot name="button"></slot>
@@ -68,7 +68,7 @@ export default defineComponent({
       proxy.$scroll.init({
         win: {
           el: window,
-          y: 0,
+          y: 415,
           b: 80
         },
         doc: {

@@ -389,7 +389,7 @@ textarea {
 }
 
 .ps {
-  background: var(--w-input-background);
+  background: var(--input-background);
   height: 500px;
 }
 </style>

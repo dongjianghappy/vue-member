@@ -1,100 +1,73 @@
 <template>
-  <div>
-    <div class="container w1100">
-      <UserInfoHead />
+<div>
+  <div class="container w1100">
+    <UserInfoHead />
+  </div>
+  <div class="container w1100 relative clearfix">
+    <div class="w180 left">
+      <v-aside :data="module.home_nav" :isFixed="false">
+        <template v-slot:button>
+        </template>
+      </v-aside>
     </div>
-    <div class="container w1100 relative clearfix">
-      <div class="w180 left">
-        <v-aside :data="module.home_nav"
-                 :isFixed="false">
-          <template v-slot:button>
-          </template>
-        </v-aside>
-      </div>
-      <div class="right"
-           style="width: 910px;">
-        <div class="module-wrap">
-          <div class="module-content p20">
-            <div style="height: 165px; overflow: hidden;">
-              <div class="mb15 font14">相册({{cateList.length || 0}})
-                <span class="right">
-                  <v-group action='add'
-                           :data="data"
-                           :group="cateList"
-                           :coding="coding.album.list"
-                           :render="aaaa" /></span>
-              </div>
-              <v-slider @onClick="handleclick"
-                        :dataList="cateList" />
+    <div class="right" style="width: 910px;">
+      <div class="module-wrap">
+        <div class="module-content p20">
+          <div style="height: 165px; overflow: hidden;">
+            <div class="mb15 font14">相册({{cateList.length || 0}})
+              <span class="right">
+                <v-group action='add' :data="data" :group="cateList" :coding="coding.album.list" :render="aaaa" v-if="loginuser.account === userInfo.account" /></span>
             </div>
+            <v-slider :data="{coding: coding.album.list}" @onClick="handleclick" :dataList="cateList" :isCurrentUser="loginuser.account === userInfo.account" />
           </div>
         </div>
-        <div class="module-wrap">
-          <div class="module-content p20"
-               style="min-height: 500px">
-            <div class="mb15">
-              <span class="right pointer"
-                    @click="handleSave('add')"
-                    v-if="loginuser.currentUser && current.id !== '0' && current.id !== '-1'"
-                    :disable="img.length<2">
-                <i class="iconfont icon-mail" />
-                保存
-              </span>
-              <span class="right pointer mr25"
-                    @click="handleUpload('add')"
-                    v-if="loginuser.currentUser && current.id !== '0' && current.id !== '-1'">
-                <i class="iconfont icon-upload-file" />
-                上传
-              </span>
-            </div>
-            <v-upload ref="upload"
-                      uploadtype='album'
-                      @imgList="image"
-                      v-if="current !== '0' && current !== 'photo'"
-                      file="talk" />
-            <div v-if="current.id === '-1'">
-              <v-tabs :tabs="[{name: '头像',value: 'photos'},{name: '头像背景',value: 'background'},{name: '主页背景',value: 'banner'}]"
-                      :isEmit="true"
-                      v-model:index="index">
-                <template v-slot:content1>
-                  <List kind="photos" />
-                </template>
-                <template v-slot:content2>
-                  <List kind="head_background" />
-                </template>
-                <template v-slot:content3>
-                  <List kind="home_background" />
-                </template>
-              </v-tabs>
-            </div>
-            <div class="plr15"
-                 v-else-if="current.id === '0'">
-              <div v-for="(item, index) in albumList"
-                   :key="index"
-                   style="overflow: auto;">
-                <div>{{item.month}}</div>
-                <div>
-                  <div class="col-sm-6 col-md-3 p10"
-                       v-for="(img, i) in item.list"
-                       :key="i">
-                    <v-thumbnail :data="{image: [img]}" />
-                  </div>
+      </div>
+      <div class="module-wrap">
+        <div class="module-content p20" style="min-height: 500px">
+          <div class="mb15">
+            <span class="right pointer" @click="handleSave('add')" v-if="loginuser.currentUser && current.id !== '0' && current.id !== '-1'" :disable="img.length<2">
+              <i class="iconfont icon-mail" />
+              保存
+            </span>
+            <span class="right pointer mr25" @click="handleUpload('add')" v-if="loginuser.currentUser && current.id !== '0' && current.id !== '-1'">
+              <i class="iconfont icon-upload-file" />
+              上传
+            </span>
+          </div>
+          <v-upload ref="upload" uploadtype='album' @imgList="image" v-if="current !== '0' && current !== 'photo'" file="talk" />
+          <div v-if="current.id === '-1'">
+            <v-tabs :tabs="[{name: '头像',value: 'photos'},{name: '头像背景',value: 'background'},{name: '主页背景',value: 'banner'}]" :isEmit="true" v-model:index="index">
+              <template v-slot:content1>
+                <List kind="photos" />
+              </template>
+              <template v-slot:content2>
+                <List kind="head_background" />
+              </template>
+              <template v-slot:content3>
+                <List kind="home_background" />
+              </template>
+            </v-tabs>
+          </div>
+          <div class="plr15" v-else-if="current.id === '0'">
+            <div v-for="(item, index) in albumList" :key="index" style="overflow: auto;">
+              <div>{{item.month}}</div>
+              <div>
+                <div class="col-sm-6 col-md-3 p10" v-for="(img, i) in item.list" :key="i">
+                  <v-thumbnail :data="{image: [img]}" />
                 </div>
               </div>
             </div>
-            <div class="plr15"
-                 v-else>
-              <div class="col-sm-6 col-md-3 p10"
-                   v-for="(item, i) in photoList"
-                   :key="i">
-                <v-thumbnail :data="item" />
-              </div>
+          </div>
+          <div class="plr15" v-else>
+            <div class="col-sm-6 col-md-3 p10" v-for="(item, i) in photoList" :key="i">
+              <v-thumbnail :data="item" />
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -131,6 +104,7 @@ export default defineComponent({
     const coding: any = codings.talk
     const store = useStore();
     const loginuser = computed(() => store.getters['user/loginuser']);
+    const userInfo = computed(() => store.getters['user/userInfo']);
     const history: any = ref([])
     const current: any = ref({})
     const cateList: any = ref([])
@@ -249,6 +223,7 @@ export default defineComponent({
       aaaa,
       index,
       loginuser,
+      userInfo,
       // sidebar,
       module
     }

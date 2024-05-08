@@ -53,8 +53,10 @@ import {
   useRoute,
   useStore,
   getQuery,
-  computed
+  computed,
+  onMounted
 } from '@/utils'
+import VueEvent from '@/utils/event'
 export default defineComponent({
   name: 'v-Search',
   props: {
@@ -156,6 +158,13 @@ export default defineComponent({
     function close(e: any) {
       context.emit('update:search', false)
     }
+
+    onMounted(() => {
+      VueEvent.on("search", (param) => {
+        handleSearch(param)
+      })
+    })
+
     return {
       handleSearch,
       handleFocus,
@@ -180,7 +189,7 @@ export default defineComponent({
   .search-box {
     display: flex;
     flex: 1;
-    background: var(--w-input-div-background);
+    background: var(--input-background);
     border-radius: 50px;
     height: 34px;
     padding: 0 10px;
@@ -215,7 +224,7 @@ export default defineComponent({
   top: 60px;
   left: 0;
   right: 0;
-  background: var(--active-background);
+  background: var(--module-background);
   box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%);
   width: 100%;
   height: auto;
@@ -231,6 +240,9 @@ export default defineComponent({
       margin-right: 10px;
       margin-bottom: 10px;
       color: #999;
+      &:hover{
+        background: var(--link-hover-background);
+      }
     }
   }
 }

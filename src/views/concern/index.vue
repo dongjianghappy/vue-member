@@ -27,7 +27,6 @@
   </div>
 
 </div>
-<AddGroup :showAlbum="true" :render="Grouping" v-model:showFlag="showAlbum" v-if="showAlbum" :data="currentData" />
 </template>
 
 <script lang="ts">
@@ -43,7 +42,6 @@ import {
 import {
   useStore
 } from 'vuex'
-import AddGroup from './components/addGroup.vue'
 import {
   group
 } from '@/assets/const'
@@ -56,7 +54,6 @@ import {
 export default defineComponent({
   name: 'IndexView1',
   components: {
-    AddGroup,
     Card
   },
   setup(props, context) {

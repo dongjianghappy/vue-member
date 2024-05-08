@@ -1,6 +1,6 @@
 <template>
 <div class="container w1100 space-name">
- <div class="text">{{userInfo.space_name || '对勇于尝试的人来说，没有不可能。'}}</div> 
+ <div class="text">{{userInfo.space_name || siteInfo.talk_space_name}}</div> 
 </div>
 </template>
 
@@ -15,8 +15,10 @@ export default defineComponent({
   name: 'v-Footer',
   setup(props, context) {
     const store = useStore()
+    const siteInfo = computed(() => store.getters['user/siteInfo']);
     const userInfo = computed(() => store.getters['user/userInfo']);
     return {
+      siteInfo,
       userInfo
     }
   }
@@ -34,6 +36,7 @@ export default defineComponent({
  .text{
    padding: 5px 0 15px 0;
    background-image: linear-gradient(90deg, hsla(0, 0%, 100%, 0), var(--module-background), hsla(0, 0%, 100%, 0)) !important;
+   color: var(--color-primary)
  }
 }
 </style>

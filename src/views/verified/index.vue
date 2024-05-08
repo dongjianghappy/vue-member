@@ -1,5 +1,5 @@
 <template>
-<div class="container bg-white w1100 relative" style="height: 650px;">
+<div class="container w1100 relative" style="background: var(--module-background); height: 650px;">
   <Institution v-if="route.query.item === 'institution'" />
   <Condition v-if="route.query.item === 'condition'" />
   <Main v-else />

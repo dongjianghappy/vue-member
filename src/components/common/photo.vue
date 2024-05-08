@@ -1,6 +1,7 @@
 <template>
 <div :class="{relative: v}" style="display: inline-block;">
-  <img :src="data.photos" onerror="this.src='http://www.yunxi10.com/source/public/images/head_normal_100.png'" @click="handleClick(data.from_uid || data.account || data.uid)">
+  <!-- <div class="absolute" style="top: -10px; left: -10px; width: calc(100% + 20px); height: calc(100% + 20px);" :style="`background: url(${data.theme.avatar_pendant.image}) no-repeat; background-size: cover; opacity: 1;`"></div> -->
+  <img :src="data.photos" style="position: inherit;" onerror="this.src='http://www.yunxi10.com/source/public/images/head_normal_100.png'" @click="handleClick(data.from_uid || data.account || data.uid)">
   <span class="verified" v-if="v && data.verified === '1'">
     v
   </span>

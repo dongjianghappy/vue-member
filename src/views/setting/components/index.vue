@@ -1,7 +1,8 @@
 <template>
   <div>
-    <Integration v-if="type==='integration'" />
-    <Goldcoin v-else-if="type==='goldcoin'" />
+    <Setting v-if="type==='setting'" />
+    <Privacy v-else-if="type==='privacy'" />
+    <Message v-else-if="type==='message'" />
     <Sign v-else-if="type==='sign'" />
     <Medal v-else-if="type==='medal'" />
     <Card v-else-if="type==='card'" />
@@ -12,24 +13,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Safe from './safe.vue'
-import Integration from './integration.vue'
-import Goldcoin from './goldcoin.vue'
-import Sign from './sign.vue'
-import Medal from './medal.vue'
-import Card from './card.vue'
-import Order from './order.vue'
+import Setting from './setting.vue'
+import Privacy from './privacy.vue'
+import Message from './message.vue'
 
 export default defineComponent({
   name: 'HomeViewdd',
   components: {
-   Safe,
-   Integration,
-   Goldcoin,
-   Sign,
-   Medal,
-   Card,
-   Order,
+   Setting,
+   Privacy,
+   Message
   },
   props: {
     type: {

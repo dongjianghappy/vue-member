@@ -468,7 +468,7 @@ export default defineComponent({
 
   &:hover {
     .music-name {
-      background: var(--active-background);
+      background: var(--module-background);
       display: block;
     }
 

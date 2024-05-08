@@ -62,7 +62,7 @@ export default defineComponent({
       let aaa: any = audio[0].duration * e.offsetX / progress_bar.clientWidth
       audio[0].currentTime = aaa
 
-      settime(audio[0], param)
+      // settime(audio[0], param)
 
       if (e.offsetX >= e.currentTarget.clientWidth) {
         time_bar.style.width = `${e.currentTarget.clientWidth}px`;

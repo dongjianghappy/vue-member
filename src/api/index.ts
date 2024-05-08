@@ -21,7 +21,7 @@ const api:any =  {
   },
   // 查询
   select(params: any) {
-    return http.request('vue', 'select', params)
+    return http.request('common', 'select', params)
   },  
   // 签到
   Sign (params: any) {
@@ -193,7 +193,15 @@ announcement (params: any) {
   Pendant (params: any) {
     return http.request('user', 'pendant', params)
   }, 
+  // 头像挂件
+  avatarPendant (params: any) {
+    return http.request('user', 'avatarPendant', params)
+  }, 
   // 鼠标特效
+  mouseEffects (params: any) {
+    return http.request('user', 'mouseEffects', params)
+  }, 
+  // 鼠标样式
   Cursor (params: any) {
     return http.request('user', 'cursor', params)
   },    
@@ -425,10 +433,18 @@ announcement (params: any) {
   UserBaiscInfo (params: any) {
     return http.request('user', 'userBaiscInfo', params)
   } ,   
+  // 个人资料
+  userInformation (params: any) {
+    return http.request('user', 'userInformation', params)
+  } ,  
   // 更改用户信息
   editUserInfo (params: any) {
     return http.request('user', 'editUserInfo', params)
   } ,     
+  // 保密设置
+  secrecySetting (params: any) {
+    return http.request('user', 'secrecySetting', params)
+  } ,   
   // 用户兴趣爱好
   UserHobby (params: any) {
     return http.request('user', 'userHobby', params)
@@ -469,7 +485,15 @@ announcement (params: any) {
   // 投票
   Vote (params: any) {
     return http.request('talk', 'vote', params)
-  } ,    
+  } ,   
+  // 收藏表情
+  insertExpression (params: any) {
+    return http.request('user', 'insertExpression', params)
+  } , 
+  // 用户表情收藏
+  userExpression (params: any) {
+    return http.request('user', 'userExpression', params)
+  } , 
   // 获取心情
   GetMoodList (params: any) {
     return http.request('common', 'mood', params)
@@ -667,8 +691,12 @@ settingList (params: any) {
   return http.request('user', 'settingList',  params)
 }, 
 // 用户设置
-userSettinng (params: any) {
-  return http.request('user', 'userSettinng',  params)
+userSetting (params: any) {
+  return http.request('user', 'userSetting',  params)
+}, 
+// 消息设置管理
+messageSettingList (params: any) {
+  return http.request('user', 'messageSettingList',  params)
 }, 
 // 语音播报
 voiceBroadcast (params: any) {
@@ -802,7 +830,31 @@ collect_music (params: any) {
 // 音乐列表
 getMusic (params: any) {
   return http.request('talk', 'getMusic', params)
-},  
+}, 
+// 消息
+message (params: any) {
+  return http.request('talk', 'message', params)
+}, 
+// 消息列表
+messageList (params: any) {
+  return http.request('talk', 'messageList', params)
+}, 
+// 消息详情
+messageDetail (params: any) {
+  return http.request('talk', 'messageDetail', params)
+}, 
+// 历史浏览记录
+viewingRecords (params: any) {
+  return http.request('talk', 'viewingRecords', params)
+}, 
+// 观看历史列表
+historyRecords (params: any) {
+  return http.request('talk', 'historyRecords', params)
+}, 
+// 用户专区
+userZone (params: any) {
+  return http.request('user', 'userZone', params)
+}, 
 }
 
   

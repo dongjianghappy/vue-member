@@ -1,6 +1,6 @@
 <template>
 <ul class="tech-lists">
-  <li class="relative" style="border-bottom: 1px dotted #ddd; padding:15px 0;" v-for="(item, index) in dataList.list" :key="index" @mouseover="hover(item)" @mouseleave="leave(item)">
+  <li class="relative" style="border-bottom: 1px dotted var(--default-border); padding:15px 0;" v-for="(item, index) in dataList.list" :key="index" @mouseover="hover(item)" @mouseleave="leave(item)">
     <p class="mb10 relative">
       <span v-if="item.management_checked === '0'"><i class="iconfont icon-shenhe font18 ml0" style="color: #5bc0de"></i></span>
       <span class="art-title font16 mr5 pointer" @click="handleclick(item)">
@@ -23,24 +23,27 @@
           </div>
         </v-popover>
       </span>
-      <span class="font18 cl-ccc">({{item.times}})</span>
+      
       <span class="right">
-        <v-button buttonType="button" class="mr5" style="border-radius: 30px;" v-if="loginuser.currentUser" @click="handleGraph(item)">
+        <v-space>
+          <!-- <v-button buttonType="button" class="mr5" style="border-radius: 30px;" v-if="loginuser.account === userInfo.account" @click="handleGraph(item)">
           <i class="iconfont icon-edit"></i>流程图
-        </v-button>
-        <v-button buttonType="button" class="mr5" style="border-radius: 30px;" v-if="loginuser.currentUser" @click="handleedit(item)">
-          <i class="iconfont icon-edit"></i>编辑
-        </v-button>
-        <v-button buttonType="button" style="border-radius: 30px;" v-if="loginuser.currentUser" @click="handleedit(item)">
-          <i class="iconfont icon-recycle"></i>删除
-        </v-button>
+        </v-button> -->
+          <span v-if="loginuser.account === userInfo.account" @click="handleedit(item)">
+            编辑
+          </span>
+          <span v-if="loginuser.account === userInfo.account" @click="handleedit(item)">
+            删除
+          </span>
+        </v-space>
       </span>
+      <span class="mr25 right cl-666">{{item.times}}</span>
     </p>
     <p>
-      <span class="operating f-fr font12 cl-ccc">
-        <a class="cl-ccc">分类：{{item.parent || '未分类'}}</a> |
-        <a title="阅读" data-model="partner" data-action="remove" data-id="22" class="remove cl-ccc">阅读({{item.visit}})</a> |
-        <a title="评论" data-model="partner" data-action="remove" data-id="22" class="remove cl-ccc">评论({{item.comment}})</a>
+      <span class="operating f-fr font12 cl-666">
+        <a class="cl-666">分类：{{item.parent || '未分类'}}</a> |
+        <a title="阅读" data-model="partner" data-action="remove" data-id="22" class="remove cl-666">阅读({{item.visit}})</a> |
+        <a title="评论" data-model="partner" data-action="remove" data-id="22" class="remove cl-666">评论({{item.comment}})</a>
       </span>
     </p>
     <div v-if="isShowBatch" style=" position: absolute; left: 0; top: 0; right: 0; bottom: 0"></div>
@@ -106,6 +109,7 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
     const loginuser = computed(() => store.getters['user/loginuser']);
+    const userInfo = computed(() => store.getters['user/userInfo']);
     const isshow = ref(false)
     const graphid: any = ref('')
 
@@ -146,7 +150,9 @@ export default defineComponent({
       handleedit,
       hover,
       leave,
-      isshow
+      isshow,
+      loginuser,
+      userInfo
     }
   }
 })

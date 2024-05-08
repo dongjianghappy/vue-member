@@ -31,12 +31,16 @@
       </li>
       <li>
         <label>真实姓名</label>
-        <div class="con" v-if="isEdit">{{basicInfo.realname}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.realname}}
+          <span class="right" @click="secrecy('realname')">保密</span>
+        </div>
         <input type="text" v-model="userInfo.realname" class="input-sm" v-else>
       </li>
       <li>
         <label>姓别</label>
-        <div class="con" v-if="isEdit">{{basicInfo.sex === "1" ? "男" : "女"}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.sex === "1" ? "男" : "女"}}
+          <span class="right" @click="secrecy('sex')">保密</span>
+        </div>
         <span v-else>
           <input name="sex" type="radio" value="1" class="sex" v-model="userInfo.sex"> 男&nbsp;&nbsp;
           <input name="sex" type="radio" value="0" class="sex" v-model="userInfo.sex"> 女
@@ -45,7 +49,9 @@
 
       <li>
         <label>生日</label>
-        <div class="con" v-if="isEdit"><span id="year">{{basicInfo.year}}</span>年 <span id="month">{{basicInfo.month}}</span>月 <span id="day">{{basicInfo.day}}</span>日</div>
+        <div class="con" v-if="isEdit"><span id="year">{{basicInfo.year}}</span>年 <span id="month">{{basicInfo.month}}</span>月 <span id="day">{{basicInfo.day}}</span>日
+        <span class="right" @click="secrecy('birth')">保密</span>
+        </div>
         <v-birthday :data="{year: basicInfo.year, month: basicInfo.month, day: basicInfo.day}" @choose="chooseBirthday" v-else />
 
       </li>
@@ -56,12 +62,15 @@
           <span id="province">{{address.province}}</span>
           <span id="city">{{address.city}}</span>
           <span id="area">{{address.area}}</span>
+          <span class="right" @click="secrecy('address')">保密</span>
         </div>
         <v-citylist :data="{province: basicInfo.province, city: basicInfo.city, area: basicInfo.area}" @choose="chooseArea" v-else />
 
       </li>
       <li><label>血型</label>
-        <div class="con" v-if="isEdit">{{basicInfo.bloodtype}} 型</div>
+        <div class="con" v-if="isEdit">{{basicInfo.bloodtype}} 型
+          <span class="right" @click="secrecy('bloodtype')">保密</span>
+        </div>
         <span class="selectgroup" v-else>
           <select v-model="userInfo.bloodtype" class="">
             <option value="A">A型</option>
@@ -114,7 +123,13 @@ export default defineComponent({
       default: () => {
         return
       }
-    }
+    },
+    secrecy: {
+      type: Function,
+      default: () => {
+        return
+      }
+    },
   },
   emits: ['update:basicInfo'],
   setup(props, context) {
@@ -153,7 +168,6 @@ export default defineComponent({
 
     function Edit() {
       isEdit.value = !isEdit.value
-      debugger
       userInfo.value = props.basicInfo
       context.emit('update:basicInfo', userInfo.value)
 

@@ -4,7 +4,7 @@
   <div class="send-input p0">
     <div>
       <div style="
-          background: var(--w-input-div-background);;
+          background: var(--input-background);
           border-radius: 8px;
           padding: 6px 11px;
         ">
@@ -15,7 +15,7 @@
   <div class="operate p0 pt15">
     <div class="left"></div>
     <div class="right">
-      <button class="btn" style="background: var(--color-primary-5);
+      <button class="btn" style="background: var(--input-background);
     border-radius: 30px;
     color: var(--button-font);
     width: auto;

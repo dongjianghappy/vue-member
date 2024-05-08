@@ -142,6 +142,7 @@ export default defineComponent({
       currentTalk.value = talk
       getComment(talk)
       getBarrage(talk)
+      viewingRecords(talk)
       context.emit('update:currentIndex', num + props.number)
       context.emit('toggle')
       play(num)
@@ -162,6 +163,7 @@ export default defineComponent({
       }
       getComment(talk)
       getBarrage(talk)
+      viewingRecords(talk)
       context.emit('update:currentIndex', num + props.number)
       context.emit('toggle')
       play(num)
@@ -179,6 +181,20 @@ export default defineComponent({
         param.commentList = res.result.list
       })
     }
+
+    // 获取评论
+    function viewingRecords(param: any = {}) {
+      store.dispatch('common/Fetch', {
+        api: 'viewingRecords',
+        data: {
+          artid: param.id,
+          duration: '32000'
+        }
+      }).then(res => {
+        // param.commentList = res.result.list
+      })
+    }
+
 
     // 获取弹幕
     function getBarrage(param: any = {}) {
@@ -311,7 +327,7 @@ export default defineComponent({
 })
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .userInfo {
   z-index: 100000;
   position: absolute;
@@ -327,8 +343,7 @@ export default defineComponent({
   .user-summary {
     font-size: 16px;
     color: #fff;
-
-    a {
+    a{
       color: #eb7340 !important;
     }
   }

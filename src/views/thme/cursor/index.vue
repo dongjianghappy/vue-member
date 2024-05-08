@@ -1,6 +1,6 @@
 <template>
 <div class="theme-wrap pt15">
-  <div class="theme-list left align_center" v-for="(item, index) in themeList" :key="index" @click="chooseTheme('cursor', item)">
+  <div class="theme-list left align_center" v-for="(item, index) in themeList" :key="index" @click="chooseTheme('cursor_effects', item)">
     <div class="relative p15" style="height: 50px">
       <img :src="item.file">
     <i class="iconfont icon-checkbox checkbox" v-if="item.id === currentData.cursor || item.file === currentData.cursor"></i>

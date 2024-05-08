@@ -64,6 +64,9 @@
       <div v-if="currentIndex === 4">
         <slot name="content5"></slot>
       </div>
+      <div v-if="currentIndex === 5">
+        <slot name="content6"></slot>
+      </div>
     </div>
   </div>
 </div>

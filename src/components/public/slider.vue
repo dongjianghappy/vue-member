@@ -23,6 +23,7 @@
           </div>
           <div class="ptb10 font6">
             {{item.name}}
+            <span class="right" v-if="isCurrentUser && item.id != '0' && item.id != '-1'"><v-visible v-model:visible="item.visible" @onclick="handleSetting($event, item)" /></span>
           </div>
         </div>
       </div>
@@ -40,21 +41,33 @@
 <script lang="ts">
 import {
   defineComponent,
-  ref
-} from 'vue'
+  ref,
+  useStore
+} from '@/utils'
 
 export default defineComponent({
   name: 'v-Button',
   props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     dataList: {
       type: Array,
       default: () => {
         return []
       }
+    },
+    isCurrentUser: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['onClick'],
   setup(props, context) {
+    const store = useStore()
     let index: any = ref(0) //播放指针
     let currentIndex: any = ref(0)
 
@@ -74,10 +87,22 @@ export default defineComponent({
       debugger
       slider[0].style.left = `-${index.value*202.5*4}px`
     }
+
+    function handleSetting(data: any, param: any){
+      store.dispatch('common/Fetch', {
+        api: 'Update',
+        data: {
+          coding: props.data.coding,
+          id: param.id,
+          visible: data
+        }
+      })
+    }
     return {
       currentIndex,
       handleClick,
-      toggle
+      toggle,
+      handleSetting
     }
   }
 })

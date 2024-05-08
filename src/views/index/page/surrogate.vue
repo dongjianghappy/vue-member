@@ -27,7 +27,7 @@
         <div class="mb30">
           <div class="mb10">我的昵称置于推荐区
             <span class="right">
-              <v-switch :data="{ item: {}, field: ''}" api="userSettinng" @toggle="getValue" className="right" :auth="true" />
+              <v-switch :data="{ item: {}, field: ''}" api="userSetting" @toggle="getValue" className="right" :auth="true" />
             </span>
           </div>
           <div class="ptb15 align_right" style="border-top: 1px #ddd solid">

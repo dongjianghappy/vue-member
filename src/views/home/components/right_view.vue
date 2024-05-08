@@ -70,9 +70,9 @@ export default defineComponent({
     const recentPhotos = computed(() => store.getters['common/recentPhotos']);
 
     function init() {
-      store.dispatch('common/MessageBoard', {
+      // store.dispatch('common/MessageBoard', {
 
-      })
+      // })
       // store.dispatch('common/RecentJournal', {
 
       // })

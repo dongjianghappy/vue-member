@@ -1,5 +1,5 @@
 <template>
-  <div class="container bg-white w1100 relative"
+  <div class="container w1100 relative"
        style="height: 650px;">
     <div class="p25 align_center">
       <div class="mb25 font24">微博认证体系

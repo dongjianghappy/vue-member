@@ -1,43 +1,42 @@
 <template>
-  <div class="music-wrap">
-    <div class="music-left">
-      <div class="music-list nowrap ptb10 plr15"
-           :class="{'music-current': item.id === data.id}"
-           style="line-height: 20px;"
-           v-for="(item, index) in dataList"
-           :key="index"
-           @click="handlePlay(item)">
-        <i class="iconfont icon-music m0" />
-        {{item.music_name}}
-      </div>
+<div class="music-wrap">
+  <div class="music-left">
+    <div class="music-list nowrap ptb10 plr15" :class="{'music-current': item.id === data.id}" style="line-height: 20px;" v-for="(item, index) in dataList" :key="index" @click="handlePlay(item)">
+      <i class="iconfont icon-music m0" />
+      {{item.music_name}}
     </div>
-    <div class="music-content">
+  </div>
+  <div class="music-content">
 
-      <div class="align_center ptb25"
-           style="height: 365px">
-        <div class="inline"
-             :class="{animate: data.isplay}"
-             style="border-radius: 50%;
+    <div class="align_center" style="height: 365px">
+      <div class="inline" :class="{animate: data.isplay}" style="border-radius: 50%;
     width: 200px;
     height: 200px;
         overflow: hidden;
 }">
-          <v-img src="http://yunxi10.com/source/public/images/music.png" />
-        </div>
-        <div>{{data.music_name}}</div>
+        <v-img src="http://yunxi10.com/source/public/images/music.png" />
       </div>
-      <div class="music-control">
-        <Control :dataList="dataList"
-                 :data="data" />
+      <div style="height: 145px; overflow: hidden;">
+        <div id="lrc-wrap" style="transition: all 0.3s;">
+          <div v-for="(item, index) in lrc.list" :key="index" style="line-height: 30px;">
+            <span :class="{'bold font16 cl-red': currentIndex === index}" @click="handleClick(index)">{{item}}</span></div>
+        </div>
       </div>
     </div>
+    <div class="music-control">
+      <Control :dataList="dataList" :data="data" />
+    </div>
   </div>
+</div>
 </template>
 
 <script lang="ts">
 import {
-  defineComponent
-} from 'vue'
+  defineComponent,
+  onMounted,
+  ref,
+  timeToSeconds
+} from '@/utils'
 import VueEvent from '@/utils/event'
 import Control from './components/control.vue'
 export default defineComponent({
@@ -57,17 +56,45 @@ export default defineComponent({
       default: () => {
         return {}
       }
-    }
+    },
+    lrc: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
   },
   setup(props, context) {
+    const currentIndex: any = ref(0)
 
     function handlePlay(param: any) {
       VueEvent.emit("musicPley", param);
       VueEvent.emit("play_music", param);
     }
 
+    function handleClick(index: any) {
+      let lrc: any = document.getElementById("lrc-wrap")
+      lrc.style.transform = `translateY(-${30*index}px)`
+      currentIndex.value = index
+
+      let audio: any = document.getElementById('listen_music');
+      audio.currentTime = timeToSeconds(props.lrc.time[index])
+
+      audio.play()
+    }
+
+    onMounted(() => {
+      VueEvent.on("sliding", (index: any) => {
+        let lrc: any = document.getElementById("lrc-wrap")
+        lrc.style.transform = `translateY(-${30*index}px)`
+        currentIndex.value = index
+      })
+    })
+
     return {
-      handlePlay
+      handlePlay,
+      handleClick,
+      currentIndex
     }
   }
 })
@@ -84,15 +111,19 @@ export default defineComponent({
     background: var(--module-background);
     width: 150px;
     height: 500px;
+
     .music-list {
       cursor: pointer;
+
       &.music-current {
         background: var(--card-background);
         color: #f00;
-        i{
+
+        i {
           color: #f00;
         }
       }
+
       &:hover {
         background: var(--card-background);
       }

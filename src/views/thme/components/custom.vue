@@ -5,7 +5,7 @@
   </div>
   <i class="iconfont icon-edit" v-else />
 </v-button>
-<v-dialog v-model:show="isShow" :action="action" ref="dialog" title="自定义主题" width="950px" :style="{width: 650, height: 720}" :data="data" @submit="submit">
+<v-dialog v-model:show="isShow" :action="action" ref="dialog" title="自定义主题" width="950px" :style="{width: 650, height: 660}" :data="data" @submit="submit">
   <template v-slot:content v-if="isShow">
     <div class="plr25">
       <ul class="form-wrap-box">
@@ -14,15 +14,14 @@
           <input v-model="detail.name" type="text" placeholder="请输入主题名称" class="input-sm input-full" />
         </li>
         <li class="li">
-          <span class="label">背景图</span>
+          <span class="label">背景图{{detail.intelligent}}</span>
           <div class="flex">
-            <div  class="mt10" style="background: #33343f;">
+            <div class="mt10" style="background: #33343f;">
               <div class="mr25" style="width: 245px">
                 <v-upload ref="upload" :data="{id: detail.id, cover: detail.cover,  coding: data.coding}" :dataList="detail.img" uploadtype="theme" @imgList="image" maxLength="1" :style="'width: 200px; height: 150px'" />
               </div>
               <div class="p10" style="flex: 1">
-                <span class="block m5 relative left" style="width: 40px; height: 43px" :style="`background: url(${thumbnail}) no-repeat; background-size: cover; filter: brightness(${1-item})`" v-for="(item, index) in transparent" :key="index" @click="handleTransparent(item)">
-                  <i class="iconfont icon-checkbox checkbox" v-if="(item) === transparentIndex"></i>
+                <span class="block m5 relative left" :class="{current: item == transparentIndex }" style="width: 40px; height: 43px" :style="`background: url(${thumbnail}) no-repeat; background-size: cover; filter: brightness(${1-item})`" v-for="(item, index) in transparent" :key="index" @click="handleTransparent(item)">
                 </span>
               </div>
             </div>
@@ -37,7 +36,6 @@
             <div style="width: 120px;">
               <v-radio label="是" name="isfixed" value="1" v-model:checked="detail.isfixed" />
               <v-radio label="否" name="isfixed" value="0" v-model:checked="detail.isfixed" />
-              <!-- <v-radiobutton name="isfixed" v-model:checked="detail.isfixed" :enums="[{label: '是', value: '1'}, {label: '否', value: '0'}]" /> -->
             </div>
           </div>
         </li>
@@ -51,7 +49,12 @@
             <div class="mr10" style="width: 32px;">
               <input v-model="detail.module_background" type="color" class="p0" style="width: 35px; height: 32px;" />
             </div>
-            <input v-model="detail.module_background" type="text" placeholder="请输入主题主色调" class="input-sm input-150" />
+            <div style="flex: 1"> <input v-model="detail.module_background" type="text" placeholder="请输入主题主色调" class="input-sm input-150" /></div>
+            <div class="mr10" style="width: 60px;">智能主题</div>
+            <div style="width: 120px;">
+              <v-radio label="是" name="intelligent" value="1" v-model:checked="detail.intelligent" />
+              <v-radio label="否" name="intelligent" value="0" v-model:checked="detail.intelligent" />
+            </div>
           </div>
         </li>
         <li class="li">
@@ -60,9 +63,9 @@
             <div class="font12">主色</div>
             <div class="flex">
               <div class="mr10" style="width: 32px;">
-                <input v-model="detail.primary_color" type="color" class="p0" style="width: 35px; height: 32px;" />
+                <input v-model="detail.primary_color" type="color" class="p0" :disabled="detail.intelligent == '1'" style="width: 35px; height: 32px;" />
               </div>
-              <input v-model="detail.primary_color" type="text" placeholder="请输入主题主色调" class="input-sm input-150" />
+              <input v-model="detail.primary_color" type="text" placeholder="请输入主题主色调" :disabled="detail.intelligent == '1'" class="input-sm input-150" />
             </div>
           </div>
           <div class="col-md-6">
@@ -74,7 +77,7 @@
               <input v-model="detail.font_color" type="text" placeholder="请输入主题主色调" class="input-sm input-150" />
             </div>
           </div>
-          <div class="col-md-6">
+          <!-- <div class="col-md-6">
             <div class="font12">表单色</div>
             <div class="flex">
               <div class="mr10" style="width: 32px;">
@@ -82,7 +85,7 @@
               </div>
               <input v-model="detail.input_color" type="text" placeholder="请输入主题主色调" class="input-sm input-150" />
             </div>
-          </div>
+          </div> -->
         </li>
       </ul>
     </div>
@@ -143,6 +146,7 @@ export default defineComponent({
     watch([isShow], async (newValues, prevValues) => {
       if (isShow.value) {
         detail.value = await dialog.value.init()
+        transparentIndex.value = detail.value.background_transparent
         if (detail.value.image) {
           thumbnail.value = detail.value.img
         }
@@ -151,6 +155,7 @@ export default defineComponent({
     // 监听路由
     watch(() => detail, (newValues, prevValues) => {
       const {
+        intelligent,
         img,
         background_transparent,
         background_color,
@@ -161,6 +166,7 @@ export default defineComponent({
       } = detail.value
 
       writeNewStyle({
+        intelligent,
         background_transparent,
         theme_background: `${background_color} url(${img[0].replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
         background_color,
@@ -230,6 +236,7 @@ export default defineComponent({
         font_color,
         input_color,
         isfixed,
+        intelligent,
         grade,
         description,
         status
@@ -245,6 +252,7 @@ export default defineComponent({
         font_color,
         input_color,
         isfixed,
+        intelligent,
         grade,
         img: img.value,
         description,
@@ -315,5 +323,8 @@ export default defineComponent({
     padding-top: 0px !important;
     padding-bottom: 0px !important;
   }
+}
+.current{
+  border: 3px solid #fff;
 }
 </style>

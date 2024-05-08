@@ -154,7 +154,8 @@ const codings: any = {
     article_group: "U0620007",
     blog_group: "U0620008",
     picture_group: "U0620019",
-    background_music: 'U0620048'
+    background_music: 'U0620048',
+    watch_history: "U0620050"
   },
   questions: {
     name: "questions",
@@ -342,6 +343,10 @@ const codings: any = {
     art: 'U0600000',
     cate: 'U0600001'
   },
+  message: {
+    setting: 'U0620051',
+    list: 'U0620049',
+  },
   navigation: 'U0520005',
   single: 'U0520006',
   site: {
@@ -464,10 +469,14 @@ const codings: any = {
     effects: 'U0700023',
     pendant: 'U0700024',
     theme_background: 'U0700034',
+    avatar_pendant: 'U0700039',
     cursor: 'U0700025',
+    related_background: 'U0700040',
+    mouse_effects: 'U0700038',
     setting: 'U0700028',
     setting_type: 'U0700029',
     verified: 'U0700031',
+    expression: 'U0700041',
     schedule: {
       cate: 'U0700032',
       list: 'U0700033'

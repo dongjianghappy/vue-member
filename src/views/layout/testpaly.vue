@@ -1,5 +1,5 @@
 <template>
-<div class="p50" style="background: #000">
+<div class="p50" style="background: #000; z-index: 1000000">
   <div style="display: flex">
     <div style="width: 25px">
       <i class="iconfont icon-play" @click="handlePlay"></i>
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <audio id="audio" src="http://localhost/source/misc/1000000.mp3" style="display: none"></audio>
+  <audio id="audio" src="http://www.07sucai.com/uploadfile/music/a739d236bda6a83977d9ad03f5d4dac8.mp3" style="display: none"></audio>
 </div>
 </template>
 

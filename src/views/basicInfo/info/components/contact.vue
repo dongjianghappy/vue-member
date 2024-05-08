@@ -12,22 +12,30 @@
     <ul class="info">
       <li>
         <label>邮箱</label>
-        <div class="con" v-if="isEdit">{{basicInfo.email}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.email}}
+          <span class="right" @click="secrecy('email')">保密</span>
+        </div>
         <input type="text" v-model="userInfo.email" class="input-sm" v-else>
       </li>
       <li>
         <label>电话</label>
-        <div class="con" v-if="isEdit">{{basicInfo.phone}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.phone}}
+          <span class="right" @click="secrecy('phone')">保密</span>
+        </div>
         <input type="text" v-model="userInfo.phone" class="input-sm" v-else>
       </li>
       <li>
         <label>QQ</label>
-        <div class="con" v-if="isEdit">{{basicInfo.qq}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.qq}}
+          <span class="right" @click="secrecy('qq')">保密</span>
+        </div>
         <input type="text" v-model="userInfo.qq" class="input-sm" v-else>
       </li>
       <li>
         <label>微信</label>
-        <div class="con" v-if="isEdit">{{basicInfo.weixin}}</div>
+        <div class="con" v-if="isEdit">{{basicInfo.weixin}}
+          <span class="right" @click="secrecy('weixin')">保密</span>
+        </div>
         <input type="text" v-model="userInfo.weixin" class="input-sm" v-else>
       </li>
     </ul>
@@ -60,7 +68,13 @@ export default defineComponent({
       default: () => {
         return
       }
-    }
+    },
+    secrecy: {
+      type: Function,
+      default: () => {
+        return
+      }
+    },
   },
   emits: ['update:basicInfo'],
   setup(props, context) {

@@ -90,8 +90,10 @@ export default defineComponent({
       } else {
         time_bar.style.width = e.offsetX + 'px';
       }
+      VueEvent.emit("duration", audio.currentTime);
       param.isplay = true
       audio.play()
+
     }
 
     function settime(audio: any, param: any) {

@@ -1,33 +1,27 @@
 <template>
 <v-button v-model:show="isShow">
-  <i class="iconfont icon-mood" />
+  <i class="iconfont icon-edit" />
 </v-button>
-<v-dialog v-model:show="isShow" ref="form" title="设置状态" :style="{width: 670, height: 570}" :confirm="true" :hasfooter="false">
+<v-dialog v-model:show="isShow" ref="form" title="心情状态" :style="{width: 650, height: 650}" :confirm="true" :hasfooter="false">
   <template v-slot:content>
-    <div class="layer-content pt0" style="height: 350px;">
-      <perfect-scrollbar>
-      <div v-for="(item, index) in dataList" :key="index">
+    <div class="mb10 plr5" style="height: 475px; overflow: auto;">
+      <div class="mb15 p15" v-for="(item, index) in dataList" :key="index" style="background: var(--card-background); border-radius: 4px;">
         <div class="mb15">{{item.name}}</div>
         <div style="overflow: hidden;">
           <div class="col-md-2 p10" v-for="(list, i) in item.list" :key="i" @click="handelclick(list)">
-            <div class="align_center li" :class="{current: current === list.id}">
+            <div class="align_center li" :class="{current: current.id === list.id}">
               {{list.name}}
             </div>
           </div>
         </div>
       </div>
-      </perfect-scrollbar>
     </div>
 
-    <div class="form-wrap" style="background: rgb(242, 242, 245);" v-if="issave">
-      <div class="input-box">
-        <input type="text" v-model="content" placeholder="说点什么好" ref="Input">
-      </div>
-      <div class="operate">
-        <div class="operate-left">
-
-        </div>
-        <button @click="save" class="operate-right" :class="{disabled: !content}" :disabled="!content">保存</button>
+    <div class="letter-form">
+      <div class="mb5">心情类型：{{current.name || '-'}}</div>
+      <div class="send-input-box relative">
+        <textarea v-model="content" placeholder="说点什么好..." class="talkcontent-wrap" style="background: transparent; resize: none;"></textarea>
+        <button @click.enter="save" class="btn absolute bg-white" :class="{disabled: !content}" :disabled="!content" style="right: 15px; bottom: 10px;">保存</button>
       </div>
     </div>
   </template>
@@ -54,7 +48,7 @@ export default defineComponent({
     const issave = ref(false)
     const dataList = ref([])
     const content: any = ref("")
-    const current: any = ref()
+    const current: any = ref({})
 
     //初始页面
     function init() {
@@ -67,7 +61,7 @@ export default defineComponent({
     }
 
     function handelclick(param: any) {
-      current.value = param.id
+      current.value = param
       issave.value = true
     }
 
@@ -75,12 +69,11 @@ export default defineComponent({
       store.dispatch('common/Fetch', {
         api: "SaveMood",
         data: {
-          mood: current.value,
+          mood: current.value.id,
           description: content.value
         }
       }).then(res => {
-        console.log("ss");
-
+        store.dispatch('user/Detect')
       })
     }
 
@@ -98,9 +91,9 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .li {
-  background: #ccc;
+  background: var(--card-background);
   height: 75px;
   border-radius: 5px;
   line-height: 75px;
@@ -110,7 +103,27 @@ export default defineComponent({
 .current {
   background: #8bc34a;
 }
-.ps {
-  height: 320px;
+
+.letter-form {
+  margin-top: 15px;
+  padding: 0 5px;
+  .send-input-box {
+    background: var(--input-background);
+    padding: 6px 11px;
+
+    textarea {
+      width: 100%;
+      height: 60px;
+      margin: 0px;
+      padding: 5px;
+      border-style: none;
+      border-width: 0px;
+      font-size: 14px;
+      word-wrap: break-word;
+      line-height: 18px;
+      overflow: hidden;
+      outline: none;
+    }
+  }
 }
 </style>

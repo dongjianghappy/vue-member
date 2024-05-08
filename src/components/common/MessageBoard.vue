@@ -1,5 +1,5 @@
 <template>
-<div id="message-board" class="pointer" style="position: fixed; left: 50px; bottom: 50px; z-index: 10;animation: pulse ease-in-out 1s infinite;">
+<div id="message-board" class="pointer" style="position: fixed; left: 45px; bottom: 50px; z-index: 10;animation: pulse ease-in-out 1s infinite;">
   <span @click="handleClick"><i class="iconfont icon-talk font16 m0" />
   在线留言
   </span>

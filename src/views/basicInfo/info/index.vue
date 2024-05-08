@@ -1,10 +1,22 @@
 <template>
-<div>
-  <Basic v-model:basicInfo="basicInfo" :edit="edit" />
-  <Contact v-model:basicInfo="basicInfo" :edit="edit" />
-  <Blog v-model:basicInfo="basicInfo" :edit="edit" />
-  <Industry v-model:basicInfo="basicInfo" :edit="edit" />
-  <Education v-model:basicInfo="basicInfo" :edit="edit" />
+<div class="module-wrap m0">
+  <div class="module-content">
+    <v-tabs :tabs="[{name: '个人信息',value: 'photos'},{name: '头像设置',value: 'background'},{name: '个人照片',value: 'background'}]" :isEmit="true">
+      <template v-slot:content1>
+        <Basic v-model:basicInfo="basicInfo" :edit="edit" :secrecy="secrecy" />
+        <Contact v-model:basicInfo="basicInfo" :edit="edit" :secrecy="secrecy" />
+        <Blog v-model:basicInfo="basicInfo" :edit="edit" />
+        <Industry v-model:basicInfo="basicInfo" :edit="edit" />
+        <Education v-model:basicInfo="basicInfo" :edit="edit" />
+      </template>
+      <template v-slot:content2>
+        <Photos v-model:basicInfo="basicInfo" :edit="edit" :render="init" />
+      </template>
+      <template v-slot:content3>
+        <PersonalPhotos v-model:basicInfo="basicInfo" :edit="edit" :render="init" />
+      </template>
+    </v-tabs>
+  </div>
 </div>
 </template>
 
@@ -23,6 +35,8 @@ import Contact from './components/contact.vue'
 import Blog from './components/blog.vue'
 import Industry from './components/industry.vue'
 import Education from './components/education.vue'
+import Photos from '../photos/index.vue'
+import PersonalPhotos from './components/personalPhotos.vue'
 
 export default defineComponent({
   name: 'HomeViewdd',
@@ -31,7 +45,9 @@ export default defineComponent({
     Contact,
     Blog,
     Industry,
-    Education
+    Education,
+    Photos,
+    PersonalPhotos
   },
   props: {
     type: {
@@ -63,11 +79,25 @@ export default defineComponent({
       })
     }
 
+    function secrecy(param: any) {
+
+      store.dispatch('common/Fetch', {
+        api: "secrecySetting",
+        data: {
+          field: param
+        }
+      }).then(res => {
+
+      })
+    }
+
     onMounted(init)
 
     return {
       basicInfo,
-      edit
+      edit,
+      init,
+      secrecy
 
     }
   }

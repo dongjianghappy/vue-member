@@ -1766,7 +1766,7 @@ img[data-original] {
   padding: 15px;
   border: 1px solid #f3f3f3;
   margin-bottom: 15px;
-  background: var(--w-input-div-background);
+  background: var(--input-background);
   overflow: hidden;
   border-radius: 2px;
   -webkit-box-sizing: border-box;

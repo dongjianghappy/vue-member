@@ -11,42 +11,96 @@
     <!-- 主内容 -->
     <div class="right" style="width: 910px;">
       <div class="module-wrap">
-        <!-- <div class="module-head p20 font22">个人档</div> -->
-        <div class="module-content basic-info" style="height: 560px;">
-          <div class="font18 bold">个人档</div>
-          <div style="display: flex">
-            <!-- <div class="mr25" style="width: 180px; height: 210px">
+        <div class="module-head p20 font22">个人档</div>
+        <div class="module-content basic-info">
+          <div class="flex">
+            <div style="flex: 1">
+              <div class="mb25">
+                {{userInfo.nickname}}（博客号: {{userInfo.account}}）
+                <span class="font12"><i class="iconfont icon-blogger mr5" style="color: #ffa82c;" />{{userInfo.blogger}}</span>
+                <!-- <span class="right">设置</span> -->
+                <div class="mt10 font12">
+                  <span class="mr15">博客访问量: {{userInfo.total_visit || 0}}</span>
+                  <span class="mr25">今日访问: {{userInfo.today_visit || 0}}</span>
+                  <span class="mr15">邮箱状态: 未验证</span>
+                </div>
+                <div class="mt10 font12">
+                  <span class="mr15">内容: {{userInfo.talk}}</span>
+                  <span class="mr15">关注: {{userInfo.myconcern}}</span>
+                  <span class="mr15">粉丝: {{userInfo.concernmy}}</span>
+                  <span class="mr15">获赞: {{userInfo.praise}}</span>
+                </div>
+                <!-- <div class="mt10 font12">
+                  <span class="mr15">今日心情:
+                    【{{userInfo.mood}}】{{userInfo.mood_description}}
+                  </span>
+                </div> -->
+              </div>
+
+              <div class="font16 bold">基本信息</div>
+              <div style="display: flex">
+                <!-- <div class="mr25" style="width: 180px; height: 210px">
               <img :src="userInfo.photos" onerror="this.src='http://www.yunxi10.com/source/public/images/head_normal_100.png'" width="180" height="180" style=" border-radius: 8px; cursor:pointer; display: inline-block;">
             </div> -->
-            <div class="form-wrap-box" style="overflow: hidden;">
-              <ul>
-                <li class="li col-md-4"><span class="label">姓名</span>{{userInfo.nickname}}</li>
-                <li class="li col-md-8"><span class="label">国籍</span>中国</li>
-                <li class="li col-md-4"><span class="label">职业</span>学生</li>
-                <li class="li col-md-8"><span class="label">年龄</span>17</li>
-                <li class="li col-md-4"><span class="label">性别</span>男</li>
-                <li class="li col-md-8"><span class="label">生日</span>02.26</li>
-                <li class="li col-md-4"><span class="label">星座</span>白羊座</li>
-                <li class="li col-md-8"><span class="label">兴趣</span>篮球</li>
-              </ul>
+                <div class="form-wrap-box" style="overflow: hidden;">
+                  <ul>
+                    <!-- <li class="li col-md-6"><span class="label">姓名</span>{{userInfo.nickname}}</li> -->
+                    <li class="li col-md-6"><span class="label">性别</span>{{userInfo.sex}}</li>
+                    <li class="li col-md-6"><span class="label">年龄</span>{{userInfo.age}}</li>
+                    <li class="li col-md-6"><span class="label">生日</span>{{userInfo.month}}月{{userInfo.day}}日</li>
+                    <li class="li col-md-6"><span class="label">所在地</span>{{address.province}}{{address.city}}{{address.area}}</li>
+                    <li class="li col-md-6"><span class="label">星座</span>白羊座</li>
+                    <li class="li col-md-6"><span class="label">职业</span>{{userInfo.industry || '-'}}</li>
+                    <li class="li col-md-6"><span class="label">兴趣</span>篮球</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="mt25 font16 bold">联系方式</div>
+              <div class="form-wrap-box" style="overflow: hidden;">
+                <ul>
+                  <li class="li col-md-6"><span class="label">微信</span>{{userInfo.weixin || 0}}</li>
+                  <li class="li col-md-6"><span class="label">QQ号</span>
+                    {{userInfo.qq}}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="mt25 font16 bold">活跃概况</div>
+              <div class="form-wrap-box" style="overflow: hidden;">
+                <ul>
+                  <li class="li col-md-6"><span class="label">加入时间</span>{{userInfo.register}}</li>
+                  <li class="li col-md-6"><span class="label">最近登录</span>{{userInfo.last_login_time}}</li>
+                  <li class="li col-md-6"><span class="label">上次发表时间</span>{{userInfo.last_login_time}}</li>
+                  <li class="li col-md-6"><span class="label">所在地区</span>{{address.province}}</li>
+                </ul>
+              </div>
+              <!-- <div class="mt25 font16 bold">访问统计</div>
+              <div class="form-wrap-box" style="overflow: hidden;">
+                <ul>
+                  <li class="li col-md-6"><span class="label">总访问量</span>{{userInfo.total_visit || 0}}</li>
+                  <li class="li col-md-6"><span class="label">今日访问</span>{{userInfo.today_visit || 0}}</li>
+                </ul>
+              </div> -->
+              <div class="mt25 font16 bold">统计信息</div>
+              <div class="form-wrap-box" style="overflow: hidden;">
+                <ul>
+                  <li class="li col-md-6"><span class="label">积分</span>{{userInfo.integration || 0}}</li>
+                  <li class="li col-md-6"><span class="label">金币</span>{{userInfo.goldcoin || 0}}</li>
+                </ul>
+              </div>
+
+              <div class="mt25 font16 bold">简介</div>
+              <div class="mt10">
+                {{userInfo.introduction}}
+              </div>
             </div>
-          </div>
-
-          <div class="mt25 font18 bold">活跃概况</div>
-          <div class="form-wrap-box" style="overflow: hidden;">
-            <ul>
-              <li class="li col-md-4"><span class="label">加入时间</span>{{userInfo.nickname}}</li>
-              <li class="li col-md-8"><span class="label">最近登录</span>中国</li>
-              <li class="li col-md-4"><span class="label">在线状态</span>学生</li>
-              <li class="li col-md-8"><span class="label">所在地区</span>广州</li>
-            </ul>
-          </div>
-
-          <div class="mt25 font18 bold">统计信息</div>
-          <div class="form-wrap-box" style="overflow: hidden;">
-            <ul>
-              <li class="li col-md-4"><span class="label">访客</span>123323</li>
-            </ul>
+            <div class="plr15" style="width:300px">
+              <div class="pb10 font16 bold">形象照</div>
+              <div>
+                <img class="radius-4" :src="userInfo.image_photo" style="width: 100%;" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -61,8 +115,11 @@ import {
   getCurrentInstance,
   ref,
   computed,
-  useStore
+  useStore,
+  onMounted,
+  reactive
 } from '@/utils'
+import citys from '@/assets/cityData'
 
 import UserInfoHead from './components/UserInfoHead.vue'
 import Aside from './components/aside.vue'
@@ -79,23 +136,59 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store: any = useStore()
     const isShow: any = ref(false)
-    const userInfo: any = computed(() => store.getters['user/userInfo']);
+    const userInfo: any = ref({});
     const module = computed(() => store.getters['user/config_talk']);
     const detail: any = ref({})
+    const cityData: any = reactive(citys)
+    const address: any = ref({});
+
+    function render() {
+      let province = ""
+      let city = ""
+      let area = ""
+      for (var i in cityData) {
+        const arr = i.split(',');
+        if (arr.length == 1) {
+          province = cityData[i][userInfo.value.province]
+        }
+        if (arr.length == 2 && arr[1] == userInfo.value.province) {
+          city = cityData[i][userInfo.value.city]
+        }
+        if (arr.length == 3 && arr[2] == userInfo.value.city) {
+          area = cityData[i][userInfo.value.area]
+        }
+      }
+
+      return {
+        province,
+        city,
+        area
+      }
+    }
 
     function handleclick() {
       isShow.value = true
     }
 
     function init() {
-
+      store.dispatch('common/Fetch', {
+        api: 'userInformation'
+      }).then((res: any) => {
+        userInfo.value = res.result
+        address.value = render();
+      })
     }
+
+    onMounted(() => {
+      init()
+    })
     return {
       userInfo,
       module,
       handleclick,
       init,
-      detail
+      detail,
+      address
     }
   }
 })

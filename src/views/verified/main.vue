@@ -1,5 +1,5 @@
 <template>
-<div class="container bg-white w1100 relative" style="height: 650px;">
+<div class="container w1100 relative" style="height: 650px;">
   <div class="verified-box p25" style="right: 65px; top: 50%; margin-top: -200px">
     <div class="font24">蓝V认证</div>
     <div class="mt25">

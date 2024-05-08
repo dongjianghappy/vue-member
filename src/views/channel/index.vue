@@ -3,6 +3,7 @@
   <div class="w180 left">
     <v-aside :data="sidebar.groups" :title="sidebar.name">
       <template v-slot:button>
+        <span class="absolute vertical-text" @click="handleRouter">内容管理</span>
         <v-group action='add' :data="data" :group="userGroup" :coding="coding.group" :render="init" />
       </template>
     </v-aside>
@@ -24,6 +25,7 @@
 <script lang="ts">
 import {
   defineComponent,
+  getCurrentInstance,
   computed,
   useRoute,
   codings,
@@ -31,7 +33,8 @@ import {
   ref,
   useStore,
   onMounted,
-  getUid
+  getUid,
+  useRouter
 } from '@/utils'
 import CateList from "./cate/index.vue"
 import Article from "./article/index.vue"
@@ -56,8 +59,13 @@ export default defineComponent({
     Graph
   },
   setup(props, context) {
+    const {
+      ctx,
+      proxy
+    }: any = getCurrentInstance();
     const store = useStore();
     const route = useRoute();
+    const router = useRouter()
     let query: any = computed(() => route.query || "");
     const channel: any = getChannel()
     const coding: any = codings[channel]
@@ -84,6 +92,13 @@ export default defineComponent({
       })
     }
 
+    function handleRouter(){
+      router.push(proxy.const.setUrl({
+        uid: getUid(),
+        query: `/content?mod=channel`
+      }))
+    }
+
     onMounted(init)
 
     return {
@@ -93,8 +108,24 @@ export default defineComponent({
       sidebar,
       columns,
       userGroup,
-      init
+      init,
+      handleRouter
     }
   }
 })
 </script>
+
+<style lang="less" scoped>
+.vertical-text {
+  background: var(--module-background);
+  left: -55px;
+  top: 70px;
+  border-radius: 4px;
+  padding: 15px;
+  writing-mode: vertical-lr;
+  /* 文字从上到下，从右到左 */
+  cursor: pointer;
+  letter-spacing: 8px;
+  // transform: rotate(180deg); /* 可选，使文字从上到下，从左到右 */
+}
+</style>

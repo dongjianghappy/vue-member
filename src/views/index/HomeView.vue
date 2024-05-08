@@ -6,7 +6,6 @@
       <div class="left-sidebar left">
         <v-aside :data="module.groups"
                  title="首页"
-                 :isFixed="false"
                  :render="init" />
       </div>
       <!-- 主内容 -->

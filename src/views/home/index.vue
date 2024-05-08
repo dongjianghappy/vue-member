@@ -5,7 +5,7 @@
   </div>
   <div class="container w1100 relative clearfix">
     <!-- 侧边菜单 -->
-    <div class="left">
+    <div class="w180 left" style="min-height: 700px;">
       <Aside :data="module.home_nav" title="首页" />
     </div>
     <!-- 主内容 -->

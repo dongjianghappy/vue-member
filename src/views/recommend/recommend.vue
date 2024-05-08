@@ -53,6 +53,7 @@ export default defineComponent({
     function init(param: any) {
       screens.value[0].getComment(param)
     }
+    
 
     onMounted(() => {
       keyStatus.value = true

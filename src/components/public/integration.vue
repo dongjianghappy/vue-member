@@ -38,7 +38,7 @@ export default defineComponent({
     function handleClick(param: any) {
       router.push(proxy.const.setUrl({
         uid: loginuser.value.account,
-        query: `/setting?mod=${param}`
+        query: `/info?mod=${param}`
       }))
     }
 

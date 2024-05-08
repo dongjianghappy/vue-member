@@ -1,7 +1,7 @@
 <template>
   <div class="container w1100 clearfix">
     <div class="w180 left">
-      <v-aside :data="menu"
+      <v-aside :data="module"
                title="设置" />
     </div>
     <div class="m0 right"
@@ -28,15 +28,13 @@ export default defineComponent({
   const store = useStore();
   const router = useRouter();
   const route = useRoute();
-  const menu: any = setting
-  menu.map((item: any) => {
-    item.path = `/setting?mod=${item.url}`
-  })  
+  const module = computed(() => store.getters['user/config_talk'].setting_center);
+  
   const component = computed(() => route.query.mod);
 
   return {
     component,
-    menu
+    module
   }
 }
 })

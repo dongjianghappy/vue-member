@@ -82,7 +82,7 @@ export default defineComponent({
       proxy.$scroll.init({
         win: {
           el: window,
-          y: 0,
+          y: document.getElementsByClassName("space-name").length > 0 ? document.getElementsByClassName("space-name")[0].clientHeight : 0,
           b: 80
         },
         doc: {

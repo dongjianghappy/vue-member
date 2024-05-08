@@ -82,8 +82,8 @@ export default defineComponent({
     }
 
     li:nth-child(2) {
-      border-left: 1px solid var(--vertical-line);
-      border-right: 1px solid var(--vertical-line);
+      border-left: 1px solid var(--default-border);
+      border-right: 1px solid var(--default-border);
     }
   }
 

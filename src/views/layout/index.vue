@@ -1,6 +1,7 @@
 <template>
 <div class="relative" v-if="isComplete">
   <Header />
+  <!-- <Testpaly /> -->
   <v-message v-if="loginMessage == 'true'" />
   <div id="main" class="talk-main" style="padding: 80px 0 0 0; overflow: hidden;">
     <div class="mask-background"></div>
@@ -8,7 +9,7 @@
       <router-view />
     </div>
   </div>
-  <Index :loginuser="loginuser" :module="module" />
+  <Index :loginuser="loginuser" />
 </div>
 <div class="p15" v-else>正在加载...</div>
 </template>
@@ -25,13 +26,15 @@ import {
 import Index from './components/index.vue'
 import Header from './components/header/index.vue'
 import Footer from './components/footer/index.vue'
+import Testpaly from './testpaly.vue'
 
 export default defineComponent({
   name: 'IndexView ',
   components: {
     Index,
     Header,
-    Footer
+    Footer,
+    Testpaly
   },
   setup(props, context) {
     const store = useStore();

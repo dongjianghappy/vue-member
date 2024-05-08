@@ -1,6 +1,6 @@
 import { color } from "@/assets/common_const";
 import { parse } from "querystring";
-import { colorHex2Rgb, colorRgb2Hex } from "./color";
+import { setColor, colorHex2Rgb, colorRgb2Hex} from "./color";
 
 export const getToken = () => {
   return localStorage.getItem('token')
@@ -95,6 +95,14 @@ export const  durationTrans = (duration: any) => {
   return b;
 }
 
+// 秒转换currentTime
+export const timeToSeconds = (timeStr: any) => {
+  var parts = timeStr.split(':');
+  return parts[0] * 3600 + // 小时数乘以3600秒
+         parts[1] * 60 +   // 分钟数乘以60秒
+         parseFloat(parts[2]); // 秒数
+}
+
 export const getParent = (current: any, value: any) => {
   let index = current.findIndex((item: any) => item.value === value)
   return index > -1 ? true : false
@@ -134,7 +142,7 @@ export const writeNewStyle = (param: any = "") => {
   
   let theme: any = sessionStorage.getItem("theme")
   theme = JSON.parse(theme)
-debugger
+
   if(param){
     theme = param
   }
@@ -148,86 +156,83 @@ debugger
   if(mode === 'moon'){
     
     cssProperties = {
-      '--page-background': '#000',
-      '--page-transparent': '0',
-      '--color-primary': "#5c5c5c",
-      '--color-primary-5': "#383838",
-      '--color-primary-2': "#b1722e",
-      '--default-font': "#bfbfbf",
-      '--default-border': "#222",
-      '--default-border-dotted': "#222",
-      '--card-background': '#2c2c2c',
-      '--active-background': "#1b1b1b",
-      '--label-background': "#333",
-      '--label-hover-background': "#555",
-      '--upload-background': "#333",
-      '--datetime-background': "#222",
-      '--datetime-font': "#bfbfbf",
-      '--calendar-hover-background': "#333",
-      '--vertical-line': '#333',
-      '--w-sub': '#797979',
-      '--w-input-div-background': '#2c2c2c',
-      '--w-input-background': '#2c2c2c',
-      '--nav-hover-background': "#2c2c2c",
-      '--nav-hover-font': "#fff",    
-      '--module-background': "#191919",
-      '--module-font': "#fff",
-      '--link-hover-background': "#2c2c2c",
-      '--link-hover-font': "#fff",
-      '--tabs-button-background': "#e9d1b9",
-      '--tabs-button-font': "#eb7350",
-      '--button-background': "#d39c7f",
-      '--button-border': "#fbbd9e",
-      '--button-font': "#fff",
-      '--button-hover': "#d39c7f",
-      '--tool-hover-background': "#2c2c2c",
-      '--popover-background': "#2c2c2c",
-      '--comment-background' : "#2c2c2c"
-    }
+     }
   }else{
-    let primary = theme.primary_color
-    let rgb = colorHex2Rgb(primary)
-    let rgbs = colorHex2Rgb(theme.module_background)
+    // let primary = theme.primary_color
+    let rgb = theme.primary_color
+    let color: any = {}
+    let rgb_arrs: any = {
+      rgb25: []
+    } 
     
+    let primarys: any = {}
+    if(theme.intelligent == '1'){
+      color = setColor(theme.module_background)
+      const {r, g, b} = color.rgb
+      const {h, s, l} = color.hsl
+      for(let i=1; i<10; i++){
+        primarys[`rgb${i}0`] = `rgb(calc(30 * 0.${i} + ${r} * (1 - 0.${i})), calc(30 * 0.${i} + ${g} * (1 - 0.${i})), calc(30 * 0.${i} + ${b} * (1 - 0.${i})));`
+      }
+      primarys['highlight'] = `hsl(${h}, calc(${s} * 1%), min(calc(${l} * 1% + 10%), 100%))`
+      primarys['primary_background'] = `hsl(${h}, calc(${s} * 1%), min(calc(${l} * 1% + 10%), 20%))`
+      
+    }else{
+      let rgb = colorHex2Rgb(theme.module_background)
+      let rgb_arr = rgb.substring(4, rgb.length-1).split(',')
+      
+      for(let i = 0; i < rgb_arr.length; i++){
+        rgb_arrs.rgb25.push(`calc(${rgb_arr[i]} * (1 + 0.25))`)
+      }
+      primarys = {
+        rgb25: `rgb(${rgb_arrs.rgb25.join(',')})`
+      }
+    }
+    
+    debugger
+    
+    // 智能主题
+    if(theme.intelligent == '1'){
+      color = {
+        module: primarys.rgb90, // 模块背景色
+        primary: primarys.highlight, // 主色
+        primary_background: primarys.primary_background, // 主色背景色
+        background: primarys.rgb70, // 背景色有: 边框色、表单色、卡片色、标签色、经过高亮色
+        input: primarys.rgb80,
+        font: theme.font_color, // 字体色
+      } 
+    }else{
+      let rgb = colorHex2Rgb(theme.primary_color)
+      color = {
+        module: theme.module_background, // 模块背景色
+        primary: rgb, // 主色
+        primary_background: rgb.replace(')', ', 0.2)'), // 主色背景色
+        background: rgb.replace(')', ', 0.1)'), // 背景色有: 边框色、表单色、卡片色、标签色、经过高亮色
+        input: primarys.rgb25, // 表单色
+        font: theme.font_color, // 字体色
+      }
+    }
+  
     cssProperties = {
-      '--page-background': theme ? theme.theme_background : "",
-      '--page-transparent': theme ? theme.background_transparent : '0',
-      '--color-primary': primary || "#f67f00",
-      '--color-primary-5': rgb.replace(')', ', 0.5)'),
-      '--color-primary-2': rgb.replace(')', ', 0.2)'),
-      '--default-font': theme.font_color,
-      '--default-border': rgb.replace(')', ', 0.1)') || "#f9f9f9",
-      '--default-border-dotted': "#f9f9f9",
-      '--card-background': rgb.replace(')', ', 0.1)') || '#f9f9f9',
-      '--active-background': theme.module_background || "#fff",
-      '--label-background': "#f3f4f9",
-      '--label-hover-background': primary || "#f67f00",
-      '--upload-background': "#f9f9f9",
-      '--datetime-background': "#8bc34a",
+      '--page-background': theme ? theme.theme_background : "", // 背景色
+      '--page-transparent': theme ? theme.background_transparent : '0', // 背景透明度
+      '--module-background': color.module, // 模块背景色
+      '--input-background': color.input, // 表单色
+      '--card-background': color.background, // 卡片色
+      '--link-hover-background': color.background, // 鼠标经过高亮背景
+      '--label-background': color.input, // 标签背景色
+      '--default-border': color.input, // 边框色
+      '--default-font': color.font, // 字体色
+      '--color-primary': color.primary, // 主色
+      '--color-primary-background': color.primary_background, // 主色背景色
       '--calendar-hover-background': "#eee",
       '--datetime-font': "#fff",
-      '--vertical-line': '#d9d9d9',
-      '--w-input-div-background': theme.input_color || '#f0f1f4',
-      '--w-input-background': theme.input_color || '#f0f1f4',
-      '--nav-hover-background': primary,
-      '--nav-hover-font': "#fff",    
-      '--module-background': theme.module_background,
-      '--module-font': theme.font_color || "#333",
-      '--link-hover-background': rgb.replace(')', ', 0.1)') || "#f2f2f2",
-      '--link-hover-font': "#333",
-      '--tabs-button-background': rgb.replace(')', ', 0.1)'),
-      '--tabs-button-font': primary || "#eb7350",
-      '--button-background': "#ffc09f",
-      '--button-border': "#fbbd9e",
       '--button-font': "#fff",
       '--button-hover': "#ffc09f",
-      '--tool-hover-background': "#eee",
-      '--popover-background': theme.module_background || "#fff",
-      '--comment-background' : "#f2f2f5"
+      '--tool-hover-background': "#eee"
     }
   }
 
-  cssProperties = Object.assign({}, cssProperties) //  generateColors(color)
+  cssProperties = Object.assign({}, cssProperties)
   debugger
   // 把对象转成css
   const cssString = Object.keys(cssProperties).map((property) => `${property}: ${cssProperties[property]}`).join(';')

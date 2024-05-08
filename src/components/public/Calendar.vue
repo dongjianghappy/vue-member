@@ -42,7 +42,7 @@
     <div class="cal_m_days">
       <div v-for="(ds, index) in monthData" :key="index" class="cal_m_day_line">
         <div v-for="d in ds" :key="d.day" class="cal_m_day_cell p5" :style="{color: getCellColor(d)}" @mouseenter="mouseenter(d, $event)" @mouseleave="mouseleave(d, $event)" @click="handleClick(d, $event)">
-          <div class="cell-box" :class="{'choose-cell': (chooseStatus && d === chooseDay)}" style="border: 1px dashed #ccc; border-radius: 5px;" :style="style">
+          <div class="cell-box" :class="{'today-cell': month == d.month && currentDay === d.day, 'choose-cell': (chooseStatus && d === chooseDay)}" style="border: 1px dashed #ccc; border-radius: 5px;" :style="style">
             {{ d.day }}
             <slot :item="d" :index="index" :another-attribute="anotherAttribute"></slot>
           </div>
@@ -396,16 +396,21 @@ export default defineComponent({
     }
 
     .cal_m_day_cell .cell-box:hover {
-      background: var(--calendar-hover-background);
+      background: var(--color-primary-background);
       transition: all 0.3s;
       // color: #409eff;
     }
 
     .cal_m_day_cell .choose-cell {
-      background: var(--color-primary);
+      background: var(--color-primary-background) !important;
+      color: #fff;
+    }
+    .cal_m_day_cell .today-cell {
+      background: var(--color-primary);;
       color: #fff;
     }
 
+    
     .cal_m_weeks {
       height: 45px;
       padding: 8px;

@@ -21,7 +21,7 @@ const getters = {
   blogInfo: (state: any) => state.blogInfo || {},
   userSetting: (state: any) => state.user.login.user_setting ? JSON.parse(state.user.login.user_setting) : {},
   system: (state: any) => state.user.login.system || {},
-  
+  siteInfo: (state: any) => state.user.login.siteInfo || state.user.basic.siteInfo || {},
 
 }
 

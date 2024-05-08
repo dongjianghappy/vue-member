@@ -199,7 +199,7 @@ export default defineComponent({
   }
 
   .login-box {
-    background: var(--card-background);
+    background: var(--background);
     flex: 1
   }
 }

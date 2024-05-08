@@ -8,7 +8,7 @@
     <div class="happy font14" style="z-index: 100">
       <div class="mb25 font20 align_center">博客记录点滴生活！</div>
       <div style="line-height: 25px; text-indent: 30px;">Hi, {{loginuser.nickname}}您好, 欢迎来到东江哥博客。海量网页素材免费下载尽在07素材网，本博客为个人博客仅记录日常。如果您有任何问题请在左下方“在线留言”留言。感谢！</div>
-
+      <v-broadcast :content="`Hi, ${loginuser.nickname}您好, 欢迎来到东江哥博客。海量网页素材免费下载尽在07素材网，本博客为个人博客仅记录日常。如果您有任何问题请在左下方“在线留言”留言。感谢！`" />
     </div>
   </template>
 </v-window>

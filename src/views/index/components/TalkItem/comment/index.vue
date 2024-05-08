@@ -13,7 +13,6 @@
       <p v-html="item.content"></p>
       <p v-if="item.image.length>0">
         <Images :data="item" kind="comment" />
-        <!-- <img :src="item.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" class="showimg" style="border-radius: 4px; width: 125px; height: 125px; cursor: zoom-in;" /> -->
       </p>
       <p v-if="data.model ==='member_talk' && item.reply > 0">
         <Reply :data="item" />
@@ -42,7 +41,7 @@ import {
   useStore
 } from 'vuex'
 import Form from './formsss.vue'
-import Images from '../components/image.vue'
+import Images from '../../../../content/expression/detail.vue'
 import Itembar from './itembar.vue'
 import Reply from './reply.vue'
 export default defineComponent({

@@ -1,7 +1,10 @@
 <template>
 <div id="tagInputContainer" class="tagInputContainer pr120" style="position:relative">
   <div class="tag-box" v-for="(item, index) in tags" :key="index"><span>{{item}}</span> <a class="deltag" href="javascript:;" title="删除" @click="remove(index)" v-if="isEdit">×</a></div>
-  <input id="tInput" type="text" placeholder="请输入标签" style="border:0" v-model="model" v-if="isEdit" @blur="input">
+  <input id="tInput" type="text" :placeholder="placeholder" style="border:0" v-model="model" v-if="isEdit" @blur="input">
+  <div class="tag-box" v-if="tags.length == '0' && !isEdit">
+-
+  </div>
   <!-- <div class="absolute w110"
          style="top: 5px; right: 5px;">
       <input id="open-search"
@@ -35,6 +38,10 @@ export default defineComponent({
     isEdit: {
       type: Boolean,
       default: true
+    },
+    placeholder: {
+      type: String,
+      default: "请输入标签"
     }
   },
   emits: ['update:tags'],

@@ -9,9 +9,16 @@
         </span>
       </div>
       <div class="expression-box">
-        <div class="expression-gif left" v-for="(item, index) in currentCate" :key="index" @click="ChooseEmoji(item.name)">
-          <img :src="item.value" :title="item.name" style="width: 24px; height: 24px;">
-        </div>
+        <template v-for="(item, index) in currentCate" :key="index">
+          <div class="col-md-2" v-if="item.isCollect" @click="ChooseEmoji(item.name)">
+            <div class="p5">
+              <img :src="item.value" :title="item.name" style="width: 100%; height: 100%;" />
+            </div>
+          </div>
+          <div class="expression-gif left" @click="ChooseEmoji(item.name)" v-else>
+            <img :src="item.value" :title="item.name" style="width: 24px; height: 24px;" />
+          </div>
+        </template>
       </div>
     </template>
     <v-loding v-else />
@@ -60,6 +67,7 @@ export default defineComponent({
     }
 
     function handleCate(param: any, index: any) {
+      debugger
       currentCate.value = param.list || []
       currentIndex.value = index
     }

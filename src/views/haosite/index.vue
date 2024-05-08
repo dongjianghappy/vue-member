@@ -1,5 +1,5 @@
 <template>
-<div class="container w1100 mb25" style="background: var(--w-input-div-background);">
+<div class="container w1100 mb25" style="background: var(--input-background);">
   <v-tabs :tabs="tabMenu" :isEmit="true" v-model:index="index">
     <template v-slot:extra>
       <v-space>

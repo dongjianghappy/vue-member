@@ -51,7 +51,7 @@ export default defineComponent({
 <style lang="less" scoped>
 .lrc {
   // text-shadow: 0 1px 0 rgba(255, 255, 255, 0.15), 5px 2px rgba(0, 0, 0, 0.075);
-  // text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px var(--color-primary-5), 0 0 35px var(--color-primary-5), 0 0 40px var(--color-primary-5), 0 0 50px var(--color-primary-5), 0 0 75px var(--color-primary-5);
-  text-shadow: 0 0 5px var(--color-primary-5), 0 0 10px var(--color-primary-5);
+  // text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px var(--input-background), 0 0 35px var(--input-background), 0 0 40px var(--input-background), 0 0 50px var(--input-background), 0 0 75px var(--input-background);
+  text-shadow: 0 0 5px var(--input-background), 0 0 10px var(--input-background);
 }
 </style>

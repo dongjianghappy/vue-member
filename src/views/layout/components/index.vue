@@ -3,15 +3,17 @@
 <v-login :displayButton="false" />
 <!-- 聊天窗口 -->
 <!-- <v-chat /> -->
-<v-messageboard v-if="module.message_board" />
+<v-messageboard v-if="module.personal_center && module.personal_center.message_board" />
+<v-time v-if="module.personal_center && module.personal_center.time" />
 <v-letter />
 <!-- 主题 -->
-<Thme v-if="loginuser.currentUser && module && module.theme" />
+<Thme v-if="loginuser.currentUser && module.personal_center && module.personal_center.theme" />
 <v-layer v-model:isShow="showFlag" :data="currentData.data" :currentImg="currentData.img" v-if="showFlag" type="image" :hasInfo="currentData.hasInfo || true" :hasComment="false" />
 <v-layer1 v-model:isShow="displayScreen" :dataList="[{...currentData.data}]" v-if="displayScreen" />
 <Graph v-model:show="displayGraph" :data="currentData" v-if="displayGraph" />
 <v-gotop />
-<MessagePrompt v-if="module.message_prompt" />
+<BirthdayPrompt v-if="loginuser.birthday && module.prompt && module.prompt.birthday" />
+<MessagePrompt v-else-if="module.prompt && module.prompt.message_prompt" />
 </template>
 
 <script lang="ts">
@@ -19,16 +21,20 @@ import {
   defineComponent,
   onMounted,
   ref,
-} from 'vue'
+  computed,
+  useStore
+} from '@/utils'
 import VueEvent from '@/utils/event'
 import Thme from '@/views/thme/index.vue'
 import Graph from '@/views/graph/index.vue'
+import BirthdayPrompt from './BirthdayPrompt.vue'
 import MessagePrompt from './MessagePrompt.vue'
 export default defineComponent({
   name: 'v-Button',
   components: {
     Thme,
     Graph,
+    BirthdayPrompt,
     MessagePrompt
   },
   props: {
@@ -37,19 +43,15 @@ export default defineComponent({
       default: () => {
         return {}
       }
-    },
-    module: {
-      type: Object,
-      default: () => {
-        return {}
-      }
     }
   },
   setup(props, context) {
+    const store = useStore();
     const showFlag = ref(false)
     const displayScreen = ref(false)
     const displayGraph = ref(false)
     const currentData = ref()
+    const module: any = computed(() => store.getters['user/config_talk']);
 
     onMounted(() => {
       // 大图查看
@@ -74,7 +76,8 @@ export default defineComponent({
       showFlag,
       displayScreen,
       displayGraph,
-      currentData
+      currentData,
+      module
     }
 
   }

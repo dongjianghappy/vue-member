@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4138403",
+      "name": "history",
+      "font_class": "history",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
+      "icon_id": "34604239",
+      "name": "collect",
+      "font_class": "collect",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
+      "icon_id": "3824780",
+      "name": "shortcut",
+      "font_class": "shortcut",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "5199945",
+      "name": "personal_info",
+      "font_class": "personal_info",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "38850984",
+      "name": "birthday",
+      "font_class": "birthday",
+      "unicode": "e6d7",
+      "unicode_decimal": 59095
+    },
+    {
       "icon_id": "12339033",
       "name": "topic",
       "font_class": "topic",

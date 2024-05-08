@@ -371,7 +371,7 @@ textarea {
 }
 
 .ps {
-  background: var(--w-input-div-background);
+  background: var(--input-background);
   height: 250px;
 }
 </style>

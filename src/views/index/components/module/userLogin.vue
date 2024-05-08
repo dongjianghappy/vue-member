@@ -10,7 +10,7 @@
       <div class="name-box">
         <v-login title="立即登录" />
       </div>
-      <div class="mt15 mb25 font18 align_center">记录生活，回忆总是美好的！</div>
+      <div class="mt15 mb25 font18 align_center">{{siteInfo.talk_brand}}</div>
     </div>
   </div>
 </div>
@@ -19,7 +19,9 @@
 <script lang="ts">
 import {
   defineComponent,
-  useRouter
+  useRouter,
+  computed,
+  useStore
 } from '@/utils'
 import Mood from '../mood.vue'
 
@@ -37,12 +39,15 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    const store = useStore()
     const router = useRouter()
 
+    const siteInfo = computed(() => store.getters['user/siteInfo']);
     function handleClick() {
       router.push('/login')
     }
     return {
+      siteInfo,
       handleClick
     }
   },
@@ -51,7 +56,7 @@ export default defineComponent({
 
 <style lang="less" scoped>
 .user-content {
-  background: var(--tabs-button-background);
+  background: var(--color-primary-background);
   line-height: 30px;
 
   &:after {

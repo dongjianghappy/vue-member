@@ -1,8 +1,9 @@
 <template>
 <div>
   <!-- <Ranking :ref="ranking" v-if="module.ranking" :style="{width: '280px'}" /> -->
-  <SearchDiscovery :ref="ranking" :style="{width: '280px'}" v-if="module.search_discovery" />
-  <BlogHot :ref="ranking" :style="{width: '280px'}" v-if="module.blog_hotlist" />
+  <RelatedSearch :ref="ranking" :style="{width: '280px'}" v-if="module.search_discovery" />
+  <!-- <SearchDiscovery :ref="ranking" :style="{width: '280px'}" v-if="module.search_discovery" />
+  <BlogHot :ref="ranking" :style="{width: '280px'}" v-if="module.blog_hotlist" /> -->
 </div>
 </template>
 
@@ -14,12 +15,14 @@ import {
   onMounted,
   computed
 } from '@/utils'
+import RelatedSearch from './related_search.vue'
 import Ranking from '../../index/components/module/ranking.vue'
 import SearchDiscovery from './search_discovery.vue'
 import BlogHot from './blog_hot.vue'
 export default defineComponent({
   name: 'RightView',
   components: {
+    RelatedSearch,
     Ranking,
     SearchDiscovery,
     BlogHot

@@ -1,6 +1,6 @@
 <template>
 <div id="aside-box" style="width: 280px">
-  <UserInfo :userInfo="loginuser" v-if="loginuser.account" />
+  <UserInfo :userInfo="loginuser" :module="module" v-if="loginuser.account" />
   <UserLogin :userInfo="loginuser" v-else />
   <Sign v-if="loginuser.account && module.sign" />
   <Calendar v-if="module.calendar" :render="render" />

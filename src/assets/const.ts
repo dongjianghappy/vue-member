@@ -164,6 +164,7 @@ export const hobbyMenum:any = [
 
 export const basicInfo: any = [
 	{name: "设置管理", url: "setting"},
+	{name: "消息设置", url: "message"},
 	{name: "头像设置", url: "photos"},
 	{name: "个人信息", url: "basic"},
 	{name: "兴趣爱好", url: "hobby"},
@@ -205,6 +206,7 @@ export const week:any = {
 }
 
 export const information:any = {
+	setting: "消息设置",
 	system: "系统消息",
 	talk: "微博消息",
 	letter: "私信消息",
@@ -308,6 +310,34 @@ export const visibles = {
 	fans: '粉丝',
 	friend: '好友',
 	privacy: '私密'
+}
+
+
+export const visibleTimeRange = {
+	0: '全部',
+	1: '最近半年',
+	2: '最近一个月',
+	3: '最近三天'
+}
+
+export const online = {
+	0: '公开',
+	1: '好友',
+	2: '私密'
+}
+
+export const commentUser = {
+	0: '所有人',
+	1: '我关注的人',
+	2: '我的粉丝'
+}
+
+
+
+export const messageNotification = {
+	2: '所有人',
+	1: '仅关注人',
+	0: '不提醒'
 }
 
 export const PRIOVINCE = [

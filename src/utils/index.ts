@@ -3,7 +3,7 @@ import {useStore} from 'vuex'
 import {useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { onMounted, onUnmounted, onBeforeUnmount } from '@vue/runtime-core';
 import codings from "@/assets/coding"
-import { getUid, getChannel, chooseCate, getParam, getQuery, durationTrans, getParent, showParent, writeNewStyle } from './auth'
+import { getUid, getChannel, chooseCate, getParam, getQuery, durationTrans, timeToSeconds, getParent, showParent, writeNewStyle } from './auth'
 import selection from "./selection"
 
 export {
@@ -28,6 +28,7 @@ export {
   getParam,
   getQuery,
   durationTrans,
+  timeToSeconds,
   getParent,
   showParent,
   writeNewStyle

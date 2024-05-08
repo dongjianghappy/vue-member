@@ -13,16 +13,20 @@ const install = (Vue:any) => {
       }
     }
     
+    // 挂件装饰
     let pendant_box: any = document.querySelectorAll('.pendant-box')
-    
     for(let i=0; i<pendant_box.length; i++){
       pendant_box[i].remove()
     }
     
+    // 鼠标特效
+    if(theme &&  theme.mouse_effects){
+        render(theme.mouse_effects, 'mouse_effects')
+    }
 
+    setCursor(theme.cursor)
     // 挂件装饰
     if(theme &&  theme.pendant){
-      setCursor(theme.cursor)
       createPendant(theme.pendant)
     } 
   }
@@ -94,10 +98,10 @@ const install = (Vue:any) => {
   }   
 
   function setCursor(obj: any){
-    if(!obj){
+    if(!obj || (obj && !obj.file)){
       return
     }
-    document.body.style.cursor = `url(${obj}),auto`
+    document.body.style.cursor = `url(${obj.file}),auto`
   }
 
   function render(obj: any, i: any){

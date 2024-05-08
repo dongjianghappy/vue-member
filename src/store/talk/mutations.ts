@@ -37,6 +37,7 @@ const mutations = {
     debugger
     state.search.page = data.page
     state.search.pages = data.pages
+    state.search.related = data.related || []
     // state.talkList = params
   },     
   setTalkList: (state: any, params: any) => {

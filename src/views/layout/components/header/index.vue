@@ -3,7 +3,7 @@
   <div class="head-wrap">
     <!-- LOGO w1320-->
     <div class="header-left" style="height: 60px; line-height: 60px; color: #333;">
-      <a href="http://www.dongblog.com" target="_brank" class="font24">东江博客</a>
+      <a href="/home" target="_brank" class="font24">{{siteInfo.talk_site_name}}</a>
     </div>
     <!-- 导航 -->
     <div class="header-content">
@@ -30,29 +30,26 @@
           <v-play :userInfo="loginuser" :style="{background: 'bg-red',color: 'cl-red', top: '60px'}" />
           <v-lrc />
         </li>
-        <li class="plr0" @click="handleClick('')" v-if="loginuser.account">
-          <img :src="loginuser.photos" onerror="this.src='http://www.yunxi10.com/source/public/images/head_normal_100.png'" class="photos p10" style="width:60px; height:60px; border-radius:50%;" />
+        <li class="relative user-login-btn plr0" v-if="loginuser.account">
+          <img :src="loginuser.photos" onerror="this.src='http://www.yunxi10.com/source/public/images/head_normal_100.png'" class="photos p10"  @click="handleClick('')" style="width:60px; height:60px; border-radius:50%;" />
+          <UserInfo :userInfo="loginuser" />
         </li>
-        <li v-else>
+        <li class="relative user-login-btn" v-else>
           <v-login />
+          <UserInfo />
         </li>
-        <li v-if="loginuser.account">
-          <!-- <v-speaking /> -->
-          <v-popover content="<i class='iconfont icon-message font18'></i>" arrow="tb" offset="right" :move="-60" keys="popover-message">
-            <div style="width: 150px; height: 250px">
-              <ul class="font14" style="display: block">
-                <li style="height: 32px" v-for="(item, index) in messge" :key="index" @click="handleClick(`/information?mod=${index}`)">{{item}}</li>
-              </ul>
-            </div>
-          </v-popover>
+        <li class="relative plr10">
+          <Shortcut />
+        </li>
+        <li class="relative plr10" v-if="loginuser.account">
+          <v-message :router="handleClick" />
+        </li>
+        <li class="relative plr10" v-if="loginuser.account">
+
           <v-popover content="<i class='iconfont icon-shezhi'></i>" arrow="tb" offset="right" :move="-60" keys="popover-setting">
             <div style="width: 150px; height: 270px">
               <ul class="font14" style="display: block">
-                <li @click="handleClick('/info?mod=setting')" >设置管理</li>
-                <li @click="handleClick('/info?mod=basic')" >基本信息</li>
-                <li @click="handleClick('/setting?mod=basic')" information >隐私设置</li>
-                <li @click="handleClick('/setting?mod=integration')" >积分管理</li>
-                <li @click="handleClick('/service')" >意见反馈</li>
+                <li @click="handleClick(item.value)" v-for="(item, index) in setting" :key="index">{{item.name}}</li>
                 <li @click="handleClick('signOut')">退出</li>
               </ul>
             </div>
@@ -81,27 +78,41 @@ import {
   getUid,
   writeNewStyle
 } from '@/utils'
-import {
-  information
-} from '@/assets/const'
+
 import VueEvent from '@/utils/event'
+import UserInfo from './components/userInfo.vue'
+import Shortcut from './components/shortcut.vue'
 
 export default defineComponent({
   name: 'v-Header',
+  components: {
+    UserInfo,
+    Shortcut
+  },
   setup(props, context) {
     const {
       proxy
     }: any = getCurrentInstance();
     const store = useStore();
     const router = useRouter();
+    const siteInfo = computed(() => store.getters['user/siteInfo']);
     const loginuser = computed(() => store.getters['user/loginuser']);
     const userInfo = computed(() => store.getters['user/userInfo']);
-    const messge: any = information;
+    const messgeData: any = ref({})
     const isSearch: any = ref(false)
     const module = computed(() => store.getters['user/config_talk'].navigation);
+    const setting = computed(() => store.getters['user/config_talk'].setting);
     const mode = computed(() => store.getters['common/mode']);
     const editPendant: any = ref(false)
     const isMore: any = ref(false)
+
+    function getMessage() {
+      store.dispatch('common/Fetch', {
+        api: 'message',
+      }).then((res: any) => {
+        messgeData.value = res.result
+      })
+    }
 
     function init() {
       store.dispatch('common/Fetch', {
@@ -145,7 +156,7 @@ export default defineComponent({
         }).then(res => {
           window.location.href = '/home'
         })
-      } else if (param === '/activity' || param === '/vote' || param === '/hao' || param === '/ranking'  || param === '/recommend' ) {
+      } else if (param === '/activity' || param === '/vote' || param === '/hao' || param === '/ranking' || param === '/recommend') {
         router.push(param)
       } else if (userInfo.value.account !== loginuser.value.account) {
         window.location.href = url; // // 如果访问用户和登录页面不相同，则跳转到登录页面
@@ -182,18 +193,23 @@ export default defineComponent({
       VueEvent.emit("saveTheme", editPendant.value);
     }
 
-    onMounted(init)
+    onMounted(() => {
+      // getMessage()
+      init()
+    })
 
     return {
       editPendant,
+      siteInfo,
       loginuser,
       userInfo,
-      messge,
+      messgeData,
       handleClick,
       handleMode,
       handleSave,
       isSearch,
       module,
+      setting,
       mode,
       isMore
     }
@@ -201,8 +217,36 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .search-active {
-  background: var(--active-background);
+  background: var(--module-background);
+}
+
+.user-login-btn {
+  .user-login-wrap {
+    display: none;
+    top: 60px;
+    right: 0;
+    z-index: 100;
+    box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    width: 320px;
+    height: auto;
+    line-height: normal;
+
+    .music-header {
+      border-bottom: 1px solid var(--default-border);
+      height: 40px;
+      line-height: normal;
+    }
+  }
+
+  &:hover {
+    .user-login-wrap {
+      background: var(--module-background);
+      display: block;
+    }
+
+  }
 }
 </style>

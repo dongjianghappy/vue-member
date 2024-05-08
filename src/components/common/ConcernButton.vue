@@ -29,6 +29,7 @@
 
 <script lang="ts">
 import {
+  getCurrentInstance,
   defineComponent,
   useStore,
 } from '@/utils'
@@ -54,6 +55,9 @@ export default defineComponent({
     }
   },
   setup(props, context) {
+    const {
+      proxy
+    }: any = getCurrentInstance();
     const store = useStore();
 
     function concern(param: any) {
@@ -64,11 +68,17 @@ export default defineComponent({
           display: props.type
         }
       }).then(res => {
+        debugger
         if(res.ifSuccess === 2){
           return
         }
+        else if(res.ifSuccess === -1){
+          proxy.$hlj.message({
+            msg: res.returnMessage
+          })
+          return
+        }
         param.concern = res.result.status
-        // props.render()
       })
     }
 

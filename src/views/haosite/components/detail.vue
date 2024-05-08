@@ -40,7 +40,7 @@
           </li> -->
         </ul>
         <div class="mt25">
-          <button @click="save" class="btn" style="background: var(--color-primary-5);
+          <button @click="save" class="btn" style="background: var(--input-background);
     border-radius: 30px;
     color: var(--button-font);
     width: auto;

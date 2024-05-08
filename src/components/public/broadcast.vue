@@ -34,20 +34,19 @@ export default defineComponent({
     const message: any = ref({
       notes: 0
     })
-    
 
     function handlePlay() {
       const speakMsg = new SpeechSynthesisUtterance()
       let speech: any = props.content
-       speakMsg.text = speech; //文字内容
-              speakMsg.lang = "zh-CN"; //使用的语言:中文
-              speakMsg.volume = 1;
-              //声音音量:0-1
-              speakMsg.rate = 1;
-              //语速:0-10
-              speakMsg.pitch = 10;
-              //音高:0-1
-              window.speechSynthesis.speak(speakMsg)
+      speakMsg.text = speech; //文字内容
+      speakMsg.lang = "zh-CN"; //使用的语言:中文
+      speakMsg.volume = 1;
+      //声音音量:0-1
+      speakMsg.rate = 1;
+      //语速:0-10
+      speakMsg.pitch = 10;
+      //音高:0-1
+      window.speechSynthesis.speak(speakMsg)
     }
 
     return {

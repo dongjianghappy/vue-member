@@ -115,23 +115,4 @@ export default defineComponent({
   flex: 1;
   overflow: auto;
 }
-
-::-webkit-scrollbar {
-  width: 4px;
-  /* 设置滚动条的宽度 */
-  background-color: #222;
-  /* 设置滚动条的背景颜色 */
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  /* 设置滚动条滑块的圆角 */
-  background-color: #45494e;
-  /* 设置滚动条滑块的颜色 */
-}
-
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-  /* 为滚动条轨道添加阴影效果 */
-}
 </style>

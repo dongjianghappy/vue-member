@@ -105,7 +105,6 @@ export default defineComponent({
 
     // 选择文件
     function getFile() {
-      debugger
       let _obj: any = FileUpload.value
       context.emit('update:haschoose', _obj.files)
       for (let i = 0; i < _obj.files.length; i++) {
@@ -200,12 +199,6 @@ export default defineComponent({
       }
 
       document.querySelectorAll('ul>li')[dst].setAttribute("class", "current")
-
-      let img1: any = document.querySelectorAll('li.upload-album-wrap>img')[src]
-      let img2: any = document.querySelectorAll('li.upload-album-wrap>img')[dst]
-      img1.style = ""
-      img2.style = ""
-
       box.value = dst
       newItems.splice(dst, 0, ...newItems.splice(src, 1))
       imgList.value = newItems
