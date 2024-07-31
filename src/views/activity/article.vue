@@ -11,7 +11,7 @@
     </div>
     <div class="activity_wrap relative">
       <div class="absolute  bg-999" style="left: 25px; bottom: 25px; border: 2px solid rgb(255, 255, 255); width: 154px; height: 154px;">
-        <img :src="detail.image" onerror="this.src='http://www.yunxi10.com/source/public/images/topic_page_2x.png'" style="width: 150px; height: 150px;" />
+        <img :src="detail.image" style="width: 150px; height: 150px;" />
         <span class="absolute" style="bottom: 0px; right: 0; width: 16px; height: 16px; z-index: 10" v-if="userInfo.account">
           <v-selectbackground kind="activity_photos" :mask="{ w: 500, h: 400, tb: 0, lr: 100 }" :data="{id: detail.id}" :size="{width: 400, height: 400}" />
         </span>
@@ -62,18 +62,17 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup  lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   computed,
   onMounted,
   ref,
-  reactive
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
+  reactive,
+  useStore,
+  useRouter,
+  useRoute,
+  codings
+} from '@/utils'
 import TalkSend from '../index/components/module/talk_send.vue'
 import TalkTabs from '../index/components/module/TalkTabs.vue'
 import TalkItem from '../index/components/TalkItem/index.vue'
@@ -82,121 +81,86 @@ import Vote from './vote/index.vue'
 import Detail from './components/detail.vue'
 import VoteSetting from '../../views/index/components/TalkItem/vote/setting.vue'
 
-import {
-  useRouter,
-  useRoute
-} from 'vue-router'
-import {
-  codings
-} from '@/utils'
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const coding = codings.talk
+let data: any = reactive([]);
+const detail: any = ref({})
+const vote: any = ref({});
+const dataList: any = ref({})
+const userInfo = computed(() => store.getters['user/loginuser']);
+const module = computed(() => store.getters['user/config_talk'].activity || []);
 
-export default defineComponent({
-  name: 'HomeViewdddf',
-  components: {
-    TalkSend,
-    TalkTabs,
-    TalkItem,
-    RightView,
-    Vote,
-    Detail,
-    VoteSetting
-  },
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const coding = codings.talk
-    let data: any = reactive([]);
-    const detail: any = ref({})
-    const vote: any = ref({});
-    const dataList: any = ref({})
-    const userInfo = computed(() => store.getters['user/loginuser']);
-    const module = computed(() => store.getters['user/config_talk'].activity || []);
+function init() {
+  window.scrollTo(0, 0)
+  store.dispatch('common/Activity', {
+    name: route.query.item
+  }).then((res) => {
+    detail.value = res.result.basic || {}
+    vote.value = res.result.vote || {}
+  })
+}
 
-    function init() {
-      window.scrollTo(0, 0)
-      store.dispatch('common/Activity', {
-        name: route.query.item
-      }).then((res) => {
-        detail.value = res.result.basic || {}
-        vote.value = res.result.vote || {}
-      })
-    }
-
-    function weibo(param: any = {}) {
-      const params: any = {
-        page: 1,
-        pagesize: 10
-      }
-
-      Object.assign(params, param)
-
-      store.dispatch(`common/Fetch`, {
-        api: 'comprehensive',
-        data: {
-          coding: "U0110000",
-          topic: route.query.item,
-          ...params
-        }
-      }).then((res) => {
-        dataList.value = res.result
-      })
-    }
-
-    function handleCollect(param: any) {
-      store.dispatch('common/Fetch', {
-        api: 'Collect',
-        data: {
-          coding: coding.activity_collect,
-          artid: param.id
-        }
-      }).then(res => {
-        if (res.ifSuccess === 2) {
-          return
-        }
-        param.collect = res.result.num
-        if (res.result.state === 1) {
-          param.hascollect = 1
-        } else {
-          param.hascollect = 0
-        }
-
-      })
-    }
-
-    function visit() {
-
-      store.dispatch('common/Fetch', {
-        api: "VisitCommunity",
-        data: {
-          coding: coding.activity,
-          field: 'name',
-          value: route.query.item,
-        }
-      }).then(res => {
-        detail.value.visit = parseInt(detail.value.visit)+1
-      })
-    }
-
-    onMounted(() => {
-      init()
-      visit()
-      weibo()
-    })
-    return {
-      route,
-      userInfo,
-      module,
-      detail,
-      vote,
-      dataList,
-      handleCollect,
-      init
-    }
+function weibo(param: any = {}) {
+  const params: any = {
+    page: 1,
+    pagesize: 10
   }
+
+  Object.assign(params, param)
+
+  store.dispatch(`common/Fetch`, {
+    api: 'comprehensive',
+    data: {
+      coding: "U0110000",
+      topic: route.query.item,
+      ...params
+    }
+  }).then((res) => {
+    dataList.value = res.result
+  })
+}
+
+function handleCollect(param: any) {
+  store.dispatch('common/Fetch', {
+    api: 'Collect',
+    data: {
+      coding: coding.activity_collect,
+      artid: param.id
+    }
+  }).then(res => {
+    if (res.ifSuccess === 2) {
+      return
+    }
+    param.collect = res.result.num
+    if (res.result.state === 1) {
+      param.hascollect = 1
+    } else {
+      param.hascollect = 0
+    }
+
+  })
+}
+
+function visit() {
+
+  store.dispatch('common/Fetch', {
+    api: "VisitCommunity",
+    data: {
+      coding: coding.activity,
+      field: 'name',
+      value: route.query.item,
+    }
+  }).then(res => {
+    detail.value.visit = parseInt(detail.value.visit) + 1
+  })
+}
+
+onMounted(() => {
+  init()
+  visit()
+  weibo()
 })
 </script>
 

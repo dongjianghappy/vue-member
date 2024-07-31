@@ -21,71 +21,47 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   getCurrentInstance,
   onMounted,
-  computed,
   useStore,
-  useRoute,
   useRouter,
-  ref,
-  codings,
-  getUid
+  ref
 } from '@/utils'
 
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-    
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const router = useRouter();
-    const coding: any = codings.sound
-    const store = useStore();
-    const route = useRoute();
-    let query: any = computed(() => route.query || "");
-    const dataList: any = ref({})
+const {
+  proxy
+}: any = getCurrentInstance();
+const router = useRouter();
+const store = useStore();
+const dataList: any = ref({})
 
-    function init(param: any = {}) {
-      const params: any = {
-        page: 1,
-        pagesize: 360
-      }
-
-      Object.assign(params, param)
-      store.dispatch('common/Fetch', {
-        api: 'userZone',
-        data: {
-          ...params
-        }
-      }).then((res) => {
-        dataList.value = res.result
-      })
-    }
-
-    function handleClick(uid: any) {
-      if (uid === undefined) {
-        return
-      }
-      router.push(`${proxy.const.u}${uid}/home`)
-    }
-
-    onMounted(() => {
-      init()
-    })
-
-    return {
-      coding,
-      query,
-      dataList,
-      init,
-      handleClick
-    }
+function init(param: any = {}) {
+  const params: any = {
+    page: 1,
+    pagesize: 360
   }
+
+  Object.assign(params, param)
+  store.dispatch('common/Fetch', {
+    api: 'userZone',
+    data: {
+      ...params
+    }
+  }).then((res) => {
+    dataList.value = res.result
+  })
+}
+
+function handleClick(uid: any) {
+  if (uid === undefined) {
+    return
+  }
+  router.push(`${proxy.const.u}${uid}/home`)
+}
+
+onMounted(() => {
+  init()
 })
 </script>

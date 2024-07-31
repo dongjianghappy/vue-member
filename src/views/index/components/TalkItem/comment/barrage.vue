@@ -24,58 +24,46 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   onMounted,
-  ref,
   computed,
   useStore
 } from '@/utils'
 import TalkItem from './talkInfo.vue'
 import Form from './formsss2.vue'
-export default defineComponent({
-  name: 'HomeViewe',
-  components: {
-    TalkItem,
-    Form
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
-    expand: {
-      type: Function,
-      default: () => {
-        return
-      }
-    }
-  },
-  emits: ['switch'],
-  setup(props, context) {
-    const store = useStore()
-    const barrageSetting: any = computed(() => store.getters['talk/barrageSetting']);
 
-    function getValue(param: any) {
-      store.commit('talk/setBarrageSetting', param)
-      context.emit("switch", param);
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
-    onMounted(() => {
-      store.commit('talk/setBarrageSetting', localStorage.getItem("barrage") || '0')
-    })
-    return {
-      barrageSetting,
-      getValue
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return
+    }
+  },
+  expand: {
+    type: Function,
+    default: () => {
+      return
     }
   }
+})
+const emit: any = defineEmits(['switch'])
+const store = useStore()
+const barrageSetting: any = computed(() => store.getters['talk/barrageSetting']);
+
+function getValue(param: any) {
+  store.commit('talk/setBarrageSetting', param)
+  emit("switch", param);
+}
+onMounted(() => {
+  store.commit('talk/setBarrageSetting', localStorage.getItem("barrage") || '0')
 })
 </script>

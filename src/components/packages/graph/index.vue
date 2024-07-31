@@ -41,7 +41,7 @@ import Tool from './tool/index.vue'
 import Attributes from './attributes/index.vue'
 import VueEvent from '@/utils/event'
 import {
-  color,
+  colorList,
 } from '@/assets/const'
 import {
   useStore
@@ -74,7 +74,6 @@ export default defineComponent({
   emits: ['close'],
   setup(props, context) {
     const store = useStore()
-    const colorList = ref(color)
     const currentColor = ref("#fff")
     let info = ref("")
     let currentNodeId: any = ref("")

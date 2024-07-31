@@ -41,7 +41,7 @@ import {
   ref,
 } from 'vue'
 import {
-  color
+  colorList
 } from '@/assets/const'
 import {
   useStore
@@ -64,7 +64,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const store = useStore()
-    const colorList = ref(color)
+    // const colorList = ref(color)
     const currentColor = ref("#fff")
     const App: any = ref({})
 
@@ -84,7 +84,6 @@ export default defineComponent({
 
     function save() {
       let param: any = JSON.stringify(App.value.graph.toJSON())
-      debugger
       props.save(param)
     }
 

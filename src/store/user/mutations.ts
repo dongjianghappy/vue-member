@@ -20,7 +20,10 @@ const mutations = {
   setBlogInfo: (state: any, params: any) => {
     state.blogInfo = params
   },   
-  
+  setEnergy: (state: any, params: any) => {
+    state.user.login.userInfo.energy = params.energy
+    state.user.login.userInfo.energy_ball = params.energy_ball
+  },     
 }
 
 export default mutations

@@ -3,10 +3,12 @@
   <div class="flex">
     <template v-if="userInfo.account">
       <div style="width: 55px">
-        <img :src="userInfo.photos" onerror="this.src='http://www.yunxi10.com/source/public/images/head_normal_100.png'" class="photos" style="width:45px; height:45px; border-radius:50%;" @click="handleRouter('')" />
+        <img :src="userInfo.photos" class="photos" style="width:45px; height:45px; border-radius:50%;" @click="handleRouter('')" />
       </div>
       <div style="flex: 1">
-        <div class="mb10 font14">{{userInfo.nickname}}</div>
+        <div class="mb10 font14">{{userInfo.nickname}}
+          <span class="ml5 font12 cl-666">博客号: {{userInfo.account}}</span>
+        </div>
         <div class="font12">{{userInfo.blogger}}</div>
       </div>
     </template>
@@ -27,63 +29,50 @@
     </div>
   </div>
   <div class="radius-4 p10">
-    <div class="mb5">成为会员</div>
-    <div class="font12">更多功能等着你来体验...</div>
+    <div class="mb5">认证为博主后</div>
+    <div class="font12">更多功能等你来体验...</div>
   </div>
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
-  ref,
-  onMounted,
   computed,
   useStore,
-  durationTrans,
   useRouter,
   getUid
 } from '@/utils'
 import VueEvent from '@/utils/event'
 
-export default defineComponent({
-  name: 'v-Shortcut',
-  props: {
-    userInfo: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore()
-    const router = useRouter();
-    const module = computed(() => store.getters['user/config_talk'].userInfo);
-
-    function handleRouter(param: any) {
-      debugger
-      let asideArr = ['/talk', '/talk?mod=praise', '/talk?mod=collect', '/talk?mod=history']
-      if (!props.userInfo.account && asideArr.indexOf(param) > -1) {
-        VueEvent.emit("login");
-        return
-      }
-      
-      router.push(proxy.const.setUrl({
-        uid: getUid(),
-        query: param
-      }))
-    }
-    return {
-      module,
-      handleRouter
+const props: any = defineProps({
+  userInfo: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
 })
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore()
+const router = useRouter();
+const module = computed(() => store.getters['user/config_talk'].userInfo);
+
+function handleRouter(param: any) {
+  let asideArr = ['/talk', '/talk?mod=praise', '/talk?mod=collect', '/talk?mod=history']
+  if (!props.userInfo.account && asideArr.indexOf(param) > -1) {
+    VueEvent.emit("login");
+    return
+  }
+
+  router.push(proxy.const.setUrl({
+    uid: getUid(),
+    query: param
+  }))
+}
 </script>
 
 <style lang="less">

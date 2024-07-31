@@ -94,7 +94,6 @@ export default defineComponent({
           data.summary = data.summary + param
         }
       } else if (param[0] === '#' || (param.indexOf("#") > -1 && word_arr[word_arr.length - 1].indexOf(" ") === -1)) {
-        debugger
         if (data.summary[data.summary.length - 1] === '#') {
           let str = data.summary.substring(0, data.summary.length - 1)
           data.summary = str + param

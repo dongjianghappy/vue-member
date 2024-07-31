@@ -2,7 +2,7 @@
 <div>
   <div class="bottom-wrap relative">
     <ul>
-      <li @click="onClick({ api: 'Collect', data: { coding: data.coding5, artid: data.id }})">
+      <li @click="onClick(data)">
         <i class="iconfont icon-star" :class="{current: data.hascollect === 1}"></i>
         <span :class="{current: data.hascollect === 1}"> {{data.collect || '收藏'}}</span>
       </li>
@@ -29,9 +29,9 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   ref,
   computed,
@@ -40,74 +40,64 @@ import {
 import Forwarding from './forwarding/index.vue'
 import Comment from './comment/index.vue'
 
-export default defineComponent({
-  name: 'TalkItemBarView',
-  components: {
-    Forwarding,
-    Comment
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return
+    }
   },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return
-      }
-    },
-    showComment: {
-      type: Boolean,
-      default: false
-    },
+  showComment: {
+    type: Boolean,
+    default: false
   },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const fn_talk: any = computed(() => store.getters['user/config_talk'].fn_talk);
-    let showCommit: any = ref(false)
-    let isShow: any = ref(props.showComment || false)
-
-    function onClick(param: any) {
-      store.dispatch('common/Fetch', param).then(res => {
-        if(res.ifSuccess === 2){
-          return
-        }
-        props.data.collect = res.result.num
-        if (res.result.state === 1) {
-          props.data.hascollect = 1
-        }else{
-          props.data.hascollect = 0
-        }
-        proxy.$hlj.message({
-          msg: res.returnMessage
-        })
-      })
-    }
-
-    function forwarding() {
-      showCommit.value = false
-      isShow.value = !isShow.value
-    }
-
-    function comment() {
-      if(props.showComment){
-        isShow.value = true
-        return
-      }
-      showCommit.value = !showCommit.value
-      isShow.value = false
-    }
-
-    return {
-      onClick,
-      isShow,
-      showCommit,
-      forwarding,
-      comment,
-      fn_talk
-    }
-  }
 })
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const fn_talk: any = computed(() => store.getters['user/config_talk'].fn_talk);
+let showCommit: any = ref(props.showComment || false)
+let isShow: any = ref(false)
+
+function onClick(param: any) {
+  store.dispatch('common/Fetch', {
+    api: 'Collect',
+    data: {
+      coding: param.coding5,
+      artid: param.id,
+      uid: param.uid
+    }
+  }).then(res => {
+    if (res.ifSuccess === 2) {
+      return
+    }
+    props.data.collect = res.result.num
+    if (res.result.state === 1) {
+      props.data.hascollect = 1
+    } else {
+      props.data.hascollect = 0
+    }
+    proxy.$hlj.message({
+      type: 'info',
+      msg: res.returnMessage
+    })
+  })
+}
+
+function forwarding() {
+  showCommit.value = false
+  isShow.value = !isShow.value
+}
+
+function comment() {
+  // if (props.showComment) {
+  //   isShow.value = true
+  //   return
+  // }
+  showCommit.value = !showCommit.value
+  isShow.value = false
+}
 </script>
 
 <style scoped>

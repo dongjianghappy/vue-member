@@ -13,51 +13,28 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
   ref,
-  computed,
+  useStore,
   useRouter,
-  getUid,
   codings
 } from '@/utils'
-import {
-  useStore
-} from 'vuex'
 
-export default defineComponent({
-  name: 'AsideView',
-  setup(props, context) {
-    const {
-      ctx,
-      proxy
-    }: any = getCurrentInstance();
-    const coding: any = codings.vote
-    const store = useStore();
-    const router = useRouter();
-    const dataList: any = ref([]);
-    const loginuser = computed(() => store.getters['user/loginuser']);
+const coding: any = codings.vote
+const store = useStore();
+const router = useRouter();
+const dataList: any = ref([]);
 
-    store.dispatch('common/Fetch', {
-      data: {
-        coding: coding.cate
-      }
-    }).then((res: any) => {
-      dataList.value = res.result
-    })
-
-    function handleclick(param: any, grade: any) {
-
-      router.push(`/vote?item=${param}`)
-    }
-    return {
-      dataList,
-      handleclick
-    }
+store.dispatch('common/Fetch', {
+  data: {
+    coding: coding.cate
   }
-
+}).then((res: any) => {
+  dataList.value = res.result
 })
+
+function handleclick(param: any, grade: any) {
+  router.push(`/vote?item=${param}`)
+}
 </script>

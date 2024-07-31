@@ -14,52 +14,27 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   ref,
-  computed,
   useStore,
   onMounted,
   codings
 } from '@/utils'
-import Detail from '../about/components/detail.vue'
 
-export default defineComponent({
-  name: 'AsideView',
-  components: {
-    Detail
-  },
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store: any = useStore()
-    const isShow: any = ref(false)
-    const dataList: any = ref({})
-    const coding: any = codings.service.history
+const store: any = useStore()
+const dataList: any = ref({})
+const coding: any = codings.service.history
 
-    function handleclick() {
-      isShow.value = true
+function init() {
+  store.dispatch('common/Fetch', {
+    data: {
+      coding
     }
+  }).then((res: any) => {
+    dataList.value = res.result
+  })
+}
 
-    function init() {
-      store.dispatch('common/Fetch', {
-        data: {
-          coding
-        }
-      }).then((res: any) => {
-        dataList.value = res.result
-      })
-    }
-
-    onMounted(init)
-    return {
-      handleclick,
-      init,
-      dataList
-    }
-  }
-})
+onMounted(init)
 </script>

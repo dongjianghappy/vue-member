@@ -5,59 +5,43 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   onMounted,
   ref
 } from 'vue'
 import VueEvent from '@/utils/event'
 import Screen from '../../views/recommend/recommend.vue'
-export default defineComponent({
-  name: 'v-Layer',
-  components: {
-    Screen
-  },
-  props: {
-    dataList: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    isShow: Boolean,
-    hasInfo: {
-      type: Boolean,
-      default: true
-    }
-  },
-  emits: ['update:isShow'],
-  setup(props, context) {
-
-    const keyStatus: any = ref(false)
-
-    function handleclick() {
-      document.getElementsByTagName("html")[0].style.overflow = ""
-      keyStatus.value = false
-      context.emit('update:isShow', false)
-    }
-
-    onMounted(() => {
-      keyStatus.value = true
-      document.addEventListener("keydown", (e: any) => {
-        if (!keyStatus.value) {
-          return
-        }
-        if (e.keyCode == '27') {
-          handleclick()
-        }
-      });
-    })
-
-    return {
-      handleclick
+const props: any = defineProps({
+  dataList: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
+})
+const emit: any = defineEmits(['update:isShow'])
+
+const keyStatus: any = ref(false)
+
+function handleclick() {
+  document.getElementsByTagName("html")[0].style.overflow = ""
+  keyStatus.value = false
+  emit('update:isShow', false)
+}
+
+onMounted(() => {
+  keyStatus.value = true
+  document.addEventListener("keydown", (e: any) => {
+    if (!keyStatus.value) {
+      return
+    }
+    if (e.keyCode == '27') {
+      handleclick()
+    }
+  });
 })
 </script>
 

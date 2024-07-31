@@ -7,7 +7,8 @@
       </div>
       <p class="m0">{{item.nickname}}</p>
       <p>{{item.times}}
-        <span class="ml5"><Reply :data="{...item, ...data}" /></span>
+        <span class="ml5">
+          <Reply :data="{...item, ...data}" /></span>
       </p>
       <p v-html="item.content"></p>
       <div class="reply_info p10" style="background: var(--card-background)" v-for="(list, i) in item.reply" :key="i">
@@ -15,7 +16,8 @@
           <v-photo :data="list" />
         </div>
         <p class="m0">{{list.from_nickname || '游客'}} 回复 {{list.nickname || '游客'}}: </p>
-        <p>{{list.times}} <span class="ml5"><Reply :data="{...list, ...data}" method="reply" /></span></p>
+        <p>{{list.times}} <span class="ml5">
+            <Reply :data="{...list, ...data}" method="reply" /></span></p>
         <p>
           {{list.content}}
         </p>
@@ -33,41 +35,30 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
 } from '@/utils'
 import Reply from './reply.vue'
-export default defineComponent({
-  name: 'HomeViewdd',
-  components: {
-    Reply
+
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
+    }
   },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    dataList: {
-      type: Object,
-      default: () => {
-        return []
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
+  dataList: {
+    type: Object,
+    default: () => {
+      return []
+    }
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return 'Default function'
     }
   }
 })
 </script>
-
-<style lang="less" scoped>
-.comment-wrap .content .comment-list p {
-    font-size: 14px;
-}
-</style>

@@ -14,9 +14,9 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   onMounted,
   ref
 } from '@/utils'
@@ -24,79 +24,65 @@ import {
 import Screen from '../index/components/TalkItem/components/screen.vue'
 import Slideshow from '../index/components/TalkItem/components/slide.vue'
 import Video from '../index/components/TalkItem/components/video.vue'
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-    Screen,
-    Slideshow,
-    Video
-  },
-  props: {
-    dataList: {
-      type: Array,
-      default: () => {
-        return {}
-      }
-    },
-    className: {
-      type: String,
-      default: "relative"
+
+const props: any = defineProps({
+  dataList: {
+    type: Array,
+    default: () => {
+      return {}
     }
   },
-  setup(props, context) {
-    const screens: any = ref(null)
-    const slide: any = ref(null)
-    let height: any = ref("")
-    let currentIndex: any = ref(0)
-    const keyStatus: any = ref(false)
-
-    function init(param: any) {
-      screens.value[0].getComment(param)
-    }
-    
-
-    onMounted(() => {
-      keyStatus.value = true
-      document.addEventListener("keydown", (e: any) => {
-        if (!keyStatus.value) {
-          return
-        }
-
-        let _slide = slide.value && slide.value.filter((item: any) => item.number === currentIndex.value)
-
-        if (e.keyCode == '37' && (_slide && _slide.length > 0)) {
-          const number = _slide[0].index == 0 ? _slide[0].data.length - 1 : _slide[0].index - 1
-          _slide[0].handleHover(number)
-          _slide[0].time()
-        }
-        if (e.keyCode == '39' && (_slide && _slide.length > 0)) {
-          const number = _slide[0].data.length - 1 == _slide[0].index ? 0 : _slide[0].index + 1
-          _slide[0].handleHover(number)
-          _slide[0].time()
-        }
-        if (screens.value.length < 2) {
-          return
-        }
-        if (e.keyCode == '38' && currentIndex.value != '0') {
-          screens.value[currentIndex.value].toggle(-1, currentIndex.value)
-        }
-        if (e.keyCode == '40' && currentIndex.value < screens.value.length - 1) {
-          screens.value[currentIndex.value].toggle(1, currentIndex.value)
-        }
-      });
-    })
-
-    onMounted(() => {
-      height.value = document.getElementsByClassName('swiper-wrap')[0].clientHeight
-    })
-
-    return {
-      screens,
-      height,
-      init,
-      currentIndex,
-      slide
-    }
+  className: {
+    type: String,
+    default: "relative"
   }
+})
+const screens: any = ref(null)
+const slide: any = ref(null)
+let height: any = ref("")
+let currentIndex: any = ref(0)
+const keyStatus: any = ref(false)
+
+defineExpose({
+  init
+})
+
+function init(param: any) {
+  screens.value[0].getComment(param)
+}
+
+onMounted(() => {
+  keyStatus.value = true
+  document.addEventListener("keydown", (e: any) => {
+    if (!keyStatus.value) {
+      return
+    }
+
+    let _slide = slide.value && slide.value.filter((item: any) => item.number === currentIndex.value)
+
+    if (e.keyCode == '37' && (_slide && _slide.length > 0)) {
+      const number = _slide[0].index == 0 ? _slide[0].data.length - 1 : _slide[0].index - 1
+      _slide[0].handleHover(number)
+      _slide[0].time()
+    }
+    if (e.keyCode == '39' && (_slide && _slide.length > 0)) {
+      const number = _slide[0].data.length - 1 == _slide[0].index ? 0 : _slide[0].index + 1
+      _slide[0].handleHover(number)
+      _slide[0].time()
+    }
+    if (screens.value.length < 2) {
+      return
+    }
+    if (e.keyCode == '38' && currentIndex.value != '0') {
+      screens.value[currentIndex.value].toggle(-1, currentIndex.value)
+    }
+    if (e.keyCode == '40' && currentIndex.value < screens.value.length - 1) {
+      screens.value[currentIndex.value].toggle(1, currentIndex.value)
+    }
+  });
+})
+
+onMounted(() => {
+  height.value = document.getElementsByClassName('swiper-wrap')[0].clientHeight
 })
 </script>

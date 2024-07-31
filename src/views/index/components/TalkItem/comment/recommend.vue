@@ -28,7 +28,7 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   defineComponent
 } from 'vue'
@@ -37,33 +37,24 @@ import Form from './formsss1.vue'
 import Images from '../components/image.vue'
 import Itembar from './itembar.vue'
 import Reply from './reply.vue'
-export default defineComponent({
-  name: 'HomeViewe',
-  components: {
-    TalkItem,
-    Form,
-    Images,
-    Itembar,
-    Reply
+
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
+    }
   },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
-    expand: {
-      type: Function,
-      default: () => {
-        return
-      }
+  render: {
+    type: Function,
+    default: () => {
+      return
+    }
+  },
+  expand: {
+    type: Function,
+    default: () => {
+      return
     }
   }
 })

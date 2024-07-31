@@ -1,44 +1,23 @@
 <template>
-<div class="inline">
-  <i class="iconfont icon-music" :class="hasbackground ?'absolute cl-white' : ''" @click="handlePlay" :style=" hasbackground ? 'background: rgba(0, 0, 0, 0.3); border-radius: 2px; right: 0px; bottom: 0px; padding: 2px; z-index: 1;' : ''" v-if="hasMusic"></i>
-  <i class="iconfont listen" :class="`icon-${isplay ? 'audio' : 'listen'}`" @click="handlePlay" v-else></i>
-</div>
+  <i class="iconfont listen" :class="`icon-${isplay ? 'audio' : 'listen'}`" @click="handlePlay"></i>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  onMounted
+  defineProps
 } from '@/utils'
 import VueEvent from '@/utils/event'
-export default defineComponent({
-  name: 'v-Audio',
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    hasMusic: {
-      type: Boolean,
-      default: false
-    },
-    hasbackground: {
-      type: Boolean,
-      default: false
-    }
-  },
-  setup(props, context) {
-    function handlePlay(e: any, index: any, status: any) {
-      VueEvent.emit("musicPley", props.data);
-    }
-    onMounted(() => {
-      VueEvent.emit("pley", props.data);
-    })
-    return {
-      handlePlay
+
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
 })
+
+function handlePlay(e: any, index: any, status: any) {
+  VueEvent.emit("musicPley", props.data);
+}
 </script>

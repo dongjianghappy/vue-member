@@ -1,38 +1,43 @@
+import VueEvent from '@/utils/event'
+
 const install = (Vue:any) => {
   Vue.config.globalProperties.$pendant = {
-
     init(){
-      
-
-
-      // let box = document.getElementById('box')
       let boxs: any = document.getElementsByClassName("pendant-box")
       for(let i=0; i<boxs.length;i++){
         let box = boxs[i]
       var deg = 0
       // 当时是否在拖动鼠标
       let isDrag = false
-
-
-
-
-
-
-
-
-
+      
+      let isEdit = false
+      VueEvent.on("saveTheme", (data: any) => {
+        isEdit = data
+        
+        let pendantBox: any = document.getElementsByClassName("pendant-box")
+        for(let i = 0; i < pendantBox.length; i++){
+          if(isEdit){
+            pendantBox[i].style.zIndex = "101"
+          }else{
+            pendantBox[i].style.zIndex = "9"
+          }
+        };
+        
+        console.log(isEdit);
+        
+      })
 
       box.addEventListener('mousedown', (ev: any) => {
+        if(!isEdit){
+          return
+        }          
         isDrag = true
         ev.preventDefault()
-      let oevent = ev || event
-      let distanceX = oevent.clientX //鼠标点击位置
-      let distanceY = oevent.clientY //鼠标点击位置
-      
       
         document.onmousemove = function (e: any) {
-
-          
+          if(!isEdit){
+            return
+          }          
           if(!isDrag){
             return
           }
@@ -43,20 +48,22 @@ const install = (Vue:any) => {
 
           box.style.top = e.clientY-ev.layerY+"px"
           box.style.left = e.clientX-ev.layerX+"px"
-          dashed.style.top = box.offsetTop-(side - box.clientHeight) / 2 - 24+'px' 
-          dashed.style.left = box.offsetLeft-(side - box.clientWidth) / 2+'px' 
-          
+          if(dashed.style){
+            dashed.style.top = box.offsetTop-(side - box.clientHeight) / 2 - 24+'px' 
+            dashed.style.left = box.offsetLeft-(side - box.clientWidth) / 2+'px' 
+          }
         }
       })
 
 
       box.addEventListener('mouseup', (ev: any) => {
         isDrag = false
-       
       })
 
-      
       box.addEventListener('mouseenter', (e: any) => {
+        if(!isEdit){
+          return
+        }
         box.style.cursor = 'move'
         if(document.querySelector(".dashed") !== null){
           let dashed: any = document.querySelector(".dashed")
@@ -74,13 +81,15 @@ const install = (Vue:any) => {
           dashed.style.top = box.offsetTop-(side - box.clientHeight) / 2 - 24+'px'
           dashed.style.left = box.offsetLeft-(side - box.clientWidth) / 2+'px'
         dashed.innerHTML = `<div class="tool">
-      <div class="tool-btn"><i class="iconfont icon-alpha-desc cl-white"></i></div>
-      <div class="tool-btn"><i class="iconfont icon-alpha-asc font14 cl-white"></i></div>
-      <div class="rotate-left tool-btn"><i class="iconfont icon-rotate-left cl-white"></i></div>
-      <div class="rotate-right tool-btn"><i class="iconfont icon-rotate-right cl-white"></i></div>
-      <div class="positioning tool-btn"><i class="iconfont icon-positioning ${box.style.position === 'fixed' ? 'cl-red' : 'cl-white'}"></i></div>
-      <div class="tool-btn"><i class="iconfont icon-close font12 cl-white"></i></div>
-    </div>`
+          <div class="tool-btn"><i class="iconfont icon-alpha-desc cl-white"></i></div>
+          <div class="tool-btn"><i class="iconfont icon-alpha-asc font14 cl-white"></i></div>
+          <div class="rotate-left tool-btn"><i class="iconfont icon-rotate-left cl-white"></i></div>
+          <div class="rotate-right tool-btn"><i class="iconfont icon-rotate-right cl-white"></i></div>
+          <div class="min-btn"><i class="iconfont icon-suoxiao cl-white"></i></div>
+          <div class="max-btn"><i class="iconfont icon-fangda font14 cl-white"></i></div>
+          <div class="positioning tool-btn"><i class="iconfont icon-positioning ${box.style.position === 'fixed' ? 'cl-red' : 'cl-white'}"></i></div>
+          <div class="tool-btn"><i class="iconfont icon-close font12 cl-white"></i></div>
+        </div>`
 
         document.body.appendChild(dashed)
         dashed.addEventListener('mouseleave', () => {
@@ -91,8 +100,10 @@ const install = (Vue:any) => {
         let alphaAsc = dashed.children[0].children[1]        
         let rotateLeft = dashed.children[0].children[2]
         let rotateRight = dashed.children[0].children[3]
-        let positioning = dashed.children[0].children[4]
-        let deletes = dashed.children[0].children[5]
+        let min = dashed.children[0].children[4]
+        let max = dashed.children[0].children[5]
+        let positioning = dashed.children[0].children[6]
+        let deletes = dashed.children[0].children[7]
 
         alphaAsc.addEventListener('click', () => {
           let opacity = box.children[0].style.opacity
@@ -118,6 +129,18 @@ const install = (Vue:any) => {
           deg += 15
           box.style.transform = `rotate(${deg}deg)`
         })
+        max.addEventListener('click', () => {
+          let width = box.children[0].clientWidth
+          box.children[0].style.width = `${width / 0.75}px`
+        })
+        min.addEventListener('click', () => {
+          let width = box.children[0].clientWidth
+          if(width <= 75){
+            return
+          }
+          box.children[0].style.width = `${width * 0.75}px`
+        })
+
         positioning.addEventListener('click', () => {
           if(box.style.position === 'absolute'){
             box.style.position = "fixed"
@@ -139,13 +162,7 @@ const install = (Vue:any) => {
         box.style.cursor = ''
       })
     }
-      
-    },
-
-
+  }
   }
 }
-
-
-
 export default install

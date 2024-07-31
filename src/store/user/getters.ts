@@ -8,7 +8,6 @@ const getters = {
     if(state.user.login){
       status = false
     }else if((state.user.login.userInfo && state.user.login.userInfo.account) === (state.user.basic.userInfo && state.user.basic.userInfo.account)){
-      alert("ccc")
       status = true
     }
 

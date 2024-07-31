@@ -37,56 +37,42 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   useStore
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Search',
-  components: {
-
-  },
-  props: {
-    pagination: {
-      type: Object,
-      default: () => {
-        return {
-          total: 0,
-          page: 1,
-          pagesize: 10
-        }
+const props: any = defineProps({
+  pagination: {
+    type: Object,
+    default: () => {
+      return {
+        total: 0,
+        page: 1,
+        pagesize: 10
       }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
-    },
-    simple: {
-      type: Boolean,
-      default: false
     }
   },
-  emits: ['clickPage'],
-  setup(props, context) {
-    const store = useStore()
-    const currentPage = ""
-
-    function handelClick(param: any) {
-      store.commit('common/setPage', param)
-      props.pagination.page = param
-      props.render({
-        page: param
-      })
+  render: {
+    type: Function,
+    default: () => {
+      return 'Default function'
     }
-
-    return {
-      currentPage,
-      handelClick
-    }
+  },
+  simple: {
+    type: Boolean,
+    default: false
   }
 })
+const store = useStore()
+const currentPage = ""
+
+function handelClick(param: any) {
+  store.commit('common/setPage', param)
+  props.pagination.page = param
+  props.render({
+    page: param
+  })
+}
 </script>

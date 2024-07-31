@@ -2,16 +2,16 @@
 <div style="height: 425px; overflow-y: auto;">
   <div class="col-sm-6" :class="className" v-for="(img, i) in history" :key="i">
     <div class="m5 relative">
-      <img :src="img" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" height="140" style="border-radius: 8px; width: 100%" @click="handleChoose(img)" />
+      <img :src="img" height="140" style="border-radius: 8px; width: 100%" @click="handleChoose(img)" />
       <i class="iconfont icon-checkbox m0 cl-red" style="right: 0px; top: 0px; padding: 2px; z-index: 1;" v-if="img === loginuser[kind]"></i>
     </div>
   </div>
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   useStore,
   ref,
   getUid,
@@ -19,62 +19,42 @@ import {
   computed
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Button',
-  props: {
-    type: {
-      type: String,
-      default: "album"
-    },
-    kind: {
-      type: String,
-      default: "photos"
-    },
-    className: {
-      type: String,
-      default: "col-md-3"
-    }
-  },
-  setup(props, context) {
-    const store = useStore();
-    const history: any = ref([])
-    const loginuser = computed(() => store.getters['user/loginuser']);
-
-    function getHistory() {
-
-      store.dispatch('common/Fetch', {
-        api: "GetHistoryPhotos",
-        data: {
-          type: props.type,
-          kind: props.kind,
-          uid: getUid()
-        }
-      }).then(res => {
-        history.value = res.result
-
-      })
-    }
-
-    function handleChoose(param: any) {
-      debugger
-      store.dispatch('common/Fetch', {
-        api: 'choosePhotos',
-        data: {
-          field: props.kind,
-          img: param
-        }
-      }).then(res => {
-        store.dispatch('user/Detect')
-      })
-    }
-
-    onMounted(getHistory)
-
-    return {
-      loginuser,
-      history,
-      handleChoose
-    }
+const props: any = defineProps({
+  kind: {
+    type: String,
+    default: "photos"
   }
 })
+
+const store = useStore();
+const history: any = ref([])
+const loginuser = computed(() => store.getters['user/loginuser']);
+
+function getHistory() {
+  store.dispatch('common/Fetch', {
+    api: "GetHistoryPhotos",
+    data: {
+      type: props.type,
+      kind: props.kind,
+      uid: getUid()
+    }
+  }).then(res => {
+    history.value = res.result
+
+  })
+}
+
+function handleChoose(param: any) {
+  store.dispatch('common/Fetch', {
+    api: 'choosePhotos',
+    data: {
+      field: props.kind,
+      img: param
+    }
+  }).then(res => {
+    store.dispatch('user/Detect')
+  })
+}
+
+onMounted(getHistory)
 </script>

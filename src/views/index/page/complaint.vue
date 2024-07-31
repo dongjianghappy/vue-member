@@ -7,7 +7,7 @@
         <div>我要投诉的是“ {{detail.nickname}}”发的微博：</div>
         <div class="flex mb25 p25" style="background: #f7f8fa">
           <div class="mr20" style="width: 120px; height: 120px">
-            <img :src="detail.image && detail.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" class="radius-8" style=" width: 100%; height: auto; cursor: zoom-in;" />
+            <img :src="detail.image && detail.image[0]" class="radius-8" style=" width: 100%; height: auto; cursor: zoom-in;" />
           </div>
           <div style="flex: 1">
             <div>{{detail.summary}}</div>

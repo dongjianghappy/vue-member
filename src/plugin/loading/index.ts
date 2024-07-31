@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import messageModal from './message.vue'
+import { component } from './components/index'
 import loadingModal from './loading.vue'
 import praiseModal from './praise.vue'
 
@@ -8,52 +8,42 @@ const install = (Vue:any) => {
     // 加载
     loading(param:any) {
       const Vues = createApp(loadingModal)
-      if(!document.getElementById("screens")){
+      if(!document.getElementById("app-screen")){
         const el = document.createElement('div')
-        el.setAttribute('id', "screens")
+        el.setAttribute('id', "app-screen")
         document.body.appendChild(el);
       }
-      Vues.mount('#screens');
+      Vues.mount('#app-screen');
     },
     
     // 消息提示
     message(param:any) {
-      const AA = Vue.component("MymodalDa", messageModal)
-      const Vues = createApp(messageModal)
+      const AA = Vue.component("MymodalDa", component(param))
       AA.component("MymodalDa").data = () => {
         return {
           msg: param.msg
         }
       }
-      if(!document.getElementById("screens")){
+      if(!document.getElementById("app-screen")){
         const el = document.createElement('div')
-        el.setAttribute('id', "screens")
+        el.setAttribute('id', "app-screen")
         document.body.appendChild(el);
       }
-      Vues.mount('#screens');
-      AA.component("MymodalDa").setup().message()
-    },
-
-    // 消息提示
-    close() {
-      const AA = Vue.component("MymodalDa", messageModal)
-      
-      AA.component("MymodalDa").setup().message()
-    },    
-
-    // 点赞
-    praise() {
-      const AA = Vue.component("MymodalDa", praiseModal)
-      const Vues = createApp(praiseModal)
-      
-      if(!document.getElementById("screens")){
-        const el = document.createElement('div')
-        el.setAttribute('id', "screens")
-        document.body.appendChild(el);
+      const Vues = createApp(component(param))
+      Vues.mount('#app-screen');
+      if(param.type != 'info'){
+        return
       }
-      Vues.mount('#screens');
-      AA.component("MymodalDa").setup().message()
-    },    
+      
+      setTimeout(()=>{
+        let tips = document.getElementsByClassName('tips-wrap')[0]
+        tips.classList.remove('fadeIn')
+        tips.classList.add('fadeOut')
+        setTimeout(()=>{
+          document.querySelectorAll("#app-screen")[0].remove()
+        },2000)
+      },3000)
+    } 
   }
 }
 

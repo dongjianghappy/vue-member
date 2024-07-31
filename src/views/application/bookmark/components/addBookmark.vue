@@ -17,7 +17,6 @@
         <div class="mb5">书签地址</div>
         <textarea v-model="detail.url" placeholder="请输入分组描述" class="w-full"></textarea>
       </li>
-
     </ul>
     <div class="mt15">
       <v-visible v-model:visible="detail.visible" />
@@ -26,105 +25,83 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  onMounted,
+  defineProps,
   ref,
-  watch
-} from 'vue'
-import {
+  watch,
   useStore
-} from 'vuex'
+} from '@/utils'
 
-export default defineComponent({
-  name: 'HomeViewh',
-  props: {
-    title: {
-      type: String,
-      default: "创建组"
-    },
-    action: {
-      type: String,
-      default: "add"
-    },
-    group: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
+const props: any = defineProps({
+  action: {
+    type: String,
+    default: "add"
+  },
+  group: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  setup(props, context) {
-    const store = useStore();
-    const isShow = ref(false)
-    const detail: any = ref({
-      id: "",
-      name: "",
-      url: ""
-    })
-
-    // 监听
-    watch([isShow], async (newValues, prevValues) => {
-      if (isShow.value) {
-        detail.value = props.data
-        // detail.value.id = props.data.id
-        // detail.value.fid = props.data.fid
-        // detail.value.name = props.data.name
-        // detail.value.url = props.data.url
-      }
-    })
-
-    function submit(params: any) {
-      const {
-        id,
-        fid,
-        name,
-        url,
-        visible,
-      } = detail.value
-
-      const param: any = {
-        fid,
-        name,
-        url,
-        visible,
-      }
-
-      if (props.action === 'edit') {
-        param.id = id
-      }
-
-      store.dispatch('common/Fetch', {
-        api: props.action === 'add' ? "Insert" : 'Update',
-        data: {
-          coding: props.data.coding.art,
-          fid: props.data.fid,
-          ...param
-        }
-      }).then(res => {
-        props.render()
-        isShow.value = false
-      })
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
-
-    return {
-      isShow,
-      detail,
-      submit
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return 'Default function'
     }
   }
 })
+const store = useStore();
+const isShow = ref(false)
+const detail: any = ref({
+  id: "",
+  name: "",
+  url: ""
+})
+
+// 监听
+watch([isShow], async (newValues, prevValues) => {
+  if (isShow.value) {
+    detail.value = props.data
+  }
+})
+
+function submit(params: any) {
+  const {
+    id,
+    fid,
+    name,
+    url,
+    visible,
+  } = detail.value
+
+  const param: any = {
+    fid,
+    name,
+    url,
+    visible,
+  }
+
+  if (props.action === 'edit') {
+    param.id = id
+  }
+
+  store.dispatch('common/Fetch', {
+    api: props.action === 'add' ? "Insert" : 'Update',
+    data: {
+      coding: props.data.coding.art,
+      fid: props.data.fid,
+      ...param
+    }
+  }).then(res => {
+    props.render()
+    isShow.value = false
+  })
+}
 </script>

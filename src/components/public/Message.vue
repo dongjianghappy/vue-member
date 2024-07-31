@@ -1,7 +1,7 @@
 <template>
 <i class="iconfont icon-dot cl-red no-event" style="position: absolute; top: 0px; left: 20px; font-size: 32px !important;" v-if="messgeData.unread"></i>
 <video ref="audio" style="display: none">
-  <source src="@/assets/video/visit.mp3" type="audio/mp3">
+  <source src="" type="audio/mp3">
 </video>
 <v-popover content="<i class='iconfont icon-message font18'></i>" arrow="tb" offset="right" :move="-60" keys="popover-message">
   <div style="width: 150px; height: 250px">
@@ -14,75 +14,62 @@
 </v-popover>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   ref,
   onMounted,
   computed,
   useStore
 } from '@/utils'
-export default defineComponent({
-  name: 'v-Message',
-  props: {
-    router: {
-      type: Function,
-      default: () => {
-        return
-      }
-    }
-  },
-  setup(props, context) {
-    const store = useStore();
-    const messgeData: any = ref({})
-    const time: any = ref(null)
-    const module = computed(() => {
-      let message = store.getters['user/config_talk'].message
-      let data = message.map((item: any) => {
-        let arr = item.value.split("?mod=")
-        item.field = arr[1]
-        return item
-      })
-
-      return data
-    });
-
-    const audio: any = ref(null)
-
-    function getMessage() {
-
-      store.dispatch('common/Fetch', {
-        api: 'message',
-      }).then((res: any) => {
-        messgeData.value = res.result
-
-        for (let key in messgeData.value.broadcast) {
-          // 开启语音播报且有新的消息
-          if (messgeData.value.broadcast[key].status == 'true') {
-            audio.value.src = messgeData.value.broadcast[key].audio
-            audio.value.load()
-            audio.value.play()
-          }
-        }
-      })
-    }
-
-    function handleClick(param: any) {
-      props.router(param)
-    }
-
-    onMounted(() => {
-      getMessage()
-      // time.value = setInterval(() => {
-      //   getMessage()
-      // }, 5000)
-    })
-    return {
-      messgeData,
-      handleClick,
-      audio,
-      module
+const props: any = defineProps({
+  router: {
+    type: Function,
+    default: () => {
+      return
     }
   }
+})
+const store = useStore();
+const module = computed(() => {
+  let message = store.getters['user/config_talk'].message
+  let data = message.map((item: any) => {
+    let arr = item.value.split("?mod=")
+    item.field = arr[1]
+    return item
+  })
+
+  return data
+});
+
+const messgeData: any = ref({})
+const time: any = ref(null)
+const audio: any = ref(null)
+
+function getMessage() {
+  store.dispatch('common/Fetch', {
+    api: 'message',
+  }).then((res: any) => {
+    messgeData.value = res.result
+
+    for (let key in messgeData.value.broadcast) {
+      if (messgeData.value.broadcast[key].status == 'true') {
+        audio.value.src = messgeData.value.broadcast[key].audio
+        audio.value.load()
+        audio.value.play()
+      }
+    }
+  })
+}
+
+function handleClick(param: any) {
+  props.router(param)
+}
+
+onMounted(() => {
+  getMessage()
+  // time.value = setInterval(() => {
+  //   getMessage()
+  // }, 5000)
 })
 </script>

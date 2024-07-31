@@ -15,7 +15,6 @@
           <div style="background: #eee; margin-top:5px; padding:5px 10px; font-size: 12px;">下载了：
             <span v-html="item.title"></span>
           </div>
-
         </div>
       </div>
     </div>
@@ -24,71 +23,31 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
+  ref,
+  onMounted,
+  useStore,
   getUid
-} from '@/utils';
-import {
-  defineComponent,
-  getCurrentInstance,
-  computed,
-  ref
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
+} from '@/utils'
 
-export default defineComponent({
-  name: 'HomeViews',
-  components: {
+const store = useStore();
+const dataList: any = ref([])
+const loading: any = ref(false)
 
-  },
-  props: {
-    channel: {
-      type: String,
-      default: ""
+function init() {
+  loading.value = false
+  store.dispatch('common/Fetch', {
+    api: "getDownload",
+    data: {
+      uid: getUid(),
+      page: 1,
+      pagesize: 25,
     }
-  },
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const index: any = ref(0)
-    const dataList: any = ref([])
-    const loading: any = ref(false)
-    let tabMenu: any = ref([{
-        name: "我下载的",
-        value: "appstore1"
-      },
-      {
-        name: "下载我的",
-        value: "appstore2"
-      }
-    ])
-
-    function init() {
-      loading.value = false
-      store.dispatch('common/Fetch', {
-        api: "getDownload",
-        data: {
-          uid: getUid(),
-          page: 1,
-          pagesize: 25,
-        }
-      }).then(res => {
-        loading.value = true
-        dataList.value = res.result
-      })
-    }
-    init()
-    return {
-      loading,
-      init,
-      dataList,
-      tabMenu,
-      index
-    }
-  },
-})
+  }).then(res => {
+    loading.value = true
+    dataList.value = res.result
+  })
+}
+onMounted(init)
 </script>

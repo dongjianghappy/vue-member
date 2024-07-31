@@ -11,9 +11,10 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   getCurrentInstance,
   useRouter,
   onMounted,
@@ -21,77 +22,58 @@ import {
   computed,
   useStore
 } from '@/utils'
-export default defineComponent({
-  name: 'AsideView',
-  props: {
-    title: {
-      type: String,
-      default: ""
-    },
-    data: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    hasIcon: {
-      type: Boolean,
-      default: true
-    },
-    isRoot: {
-      type: Boolean,
-      default: true
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
+
+const props: any = defineProps({
+  data: {
+    type: Array,
+    default: () => {
+      return []
     }
   },
-  emits: ['route'],
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore()
-    const router = useRouter();
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    const userInfo: any = computed(() => store.getters['user/userInfo']);
-    // 初始化数据
-    function init() {
-      proxy.$scroll.init({
-        win: {
-          el: window,
-          y: 0,
-          b: 80
-        },
-        doc: {
-          el: 'sidebar_fixed'
-        },
-        type: "fixed"
-      })
-    }
-
-    function handleClick(param: any) {
-      if (Number(param) || param === "0") {
-        context.emit('route', param)
-      } else {
-        router.push(param)
-
-        setTimeout(() => {
-          props.render && props.render()
-        }, 100)
-      }
-    }
-
-    onMounted(init)
-
-    return {
-      loginuser,
-      userInfo,
-      handleClick
+  hasIcon: {
+    type: Boolean,
+    default: true
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return
     }
   }
 })
+const emit: any = defineEmits(['route'])
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore()
+const router = useRouter();
+const loginuser = computed(() => store.getters['user/loginuser']);
+const userInfo: any = computed(() => store.getters['user/userInfo']);
+// 初始化数据
+function init() {
+  proxy.$scroll.init({
+    win: {
+      el: window,
+      y: 0,
+      b: 80
+    },
+    doc: {
+      el: 'sidebar_fixed'
+    },
+    type: "fixed"
+  })
+}
+
+function handleClick(param: any) {
+  if (Number(param) || param === "0") {
+    emit('route', param)
+  } else {
+    router.push(param)
+
+    setTimeout(() => {
+      props.render && props.render()
+    }, 100)
+  }
+}
+onMounted(init)
 </script>

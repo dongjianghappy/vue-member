@@ -27,7 +27,6 @@ export default defineComponent({
         el.classList.add('fixed')
         el.classList.remove('absolute')
         el.style.top = 0
-        debugger
         for(let i = 0; i < screen.length; i++){
           screen[i].style.height = document.documentElement.clientHeight+"px"
         }

@@ -84,7 +84,6 @@ export default defineComponent({
     }
 
     function submit(){
-      debugger
       const Arrs: any = []
       checkedList.value.map((index: any)=>{
         let arr = ""
@@ -94,12 +93,6 @@ export default defineComponent({
         
       context.emit('confirm', Arrs)
     }
-
-    // onMounted(() => {
-    //   debugger
-    //   
-    // })
-
 
     return {
       isShow,

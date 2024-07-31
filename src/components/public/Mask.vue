@@ -2,27 +2,21 @@
 <div class="mask" @click="handleClick"></div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent
+  defineProps,
+  defineEmits
 } from 'vue'
 
-export default defineComponent({
-  name: 'v-Mask',
-  props: {
-    isShow: {
-      type: String,
-      default: false
-    }
-  },
-  emits: ['update:isShow'],
-  setup(props, context) {
-    function handleClick() {
-      context.emit('update:isShow', !props.isShow)
-    }
-    return {
-      handleClick
-    }
+const props: any = defineProps({
+  isShow: {
+    type: String,
+    default: false
   }
 })
+const emit: any = defineEmits(['update:isShow'])
+
+function handleClick() {
+  emit('update:isShow', !props.isShow)
+}
 </script>

@@ -55,45 +55,34 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   useStore,
 } from '@/utils'
 
-export default defineComponent({
-  name: 'AsideView',
-  props: {
-    dataList: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    module: {
-      type: Array,
-      default: () => {
-        return {}
-      }
-    },
-    mod: {
-      type: String,
-      default: ""
+const props: any = defineProps({
+  dataList: {
+    type: Array,
+    default: () => {
+      return []
     }
   },
-  setup(props, context) {
-    const store = useStore()
-
-    function init() {
-      store.dispatch('common/RecommendUser')
+  module: {
+    type: Array,
+    default: () => {
+      return {}
     }
-
-    return {
-      init
-    }
+  },
+  mod: {
+    type: String,
+    default: ""
   }
-
 })
+const store = useStore()
+
+function init() {
+  store.dispatch('common/RecommendUser')
+}
 </script>
 
 <style lang="less" scoped>

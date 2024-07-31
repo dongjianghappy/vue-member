@@ -20,7 +20,7 @@
 
     </div>
     <div class="operate-right" style=" width: 65px;">
-      <button @click="sendComment" class="btn font12" :class="{disabled: !detail.content}" :disabled="!detail.content">发送</button>
+      <button @click="sendComment" class="btn font12" :class="{disabled: !isCommit}" :disabled="!isCommit">发送</button>
     </div>
   </div>
 
@@ -74,6 +74,9 @@ export default defineComponent({
     const store = useStore();
     const userInfo = computed(() => store.getters['user/userInfo']);
     const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
+    const isCommit = computed(() => {
+      return detail.content || detail.img
+    });
     const upload: any = ref(null);
     let Input: any = ref(null)
     const refaite: any = ref(null)
@@ -167,7 +170,8 @@ export default defineComponent({
       choose,
       handleFocus,
       handleKeyup,
-      refaite
+      refaite,
+      isCommit
     }
   }
 })

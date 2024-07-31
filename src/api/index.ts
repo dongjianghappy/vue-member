@@ -7,6 +7,10 @@ const api:any =  {
   Detect (params?: any) {
     return http.request('user', 'Detect', params)
   },
+  // 用户在线检测
+  online (params?: any) {
+    return http.request('user', 'online', params)
+  },
   // 用户登录
   OtherUserInfo (params?: any) {
     return http.request('user', 'otherUserInfo', params)
@@ -151,6 +155,10 @@ RecommendUser (params: any) {
 RecommendMusic  (params: any) {
   return http.request('user', 'RecommendMusic', params)
 },  
+// 热搜
+hotSearch (params: any) {
+  return http.request('talk', 'hotSearch', params)
+},  
 // 热门话题
 HotTalk (params: any) {
   return http.request('talk', 'hotTalk', params)
@@ -180,7 +188,7 @@ announcement (params: any) {
   // 点赞
   Forwarding (params: any) {
     return http.request('user', 'forwarding', params)
-  },  
+  }, 
   // 主题
   Theme (params: any) {
     return http.request('user', 'theme', params)
@@ -239,7 +247,10 @@ announcement (params: any) {
   Goldcoin (params: any) {
     return http.request('user', 'goldcoin', params)
   },  
-
+  // 能量管理
+  energyList (params: any) {
+    return http.request('user', 'energyList', params)
+  },  
   // 签到列表
   SignList (params: any) {
     return http.request('user', 'signList', params)
@@ -568,6 +579,11 @@ announcement (params: any) {
     return http.request('user', 'userGroupList', params)
   } ,   
 
+  // 书签分类
+  bookmarkCate (params: any) {
+    return http.request('user', 'bookmarkCate', params)
+  } ,   
+
   // 用户书签
   bookmark (params: any) {
     return http.request('user', 'bookmark', params)
@@ -588,6 +604,26 @@ announcement (params: any) {
     return http.request('user', 'getPraise', params)
   } , 
 
+   // 下载
+   download (params: any) {
+    return http.request('talk', 'download', params)
+  } , 
+
+  // 内容收藏
+  content_collect (params: any) {
+    return http.request('talk', 'content_collect', params)
+  } , 
+
+  // 内容收藏列表
+  TalkContentCollect (params: any) {
+    return http.request('talk', 'TalkContentCollect', params)
+  } , 
+
+  // 删除内容收藏
+  deleteContent (params: any) {
+    return http.request('talk', 'deleteContent', params)
+  } , 
+  
   // 用户书签
   getDownload (params: any) {
     return http.request('user', 'getDownload', params)
@@ -778,6 +814,10 @@ schedule (params: any) {
 updateSchedule (params: any) {
   return http.request('talk', 'updateSchedule', params)
 },
+// 收获能量
+getEnergy (params: any) {
+  return http.request('talk', 'getEnergy', params)
+},
 // 微博信息
 talkInfo(params: any) {
   return http.request('talk', 'talkInfo', params)
@@ -786,9 +826,17 @@ talkInfo(params: any) {
 talkDetail(params: any) {
   return http.request('talk', 'talkDetail', params)
 },
+// 支付微博置顶
+payTalkToping(params: any) {
+  return http.request('talk', 'payTalkToping', params)
+},
 // 微博推荐
 recommendTalk(params: any) {
   return http.request('talk', 'recommendTalk', params)
+},
+// 获取相册
+getAlbum(params: any) {
+  return http.request('talk', 'getAlbum', params)
 },
 // 摄影
 cameraTalk(params: any) {
@@ -851,10 +899,84 @@ viewingRecords (params: any) {
 historyRecords (params: any) {
   return http.request('talk', 'historyRecords', params)
 }, 
+// 我参与的投票项目列表
+myVoteList (params: any) {
+  return http.request('talk', 'myVoteList', params)
+}, 
 // 用户专区
 userZone (params: any) {
   return http.request('user', 'userZone', params)
 }, 
+
+// 权限验证
+verificationGrade (params: any) {
+  return http.request('talk', 'verificationGrade', params)
+},
+
+// 卡包查询
+cardHolder(params: any) {
+  return http.request('talk', 'cardHolder', params)
+},
+
+// 活动
+huodong (params: any) {
+  return http.request('talk', 'huodong', params)
+},
+
+// 立即领取
+receive (params: any) {
+  return http.request('talk', 'receive', params)
+},
+
+// 功能特权
+privilege (params: any) {
+  return http.request('talk', 'privilege', params)
+},
+
+// 功能特权详情
+privilegeDetail (params: any) {
+  return http.request('talk', 'privilegeDetail', params)
+},
+
+// 数据总览
+totalStatistics (params: any) {
+  return http.request('talk', 'totalStatistics', params)
+},
+
+// 用户数据统计
+userStatistics (params: any) {
+  return http.request('talk', 'userStatistics', params)
+},
+
+// 微博数据统计
+talkStatistics (params: any) {
+  return http.request('talk', 'talkStatistics', params)
+},
+
+// 数据统计
+dataStatistics (params: any) {
+  return http.request('talk', 'dataStatistics', params)
+},
+
+// 是否存在黑名单
+hasBlack (params: any) {
+  return http.request('user', 'hasBlack', params)
+},
+
+// 加入黑名单
+joinBlack (params: any) {
+  return http.request('user', 'joinBlack', params)
+},
+
+// 黑名单列表
+blacklist (params: any) {
+  return http.request('user', 'blacklist', params)
+},
+
+// 获取地址
+getLocation (params: any) {
+  return http.request('common', 'getLocation', params)
+},
 }
 
   

@@ -10,63 +10,44 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   useStore,
-  useRoute,
   ref,
   onMounted,
   getUid,
-  watch,
   codings
 } from '@/utils'
 import Form from '../application/message_board/components/form.vue'
 import List from '../application/message_board/components/list.vue'
 
-export default defineComponent({
-  name: 'MessageBoardView',
-  components: {
-    Form,
-    List
-  },
-  setup(props, context) {
-    const store = useStore();
-    const coding = codings.service.message_board
-    let dataList: any = ref({})
-    const loading: any = ref(false)
+const store = useStore();
+const coding = codings.service.message_board
+let dataList: any = ref({})
+const loading: any = ref(false)
 
-    function init(param: any = {}) {
-      loading.value = false
+function init(param: any = {}) {
+  loading.value = false
 
-      const params: any = {
-        coding: coding.list,
-        uid: getUid(),
-        page: 1,
-        pagesize: 25
-      }
-
-      Object.assign(params, param)
-
-      store.dispatch('common/Fetch', {
-        api: "userMessageBoard",
-        data: {
-          ...params
-        }
-      }).then(res => {
-        loading.value = true
-        dataList.value = res.result || {}
-      })
-    }
-
-    onMounted(init)
-
-    return {
-      coding,
-      dataList,
-      loading,
-      init,
-    }
+  const params: any = {
+    coding: coding.list,
+    uid: getUid(),
+    page: 1,
+    pagesize: 25
   }
-})
+
+  Object.assign(params, param)
+
+  store.dispatch('common/Fetch', {
+    api: "userMessageBoard",
+    data: {
+      ...params
+    }
+  }).then(res => {
+    loading.value = true
+    dataList.value = res.result || {}
+  })
+}
+
+onMounted(init)
 </script>

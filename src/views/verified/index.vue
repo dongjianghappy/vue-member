@@ -6,30 +6,13 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   useRoute,
 } from '@/utils'
 import Main from './main.vue'
 import Institution from './institution.vue'
 import Condition from './condition.vue'
 
-
-export default defineComponent({
-  name: 'MessageBoardView',
-  components: {
-    Main,
-    Institution,
-    Condition
-  },
-  setup(props, context) {
-    const route = useRoute();
-
-    return {
-      route,
-
-    }
-  }
-})
+const route = useRoute();
 </script>

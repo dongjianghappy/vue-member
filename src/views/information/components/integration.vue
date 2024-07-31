@@ -17,51 +17,23 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   computed,
-  onMounted,
-  ref,
-  codings
+  useStore,
 } from '@/utils'
-import {
-  useStore
-} from 'vuex'
-import {
-  information
-} from '@/assets/const'
 import List from './list.vue'
-export default defineComponent({
-  name: 'AsideView',
-  components: {
-    List
-  },
-  props: {
-    title: {
-      type: String,
-      defualt: "system"
-    }
-  },
-  setup(props, context) {
-    const store = useStore()
-    const info: any = information
-    const module = computed(() => {
-      debugger
-      let aa = store.getters['user/config_talk'].message
-      // alert(JSON.stringify(aa))
-      let bb = aa.filter((item: any) => item.value.indexOf(props.title) > -1)
-      return bb[0]
-    });
 
-    onMounted(() => {
-      
-    })
-    return {
-      module
-    }
+const props: any = defineProps({
+  title: {
+    type: String,
+    defualt: "system"
   }
-
 })
+const store = useStore()
+const module = computed(() => {
+  let aa = store.getters['user/config_talk'].message
+  let bb = aa.filter((item: any) => item.value.indexOf(props.title) > -1)
+  return bb[0]
+});
 </script>

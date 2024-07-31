@@ -9,36 +9,25 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent
+  defineProps
 } from '@/utils'
 import VueEvent from '@/utils/event'
 import Video from '../index/components/TalkItem/components/video2.vue'
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-    Video
-  },
-  props: {
-    dataList: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    }
-  },
-  setup(props, context) {
 
-    function showImg(param: any) {
-      VueEvent.emit("screen", {
-        data: param
-      });
-    }
-
-    return {
-      showImg
+const props: any = defineProps({
+  dataList: {
+    type: Array,
+    default: () => {
+      return []
     }
   }
 })
+
+function showImg(param: any) {
+  VueEvent.emit("screen", {
+    data: param
+  });
+}
 </script>

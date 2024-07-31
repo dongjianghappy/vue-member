@@ -1,120 +1,34 @@
 <template>
-<div class="node-info">
-  <perfect-scrollbar>
+<div class="node-info" style="height: 650px; overflow-y: auto;">
+    <div class="p15">{{node.ftype == undefined ? '未选中节点' : '当前已选中节点'}}</div>
     <!-- 边框样式 -->
-    <v-collapse title="样式设置">
-      <div class="clearfix" v-if="node.ftype !== 'link'">
-        <div class="col-md-6 align_left h70">
-          <span>填充</span>
-          <div class="">
-            <v-colorpicker @color="chooseColor" :color="attrs.fill" attr="fill" />
-          </div>
-        </div>
-        <div class="col-md-6 align_center">
-          <span>边框</span>
-          <div>
-            <v-colorpicker @color="chooseColor" :color="attrs.stroke" attr="stroke" />
-          </div>
-        </div>
-      </div>
-      <div class="h70" v-else>
-        <span>边框</span>
-        <div>
-          <v-colorpicker @color="chooseColor" :color="attrs.stroke" attr="stroke" />
-        </div>
-      </div>
-
-      <div>
-        边框样式
-        <v-select :enums="borderStyle" v-model:value="attrs.strokeDasharray" :defaultValue="attrs.strokeDasharray = attrs.strokeDasharray ? attrs.strokeDasharray : 'solid'" />
-      </div>
-    </v-collapse>
+      <StyleSetting />
 
     <!-- 文本样式 -->
-    <v-collapse title="文本设置">
-      <ul class="form-wrap-box">
-        <li class="vertical">
-          <div class="label">名称</div>
-          <div contenteditable="true" class="content-editable" @blur="textBlur" style="display: inline-block;">
-            {{attrs.text}}
-          </div>
-        </li>
-      </ul>
-      <div class="align_left h70 mt10">
-        <span>填充</span>
-        <div>
-          <v-colorpicker @color="chooseColor" :color="attrs.textColor" :islabel="true" attr="fill" />
-        </div>
-      </div>
-    </v-collapse>
+    <TextSetting />
+    
 
     <!-- 高级设置 -->
-    <v-collapse title="高级设置" :iscollapse="true">
-      <NodeInfo :data="node.data" v-if="node.ftype !== 'link' || node.type !=='intentionLink'" />
-      <LinkLine :data="node.data" v-else />
-    </v-collapse>
-  </perfect-scrollbar>
-  <!-- <div class="p15">
-    <div id="paper-multiple-papers-small" class="bg-white" style="width: 200px; height: 200px;"></div>
-  </div> -->
+    <HeightSetting />
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import StyleSetting from './components/styleSetting.vue'
+import TextSetting from './components/textSetting.vue'
+import HeightSetting from './components/heightSetting.vue'
 import {
-  defineComponent,
-  computed
-} from 'vue'
-import NodeInfo from './components/nodeInfo.vue'
-import LinkLine from './components/linkLine.vue'
-import Broadcast from './components/broadcast.vue'
-export default defineComponent({
-  name: "MymodalD",
-  components: {
-    NodeInfo,
-    LinkLine,
-    Broadcast
-  },
-  props: {
+    defineProps
+  } from 'vue'
+  const {node} = defineProps({
     node: {
       type: Object, 
       default: () => {
         return {}
       }
-    },
-    attrs: {
-      type: Object, 
-      default: () => {
-        return {}
-      }
-    },
-    borderStyle: {
-      type: Object, 
-      default: () => {
-        return {}
-      }
-    },
-  },
-  emits: ['setAttrs'],
-  setup(props, context) {
-    function chooseColor(param: any) {
-      context.emit('setAttrs', param)
     }
+  })
 
-    function textBlur(e: any, attr: any) {
-      context.emit('setAttrs', {
-        islabel: true,
-        attr: "text",
-        value: e.currentTarget.innerHTML
-      })
-    }
-
-    return {
-      chooseColor,
-      textBlur
-    }
-  }
-})
 </script>
 
 <style lang="less" scoped>
@@ -176,9 +90,5 @@ export default defineComponent({
     border-radius: 6px;
     padding: 0;
   }
-}
-
-.ps {
-  height: 635px;
 }
 </style>

@@ -32,82 +32,60 @@
       </li>
     </ul>
   </div>
-
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   onMounted,
-  ref,
   useStore
 } from '@/utils'
 import Album from './album.vue'
-export default defineComponent({
-  name: 'AsideView',
-  components: {
-    Album
-  },
-  props: {
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
-    basicInfo: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+
+const props: any = defineProps({
+  render: {
+    type: Function,
+    default: () => {
+      return
     }
   },
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const userInfo: any = ref(props.basicInfo)
-
-    // 监听图片上传
-    function brandPhoto(a: any) {
-      handleSave({
-        name: 'brand_photo',
-        img: a
-      })
-    }
-
-    // 监听图片上传
-    function imageIhoto(a: any) {
-      handleSave({
-        name: 'image_photo',
-        img: a
-      })
-    }
-
-    function handleSave(param: any) {
-      store.dispatch('common/Fetch', {
-        api: "editUserInfo",
-        data: {
-          ...param
-        }
-      }).then((res: any) => {
-        props.render()
-      })
-    }
-
-    onMounted(() => {
-      props.render()
-    })
-
-    return {
-      userInfo,
-      brandPhoto,
-      imageIhoto,
-      handleSave
+  basicInfo: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
+})
+const store = useStore();
+
+// 监听图片上传
+function brandPhoto(a: any) {
+  handleSave({
+    name: 'brand_photo',
+    img: a
+  })
+}
+
+// 监听图片上传
+function imageIhoto(a: any) {
+  handleSave({
+    name: 'image_photo',
+    img: a
+  })
+}
+
+function handleSave(param: any) {
+  store.dispatch('common/Fetch', {
+    api: "editUserInfo",
+    data: {
+      ...param
+    }
+  }).then((res: any) => {
+    props.render()
+  })
+}
+
+onMounted(() => {
+  props.render()
 })
 </script>

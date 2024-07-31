@@ -10,9 +10,7 @@
         {{data.nickname}}
       </span>
     </div>
-    <div class="user_from pb5">{{data.times}}
-      <span class="ml5 cl-eb7350" v-if="data.istop === '1'">置顶</span>
-    </div>
+    <div class="user_from pb5">{{data.times}}</div>
     <div class="user_text markdown mt30 font16" style="margin-left: -65px;">
       <div class="relative" style="min-height: 30px" v-if="data.summary">
         <span v-html="data.summary.replace(/\n/g, '<br/>')"></span>
@@ -24,47 +22,21 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  ref,
+  defineProps,
   computed,
   useStore
 } from '@/utils'
 
-export default defineComponent({
-  name: 'TalkItemView',
-  components: {},
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    const showFlag = ref(false)
-    const currentData = ref()
-    const currentImg = ref()
-    return {
-      showFlag,
-      currentData,
-      currentImg,
-      loginuser
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
 })
+const store = useStore();
+const loginuser = computed(() => store.getters['user/loginuser']);
 </script>

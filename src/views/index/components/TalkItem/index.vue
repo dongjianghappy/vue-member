@@ -24,7 +24,7 @@
                       <Detail :data="item" />
                     </li>
                     <li @click="handleRouter('istop', item)" v-if="module.istop">{{item.istop === '1' ? '取消置顶' : '置顶'}}</li>
-                    <li  v-if="module.vote">
+                    <li v-if="module.vote">
                       <VoteSetting :data="item" />
                     </li>
                     <template v-if="module.visible">
@@ -33,16 +33,20 @@
                       <li @click="handleVisible('friend', item)" v-if="item.visible !=='friend'">转为好友可见</li>
                       <li @click="handleVisible('privacy', item)" v-if="item.visible !=='privacy'">转为自己可见</li>
                     </template>
+                    <!-- <li @click="setPay(item)" v-if="item.pay ==='1'">付费观看</li> -->
+                    <li @click="setPay(item)" v-else>设为免费</li>
+                    <li @click="setDownload(item)" v-if="item.isdownload ==='1'">允许用户下载</li>
+                    <li @click="setDownload(item)" v-else>禁止用户下载</li>
                     <li @click="deleteTalk(item.id)" v-if="module.delete">删除</li>
                   </template>
                   <template v-else>
-                    <li @click="handleRouter('surrogate', item)" v-if="module.help_istop">帮上置顶</li>
+                    <li @click="handleRouter('surrogate', item)" v-if="module.help_istop && !item.istop">帮上置顶</li>
                     <li @click="handleRouter('complaint', item)" v-if="module.complain">投诉</li>
                   </template>
                   <li class="share" v-if="module.share">
                     <span class="shares">分享</span>
                     <span class="copy">
-                      <v-copy title="点我复制地址" :data="item.shortUrl" /></span>
+                      <v-copy title="点我复制地址" :content="item.shortUrl" /></span>
                   </li>
                 </ul>
               </div>
@@ -54,9 +58,13 @@
             <Vote :data="item" />
           </span>
           <span class="ml5 cl-eb7350" v-if="item.istop === '1'">置顶</span>
+          <!-- <span class="ml5 cl-eb7350" v-if="item.pay !== '1'">付费观看</span> -->
         </div>
         <div class="user_text markdown">
           <div class="relative" style="min-height: 30px" v-if="item.summary">
+            <span v-if="item.remark">
+              <span class="bold" style="color: var(--color-primary);">{{item.remark}}</span><i class="iconfont icon-dot" />
+            </span>
             <span v-html="item.summary.replace(/\n/g, '<br/>')"></span>
             <v-audio :data="item" :hasMusic="true" v-if="item.background_music" />
             {{item.music_name}}
@@ -86,6 +94,7 @@
             <Audio :dataList="sourceData" :data="item" v-else-if="item.model=='sound'" />
             <Images :data="item" v-else />
           </div>
+          <div class="font12 cl-999" v-if="item.location"><i class="iconfont icon-position font12" />{{item.location}}</div>
         </div>
       </div>
       <TalkItembar :data="item" :showComment="showComment" />
@@ -106,12 +115,13 @@
       </div>
     </template>
   </div>
+  <v-nodata v-if="!sourceData.length && loading" trip="暂无内容" />
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   ref,
   computed,
@@ -128,105 +138,102 @@ import Vote from './vote/index.vue'
 import VoteSetting from './vote/setting.vue'
 import Detail from './components/detail.vue'
 
-export default defineComponent({
-  name: 'TalkItemView',
-  components: {
-    Images,
-    Video,
-    Audio,
-    TalkItembar,
-    Graph,
-    Vote,
-    VoteSetting,
-    Detail
+const props: any = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
   },
-  props: {
-    sourceData: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    deleteTalk: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
-    showComment: {
-      type: Boolean,
-      default: false
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
+  sourceData: {
+    type: Array,
+    default: () => {
+      return []
+    }
   },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    const module = computed(() => store.getters['user/config_talk'].talk_operation || []);
-    const showFlag = ref(false)
-    const currentData = ref()
-    const currentImg = ref()
-
-    function handleClick(uid: any) {
-      if (getUid() !== uid) {
-        const path = window.location.pathname.split("/")
-        window.location.href = `${path[1] === "app" ? "/app": ""}/u/${uid}/home`;
-      } else {
-        router.push(`${proxy.const.u}${uid}/home`)
-      }
+  deleteTalk: {
+    type: Function,
+    default: () => {
+      return
     }
-
-    function handleRouter(type: any, param: any) {
-      if (type === 'istop') {
-        store.dispatch('common/Fetch', {
-          api: "changeData",
-          data: {
-            coding: param.coding,
-            id: param.id,
-            field: 'istop',
-            value: param.istop == '1' ? '0' : '1'
-          }
-        }).then((res: any) => {
-          param.istop = param.istop == '1' ? '0' : '1'
-        })
-      } else {
-        router.push(`/${type}?id=${param.id}`)
-      }
-    }
-
-    function handleVisible(type: any, param: any) {
-      store.dispatch('common/Fetch', {
-        api: 'setVisible',
-        data: {
-          id: param.id,
-          visible: type
-        }
-      }).then(res => {
-        param.visible = res.result
-      })
-    }
-
-    return {
-      module,
-      showFlag,
-      currentData,
-      currentImg,
-      loginuser,
-      handleClick,
-      handleRouter,
-      handleVisible
-    }
+  },
+  showComment: {
+    type: Boolean,
+    default: false
   }
 })
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const router = useRouter();
+const loginuser = computed(() => store.getters['user/loginuser']);
+const module = computed(() => store.getters['user/config_talk'].talk_operation || []);
+
+function handleClick(uid: any) {
+  if (getUid() !== uid) {
+    const path = window.location.pathname.split("/")
+    window.location.href = `${path[1] === "app" ? "/app": ""}/u/${uid}/home`;
+  } else {
+    router.push(`${proxy.const.u}${uid}/home`)
+  }
+}
+
+function handleRouter(type: any, param: any) {
+  if (type === 'istop') {
+    store.dispatch('common/Fetch', {
+      api: "changeData",
+      data: {
+        coding: param.coding,
+        id: param.id,
+        field: 'istop',
+        value: param.istop == '1' ? '0' : '1'
+      }
+    }).then((res: any) => {
+      param.istop = param.istop == '1' ? '0' : '1'
+    })
+  } else {
+    router.push(`/${type}?id=${param.id}`)
+  }
+}
+
+function handleVisible(type: any, param: any) {
+  store.dispatch('common/Fetch', {
+    api: 'setVisible',
+    data: {
+      id: param.id,
+      visible: type
+    }
+  }).then(res => {
+    param.visible = res.result
+  })
+}
+
+function setPay(param: any) {
+  store.dispatch('common/Fetch', {
+    api: 'updateStatus',
+    data: {
+      coding: param.coding,
+      id: param.id,
+      status: 'pay'
+    }
+  }).then(res => {
+    param.pay = res.result.value
+  })
+}
+
+function setDownload(param: any) {
+  store.dispatch('common/Fetch', {
+    api: 'updateStatus',
+    data: {
+      coding: param.coding,
+      id: param.id,
+      status: 'isdownload'
+    }
+  }).then(res => {
+    param.isdownload = res.result.value
+  })
+}
+
+
 </script>
 
 <style lang="less" scoped>

@@ -54,206 +54,159 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   marked
 } from 'marked';
 import {
-  defineComponent,
   getCurrentInstance,
-  computed,
   useStore,
   useRoute,
   watch,
   ref,
   useRouter,
   onMounted,
-  reactive,
-  chooseCate,
   codings
 } from '@/utils'
 import TagList from '@/components/tag/index.vue'
 import {
-  journal
-} from '@/assets/const';
+  saveTemps
+} from '@/utils/serverApi'
 
-export default defineComponent({
-  name: 'HomeViewiiii',
-  props: {
-    action: {
-      type: String,
-      default: "add"
-    }
-  },
-  components: {
-    TagList,
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const router = useRouter();
-    const coding: any = codings.talk.journal
-    const route = useRoute();
-    const store = useStore();
-    const detail: any = ref({})
-    const configData: any = ref({})
-    const upload: any = ref(null);
-    const mod: any = route.query.mod;
-    const img = ref("")
-    const basic = reactive({
-      currentImg: ""
-    })
-    const paper: any = ref([])
-    const currentPaper: any = ref({})
-
-    watch(() => route.query.action, () => {
-      detail.value = {}
-    })
-
-    // 设置属性
-    function setStyle(param: any) {
-      detail.value.style = param
-    }
-
-    // 设置图片
-    function image(a: any) {
-      img.value = a
-    }
-
-    // 监听选择分类或专辑
-    function getCate(param: any) {
-      detail.value.parent = param.name
-      detail.value.fid = param.value.substring(1, param.value.substring.length)
-    }
-
-    // 初始化数据
-    function init() {
-      if (props.action === "edit") {
-        store.dispatch('common/Fetch', {
-          api: 'detail',
-          data: {
-            coding: coding.art,
-            id: route.query.id
-          }
-        }).then(res => {
-          detail.value = res.result
-          detail.value.style = JSON.parse(res.result.style)
-        })
-      } else {
-        store.dispatch('common/Fetch', {
-          api: 'articleTempList',
-          data: {
-            type: 'journal',
-          }
-        }).then(res => {
-          if (res.result !== "" && res.result !== null) {
-            detail.value = JSON.parse(res.result)
-          }
-        })
-      }
-    }
-
-    // 信纸
-    function stationery() {
-      store.dispatch('common/Fetch', {
-        data: {
-          coding: coding.stationery
-        }
-      }).then(res => {
-        paper.value = res.result
-
-      })
-    }
-
-    function handlePrev() {
-      router.go(-1)
-    }
-
-    // 保存到草稿箱
-    function saveTemp() {
-      store.dispatch('common/Fetch', {
-        api: "articleTempSave",
-        data: {
-          type: 'journal',
-          content: JSON.stringify(detail.value)
-        }
-      }).then(res => {
-        proxy.$hlj.message({
-          msg: res.returnMessage
-        })
-      })
-    }
-
-    // 保存
-    function save() {
-      const {
-        fid,
-        title,
-        tag,
-        method,
-        source,
-        source_url,
-        visible,
-        summary,
-        markdown,
-        style,
-        paper,
-        content
-      } = detail.value
-
-      const param: any = {
-        fid,
-        title,
-        img: img.value,
-        tag: tag && tag.join(',') || "",
-        method,
-        source,
-        source_url,
-        visible,
-        summary,
-        style: JSON.stringify(style),
-        content: marked.parse(markdown || "{}"),
-        markdown,
-        paper: currentPaper.value.id,
-        coding: coding.art,
-      }
-      if (props.action !== "add") {
-        param.id = detail.value.id
-      }
-      // proxy.$hlj.loading()
-      store.dispatch('common/Fetch', {
-        api: props.action !== "add" ? 'Update' : "Insert",
-        data: {
-          ...param
-        }
-      }).then(res => {
-        proxy.$hlj.message({
-          msg: "操作成功"
-        })
-      })
-    }
-
-    onMounted(() => {
-      init()
-      stationery()
-    })
-    return {
-      coding,
-      save,
-      detail,
-      setStyle,
-      upload,
-      getCate,
-      configData,
-      mod,
-      image,
-      basic,
-      saveTemp,
-      paper,
-      currentPaper,
-      handlePrev
-    }
+const props: any = defineProps({
+  action: {
+    type: String,
+    default: "add"
   }
+})
+const {
+  proxy
+}: any = getCurrentInstance();
+const router = useRouter();
+const coding: any = codings.talk.journal
+const route = useRoute();
+const store = useStore();
+const detail: any = ref({})
+const upload: any = ref(null);
+const img = ref("")
+const paper: any = ref([])
+const currentPaper: any = ref({})
+
+watch(() => route.query.action, () => {
+  detail.value = {}
+})
+
+// 设置属性
+function setStyle(param: any) {
+  detail.value.style = param
+}
+
+// 设置图片
+function image(a: any) {
+  img.value = a
+}
+
+// 初始化数据
+function init() {
+  if (props.action === "edit") {
+    store.dispatch('common/Fetch', {
+      api: 'detail',
+      data: {
+        coding: coding.art,
+        id: route.query.id
+      }
+    }).then(res => {
+      detail.value = res.result
+      detail.value.style = JSON.parse(res.result.style)
+    })
+  } else {
+    store.dispatch('common/Fetch', {
+      api: 'articleTempList',
+      data: {
+        type: 'journal',
+      }
+    }).then(res => {
+      if (res.result !== "" && res.result !== null) {
+        detail.value = JSON.parse(res.result)
+      }
+    })
+  }
+}
+
+// 信纸
+function stationery() {
+  store.dispatch('common/Fetch', {
+    data: {
+      coding: coding.stationery
+    }
+  }).then(res => {
+    paper.value = res.result
+
+  })
+}
+
+function handlePrev() {
+  router.go(-1)
+}
+
+// 保存到草稿箱
+function saveTemp() {
+  saveTemps({
+    type: 'journal',
+    content: JSON.stringify(detail.value)
+  }, proxy)
+}
+
+// 保存
+function save() {
+  const {
+    fid,
+    title,
+    tag,
+    method,
+    source,
+    source_url,
+    visible,
+    summary,
+    markdown,
+    style,
+    paper,
+    content
+  } = detail.value
+
+  const param: any = {
+    fid,
+    title,
+    img: img.value,
+    tag: tag && tag.join(',') || "",
+    method,
+    source,
+    source_url,
+    visible,
+    summary,
+    style: JSON.stringify(style),
+    content: marked.parse(markdown || "{}"),
+    markdown,
+    paper: currentPaper.value.id,
+    coding: coding.art,
+  }
+  if (props.action !== "add") {
+    param.id = detail.value.id
+  }
+  store.dispatch('common/Fetch', {
+    api: props.action !== "add" ? 'Update' : "Insert",
+    data: {
+      ...param
+    }
+  }).then(res => {
+    proxy.$hlj.message({
+      msg: "操作成功"
+    })
+  })
+}
+
+onMounted(() => {
+  init()
+  stationery()
 })
 </script>

@@ -21,11 +21,48 @@ export const clearToken = () => {
   localStorage.removeItem('token')
 }
 
+// 转成blob文件
+export const toBlob = async (fileList: any) => {
+
+ // 使用fetch获取文件并将其转换为Blob
+await fetch("http://localhost:8081/ThatGirl.mp3",{
+  method: 'GET',
+  mode: 'cors',
+  // credentials: 'same-origin',
+  // headers: {
+  //   'Content-Type': 'application/json'
+  // }
+})
+.then(response => response.blob())
+.then(blob => {
+  // 在这里处理Blob对象
+  fileList[0].file = URL.createObjectURL(blob)
+  console.log(blob);
+})
+.catch(error => {
+  // 处理错误
+  console.error('Error fetching file:', error);
+});
+  fileList
+}
+
 export const getUid = () => {
+
+  
  let uid = ""
- const arr = window.location.pathname.split("/u/")
- if(arr.length > 1){
-   uid = arr[1].split("/")[0]
+ if( window.location.pathname.indexOf("/u/") != -1){
+  const arr = window.location.pathname.split("/u/")
+  if(arr.length > 1){
+    uid = arr[1].split("/")[0]
+  }
+ }
+ else if( window.location.pathname.indexOf("/home") != -1){
+  let userInfo: any = sessionStorage.getItem("userInfo")
+  userInfo = JSON.parse(userInfo || '{}')
+  uid = userInfo.account
+ } 
+ else{
+  uid = window.location.pathname.split("/")[1]
  }
  return uid
 }
@@ -139,7 +176,6 @@ const generateClolors = (primary: any) => {
 
 // 设置颜色变量值、替换变量为相对应的颜色值
 export const writeNewStyle = (param: any = "") => {
-  
   let theme: any = sessionStorage.getItem("theme")
   theme = JSON.parse(theme)
 
@@ -188,7 +224,6 @@ export const writeNewStyle = (param: any = "") => {
       }
     }
     
-    debugger
     
     // 智能主题
     if(theme.intelligent == '1'){
@@ -213,7 +248,7 @@ export const writeNewStyle = (param: any = "") => {
     }
   
     cssProperties = {
-      '--page-background': theme ? theme.theme_background : "", // 背景色
+      '--page-background': theme ? theme.theme : "", // 背景色
       '--page-transparent': theme ? theme.background_transparent : '0', // 背景透明度
       '--module-background': color.module, // 模块背景色
       '--input-background': color.input, // 表单色
@@ -233,7 +268,7 @@ export const writeNewStyle = (param: any = "") => {
   }
 
   cssProperties = Object.assign({}, cssProperties)
-  debugger
+  
   // 把对象转成css
   const cssString = Object.keys(cssProperties).map((property) => `${property}: ${cssProperties[property]}`).join(';')
   let aa: any = document.querySelector('#root')
@@ -245,7 +280,7 @@ export const writeNewStyle = (param: any = "") => {
     const style: any = document.createElement('style');
     style.type = 'text/css';
     style.id = 'root';
-    debugger
+    
     style.textContent = `:root{${cssString}}`
     document.head.appendChild(style)
 }

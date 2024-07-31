@@ -27,45 +27,28 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   onMounted,
   computed,
-  ref
-} from '@/utils'
-import {
+  ref,
   useStore
-} from 'vuex'
+} from '@/utils'
 
-export default defineComponent({
-  name: 'AsideView',
-  setup(props, context) {
-    const {
-      ctx,
-      proxy
-    }: any = getCurrentInstance();
-    const userInfo: any = computed(() => store.getters['user/userInfo']);
-    const store = useStore();
-    const logList: any = ref([])
+const userInfo: any = computed(() => store.getters['user/userInfo']);
+const store = useStore();
+const logList: any = ref([])
 
-    function init() {
-      store.dispatch('common/Fetch', {
-        api: 'LoginLog',
-        data: {
-          uid: userInfo.value.account
-        }
-      }).then(res => {
-        logList.value = res.result
-      })
+function init() {
+  store.dispatch('common/Fetch', {
+    api: 'LoginLog',
+    data: {
+      uid: userInfo.value.account
     }
+  }).then(res => {
+    logList.value = res.result
+  })
+}
 
-    onMounted(init)
-    return {
-      logList
-    }
-  }
-
-})
+onMounted(init)
 </script>

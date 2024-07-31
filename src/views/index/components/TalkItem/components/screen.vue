@@ -19,7 +19,7 @@
           </div>
           <div class="sidebar-item mb20">
             <div class="photos">
-              <v-photo1 :data="data" :style="{width: '50px', height: '50px', borderRadius: '50%'}" />
+              <v-photo :data="data" sub="concern" />
             </div>
           </div>
           <div class="sidebar-item" @click="handlePraise(data)">

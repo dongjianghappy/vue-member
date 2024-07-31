@@ -19,14 +19,8 @@ Checkbox
     const {ctx}:any = getCurrentInstance();
   
     function pushItemsss(){
-      alert("sssssss")
+      
     }
-    // function init(){
-    //   props.$emit("pushItem")
-    //   debugger
-    //   ctx
-    // }
-    // onMounted(init)
     return {
       pushItemsss
     }

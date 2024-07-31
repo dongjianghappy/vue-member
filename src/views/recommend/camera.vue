@@ -18,28 +18,16 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   defineComponent
 } from '@/utils'
 
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-
-  },
-  props: {
-    dataList: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    }
-  },
-  setup(props, context) {
-
-    return {
-
+const props: any = defineProps({
+  dataList: {
+    type: Array,
+    default: () => {
+      return []
     }
   }
 })

@@ -15,44 +15,36 @@
 </ul>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent
+  defineProps
 } from 'vue'
 
-export default defineComponent({
-  name: 'v-Tree',
-  props: {
-    dataList: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    checkedList: {
-      type: Array,
-      default: []
+const props: any = defineProps({
+  dataList: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  setup(props, context) {
-    function handleclick(id: any) {
-      if (props.checkedList.indexOf(id) > -1) {
-        let index = props.checkedList.indexOf(id)
-        props.checkedList.splice(index, 1)
-      } else {
-        props.checkedList.push(id)
-      }
-    }
-
-    function handelExpand(param: any) {
-      param.extand = !param.extand
-    }
-    return {
-      handleclick,
-      handelExpand,
-    }
+  checkedList: {
+    type: Array,
+    default: []
   }
 })
+
+function handleclick(id: any) {
+  if (props.checkedList.indexOf(id) > -1) {
+    let index = props.checkedList.indexOf(id)
+    props.checkedList.splice(index, 1)
+  } else {
+    props.checkedList.push(id)
+  }
+}
+
+function handelExpand(param: any) {
+  param.extand = !param.extand
+}
 </script>
 
 <style scoped>

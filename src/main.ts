@@ -13,6 +13,7 @@ import pendant from './plugin/pendant'
 import move from './plugin/move'
 import cons from './plugin/const'
 import form from './plugin/validate'
+import chartist from 'vue-chartist'
 
 import VueMarkdownEditor from '@kangc/v-md-editor';
 import '@kangc/v-md-editor/lib/style/base-editor.css';
@@ -39,11 +40,12 @@ hlj(Vue)
 message(Vue)
 scroll(Vue)
 pendant(Vue)
-hljs(Vue)
 move(Vue)
 cons(Vue)
 form(Vue)
+hljs(Vue)
 Vue.use(PerfectScrollbar)
+Vue.use(chartist)
 
 // Vue.config.globalProperties.$aabb = hlj
 Vue.use(store).use(router).use(VueMarkdownEditor).mount('#app')

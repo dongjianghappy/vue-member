@@ -100,12 +100,6 @@ export default defineComponent({
       context.emit('save', Arrs)
     }
 
-    // onMounted(() => {
-    //   debugger
-    //   
-    // })
-
-
     return {
       isShow,
       showGraph,

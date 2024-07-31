@@ -12,82 +12,37 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   computed,
   onMounted,
   ref,
-  codings
-} from '@/utils'
-import {
-  useStore
-} from 'vuex'
-import Index from './components/index.vue'
-import {
-  useRouter,
+  useStore,
   useRoute
-} from 'vue-router'
+} from '@/utils'
+import Index from './components/index.vue'
 
-export default defineComponent({
-  name: 'IndexView1',
-  components: {
-    Index
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const coding = codings
-    const dataList: any = ref([])
-    const module: any = computed(() => {
-      let site = store.getters['user/config_talk']
-      site.ranking && site.ranking.map((item: any) => {
-        item.path = `/ranking?mod=${item.value}`
-      })
-      return site
-    });
-    const component = computed(() => route.query.mod);
-
-
- function init() {
-      store.dispatch('common/Fetch', {
-        api: 'ranking',
-        data: {
-          type: route.query.mod
-        }
-      }).then(res => {
-        dataList.value = res.result
-      })
-    }
-
-    onMounted(init) 
-
-    return {
-      route,
-      component,
-      module,
-      init,
-      dataList
-    }
-  }
+const store = useStore();
+const route = useRoute();
+const dataList: any = ref([])
+const module: any = computed(() => {
+  let site = store.getters['user/config_talk']
+  site.ranking && site.ranking.map((item: any) => {
+    item.path = `/ranking?mod=${item.value}`
+  })
+  return site
 })
-</script>
 
-<style lang="less" scoped>
-/deep/ .collapse {
-  background: none !important;
-
-  .collapse-head {
-    background: none !important;
-  }
-
-  .aside-list {
-    background: none !important;
-  }
+function init() {
+  store.dispatch('common/Fetch', {
+    api: 'ranking',
+    data: {
+      type: route.query.mod
+    }
+  }).then(res => {
+    dataList.value = res.result
+  })
 }
-</style>
+
+onMounted(init)
+</script>

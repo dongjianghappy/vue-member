@@ -14,7 +14,7 @@
 
         <div v-html="item.title" style="min-height: 30px"></div>
         <div v-if="item.image.length === 1" style="overflow:hidden; border-radius: 8px;width: 168px; height: 224px; cursor: zoom-in;">
-          <v-img :src="item.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" @click="showImg(item, img)" />
+          <v-img :src="item.image[0]" @click="showImg(item, img)" />
         </div>
         <ul v-else class="img-grid smallimg-wrap clearfix">
           <li v-for="(img, k) in item.image" :key="k" style="border-radius: 8px; overflow:hidden;">

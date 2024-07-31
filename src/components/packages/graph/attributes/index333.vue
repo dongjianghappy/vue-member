@@ -99,13 +99,7 @@ export default defineComponent({
       props.data.push = Arrs
       context.emit('save', Arrs)
     }
-
-    // onMounted(() => {
-    //   debugger
-    //   
-    // })
-
-
+    
     return {
       isShow,
       showGraph,

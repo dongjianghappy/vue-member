@@ -36,6 +36,7 @@
       </li>
       <li class="li">
         <span class="label">所属分类</span>
+        {{detail.fid}}
         <span class="pr15">{{detail.parent}}</span>
         <v-category name="选择分类" :data="{item: detail, coding: coding}" :isMore="true" type="text"></v-category>
       </li>
@@ -72,209 +73,166 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   marked
 } from 'marked';
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   onMounted,
-  watch,
   ref,
-  reactive,
   useStore,
   useRouter,
   useRoute,
   codings
 } from '@/utils'
 
-export default defineComponent({
-  name: 'ArticleView',
-  props: {
-    action: {
-      type: String,
-      default: "add"
-    },
-    columns: {
-      type: Object,
-      default: []
-    },
-    channel: {
-      type: String,
-      default: ""
-    },
-    field: {
-      type: Object,
-      default: () => {
-        return {
-          album: true,
-          color: true
-        }
-      }
-    }
+import {
+  saveTemps
+} from '@/utils/serverApi'
+
+const props: any = defineProps({
+  action: {
+    type: String,
+    default: "add"
   },
-  components: {},
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const checkField = [{
-      name: 'title',
-      message: "标题不能为空"
-    }, {
-      name: 'tag',
-      message: "标签不能为空"
-    }, {
-      name: 'fid',
-      message: "请选择分类"
-    }]
-    const detail: any = ref({})
-    const configData: any = ref({})
-    const img = ref("")
-    const upload: any = ref(null);
-    const channel: any = props.channel;
-    const coding: any = codings[props.channel]
-    const basic = reactive({
-      currentImg: ""
+  columns: {
+    type: Object,
+    default: []
+  },
+  channel: {
+    type: String,
+    default: ""
+  }
+})
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const checkField = [{
+  name: 'title',
+  message: "标题不能为空"
+}, {
+  name: 'tag',
+  message: "标签不能为空"
+}, {
+  name: 'fid',
+  message: "请选择分类"
+}]
+const detail: any = ref({})
+const img = ref("")
+const upload: any = ref(null);
+const coding: any = codings[props.channel]
+
+// 设置属性
+function setStyle(param: any) {
+  detail.value.style = param
+}
+
+// 设置图片
+function image(a: any) {
+  img.value = a
+}
+
+// 保存到草稿箱
+function saveTemp() {
+  saveTemps({
+    type: props.channel,
+    content: JSON.stringify(detail.value)
+  }, proxy)
+}
+
+// 保存
+function save() {
+  const {
+    fid,
+    pid,
+    title,
+    tag,
+    method,
+    source,
+    source_url,
+    description,
+    visible,
+    summary_markdown,
+    markdown,
+    style
+  } = detail.value
+
+  proxy.$form.validate(detail.value, checkField, (valid: any, message: any) => {
+    if (valid) {
+      proxy.$message.message({
+        msg: message
+      })
+      return false
+    }
+
+    const param: any = {
+      fid,
+      pid,
+      title,
+      img: img.value,
+      tag: tag && tag.join(',') || "",
+      method,
+      source,
+      source_url,
+      description,
+      visible,
+      summary: marked.parse(summary_markdown || "{}"),
+      summary_markdown,
+      content: marked.parse(markdown || "{}"),
+      markdown,
+      style: JSON.stringify(style),
+      coding: coding.art,
+    }
+    if (props.action !== "add") {
+      param.id = detail.value.id
+    }
+    store.dispatch('common/Fetch', {
+      api: props.action !== "add" ? 'UpdateArticle' : "InsertArticle",
+      data: {
+        ...param
+      }
+    }).then(res => {
+      proxy.$hlj.message({
+        msg: "操作成功!"
+      })
     })
+  })
 
-    // 设置属性
-    function setStyle(param: any) {
-      detail.value.style = param
-    }
+}
 
-    // 设置图片
-    function image(a: any) {
-      img.value = a
-    }
+function handlePrev() {
+  router.go(-1)
+}
 
-    // 保存到草稿箱
-    function saveTemp() {
-      store.dispatch('common/Fetch', {
-        api: "articleTempSave",
-        data: {
-          type: props.channel,
-          content: JSON.stringify(detail.value)
-        }
-      }).then(res => {
-        proxy.$hlj.message({
-          msg: res.returnMessage
-        })
-      })
-    }
-
-    // 保存
-    function save() {
-
-      const {
-        fid,
-        pid,
-        title,
-        tag,
-        method,
-        source,
-        source_url,
-        description,
-        visible,
-        summary_markdown,
-        markdown,
-        content,
-        style
-      } = detail.value
-
-      proxy.$form.validate(detail.value, checkField, (valid: any, message: any) => {
-        if (valid) {
-          proxy.$message.message({
-            msg: message
-          })
-          return false
-        }
-
-        const param: any = {
-          fid,
-          pid,
-          title,
-          img: img.value,
-          tag: tag && tag.join(',') || "",
-          method,
-          source,
-          source_url,
-          description,
-          visible,
-          summary: marked.parse(summary_markdown || "{}"),
-          summary_markdown,
-          content: marked.parse(markdown || "{}"),
-          markdown,
-          style: JSON.stringify(style),
-          coding: coding.art,
-        }
-        if (props.action !== "add") {
-          param.id = detail.value.id
-        }
-        // proxy.$hlj.loading()
-        store.dispatch('common/Fetch', {
-          api: props.action !== "add" ? 'UpdateArticle' : "InsertArticle",
-          data: {
-            ...param
-          }
-        }).then(res => {
-          proxy.$hlj.message({
-            msg: "操作成功!"
-          })
-          // proxy.$hlj.close()
-        })
-      })
-
-    }
-
-    function handlePrev() {
-      router.go(-1)
-    }
-
-    onMounted(() => {
-      if (props.action === "edit") {
-        store.dispatch('common/Fetch', {
-          api: 'ArticleDetails',
-          data: {
-            coding: coding.art,
-            id: route.query.id
-          }
-        }).then(res => {
-          detail.value = res.result
-          // detail.value.style = JSON.parse(res.result.style)
-          let style = JSON.parse(detail.value.style || '{}')
-          detail.value.style = style instanceof Object ? style : {}
-        })
-      } else {
-        store.dispatch('common/Fetch', {
-          api: 'articleTempList',
-          data: {
-            type: props.channel,
-          }
-        }).then(res => {
-          if (res.result !== "" && res.result !== null) {
-            detail.value = JSON.parse(res.result)
-          }
-        })
+onMounted(() => {
+  if (props.action === "edit") {
+    store.dispatch('common/Fetch', {
+      api: 'ArticleDetails',
+      data: {
+        coding: coding.art,
+        id: route.query.id
+      }
+    }).then(res => {
+      detail.value = res.result
+      let style = JSON.parse(detail.value.style || '{}')
+      detail.value.style = style instanceof Object ? style : {}
+    })
+  } else {
+    store.dispatch('common/Fetch', {
+      api: 'articleTempList',
+      data: {
+        type: props.channel,
+      }
+    }).then(res => {
+      if (res.result !== "" && res.result !== null) {
+        detail.value = JSON.parse(res.result)
       }
     })
-    return {
-      saveTemp,
-      save,
-      detail,
-      upload,
-      configData,
-      channel,
-      coding,
-      image,
-      basic,
-      setStyle,
-      handlePrev
-    }
   }
 })
 </script>

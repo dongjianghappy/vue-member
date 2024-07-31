@@ -57,15 +57,17 @@ const actions = {
     return result
   },
   TalkComment: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
     const { result }:any = await api.TalkComment({
-      ...params 
+      ...data 
     })
     context.commit("setTalkComment" , result.result);
     return result
   },  
   TalkPraise: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
     const { result }:any = await api.TalkPraise({
-      ...params 
+      ...data 
     })
     context.commit("setTalkPraise" , result.result);
     return result

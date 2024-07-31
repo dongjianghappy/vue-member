@@ -10,64 +10,30 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  onMounted,
+  defineProps,
   ref,
-  watch,
   computed
 } from 'vue'
 import {
   useStore
 } from 'vuex'
 import Form from "./formsss.vue"
-export default defineComponent({
-  name: 'HomeViewh',
-  components: {
-    Form
-  },
-  props: {
-    title: {
-      type: String,
-      default: "创建组"
-    },
-    action: {
-      type: String,
-      default: "add"
-    },
-    group: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
-    },
-    method: {
-      type: String,
-      default: ""
-    },
-  },
-  setup(props, context) {
-    const store = useStore();
-    const isShow = ref(false)
-    const userInfo: any = computed(() => store.getters['user/userInfo']);
 
-    return {
-      isShow,
-      userInfo
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
-  }
+  },
+  method: {
+    type: String,
+    default: ""
+  },
 })
+const store = useStore();
+const isShow = ref(false)
+const userInfo: any = computed(() => store.getters['user/userInfo']);
 </script>

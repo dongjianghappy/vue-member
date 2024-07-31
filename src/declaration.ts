@@ -6,4 +6,5 @@ declare module 'vue-gemini-scrollbar'
 declare module 'querystring'
 declare module 'jquery'
 declare module 'lodash'
+declare module 'vue-chartist'
 

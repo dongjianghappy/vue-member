@@ -62,7 +62,6 @@ export default defineComponent({
     }
 
     function textBlur(e: any) {
-      debugger
       props.data.speech = e.currentTarget.innerHTML
     }
 
@@ -75,7 +74,6 @@ export default defineComponent({
     }
 
     function submit() {
-      debugger
       const Arrs: any = []
       checkedList.value.map((index: any) => {
         let arr = ""
@@ -85,12 +83,7 @@ export default defineComponent({
 
       context.emit('update:save', Arrs)
     }
-
-    // onMounted(() => {
-    //   debugger
-    //   
-    // })
-
+    
     return {
       isShow,
       textBlur,

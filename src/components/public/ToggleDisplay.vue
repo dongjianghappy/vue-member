@@ -5,27 +5,20 @@
 </span>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits
 } from 'vue'
-
-export default defineComponent({
-  name: 'v-ToggleDisplay',
-  props: {
-    toggle: {
-      type: String,
-      default: 'list'
-    }
-  },
-  emits: ['update:toggle'],
-  setup(props, context) {
-    function handelClick(param: any) {
-      context.emit('update:toggle', param)
-    }
-    return {
-      handelClick
-    }
+const props: any = defineProps({
+  toggle: {
+    type: String,
+    default: 'list'
   }
 })
+const emit: any = defineEmits(['update:toggle'])
+
+function handelClick(param: any) {
+  emit('update:toggle', param)
+}
 </script>

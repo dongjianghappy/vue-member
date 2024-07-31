@@ -3,68 +3,64 @@
 <i class="iconfont icon-error font18" v-else @click.stop="handleclick(data.item)" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   useStore
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Switch',
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    api: {
-      type: String,
-      default: ""
-    },
-    param: {
-      default: () => {
-        return {}
-      }
-    },
-    msg: {
-      type: Function,
-      default: () => {
-        return
-      }
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  emits: ['toggle'],
-  setup(props, context) {
-    const store = useStore();
-    const {
-      data: {
-        field,
-        coding
-      }
-    }: any = props
-
-    function handleclick(item: any) {
-      store.dispatch('common/Fetch', {
-        api: props.api || "updateStatus",
-        data: {
-          coding,
-          id: item.id,
-          status: field,
-          ...props.param
-        }
-      }).then(res => {
-        if (res.result.type) {
-          item[res.result.type] = res.result.value
-          context.emit('toggle', {field: props.data.item.name, value: res.result.value})
-        } else {
-          props.msg(res.returnMessage)
-        }
-      })
+  api: {
+    type: String,
+    default: ""
+  },
+  param: {
+    default: () => {
+      return {}
     }
-    return {
-      handleclick
+  },
+  msg: {
+    type: Function,
+    default: () => {
+      return
     }
   }
 })
+const emit: any = defineEmits(['toggle'])
+const store = useStore();
+const {
+  data: {
+    field,
+    coding
+  }
+}: any = props
+
+function handleclick(item: any) {
+  store.dispatch('common/Fetch', {
+    api: props.api || "updateStatus",
+    data: {
+      coding,
+      id: item.id,
+      status: field,
+      ...props.param
+    }
+  }).then(res => {
+    if (res.result.type) {
+      item[res.result.type] = res.result.value
+      emit('toggle', {
+        field: props.data.item.name,
+        value: res.result.value
+      })
+    } else {
+      props.msg(res.returnMessage)
+    }
+  })
+}
 </script>

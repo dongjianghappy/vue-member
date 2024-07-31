@@ -108,14 +108,12 @@ export default defineComponent({
         audio.play()
         settime()
       } else {
-        debugger
         audio.pause()
       }
     }
 
     // 音量控制
     function handleSound() {
-      debugger
       let sound_bar: any = document.getElementById('sound_bar');
       let sound_slider: any = document.getElementById('sound-slider');
       let sound_innbar: any = document.getElementById('sound_innbar');

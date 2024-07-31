@@ -25,52 +25,38 @@
 </v-popover>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
+  defineProps,
+  defineEmits,
   ref
 } from 'vue'
 import {
-  color
+  colorList
 } from '@/assets/const'
-export default defineComponent({
-  name: 'v-ColorPicker',
-  props: {
-    islabel: {
-      type: Boolean,
-      default: false
-    },
-    color: {
-      type: String,
-      default: ""
-    },
-    attr: {
-      type: String,
-      default: ""
-    }
+const props: any = defineProps({
+  islabel: {
+    type: Boolean,
+    default: false
   },
-  emits: ['color'],
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const colorList = ref(color)
-    const currentColor = ref("#fff")
-
-    function choose(color: any) {
-      currentColor.value = color
-      context.emit('color', {
-        islabel: props.islabel,
-        attr: props.attr,
-        value: color
-      })
-    }
-    return {
-      currentColor,
-      colorList,
-      choose
-    }
+  color: {
+    type: String,
+    default: ""
+  },
+  attr: {
+    type: String,
+    default: ""
   }
 })
+const emit: any = defineEmits(['color'])
+const currentColor = ref("#fff")
+
+function choose(color: any) {
+  currentColor.value = color
+  emit('color', {
+    islabel: props.islabel,
+    attr: props.attr,
+    value: color
+  })
+}
 </script>

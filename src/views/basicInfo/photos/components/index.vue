@@ -111,7 +111,6 @@ export default defineComponent({
 
     //初始页面
     function init(src: any) {
-      debugger
       // 获取canvas内建对象
       let boximg: any = drawCanv.value;
       let canvas = boximg.getContext("2d");
@@ -134,7 +133,6 @@ export default defineComponent({
           xs = (410 - img_width) / 2
           ys = 0;
         }
-        debugger
         canvas.drawImage(img, 0, 0, img.width, img.height, xs, ys, img_width, img_height);
       }
 
@@ -154,7 +152,6 @@ export default defineComponent({
     //绘制缩略图
     function drag(box: any, x: any, y: any) {
       let c = document.querySelectorAll(box)[0];
-      debugger
       let ctxs = c.getContext("2d");
       let img = document.getElementById("drawCanv");
       ctxs.drawImage(img, x, y, 150, 150, 0, 0, 300, 150);
@@ -183,7 +180,6 @@ export default defineComponent({
       let cvs: any = document.querySelectorAll("#cover")[0];
       var image = new Image();
       image.src = cvs.toDataURL("image/png");
-      debugger
       store.dispatch('common/Fetch', {
         api: "UploadPhotos",
         data: {

@@ -49,7 +49,8 @@ export default defineComponent({
     function handleclick() {
       const param: any = {
         coding: props.data.coding4,
-        artid: props.data.id
+        artid: props.data.id,
+        uid: props.data.uid
       }
 
       store.dispatch('common/Fetch', {
@@ -63,6 +64,7 @@ export default defineComponent({
         }
         if (res.ifSuccess === 0) {
           proxy.$hlj.message({
+            type: 'info',
             msg: res.returnMessage
           })
           return

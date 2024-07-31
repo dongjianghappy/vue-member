@@ -111,7 +111,6 @@ export default defineComponent({
           uid: getUid()
         }
       }).then(res => {
-        debugger
         item.list = res.result
       })
     }
@@ -161,7 +160,6 @@ export default defineComponent({
       chatList()
       VueEvent.on("content", (data: any) => {
         if(data.type != 'join'){
-          debugger
           chatData.value.push({
             uid: data.uid,
             name: data.name,

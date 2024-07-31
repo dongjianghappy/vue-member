@@ -1,7 +1,7 @@
 <template>
 <v-button v-model:show="isShow" class="relative">
   <div class="thumbnail">
-    <v-img :src="data.cover || data.image[0].replace(/thumb/g, 'view')" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" @click="showImg(data)" />
+    <v-img :src="data.cover || data.image[0].replace(/thumb/g, 'view')" @click="showImg(data)" />
   </div>
 </v-button>
 </template>

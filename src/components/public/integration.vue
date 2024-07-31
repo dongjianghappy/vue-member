@@ -5,58 +5,34 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
-  ref,
-  onMounted,
   computed,
   useStore,
-  useRouter,
-  codings
+  useRouter
 } from '@/utils'
-export default defineComponent({
-  name: 'v-Audio',
-  props: {
-    userInfo: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    const module = computed(() => store.getters['user/config_talk'].more);
-
-    function handleClick(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: loginuser.value.account,
-        query: `/info?mod=${param}`
-      }))
-    }
-
-    return {
-      module,
-      handleClick
+const props: any = defineProps({
+  userInfo: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
 })
-</script>
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const router = useRouter();
+const loginuser = computed(() => store.getters['user/loginuser']);
+const module = computed(() => store.getters['user/config_talk'].more);
 
-<style lang="less" scoped>
-.icon-wrap {
-  background: #eee;
-  border-radius: 4px;
-  width: 50px;
-  height: 50px;
-  line-height: 60px;
-  display: inline-block;
+function handleClick(param: any) {
+  router.push(proxy.const.setUrl({
+    uid: loginuser.value.account,
+    query: `/info?mod=${param}`
+  }))
 }
-</style>
+</script>

@@ -27,10 +27,8 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   onMounted,
   ref
 } from 'vue'
@@ -42,65 +40,50 @@ import {
   online,
   commentUser
 } from '@/assets/const'
-export default defineComponent({
-  name: 'AsideView',
-  setup(props, context) {
-    const store = useStore();
-    const dataList: any = ref([])
 
-    function init() {
-      store.dispatch('common/Fetch', {
-        api: 'settingList',
-        data: {
-          sub: 'privacy'
-        }
-      }).then(res => {
-        dataList.value = res.result
-      })
+const store = useStore();
+const dataList: any = ref([])
+
+function init() {
+  store.dispatch('common/Fetch', {
+    api: 'settingList',
+    data: {
+      sub: 'privacy'
     }
+  }).then(res => {
+    dataList.value = res.result
+  })
+}
 
-    function getValue(param: any) {
-      store.dispatch('user/Detect')
+function getValue(param: any) {
+  store.dispatch('user/Detect')
+}
+
+function handleClick(param: any, value: any) {
+  store.dispatch('common/Fetch', {
+    api: 'userSetting',
+    data: {
+      status: param.name,
+      value: value,
+      sub: 'privacy'
     }
+  }).then(res => {
+    param[param.name] = res.result.value
+    store.dispatch('user/Detect')
+  })
+}
 
-    function handleClick(param: any, value: any) {
-      debugger
-      store.dispatch('common/Fetch', {
-        api: 'userSetting',
-        data: {
-          status: param.name,
-          value: value,
-          sub: 'privacy'
-        }
-      }).then(res => {
-        param[param.name] = res.result.value
-        store.dispatch('user/Detect')
-      })
-    }
-
-    function getEnum(param: any){
-      let enums: any = []
-      if(param === 'visible_time'){
-        enums = visibleTimeRange
-      }
-      else if(param === 'online'){
-        enums = online
-      }
-      else if(param === 'comment_user'){
-        enums = commentUser
-      }
-      return enums
-    } 
-
-    onMounted(init)
-    return {
-      commentUser,
-      dataList,
-      getValue,
-      handleClick,
-      getEnum
-    }
+function getEnum(param: any) {
+  let enums: any = []
+  if (param === 'visible_time') {
+    enums = visibleTimeRange
+  } else if (param === 'online') {
+    enums = online
+  } else if (param === 'comment_user') {
+    enums = commentUser
   }
+  return enums
+}
 
-})
+onMounted(init)
 </script>

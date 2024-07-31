@@ -1,12 +1,14 @@
 <template>
   <div>
-    <v-graph />
+    <!-- <v-graph /> -->
+    <span @click="handleclick">点击</span>
   </div>
 </template>
 
 <script lang="ts">
 import {
   defineComponent,
+  getCurrentInstance,
 } from 'vue'
 
 export default defineComponent({
@@ -30,11 +32,18 @@ export default defineComponent({
   },
   emits: ['update:show', 'onClick'],
   setup(props, context) {
+    const {
+      proxy
+    }: any = getCurrentInstance();
 
     // 按钮消息发送两种方式: 1、点击事件监听，2、点击响应式切换
     function handleclick() {
-      context.emit('onClick')
-      context.emit('update:show', !props.show)
+      proxy.$hlj.message({
+            type: 'info',
+            msg: "提示"
+          })
+      // context.emit('onClick')
+      // context.emit('update:show', !props.show)
     }
     return {
       handleclick

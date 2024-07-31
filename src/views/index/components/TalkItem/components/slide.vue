@@ -73,7 +73,6 @@ export default defineComponent({
       banner = banner.value
       let imgul = banner.children
       imgul[0].style.width = `${props.data.length * parseInt(props.style.width)}px`
-      debugger
       time() //自动播放
     }
 

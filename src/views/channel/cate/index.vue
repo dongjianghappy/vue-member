@@ -22,86 +22,21 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  computed,
-  useStore,
-  useRouter,
-  useRoute,
-  watch,
-  onMounted,
-  ref,
-  codings
+  defineProps
 } from '@/utils'
 
-export default defineComponent({
-  name: 'HomeView',
-  props: {
-    dataList: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    item: {
-      type: String,
-      default: ""
+const props: any = defineProps({
+  dataList: {
+    type: Array,
+    default: () => {
+      return []
     }
   },
-  data() {
-    return {
-      menu: [{
-          name: "全部",
-          path: ""
-        },
-        {
-          name: "已审核",
-          path: "audited"
-        },
-        {
-          name: "未审核",
-          path: "unAudited"
-        },
-        {
-          name: "被退回",
-          path: "returned"
-        }
-      ]
-    }
-  },
-  setup(props, context) {
-    const {
-      ctx,
-      proxy
-    }: any = getCurrentInstance();
-    const router = useRouter();
-    const route = useRoute();
-    const store = useStore();
-    // let m = route.query.mod;
-    const codding: any = codings["picture"]
-    const loginuser = computed(() => store.getters['user/loginuser']);
-
-    function handleclick(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: loginuser.value.account,
-        query: `/appstore/?mod=${route.query.mod}&item=list&cat=${param.id}`
-      }))
-    }
-
-    function handleclicks(param: any) {
-      let query = ""
-      if (param) {
-        query = param === 'details' ? `&item=${param}&action=add` : `&item=${param}`
-      }
-
-      router.push(`/appstore/?mod=${route.query.mod}${query}`)
-    }
-    return {
-      handleclick,
-      handleclicks
-    }
+  item: {
+    type: String,
+    default: ""
   }
 })
 </script>

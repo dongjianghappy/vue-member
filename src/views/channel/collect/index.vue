@@ -31,7 +31,7 @@
             </span>
             <span class="font16 cl-ccc">({{item.times}})</span>
             <span class="right pointer" @click="handleedit(item)"><i class="iconfont icon-recycle"></i></span>
-          
+
           </p>
           <!-- <p>
             <span class="operating f-fr font12 cl-ccc">
@@ -48,95 +48,64 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  computed,
+  defineProps,
   ref,
-  getUid
-} from '@/utils'
-import {
+  getUid,
+  onMounted,
   useStore
-} from 'vuex'
-// import TalkItem from '../components//TalkItem/index.vue'
+} from '@/utils'
 import List from "../article/list.vue"
 import Album from "../article/album.vue"
-export default defineComponent({
-  name: 'HomeViewsss',
-  components: {
-    List,
-    Album
-  },
-  props: {
-    channel: {
-      type: String,
-      default: ""
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const toggleDisplay: any = ref("list")
-    const coding: any = props.data.coding
-    const loading: any = ref(false)
-    const dataList: any = ref({});
-    let tabMenu: any = ref([{
-        name: "我收藏的",
-        value: "appstore1"
-      },
-      {
-        name: "被收藏的",
-        value: "appstore2"
-      }
-    ])
 
-    if (props.channel === 'picture') {
-      // menu.value[0].name = "图片管理"
-      toggleDisplay.value = 'album'
-    } else if (props.channel === 'video') {
-      // menu.value[0].name = "视频管理"
-    } else if (props.channel === 'website') {
-      // menu.value[0].name = "网站管理"
-      toggleDisplay.value = 'album'
-    } else if (props.channel === 'source') {
-      // menu.value[0].name = "资源管理"
-      toggleDisplay.value = 'album'
-    } else if (props.channel === 'funny') {
-      // menu.value[0].name = "搞笑段子"
-    }
-
-    function init() {
-      loading.value = false
-      store.dispatch('common/Fetch', {
-        api: "getCollect",
-        data: {
-          uid: getUid(),
-          coding: coding.art,
-          page: 1,
-          pagesize: 25,
-        }
-      }).then(res => {
-        loading.value = true
-        dataList.value = res.result
-      })
-    }
-    init()
-    return {
-      toggleDisplay,
-      init,
-      loading,
-      dataList,
-      tabMenu
-    }
+const props: any = defineProps({
+  channel: {
+    type: String,
+    default: ""
   },
+  data: {
+    type: Object,
+    default: () => {
+      return {}
+    }
+  }
 })
+const store = useStore();
+const toggleDisplay: any = ref("list")
+const coding: any = props.data.coding
+const loading: any = ref(false)
+const dataList: any = ref({});
+
+if (props.channel === 'picture') {
+  // menu.value[0].name = "图片管理"
+  toggleDisplay.value = 'album'
+} else if (props.channel === 'video') {
+  // menu.value[0].name = "视频管理"
+} else if (props.channel === 'website') {
+  // menu.value[0].name = "网站管理"
+  toggleDisplay.value = 'album'
+} else if (props.channel === 'source') {
+  // menu.value[0].name = "资源管理"
+  toggleDisplay.value = 'album'
+} else if (props.channel === 'funny') {
+  // menu.value[0].name = "搞笑段子"
+}
+
+function init() {
+  loading.value = false
+  store.dispatch('common/Fetch', {
+    api: "getCollect",
+    data: {
+      uid: getUid(),
+      coding: coding.art,
+      page: 1,
+      pagesize: 25,
+    }
+  }).then(res => {
+    loading.value = true
+    dataList.value = res.result
+  })
+}
+onMounted(init)
 </script>

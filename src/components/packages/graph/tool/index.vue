@@ -51,7 +51,7 @@ import {
 } from 'vue'
 import svgPanZoom from 'svg-pan-zoom'
 import {
-  color
+  colorList
 } from '@/assets/const'
 import {
   useStore
@@ -84,7 +84,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const store = useStore()
-    const colorList = ref(color)
+    // const colorList = ref(color)
     const currentColor = ref("#fff")
     const App: any = ref({})
     

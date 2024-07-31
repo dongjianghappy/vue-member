@@ -17,90 +17,87 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
+  defineProps,
+  getCurrentInstance,
   codings,
-  defineComponent,
   ref,
-  watch
-} from '@/utils'
-import {
+  watch,
   useStore
-} from 'vuex'
-export default defineComponent({
-  name: 'HomeViewh',
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    action: {
-      type: String,
-      default: 'add'
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
+} from '@/utils'
+
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
+    }
   },
-  setup(props, context) {
-    const store = useStore();
-    const coding = codings.user
-    const isShow = ref(false)
-    const dialog: any = ref(null)
-    const detail: any = ref({})
-
-    // 监听
-    watch([isShow], async (newValues, prevValues) => {
-      if (isShow.value) {
-        detail.value = await dialog.value.init()
-      }
-    })
-
-    function handleSave(params: any) {
-
-      let img = props.data.image.split("/")
-
-      const param: any = {
-        img: `|${img[img.length - 1]}|`
-      }
-
-      store.dispatch('common/Fetch', {
-        api: 'insertExpression',
-        data: {
-          ...param,
-        }
-      }).then(() => {
-        isShow.value = false
-
-      })
+  action: {
+    type: String,
+    default: 'add'
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return
     }
+  },
+})
 
-    function handleSubmit(){
-      store.dispatch('common/Fetch', {
-        api: 'Update',
-        data: {
-          coding: coding.expression,
-          id: props.data.id,
-          name: props.data.name
-        }
-      }).then(() => {
-        isShow.value = false
-        props.render()
-      })
-    }
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const coding = codings.user
+const isShow = ref(false)
+const dialog: any = ref(null)
+const detail: any = ref({})
 
-    return {
-      dialog,
-      isShow,
-      detail,
-      handleSave,
-      handleSubmit
-    }
+// 监听
+watch([isShow], async (newValues, prevValues) => {
+  if (isShow.value) {
+    detail.value = await dialog.value.init()
   }
 })
+
+function handleSave(params: any) {
+
+  let img = props.data.image.split("/")
+
+  const param: any = {
+    img: `|${img[img.length - 1]}|`
+  }
+
+  store.dispatch('common/Fetch', {
+    api: 'insertExpression',
+    data: {
+      ...param,
+    }
+  }).then((res) => {
+    if (res.ifSuccess) {
+      isShow.value = false
+      return
+    }
+    proxy.$hlj.message({
+      type: 'info',
+      msg: res.returnMessage
+    })
+  })
+}
+
+function handleSubmit() {
+  store.dispatch('common/Fetch', {
+    api: 'Update',
+    data: {
+      coding: coding.expression,
+      id: props.data.id,
+      name: props.data.name
+    }
+  }).then(() => {
+    isShow.value = false
+    props.render()
+  })
+}
 </script>

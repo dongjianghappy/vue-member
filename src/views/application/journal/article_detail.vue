@@ -5,7 +5,7 @@
     <span class="pointer right font12" @click="handlePrev">返回日志列表</span>
   </div>
   <div class="module-content form-wrap-box detail" style="padding: 25px 50px !important; min-height: 500px;" :style="{background: data.paper}">
-    <div class="article nobg" v-if="loading" >
+    <div class="article nobg" v-if="loading">
       <div class="article-head">
         <h2 class="mb15" :style="[data.style]">{{data.title}}</h2>
         <div class="author font12 cl-999">
@@ -34,9 +34,8 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   getCurrentInstance,
   onMounted,
   ref,
@@ -46,59 +45,46 @@ import {
   getUid
 } from '@/utils'
 
-export default defineComponent({
-  name: 'ArticleView',
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const data: any = ref({})
-    const configData: any = ref({})
-    const loading: any = ref(false)
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const data: any = ref({})
+const loading: any = ref(false)
 
-    // 初始化数据
-    function init() {
-      loading.value = false
-      store.dispatch('common/Fetch', {
-        api: 'journalView',
-        data: {
-          id: route.query.id
-        }
-      }).then(res => {
-        loading.value = true
-        data.value = res.result
-        data.value.style = JSON.parse(res.result.style)
-      })
+// 初始化数据
+function init() {
+  loading.value = false
+  store.dispatch('common/Fetch', {
+    api: 'journalView',
+    data: {
+      id: route.query.id
     }
+  }).then(res => {
+    loading.value = true
+    data.value = res.result
+    data.value.style = JSON.parse(res.result.style)
+  })
+}
 
-    function handleclick(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: getUid(),
-        query: `/journal?item=view&id=${param}`
-      }))
-      setTimeout(() => {
-        window.scrollTo(0, 0)
-        init()
-      }, 100)
-    }
+function handleclick(param: any) {
+  router.push(proxy.const.setUrl({
+    uid: getUid(),
+    query: `/journal?item=view&id=${param}`
+  }))
+  setTimeout(() => {
+    window.scrollTo(0, 0)
+    init()
+  }, 100)
+}
 
-    function handlePrev() {
-      router.go(-1)
-    }
+function handlePrev() {
+  router.go(-1)
+}
 
-    onMounted(() => {
-      init()
-    })
-    return {
-      data,
-      configData,
-      handleclick,
-      loading,
-      handlePrev
-    }
-  }
+onMounted(() => {
+  init()
 })
 </script>

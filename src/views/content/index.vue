@@ -13,22 +13,18 @@
     <Expression v-else-if="component === 'expression'" />
     <Statistics v-else-if="component === 'statistics'" />
     <Contribution v-else-if="component === 'contribution'" />
-    <Index v-else />
-
+    <Data v-else />
   </div>
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   computed,
-  onMounted
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
+  useStore,
+  useRoute
+} from '@/utils'
+
 import Index from './components/index.vue'
 import Channel from './components/channel.vue'
 import Visitor from './visitor/index.vue'
@@ -36,63 +32,16 @@ import Mood from './components/mood.vue'
 import Expression from './expression/index.vue'
 import Statistics from './statistics/index.vue'
 import Contribution from './components/contribution.vue'
-import {
-  useRouter,
-  useRoute
-} from 'vue-router'
+import Data from './data/index.vue'
 
-export default defineComponent({
-  name: 'IndexView1',
-  components: {
-    Index,
-    Channel,
-    Visitor,
-    Mood,
-    Expression,
-    Statistics,
-    Contribution
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const module: any = computed(() => {
-      let site = store.getters['user/config_talk']
-      site.content && site.content.map((item: any) => {
-        item.path = `/content${item.value}`
-      })
-      return site
-    });
-    const component = computed(() => route.query.mod);
-
-    onMounted(() => {
-      // const side = module.value.content.filter((item: any) => item.default === '1')
-      // if(side.length > 0){
-      //   router.push(window.location.pathname + side[0].value)
-      // }
-    })
-
-    return {
-      component,
-      module,
-    }
-  }
-})
+const store = useStore();
+const route = useRoute();
+const module: any = computed(() => {
+  let site = store.getters['user/config_talk']
+  site.content && site.content.map((item: any) => {
+    item.path = `/content${item.value}`
+  })
+  return site
+});
+const component = computed(() => route.query.mod);
 </script>
-
-<style lang="less" scoped>
-/deep/ .collapse {
-  background: none !important;
-
-  .collapse-head {
-    background: none !important;
-  }
-
-  .aside-list {
-    background: none !important;
-  }
-}
-</style>

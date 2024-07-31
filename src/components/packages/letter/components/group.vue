@@ -119,7 +119,6 @@ export default defineComponent({
           uid: getUid()
         }
       }).then(res => {
-        debugger
         item.list = res.result
       })
     }

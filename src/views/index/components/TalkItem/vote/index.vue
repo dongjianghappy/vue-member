@@ -26,89 +26,73 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   ref,
   useStore,
   watch
 } from '@/utils'
 import Vote2 from "@/views/vote/components/vote2.vue"
-export default defineComponent({
-  name: 'v-Category',
-  components: {
-    Vote2
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  setup(props, context) {
-    const isShow: any = ref(false)
-    const {
-      proxy
-    }: any = getCurrentInstance();
 
-    const store = useStore();
-    const detail: any = ref([])
-
-    // 监听
-    watch([isShow], async (newValues, prevValues) => {
-      if (isShow.value) {
-        init()
-      }
-    })
-
-    function init() {
-      store.dispatch('common/Fetch', {
-        api: 'voteDetail',
-        data: {
-          talk_id: props.data.id
-        }
-      }).then(res => {
-        detail.value = res.result
-      })
-    }
-
-    function handelclick(param: any) {
-      if (detail.value.user_voting.times) {
-        proxy.$hlj.message({
-          msg: "亲, 你已经投过票了"
-        })
-        return
-      }
-      debugger
-      store.dispatch('common/Fetch', {
-        api: "Vote",
-        data: {
-          id: detail.value.id,
-          options: typeof detail.value.option === 'string' ? detail.value.option : detail.value.option === undefined ? '' : detail.value.option.join(',')
-        }
-      }).then(res => {
-        if(res.ifSuccess === 2){
-          return
-        }
-        param.vote = parseInt(param.vote) + parseInt(res.result.num)
-        param.status = true
-      })
-    }
-
-    function handleclick(param: any) {
-      isShow.value = !isShow.value
-    }
-
-    return {
-      isShow,
-      handleclick,
-      detail,
-      init,
-      handelclick
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
 })
+const isShow: any = ref(false)
+const {
+  proxy
+}: any = getCurrentInstance();
+
+const store = useStore();
+const detail: any = ref([])
+
+// 监听
+watch([isShow], async (newValues, prevValues) => {
+  if (isShow.value) {
+    init()
+  }
+})
+
+function init() {
+  store.dispatch('common/Fetch', {
+    api: 'voteDetail',
+    data: {
+      talk_id: props.data.id
+    }
+  }).then(res => {
+    detail.value = res.result
+  })
+}
+
+function handelclick(param: any) {
+  if (detail.value.user_voting.times) {
+    proxy.$hlj.message({
+      msg: "亲, 你已经投过票了"
+    })
+    return
+  }
+  store.dispatch('common/Fetch', {
+    api: "Vote",
+    data: {
+      id: detail.value.id,
+      options: typeof detail.value.option === 'string' ? detail.value.option : detail.value.option === undefined ? '' : detail.value.option.join(',')
+    }
+  }).then(res => {
+    if (res.ifSuccess === 2) {
+      return
+    }
+    param.vote = parseInt(param.vote) + parseInt(res.result.num)
+    param.status = true
+  })
+}
+
+function handleclick(param: any) {
+  isShow.value = !isShow.value
+}
 </script>

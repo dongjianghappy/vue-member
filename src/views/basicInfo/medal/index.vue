@@ -25,47 +25,27 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  computed,
   codings,
   onMounted,
-  ref
-} from '@/utils'
-import {
+  ref,
   useStore
-} from 'vuex'
+} from '@/utils'
 
-export default defineComponent({
-  name: 'AsideView',
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const coding = codings
-    const store = useStore();
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    const dataList = ref({});
+const coding = codings
+const store = useStore();
+const dataList = ref({});
 
-    function init() {
-      store.dispatch('common/Fetch', {
-        data: {
-          coding: coding.medal
-        }
-      }).then(res => {
-        dataList.value = res.result
-      })
+function init() {
+  store.dispatch('common/Fetch', {
+    data: {
+      coding: coding.medal
     }
+  }).then(res => {
+    dataList.value = res.result
+  })
+}
 
-    onMounted(init)
-    return {
-      init,
-      loginuser,
-      dataList
-    }
-  }
-
-})
+onMounted(init)
 </script>

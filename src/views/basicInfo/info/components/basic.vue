@@ -50,7 +50,7 @@
       <li>
         <label>生日</label>
         <div class="con" v-if="isEdit"><span id="year">{{basicInfo.year}}</span>年 <span id="month">{{basicInfo.month}}</span>月 <span id="day">{{basicInfo.day}}</span>日
-        <span class="right" @click="secrecy('birth')">保密</span>
+          <span class="right" @click="secrecy('birth')">保密</span>
         </div>
         <v-birthday :data="{year: basicInfo.year, month: basicInfo.month, day: basicInfo.day}" @choose="chooseBirthday" v-else />
 
@@ -98,145 +98,120 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
   reactive,
   ref,
   computed
 } from 'vue'
 import citys from '@/assets/cityData'
 
-export default defineComponent({
-  name: 'AsideView',
-  props: {
-    basicInfo: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    edit: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
-    secrecy: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
+const props: any = defineProps({
+  basicInfo: {
+    type: Object,
+    default: () => {
+      return {}
+    }
   },
-  emits: ['update:basicInfo'],
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    let isEdit = ref(true)
-    const cityData: any = reactive(citys)
-    const userInfo: any = ref(props.basicInfo)
-
-    const address = computed(() => render());
-
-    function render() {
-      let province = ""
-      let city = ""
-      let area = ""
-      for (var i in cityData) {
-        const arr = i.split(',');
-        if (arr.length == 1) {
-          province = cityData[i][props.basicInfo.province]
-        }
-        if (arr.length == 2 && arr[1] == props.basicInfo.province) {
-          city = cityData[i][props.basicInfo.city]
-        }
-        if (arr.length == 3 && arr[2] == props.basicInfo.city) {
-          area = cityData[i][props.basicInfo.area]
-        }
-      }
-
-      return {
-        province,
-        city,
-        area
-      }
+  edit: {
+    type: Function,
+    default: () => {
+      return
     }
-
-    function Edit() {
-      isEdit.value = !isEdit.value
-      userInfo.value = props.basicInfo
-      context.emit('update:basicInfo', userInfo.value)
-
-      if (isEdit.value) {
-        const {
-          nickname,
-          space_name,
-          signature,
-          realname,
-          sex,
-          year,
-          month,
-          day,
-          province,
-          city,
-          area,
-          bloodtype,
-          blogger,
-          introduction,
-          message
-        } = props.basicInfo
-        props.edit({
-          nickname,
-          space_name,
-          signature,
-          realname,
-          sex,
-          year,
-          month,
-          day,
-          province,
-          city,
-          area,
-          bloodtype,
-          blogger,
-          introduction,
-          message
-        })
-      }
-
+  },
+  secrecy: {
+    type: Function,
+    default: () => {
+      return
     }
+  },
+})
+const emit: any = defineEmits(['update:basicInfo'])
+let isEdit = ref(true)
+const cityData: any = reactive(citys)
+const userInfo: any = ref(props.basicInfo)
+const address = computed(() => render());
 
-    function chooseBirthday(param: any) {
-      userInfo.value.year = param.year
-      userInfo.value.month = param.month
-      userInfo.value.day = param.day
+function render() {
+  let province = ""
+  let city = ""
+  let area = ""
+  for (var i in cityData) {
+    const arr = i.split(',');
+    if (arr.length == 1) {
+      province = cityData[i][props.basicInfo.province]
     }
-
-    function chooseArea(param: any) {
-      userInfo.value.province = param.province
-      userInfo.value.city = param.city
-      userInfo.value.area = param.area
+    if (arr.length == 2 && arr[1] == props.basicInfo.province) {
+      city = cityData[i][props.basicInfo.city]
     }
-
-    // 取消
-    function handelCancel() {
-      isEdit.value = !isEdit.value
-    }
-
-    return {
-      isEdit,
-      Edit,
-      handelCancel,
-      userInfo,
-      chooseBirthday,
-      chooseArea,
-      address
+    if (arr.length == 3 && arr[2] == props.basicInfo.city) {
+      area = cityData[i][props.basicInfo.area]
     }
   }
 
-})
+  return {
+    province,
+    city,
+    area
+  }
+}
+
+function Edit() {
+  isEdit.value = !isEdit.value
+  userInfo.value = props.basicInfo
+  emit('update:basicInfo', userInfo.value)
+
+  if (isEdit.value) {
+    const {
+      nickname,
+      space_name,
+      signature,
+      realname,
+      sex,
+      year,
+      month,
+      day,
+      province,
+      city,
+      area,
+      bloodtype,
+      blogger,
+      introduction,
+      message
+    } = props.basicInfo
+    props.edit({
+      nickname,
+      space_name,
+      signature,
+      realname,
+      sex,
+      year,
+      month,
+      day,
+      province,
+      city,
+      area,
+      bloodtype,
+      blogger,
+      introduction,
+      message
+    })
+  }
+}
+
+function chooseBirthday(param: any) {
+  userInfo.value.year = param.year
+  userInfo.value.month = param.month
+  userInfo.value.day = param.day
+}
+
+function chooseArea(param: any) {
+  userInfo.value.province = param.province
+  userInfo.value.city = param.city
+  userInfo.value.area = param.area
+}
+
+function handelCancel() {
+  isEdit.value = !isEdit.value
+}
 </script>

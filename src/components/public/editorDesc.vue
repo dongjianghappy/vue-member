@@ -251,7 +251,6 @@ ${'```'}`
 
       // 标题设置
       if (type === 'object') {
-        debugger
         if(param.type === 'title'){
           str = title[param.value].value + title[param.value].name
         }else if(param.type === 'code'){

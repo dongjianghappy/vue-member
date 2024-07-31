@@ -52,7 +52,6 @@ export default defineComponent({
       context.emit('update:name', param.name)
       const params: any = {}
       params[props.field] = param.value
-      debugger
       props.render(params)
     }
     return {

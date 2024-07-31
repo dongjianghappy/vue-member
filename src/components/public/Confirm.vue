@@ -12,9 +12,9 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   ref,
   useStore
@@ -22,118 +22,105 @@ import {
 
 import confirm from '@/assets/modal_enum'
 
-export default defineComponent({
-  name: 'v-Confirm',
-  props: {
-    name: {
-      type: String,
-      default: ""
-    },
-    // 按钮类型
-    buttonType: {
-      type: String,
-      default: "text"
-    },
-    icon: {
-      type: String,
-      default: ""
-    },
-    className: {
-      type: String,
-      default: ""
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    // 是否展示
-    disabled: {
-      type: Boolean,
-      default: false
-    },
-    api: {
-      type: String,
-      default: ""
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
-    },
-    operating: {
-      type: String,
-      default: ""
-    },
-    auth: {
-      type: Boolean,
-      default: false
-    },
-    submit: {
-      type: Function,
-    },
+const props: any = defineProps({
+  name: {
+    type: String,
+    default: ""
   },
-  setup(props, context) {
-    const isShow: any = ref(false)
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const {
-      data,
-      operating
-    }: any = props
-    const message: any = confirm
-
-    function handleclick(param: any) {
-      if (typeof data.id === 'object' && data.id.length === 0) {
-        proxy.$hlj.message({
-          msg: "编辑成功"
-        })
-        return
-      }
-      isShow.value = !isShow.value
+  // 按钮类型
+  buttonType: {
+    type: String,
+    default: "text"
+  },
+  icon: {
+    type: String,
+    default: ""
+  },
+  className: {
+    type: String,
+    default: ""
+  },
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
-
-    function submit() {
-      if (props.submit) {
-        props.submit({
-          cancel: () => {
-            isShow.value = false
-          },
-        })
-      } else {
-        let id = props.data.id
-        if (typeof data.id === 'object' && data.id.length != 0) {
-          id = data.id.toString()
-        }
-
-        store.dispatch('common/Fetch', {
-          api: props.api,
-          data: {
-            ...props.data,
-            id: id
-          }
-        }).then(res => {
-          debugger
-          proxy.$hlj.message({
-            msg: message[operating] && message[operating].info
-          })
-
-          props.render()
-          isShow.value = !isShow.value
-        })
-      }
-
+  },
+  // 是否展示
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  api: {
+    type: String,
+    default: ""
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return 'Default function'
     }
-    return {
-      isShow,
-      handleclick,
-      submit,
-      message
-    }
-  }
+  },
+  operating: {
+    type: String,
+    default: ""
+  },
+  auth: {
+    type: Boolean,
+    default: false
+  },
+  submit: {
+    type: Function,
+  },
 })
+const isShow: any = ref(false)
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const {
+  data,
+  operating
+}: any = props
+const message: any = confirm
+
+function handleclick(param: any) {
+  if (typeof data.id === 'object' && data.id.length === 0) {
+    proxy.$hlj.message({
+      msg: "编辑成功"
+    })
+    return
+  }
+  isShow.value = !isShow.value
+}
+
+function submit() {
+  if (props.submit) {
+    props.submit({
+      cancel: () => {
+        isShow.value = false
+      },
+    })
+  } else {
+    let id = props.data.id
+    if (typeof data.id === 'object' && data.id.length != 0) {
+      id = data.id.toString()
+    }
+
+    store.dispatch('common/Fetch', {
+      api: props.api,
+      data: {
+        ...props.data,
+        id: id
+      }
+    }).then(res => {
+      proxy.$hlj.message({
+        msg: message[operating] && message[operating].info
+      })
+
+      props.render()
+      isShow.value = !isShow.value
+    })
+  }
+}
 </script>

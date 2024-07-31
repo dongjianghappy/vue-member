@@ -81,149 +81,130 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
-  onMounted,
   ref,
   useStore,
   watch
 } from '@/utils'
-export default defineComponent({
-  name: 'v-Category',
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    type: {
-      type: String,
-      default: "talk"
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  setup(props, context) {
-    const isShow: any = ref(false)
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const element: any = document.getElementsByTagName('html');
-    const dialog: any = ref(null)
-    const dataList: any = ref([])
-    const detail: any = ref({})
-    let current: any = ref({})
-
-    // 监听
-    watch([isShow], async (newValues, prevValues) => {
-      if (isShow.value) {
-        element[0].style.overflow = 'hidden';
-        init()
-      } else {
-        element[0].style.overflow = 'auto';
-      }
-    })
-
-    function init(param: any = "") {
-      store.dispatch('common/Fetch', {
-        api: 'getVote',
-        data: {
-          talk_id: props.data.id
-        }
-      }).then(res => {
-        detail.value = res.result
-        dataList.value = res.result.list
-      })
-    }
-
-    function handleclick(param: any) {
-      isShow.value = !isShow.value
-    }
-
-    function clickAdd() {
-      dataList.value.push({
-        image: '',
-        sort: '',
-        static: '',
-        status: '',
-        vote: '',
-        votetitle: '',
-        description: ''
-      })
-    }
-
-    // 确认按钮
-    function submit(params: any) {
-      const {
-        id,
-        name,
-        talk_id,
-        start_time,
-        last_time,
-        grade,
-        content,
-        votetitle,
-        choose,
-        chart,
-        status
-      } = detail.value
-
-      let listData: any = []
-      dataList.value.map((item: any) => {
-        listData.push({
-          id: item.id,
-          votetitle: item.votetitle,
-          color: item.color,
-          description: item.description
-        })
-      })
-
-      const param: any = {
-        name,
-        talk_id: props.data.id,
-        type: props.type,
-        start_time,
-        last_time,
-        grade,
-        content,
-        votetitle,
-        choose,
-        chart,
-        status,
-        list: JSON.stringify(listData)
-      }
-      if (0) {
-        param.id = id
-      }
-      store.dispatch('common/Fetch', {
-        api: "setVote",
-        data: {
-          ...param
-        }
-      }).then(res => {
-        isShow.value = false
-      })
-    }
-
-    function clickRemove(index: any) {
-      dataList.value.splice(index, 1)
-    }
-
-    return {
-      dialog,
-      isShow,
-      current,
-      handleclick,
-      clickAdd,
-      clickRemove,
-      dataList,
-      detail,
-      submit
-    }
+  type: {
+    type: String,
+    default: "talk"
   }
 })
+const isShow: any = ref(false)
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const element: any = document.getElementsByTagName('html');
+const dialog: any = ref(null)
+const dataList: any = ref([])
+const detail: any = ref({})
+let current: any = ref({})
+
+// 监听
+watch([isShow], async (newValues, prevValues) => {
+  if (isShow.value) {
+    element[0].style.overflow = 'hidden';
+    init()
+  } else {
+    element[0].style.overflow = 'auto';
+  }
+})
+
+function init(param: any = "") {
+  store.dispatch('common/Fetch', {
+    api: 'getVote',
+    data: {
+      talk_id: props.data.id
+    }
+  }).then(res => {
+    detail.value = res.result
+    dataList.value = res.result.list
+  })
+}
+
+function handleclick(param: any) {
+  isShow.value = !isShow.value
+}
+
+function clickAdd() {
+  dataList.value.push({
+    image: '',
+    sort: '',
+    static: '',
+    status: '',
+    vote: '',
+    votetitle: '',
+    description: ''
+  })
+}
+
+// 确认按钮
+function submit(params: any) {
+  const {
+    id,
+    name,
+    start_time,
+    last_time,
+    grade,
+    content,
+    votetitle,
+    choose,
+    chart,
+    status
+  } = detail.value
+
+  let listData: any = []
+  dataList.value.map((item: any) => {
+    listData.push({
+      id: item.id,
+      votetitle: item.votetitle,
+      color: item.color,
+      description: item.description
+    })
+  })
+
+  const param: any = {
+    name,
+    talk_id: props.data.id,
+    type: props.type,
+    start_time,
+    last_time,
+    grade,
+    content,
+    votetitle,
+    choose,
+    chart,
+    status,
+    list: JSON.stringify(listData)
+  }
+  if (0) {
+    param.id = id
+  }
+  store.dispatch('common/Fetch', {
+    api: "setVote",
+    data: {
+      ...param
+    }
+  }).then(res => {
+    isShow.value = false
+  })
+}
+
+function clickRemove(index: any) {
+  dataList.value.splice(index, 1)
+}
 </script>
 
 <style lang="less" scoped>

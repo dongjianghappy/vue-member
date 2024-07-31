@@ -7,9 +7,19 @@
   <!-- 主内容 -->
   <div class="main-center left" style="width: 620px;">
     <div class="module-wrap">
-      <div class="module-content plr15" style="height: 650px;">
-        <div class="mb15 flex">
-          <div class="font18" style="flex: 1">每周日程概况</div>
+      <div class="module-head">
+        <span class="pointer" :class="{'opacity': tabIndex == 1}" @click="handleTabs(0)">能量日程</span>
+        <span class="ml15 pointer" :class="{'opacity': tabIndex == 0}" @click="handleTabs(1)">我的日程</span>
+      </div>
+      <div class="module-content plr15" style="min-height: 650px;">
+        <div class="mb30" v-if="tabIndex == 0">
+          <i class="iconfont icon-info" />
+          能量日程打卡后会获得一定的能量值。
+        </div>
+        <div class="mb20 flex" v-else>
+          <div class="font14" style="flex: 1">
+            <i class="iconfont icon-info" />
+            我的日程用户可以自行管理记录打卡自己的项目</div>
           <div class="w50" style="display: inline-flex;">
             <i class="iconfont icon-arrow deg180 pointer" @click="handleToggle(-1)" />
             <i class="iconfont icon-arrow pointer" @click="handleToggle(1)" />
@@ -29,7 +39,7 @@
         <div class="cal_m_days" v-for="(item, index) in dataList" :key="index">
           <div class="w100">{{item.name}}</div>
           <div class="col" v-for="(list, i) in item.list" :key="i">
-            <i class="iconfont icon-bus font32" :class="list ? 'complete' : 'cl-ccc'" v-if="list != 2" />
+            <i class="iconfont icon-bus font24" :class="list ? 'complete' : 'cl-ccc'" v-if="list != 2" />
           </div>
           <div class="w100">
             <span v-if="current == '0'">
@@ -40,10 +50,7 @@
                 </span>
               </span>
               <span v-else>
-                <span class="cl-ccc" v-if="item.status">已搭车</span>
-                <span class="relative" @click="handleClick(item)" v-else>去搭车
-                  <i class="iconfont icon-dot cl-red" style="position: absolute; top: --15px; right: -15px;"></i>
-                </span>
+                <Clockin :data="{...item, coding,  sync: item.sync === '1' ? true : false}" />
               </span>
             </span>
             <span class="cl-999" v-else>-</span>
@@ -59,15 +66,11 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   onMounted,
   computed,
   useStore,
-  useRouter,
-  useRoute,
   ref,
   getUid,
   codings
@@ -75,126 +78,91 @@ import {
 
 import Detail from './components/detail.vue'
 import RightView from '../../index/components/right_aside.vue'
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-    Detail,
-    RightView
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const coding: any = codings.user.schedule.cate
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    let query: any = computed(() => route.query || "");
-    const module = computed(() => store.getters['user/config_talk']);
-    const userInfo = computed(() => store.getters['user/loginuser']);
-    const currentData = ref({})
-    const userGroup = ref([])
-    const list: any = ref(null);
-    let weeks: any = ["一", "二", "三", "四", "五", "六", "日"]
-    let weekDates: any = ref([])
-    let dataList: any = ref([])
-    const current: any = ref(0)
-    const sidebar = computed(() => {
-      const sidebar = store.getters['user/config'].bookmark || []
-      sidebar.groups && sidebar.groups.map((item: any) => {
-        item.path = `/bookmark?item=${item.value}`
-      })
-      return sidebar
-    });
+import Clockin from './components/clock_in.vue'
 
-    function getDatas() {
-      // 获取当前日期  
-      let currentDate = new Date();
-      let day = currentDate.getDay()
-      weekDates.value = []
-      // 设置星期一为当前日期  
+const coding: any = codings.user.schedule.cate
+const store = useStore();
+const module = computed(() => store.getters['user/config_talk']);
+const userInfo = computed(() => store.getters['user/loginuser']);
+let weeks: any = ["一", "二", "三", "四", "五", "六", "日"]
+let weekDates: any = ref([])
+let dataList: any = ref([])
+const current: any = ref(0)
+const tabIndex: any = ref(0)
 
-      let monday: any = ""
-      if (day == 0) {
-        monday = new Date(currentDate.setDate(currentDate.getDate() - 6));
-      } else {
-        monday = new Date(currentDate.setDate(currentDate.getDate() - (day-1)));
-      }
-      
+function getDatas() {
+  // 获取当前日期  
+  let currentDate = new Date();
+  let day = currentDate.getDay()
+  weekDates.value = []
+  // 设置星期一为当前日期  
 
-      // 获取一周的日期   
-      for (let i = 0; i < 7; i++) {
-        let day = new Date(monday.getTime() + i * 24 * 60 * 60 * 1000 + current.value * 7 * 86400000)
-        let data = `${day.getMonth()+1}.${day.getDate()}` // ${day.getFullYear()}.
-        weekDates.value.push({
-          week: weeks[i],
-          day: data
-        }); // 一天的毫秒数  
-      }
-    }
-
-    function init() {
-      store.dispatch('common/Fetch', {
-        api: "schedule",
-        data: {
-          coding: coding,
-          uid: getUid(),
-          index: current.value
-        }
-      }).then(res => {
-        dataList.value = res.result
-        getDatas()
-      })
-    }
-
-    function handleToggle(param: any) {
-      current.value = current.value + param
-      init()
-    }
-
-    function handleClick(param: any) {
-      store.dispatch('common/Fetch', {
-        api: "updateSchedule",
-        data: {
-          coding: coding,
-          uid: getUid(),
-          fid: param.id
-        }
-      }).then(res => {
-        init()
-      })
-
-    }
-
-    onMounted(() => {
-      getDatas()
-      init()
-    })
-
-    return {
-      coding,
-      module,
-      userInfo,
-      handleClick,
-      handleToggle,
-      query,
-      sidebar,
-      list,
-      currentData,
-      userGroup,
-      init,
-      weeks,
-      dataList,
-      weekDates,
-      current
-    }
+  let monday: any = ""
+  if (day == 0) {
+    monday = new Date(currentDate.setDate(currentDate.getDate() - 6));
+  } else {
+    monday = new Date(currentDate.setDate(currentDate.getDate() - (day - 1)));
   }
+
+  // 获取一周的日期   
+  for (let i = 0; i < 7; i++) {
+    let day = new Date(monday.getTime() + i * 24 * 60 * 60 * 1000 + current.value * 7 * 86400000)
+    let data = `${day.getMonth()+1}.${day.getDate()}` // ${day.getFullYear()}.
+    weekDates.value.push({
+      week: weeks[i],
+      day: data
+    }); // 一天的毫秒数  
+  }
+}
+
+function init() {
+  store.dispatch('common/Fetch', {
+    api: "schedule",
+    data: {
+      coding: coding,
+      index: current.value,
+      system: (tabIndex.value === 0 ? '1' : '0')
+    }
+  }).then(res => {
+    dataList.value = res.result
+    getDatas()
+  })
+}
+
+function handleTabs(index: any) {
+  tabIndex.value = index
+  init()
+}
+
+function handleToggle(param: any) {
+  current.value = current.value + param
+  init()
+}
+
+function handleClick(param: any) {
+  store.dispatch('common/Fetch', {
+    api: "updateSchedule",
+    data: {
+      coding: coding,
+      uid: getUid(),
+      fid: param.id,
+      system: param.system,
+      style: JSON.stringify({left: Math.floor(Math.random() * 20 + 10), top: Math.floor(Math.random() * 100 - 150)})
+    }
+  }).then(res => {
+    init()
+  })
+}
+
+onMounted(() => {
+  getDatas()
+  init()
 })
 </script>
 
 <style lang="less" scoped>
 .cal_m_weeks {
-  background: #f0f1f4;
+  background: var(--card-background);
   height: 50px;
   line-height: 50px;
   display: flex;
@@ -211,13 +179,11 @@ export default defineComponent({
     &:nth-child(2) {
       border-left: 2px solid var(--default-border);
     }
-
   }
-
 }
 
 .cal_m_days {
-  background: #f0f1f4;
+  background: var(--card-background);
   height: 50px;
   line-height: 50px;
   display: flex;
@@ -236,10 +202,6 @@ export default defineComponent({
     &:nth-child(2) {
       border-left: 2px solid var(--default-border);
     }
-
-    // &:hover {
-    //   background: var(--tabs-button-background);
-    // }
   }
 
   &:nth-child(7n) {
@@ -256,5 +218,8 @@ export default defineComponent({
   .complete {
     color: #f67f00;
   }
+}
+.opacity {
+  opacity: 0.5
 }
 </style>

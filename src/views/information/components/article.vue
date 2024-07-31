@@ -12,62 +12,37 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   onMounted,
   ref,
-  reactive,
   useStore,
   useRoute,
-  codings,
-  useRouter,
-  watch,
-  getUid
+  useRouter
 } from '@/utils'
 
-export default defineComponent({
-  name: 'ArticleView',
-  props: {
-    channel: {
-      type: String,
-      default: ""
-    },
-  },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const coding: any = codings.user.message
-    const detail: any = ref({})
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const detail: any = ref({})
 
-    // 初始化数据
-    function init() {
-      store.dispatch('common/Fetch', {
-        api: "messageDetail",
-        data: {
-          id: route.query.id
-        }
-      }).then(res => {
-        detail.value = res.result
-      })
+// 初始化数据
+function init() {
+  store.dispatch('common/Fetch', {
+    api: "messageDetail",
+    data: {
+      id: route.query.id
     }
+  }).then(res => {
+    detail.value = res.result
+  })
+}
 
-    function handlePrev() {
-      router.go(-1)
-    }
+function handlePrev() {
+  router.go(-1)
+}
 
-    onMounted(() => {
-      init()
-    })
-    return {
-      detail,
-      handlePrev
-    }
-  }
+onMounted(() => {
+  init()
 })
 </script>

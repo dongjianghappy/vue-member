@@ -8,94 +8,87 @@
 </span>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   useStore
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Switch',
-  props: {
-    storage: {
-      type: Boolean,
-      default: false
-    },
-    isbutton: {
-      type: Boolean,
-      default: true
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    api: {
-      type: String,
-      default: ""
-    },
-    param: {
-      default: () => {
-        return {}
-      }
-    },
-    className: {
-      type: String,
-      default: ""
-    },
-    auth: {
-      type: Boolean,
-      default: false
-    },
-    msg: {
-      type: Function,
-      default: () => {
-        return
-      }
+const props: any = defineProps({
+  storage: {
+    type: Boolean,
+    default: false
+  },
+  isbutton: {
+    type: Boolean,
+    default: true
+  },
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  emits: ['toggle'],
-  setup(props, context) {
-    const store = useStore();
-    const {
-      data: {
-        field,
-        coding
-      }
-    }: any = props
-
-    function handleclick(item: any) {
-      if (!props.storage) {
-        store.dispatch('common/Fetch', {
-          api: props.api || "updateStatus",
-          data: {
-            coding,
-            id: item.id,
-            status: field,
-            value: item[field] == '1' ? '0' : '1',
-            ...props.param
-          }
-        }).then(res => {
-          if (res.result.type) {
-            item[res.result.type] = res.result.value
-            context.emit('toggle', {
-              field: props.data.item.name,
-              value: res.result.value
-            })
-          } else {
-            props.msg(res.returnMessage)
-          }
-        })
-      } else {
-        let name: any = localStorage.getItem(field) == undefined || localStorage.getItem(field) == '1'  ? '0' : '1'
-        localStorage.setItem(field, name)
-        context.emit('toggle', localStorage.getItem(field))
-      }
+  api: {
+    type: String,
+    default: ""
+  },
+  param: {
+    default: () => {
+      return {}
     }
-    return {
-      handleclick
+  },
+  className: {
+    type: String,
+    default: ""
+  },
+  auth: {
+    type: Boolean,
+    default: false
+  },
+  msg: {
+    type: Function,
+    default: () => {
+      return
     }
   }
 })
+const emit: any = defineEmits(['toggle'])
+const store = useStore();
+const {
+  data: {
+    field,
+    coding
+  }
+}: any = props
+
+function handleclick(item: any) {
+  if (!props.storage) {
+    store.dispatch('common/Fetch', {
+      api: props.api || "updateStatus",
+      data: {
+        coding,
+        id: item.id,
+        status: field,
+        value: item[field] == '1' ? '0' : '1',
+        ...props.param
+      }
+    }).then(res => {
+      if (res.result.type) {
+        item[res.result.type] = res.result.value
+        emit('toggle', {
+          field: props.data.item.name,
+          value: res.result.value
+        })
+      } else {
+        props.msg(res.returnMessage)
+      }
+    })
+  } else {
+    let name: any = localStorage.getItem(field) == undefined || localStorage.getItem(field) == '1' ? '0' : '1'
+    localStorage.setItem(field, name)
+    emit('toggle', localStorage.getItem(field))
+  }
+}
 </script>

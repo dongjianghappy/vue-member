@@ -9,45 +9,16 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  computed
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
-import Index from './components/index.vue'
-import {
-  basicInfo,
-  information
-} from '@/assets/const'
-import {
-  useRouter,
+  computed,
+  useStore,
   useRoute
-} from 'vue-router'
+} from '@/utils'
+import Index from './components/index.vue'
+const store = useStore();
+const route = useRoute();
+const module = computed(() => store.getters['user/config_talk'].userinfo);
 
-export default defineComponent({
-  name: 'IndexView1',
-  components: {
-    Index
-  },
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const module = computed(() => store.getters['user/config_talk'].userinfo);
-    
-    const component = computed(() => route.query.mod);
-
-    return {
-      component,
-      module
-    }
-  }
-})
+const component = computed(() => route.query.mod);
 </script>

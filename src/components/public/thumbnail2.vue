@@ -3,7 +3,7 @@
   <i class="iconfont" :class="`icon-${icon}`" @click="showImg(data)" v-if="icon" />
   <div style=" background: #252632; border-radius: 8px; overflow:hidden; height:300px" v-else>
     <div style="height: 220px; overflow: hidden;">
-      <img :src="data.cover || data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" style="width: 100%; height: 220px;" />
+      <img :src="data.cover || data.image[0]" style="width: 100%; height: 220px;" />
     </div>
     <div class="ptb15 plr10">
       <div class="mb10" v-html="data.summary"></div>

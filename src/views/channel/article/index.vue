@@ -4,10 +4,9 @@
 <AricleIndex v-else :channel="channel" :data="data" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
+  defineProps,
   computed,
   useRoute,
 } from '@/utils'
@@ -15,32 +14,18 @@ import AricleIndex from "./aricle_index.vue"
 import ArticleDetail from "./article_action.vue"
 import ArticleView from "./article_detail.vue"
 
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-    AricleIndex,
-    ArticleDetail,
-    ArticleView
+const props: any = defineProps({
+  channel: {
+    type: String,
+    default: ""
   },
-  props: {
-    channel: {
-      type: String,
-      default: ""
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  setup(props, context) {
-    const route = useRoute()
-    let query: any = computed(() => route.query || "")
-
-    return {
-      query
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
 })
+const route = useRoute()
+let query: any = computed(() => route.query || "")
 </script>

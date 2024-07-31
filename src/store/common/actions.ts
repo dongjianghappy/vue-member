@@ -56,6 +56,13 @@ const actions = {
     context.commit("setRecommendUser" , result.result);
     return result
   },  
+  hotSearch: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const { result }:any = await api.hotSearch({
+      ...params 
+    })
+    context.commit("setHot" , result.result);
+    return result
+  }, 
   HotTalk: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const { result }:any = await api.HotTalk({
       ...params 
@@ -95,6 +102,14 @@ const actions = {
     context.commit("setGoldcoin" , result.result);
     return result
   }, 
+  EnergyList: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const { result }:any = await api.energyList({
+      ...params 
+    })
+
+    context.commit("setEnergyList" , result.result);
+    return result
+  },    
   SignList: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const { result }:any = await api.SignList({
       ...params 
@@ -102,7 +117,15 @@ const actions = {
 
     context.commit("setSignList" , result.result);
     return result
-  },   
+  },  
+  Blacklist: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const { result }:any = await api.blacklist({
+      ...params 
+    })
+
+    context.commit("setBlacklist" , result.result);
+    return result
+  }, 
   MessageBoard: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const { result }:any = await api.MessageBoard({
       ...params 
@@ -128,7 +151,6 @@ const actions = {
     return result
   },
   uploadImg: async (context: { commit: Commit; state: any}, params: any = {}) => {
-    debugger
     const {result}:any = await api.uploadImage({
       ...params 
     })

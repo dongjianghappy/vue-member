@@ -13,50 +13,34 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance
+  defineProps,
+  defineEmits
 } from 'vue'
 import {
   COLOR
 } from '@/assets/common_const'
-export default defineComponent({
-  name: 'v-Color',
-  components: {
-
+const props: any = defineProps({
+  color: {
+    type: Array,
+    default: []
   },
-  props: {
-    color: {
-      type: Array,
-      default: []
-    },
-    col: {
-      String,
-      default: 'col-md-3'
-    }
-  },
-  emits: ['update:color'],
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const colorList = COLOR
-
-    function handleclick(param: any) {
-      debugger
-      if (props.color.indexOf(param) > -1) {
-        let index = props.color.indexOf(param)
-        props.color.splice(index, 1)
-      } else {
-        props.color.push(param)
-      }
-      context.emit('update:color', props.color)
-    }
-    return {
-      colorList,
-      handleclick
-    }
+  col: {
+    String,
+    default: 'col-md-3'
   }
 })
+const emit: any = defineEmits(['update:color'])
+const colorList = COLOR
+
+function handleclick(param: any) {
+  if (props.color.indexOf(param) > -1) {
+    let index = props.color.indexOf(param)
+    props.color.splice(index, 1)
+  } else {
+    props.color.push(param)
+  }
+  emit('update:color', props.color)
+}
 </script>

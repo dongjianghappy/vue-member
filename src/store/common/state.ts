@@ -3,12 +3,14 @@ export interface State {
   isEditTheme: any;
   recommendUser: any;
   announcement: any;
+  hot: any;
   hotTalk: any;
   ranking: any;
   visitor: any
   appstore: any
   integration: any,
   goldcoin: any,
+  energyList: any,
   signList: any
   messageBoard: any
   recentJournal: any
@@ -27,6 +29,7 @@ const initState: State = {
   isEditTheme: false,
   recommendUser: [],
   announcement: [],
+  hot: [],
   hotTalk: [],
   ranking: [],
   visitor:{
@@ -37,6 +40,7 @@ const initState: State = {
   appstore: [],
   integration: [],
   goldcoin: [],
+  energyList: [],
   signList: [],
   messageBoard: [],
   recentJournal: [],

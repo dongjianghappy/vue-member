@@ -1,160 +1,144 @@
 <template>
 <ul class="clearfix">
-  <li class="col-sm-6 col-md-6 p10" v-for="(item, index) in data" :key="index">
-    <div class="grid-wrap" style="height: 120px">
+  <li class="mb10" v-for="(item, index) in data" :key="index">
+    <div class="grid-wrap">
       <div class="grid-left">
-        <a @click="handleGoto(item.account)">
-          <img :src="item.photos" width="50" height="50" style="vertical-align:middle; border-radius:50%; " class="showuserinfo" data-uid="1105825974" data-placement="automatic" data-toggle="tooltip17">
-        </a>
+        <v-photos :sourceData="item" />
       </div>
       <div class="grid-body">
         <p>
           <span style="font-weight:bold;">{{item.nickname}}</span>
           <i class="iconfont icon-male" v-if="item.sex === '1'"></i>
           <i class="iconfont icon-female" v-else></i>
-          <span><Remark :data="{uid: item.friend_uid}" /></span>
+          <span v-if="mod === 'myconcern' && loginuser.account === userInfo.account">
+            <Remark :data="{uid: item.account}" /><span style="color: #FFC107;" v-if="item.image">(图)</span></span>
+          <span class="ml5"><Blacklist :data="{uid: item.account, blacklist: item.blacklist}" /></span>
+          <span class="right">
+            <span class="concern" @click="concern(item)" v-if="item.account !== loginuser.account">{{item.concern_status}}</span>
+            <span class="ml15" v-if="mod === 'myconcern' && loginuser.account === userInfo.account">
+              <v-popover content="<i class='iconfont icon-down font18'></i>" arrow="tb" offset="right" :move="-60" :keys="`popover-${index}`">
+                <div class="p15" style="width: 150px; height: 250px">
+                  <ul class="font14" style="display: block">
+                    <li style="height: 32px" v-for="(data, i) in group" :key="i" @click="handleClick({ friend_uid: item.account, grouping: data.id })">{{data.name}}({{data.num}})</li>
+                  </ul>
+                </div>
+              </v-popover>
+            </span>
+          </span>
         </p>
-        <p>
-          <a>上海</a> |
-          <a @click="handleClickss(item.account, 'myconcern')"><span>关注</span>{{item.myconcern}}</a> |
-          <a @click="handleClickss(item.account, 'concernmy')"><span>粉丝</span>{{item.concernmy}}</a> |
-          <a><span>话题</span>{{item.talk}}</a>
+        <p class="font12">
+          <v-concern :userInfo="item" />
         </p>
-        <p>{{item.signature}}</p>
+        <p class="font12 cl-666">{{item.signature || 'Ta还没有签名'}}</p>
       </div>
-      <div class="right" style="width:50%" v-if="loginuser.currentUser">
-        <span class="concern" @click="concern(item)" style=" width:auto; height:20px; line-height:20px; display:block; text-align:center; cursor:pointer; position: absolute; top: 25px; right: 80px;">
-          {{item.concern_status}}</span>
-        <span class="infos demoimg" data-placement="top" data-toggle="tooltip17" style="width:60px; height:20px; line-height:20px; display:block; text-align:center; cursor:pointer; position:absolute; top:25px; right:15px;" data-left="-90">
-          <v-popover content="<i class='iconfont icon-down font18'></i>" arrow="tb" offset="right" :move="-60" :keys="`popover-${index}`" v-if="mod === 'myconcern'">
 
-            <div class="p15" style="width: 150px; height: 250px">
-              <ul class="font14" style="display: block">
-                <li style="height: 32px" v-for="(data, i) in group" :key="i" @click="handleClick({ friend_uid: item.friend_uid, grouping: data.id })">{{data.name}}({{data.num}})</li>
-              </ul>
-            </div>
-          </v-popover>
-        </span>
-      </div>
     </div>
   </li>
 </ul>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import Remark from './remark.vue'
+import Blacklist from './blacklist.vue'
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
-  ref,
   computed,
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
-import {
+  useStore,
   useRouter,
-  useRoute,
-  onBeforeRouteUpdate
-} from 'vue-router'
-import {
   getUid
 } from '@/utils'
 
-export default defineComponent({
-  name: 'AsideView',
-  components: {
-    Remark
-  },
-  props: {
-    data: {
-      type: Object,
-      defualt: () => {
-        return 
-      }
-    },
-    mod: {
-      type: String,
-      default: "concernmy"
-    },
-    group: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
+const props: any = defineProps({
+  data: {
+    type: Object,
+    defualt: () => {
+      return
     }
   },
-  setup(props, context) {
-    const {
-      ctx,
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const loginuser = computed(() => store.getters['user/loginuser']);
-
-
-    // 点击关注
-    function concern(item: any) {
-      store.dispatch('common/Fetch', {
-        api: "Concern",
-        data: {
-          uid: item.uid || item.friend_uid
-        }
-      }).then(res => {
-        if (res.returnMessage === "你已取消关注") {
-          item.concern_status = "关注Ta"
-        } else {
-          item.concern_status = "互相关注"
-        }
-        // userInfo.value.concernstatus = res.result.status
-      })
+  mod: {
+    type: String,
+    default: "concernmy"
+  },
+  group: {
+    type: Object,
+    default: () => {
+      return {}
     }
-
-    function handleClickss(uid: any, param: any) {
-
-      window.location.href = proxy.const.setUrl({
-        uid: uid,
-        query: `/concern?mod=${param}`
-      })
-    }
-
-    function handleClick(param: any) {
-      store.dispatch('common/Fetch', {
-        api: "UpdateGrouping",
-        data: {
-          ...param
-        }
-      }).then(res => {
-        props.render()
-      })
-
-    }
-
-    function handleGoto(uid: any) {
-      debugger
-      if (getUid() !== uid) {
-        const path = window.location.pathname.split("/")
-        window.location.href = `${path[1] === "app" ? "/app": ""}/u/${uid}/home`;
-      } else {
-        router.push(`${proxy.const.u}${uid}/home`)
-      }
-    }
-
-    return {
-      concern,
-      handleClick,
-      handleClickss,
-      handleGoto,
-      loginuser
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return
     }
   }
-
 })
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const router = useRouter();
+const loginuser = computed(() => store.getters['user/loginuser']);
+const userInfo = computed(() => store.getters['user/userInfo']);
+
+// 点击关注
+function concern(item: any) {
+  store.dispatch('common/Fetch', {
+    api: "Concern",
+    data: {
+      uid: item.account
+    }
+  }).then(res => {
+    if (res.returnMessage === "你已取消关注") {
+      item.concern_status = "关注Ta"
+    } else {
+      item.concern_status = "互相关注"
+    }
+  })
+}
+
+function handleClickss(uid: any, param: any) {
+  store.dispatch('common/Fetch', {
+    api: "verificationGrade",
+    data: {
+      uid: uid,
+      type: 'concernList',
+      query: param
+    }
+  }).then(res => {
+    if (res.ifSuccess) {
+      window.location.href = proxy.const.setUrl({
+        uid: uid,
+        query: res.result
+      })
+    } else {
+      proxy.$hlj.message({
+        type: 'info',
+        msg: res.returnMessage
+      })
+    }
+
+  })
+}
+
+function handleClick(param: any) {
+  store.dispatch('common/Fetch', {
+    api: "UpdateGrouping",
+    data: {
+      ...param
+    }
+  }).then(res => {
+    props.render()
+  })
+
+}
+
+function handleGoto(uid: any) {
+  if (getUid() !== uid) {
+    const path = window.location.pathname.split("/")
+    window.location.href = `${path[1] === "app" ? "/app": ""}/u/${uid}/home`;
+  } else {
+    router.push(`${proxy.const.u}${uid}/home`)
+  }
+}
 </script>

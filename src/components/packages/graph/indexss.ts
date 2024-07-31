@@ -8,7 +8,7 @@ import basicInfo from './dataModel/basic'
 import VueEvent from '@/utils/event'
 import {cloneDeep} from 'lodash'
 
- class graphs {
+class graphs {
   el: any = HTMLDivElement
   paper: any = joint.dia.Paper
   graph: any = joint.dia.Graph
@@ -43,7 +43,6 @@ import {cloneDeep} from 'lodash'
   this.undoStack = []
   this.redoStack = []
 
-
   var paperSmall = new joint.dia.Paper(Object.assign({
     el: document.getElementById('paper-multiple-papers-small'),
     model: graph,
@@ -55,24 +54,17 @@ import {cloneDeep} from 'lodash'
   }));
   paperSmall.scale(0.25,0.25,0,0)
 
-
-
   var boundaryTool = new joint.elementTools.Boundary();
-var removeButton = new joint.elementTools.Remove();
-
-var toolsView = new joint.dia.ToolsView({
-    tools: [
+  var removeButton = new joint.elementTools.Remove();
+  var toolsView = new joint.dia.ToolsView({
+      tools: [
         boundaryTool,
         removeButton
-    ]
-});
+      ]
+  });
 
-    // this.draggable()
-    this.setLink()
-    // this.svgPanZooms()
-    this.handleMouse()
-
-
+  this.setLink()
+  this.handleMouse()
 
   const rect = new joint.shapes.standard.Rectangle({
     position: { x: 50, y: 50 },
@@ -83,7 +75,7 @@ var toolsView = new joint.dia.ToolsView({
           ports.anchorPort
         ]
     }
-});
+  });
   
   paper.on('element:mouseleave', function(elementView: any) {
       elementView.hideTools();
@@ -94,9 +86,9 @@ var toolsView = new joint.dia.ToolsView({
   });
 
   
-  paper.on('element:pointerup', function(elementView: any) {
-    _this.undoStackPush('add', 'node',  _this.currCell, true)
-});
+    paper.on('element:pointerup', function(elementView: any) {
+      _this.undoStackPush('add', 'node',  _this.currCell, true)
+   });
   }
   
 
@@ -106,17 +98,20 @@ var toolsView = new joint.dia.ToolsView({
     if(!data){
       data = new dataModel.start({id: 'null', name: text})
     }
-    
     const rect = new (Elements as any)[ftype]({})
     rect.position(position.x, position.y);
     rect.setData(data)
     rect.addTo(this.graph);
+
+    // 创建节点后并显示该节点信息
+    VueEvent.emit("navbarSetting", rect);
+    VueEvent.emit("selectColor");
+
     this.undoStackPush('add', 'node', rect, true)
   }
 
   // 创建线条
   createLink(linkView: any) {
-
     let currentLinkModel = linkView.model.attributes
     let source = linkView.sourceView
     let target = linkView.targetView
@@ -139,21 +134,24 @@ var toolsView = new joint.dia.ToolsView({
     }
     let linkData = new dataModel['linkNode'](linkObj)
     linkView.model.setData(linkData)
+
+    // 创建线条后并显示该节点信息
+    VueEvent.emit("navbarSetting", linkView.model);
+
     this.undoStackPush('add', 'link', linkView, true)
   }
 
-  setLink() {
-    let self = this
-    this.paper.on('link:pointerdblclick', function(linkView: any) {
-      
-     
-    });
+    setLink() {
+      let self = this
+      this.paper.on('link:pointerdblclick', function(linkView: any) {
 
-  this.paper.on('link:pointerup', function(linkView: any) {
-    let source = linkView.sourceView
-    let target = linkView.targetView
-    
-  }); 
+      });
+
+    this.paper.on('link:pointerup', function(linkView: any) {
+      let source = linkView.sourceView
+      let target = linkView.targetView
+      
+    }); 
 
 
     this.paper.on('link:connect', function(linkView: any) {
@@ -165,7 +163,7 @@ var toolsView = new joint.dia.ToolsView({
     });    
 
     const _this = this
-// 删除节点
+    // 删除节点
     this.paper.on('element:delete', function(elementView: any, evt: any) {
       alert("ccccc")
       // Stop any further actions with the element view e.g. dragging
@@ -177,27 +175,6 @@ var toolsView = new joint.dia.ToolsView({
     });    
   }
 
-
-
-
-  // // 允许拖拽
-  // draggable(){
-  //   this.el.addEventListener('dragover', (e: any) => {
-  //     e.preventDefault()
-  //   })
-  //   this.el.addEventListener('drop', (e: any) => {
-  //     let ftype: any = e.dataTransfer.getData('ftype')
-  //     let text: any = e.dataTransfer.getData('text')
-  //     let offsetX: any = Number(e.dataTransfer.getData('offsetX'))
-  //     let offsetY: any = Number(e.dataTransfer.getData('offsetY'))
-  //     let dropPoint: any = this.paper.pageToLocalPoint(e.pageX, e.pageY)
-  //     let x: any = dropPoint.x - offsetX
-  //     let y: any = dropPoint.y - offsetY
-      
-  //     let cellView: any = this.createNode(ftype, text, {x, y})
-  //   })
-  // }
-
   // 允许拖拽
   draggable(e: any, data: any){
       let ftype: any = data.ftype
@@ -207,128 +184,128 @@ var toolsView = new joint.dia.ToolsView({
       let dropPoint: any = this.paper.pageToLocalPoint(e.pageX, e.pageY)
       let x: any = dropPoint.x - offsetX
       let y: any = dropPoint.y - offsetY
-      
-      let cellView: any = this.createNode(ftype, text, {x, y})
-
+      this.createNode(ftype, text, {x, y})
   }
 
+  // 更新节点
+  updateCells(cells: any, graph: Object){
+    let thisa: any = graph
 
+    if(!cells) return
+
+    let cellsList:any = (typeof cells=='string') ? JSON.parse(cells) : cells
+    cellsList.cells && cellsList.cells.map((cell: any) => {
+
+      if(cell.ftype === 'link' || cell.ftype === 'intentionLink'){
+        const {id, ftype, source, target, vertices, data} = cell as dataModel.Link
+        let sourceCell = thisa.getCell(source.id)
+        let targetCell = thisa.getCell(target.id)
+        let sss = new (Elements as any)[ftype]({id}) 
+        source && sss.source(sourceCell)
+        target && sss.target(targetCell)
+        vertices && sss.vertices(vertices)
+        let linkData: any = new dataModel['linkNode'](data)
+        sss.render({attrs: cell.attrs, data: cell.data})
+        sss.addTo(this.graph);    
+      }else{
+        const {id, ftype, position, data} = cell as dataModel.Node
+        const datas = new dataModel.start({...data})
+        const rect = new (Elements as any)[ftype]({id})
+        rect.position(position.x, position.y);
+        rect.render({attrs: cell.attrs, data: datas})
+        rect.addTo(this.graph);
+      }
+   })
+   this.svgPanZooms()
+  }
+
+  // 设置数据
   setGraphData(id: any){
     const cell = this.graph.getCell(id)
     let data = cell.attributes.data
     cell.setData(data)
-  }
+  }  
 
-  updateCells(cells: any, graph: Object){
-    let thisa: any = graph
-
-    if(!cells) {
-      return
-    }
-
-   let cellsList:any = (typeof cells=='string') ? JSON.parse(cells) : cells
-
-   cellsList.cells && cellsList.cells.map((cell: any) => {
-
-    if(cell.ftype === 'link' || cell.ftype === 'intentionLink'){
-      
-      const {id, ftype, source, target, vertices, data} = cell as dataModel.Link
-      let sourceCell = thisa.getCell(source.id)
-      let targetCell = thisa.getCell(target.id)
-      let sss = new (Elements as any)[ftype]({id}) 
-      source && sss.source(sourceCell)
-      target && sss.target(targetCell)
-      vertices && sss.vertices(vertices)
-      let linkData: any = new dataModel['linkNode'](data)
-      sss.render({attrs: cell.attrs, data: cell.data})
-      sss.addTo(this.graph);    
-    }else{
-      const {id, ftype, position, data} = cell as dataModel.Node
-      const datas = new dataModel.start({...data})
-      const rect = new (Elements as any)[ftype]({id})
-      rect.position(position.x, position.y);
-      rect.render({attrs: cell.attrs, data: datas})
-      rect.addTo(this.graph);
-    }
-   })
-   this.svgPanZooms()
-  //  this.svgPanZooms2()
-  }
-
+  // 重新渲染
   updateGraph(cells: any){
     this.updateCells(cells, this.graph)
-
-  }
-
-  handleMouse(){
-
-    let _this = this
-
-    this.paper.on('element:pointerdown', (cellView: any, evt: any, x: number, y: number) => {
-      this.currCell = cellView;
-  })
-  this.paper.on('cell:pointerup blank:pointerup', (cellView: any, evt: any, x: number, y: number) => {
-      this.currCell = null;
-  })
-
-  this.paper.on('link:pointerdown', (cellView: any, evt: any, x: number, y: number) => {
-    this.currCell = cellView;
-})
-this.paper.on('link:pointerup', (cellView: any, evt: any, x: number, y: number) => {
-    this.currCell = null;
-})
-
-    // 点击画布空白处
-    this.paper.on('blank:pointerclick', function() {
-      VueEvent.emit("blank");
-    });
-
-  // 点击图形节点
-  this.paper.on('cell:pointerclick', function(cellView: any) {
-   const cell = cellView.model
-
-   VueEvent.emit("navbarSetting", cell);
-   VueEvent.emit("selectColor");
-  });
-
-  // 点击连线节点
-  this.paper.on('link:pointerclick', function(cellView: any) {
-    const cell = cellView.model
-    VueEvent.emit("navbarSetting", cell);
-   });  
-
-
-    this.paper.on('element:mouseenter', function(elementView: any) {
-      var boundaryTool = new joint.elementTools.Boundary();
-      var removeButton = new joint.elementTools.Remove();
-      var toolsView = new joint.dia.ToolsView({
-        name: 'basic-tools',
-        tools: [boundaryTool, removeButton],
-    });
-    elementView.addTools(toolsView)
-  });    
-
-  this.paper.on('link:mouseenter', (linkView: any) => {
-    var boundaryTool = new joint.elementTools.Boundary();
-    var removeButton = new joint.elementTools.Remove();
-    var toolsView = new joint.dia.ToolsView({
-      name: 'basic-tools',
-      tools: [boundaryTool, removeButton],
-  });
-  linkView.addTools(toolsView)
-});
-
-this.paper.on('link:mouseleave', (linkView: any) => {
-    linkView.removeTools();
-});
 
   }
 
   // 设置背景色
   setBackground(color: any){
     this.paper.drawBackground({color: color})
-   
   }
+
+  // 设置属性
+  setAttrs(param: any){
+    const cell = this.graph.getCell(param.id)
+    cell.setAttr(param)
+  }    
+
+  // 鼠标事件
+  handleMouse(){
+    this.paper.on('element:pointerdown', (cellView: any, evt: any, x: number, y: number) => {
+      this.currCell = cellView;
+    })
+
+    this.paper.on('cell:pointerup blank:pointerup', (cellView: any, evt: any, x: number, y: number) => {
+      this.currCell = null;
+    })
+
+    this.paper.on('link:pointerdown', (cellView: any, evt: any, x: number, y: number) => {
+      this.currCell = cellView;
+    })
+
+    this.paper.on('link:pointerup', (cellView: any, evt: any, x: number, y: number) => {
+      this.currCell = null;
+    })
+
+    // 点击画布空白处
+    this.paper.on('blank:pointerclick', function() {
+      VueEvent.emit("blank");
+    });
+
+    // 点击图形节点
+    this.paper.on('cell:pointerclick', function(cellView: any) {
+      const cell = cellView.model
+      VueEvent.emit("navbarSetting", cell);
+      VueEvent.emit("selectColor");
+    });
+
+    // 点击连线节点
+    this.paper.on('link:pointerclick', function(cellView: any) {
+      const cell = cellView.model
+      VueEvent.emit("navbarSetting", cell);
+    });  
+
+    // 鼠标经过元素
+    this.paper.on('element:mouseenter', function(elementView: any) {
+      var boundaryTool = new joint.elementTools.Boundary();
+      var removeButton = new joint.elementTools.Remove();
+      var toolsView = new joint.dia.ToolsView({
+        name: 'basic-tools',
+        tools: [boundaryTool, removeButton],
+        });
+        elementView.addTools(toolsView)
+      });    
+
+    // 鼠标经过连线
+    this.paper.on('link:mouseenter', (linkView: any) => {
+      var boundaryTool = new joint.elementTools.Boundary();
+      var removeButton = new joint.elementTools.Remove();
+      var toolsView = new joint.dia.ToolsView({
+        name: 'basic-tools',
+        tools: [boundaryTool, removeButton],
+    });
+
+    // 鼠标离开连线
+    this.paper.on('link:mouseleave', (linkView: any) => {
+      linkView.removeTools();
+    });    
+  });
+
+}
 
   svgPanZooms() {
     let _this = this
@@ -410,14 +387,6 @@ this.paper.on('link:mouseleave', (linkView: any) => {
     }
   }  
 
-  // 设置属性
-  setAttrs(param: any){
-    const cell = this.graph.getCell(param.id)
-    cell.setAttr(param)
-  }
-
-
-
   // 撤销和恢复
 
   // 操作记录
@@ -475,7 +444,6 @@ this.paper.on('link:mouseleave', (linkView: any) => {
       let newCell = cloneDeep(cellObj[0])
         cellObj[0].attributes = cell.data.attributes
         cell.data.attributes = newCell.attributes
-      // this.updateGraph() // 重新渲染
     }
     cell && this.redoStack.push(cell)
   }
@@ -520,8 +488,6 @@ this.paper.on('link:mouseleave', (linkView: any) => {
       let newCell = cloneDeep(cellObj[0])
       cellObj[0].attributes = cell.data.attributes
       cell.data.attributes = newCell.attributes
-      
-      // this.updateGraph() // 重新渲染
     }
     cell && this.undoStack.push(cell)
   }

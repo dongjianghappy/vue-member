@@ -85,7 +85,6 @@ export default defineComponent({
     })
 
     function handleclick(e: any) {
-      debugger
       isShow.value = !isShow.value
       const doc = document.documentElement
       const el = e.currentTarget;

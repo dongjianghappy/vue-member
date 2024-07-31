@@ -68,12 +68,12 @@ export default defineComponent({
           display: props.type
         }
       }).then(res => {
-        debugger
         if(res.ifSuccess === 2){
           return
         }
-        else if(res.ifSuccess === -1){
+        else if(res.ifSuccess === 0 || res.ifSuccess === -1){
           proxy.$hlj.message({
+            type: 'info',
             msg: res.returnMessage
           })
           return

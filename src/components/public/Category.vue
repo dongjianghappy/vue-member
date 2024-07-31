@@ -56,250 +56,223 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   ref,
   useStore,
   watch,
-  getParent,
-  showParent
+  getParent
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Category',
-  props: {
-    title: {
-      type: String,
-      default: ""
-    },
-    name: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: "button"
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    api: {
-      type: String,
-      default: ""
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
-    },
-    isInt: {
-      type: Boolean,
-      default: false
-    },
-    isCurrent: {
-      type: Boolean,
-      default: false
-    },
-    // 确认按钮是否是提交
-    isUpdate: {
-      type: Boolean,
-      default: false
-    },
-    isMore: {
-      type: Boolean,
-      default: false
-    },
-    isGroup: {
-      type: Boolean,
-      default: false
-    },
+const props: any = defineProps({
+  title: {
+    type: String,
+    default: ""
   },
-  emits: ['update:cate'],
-  setup(props, context) {
-    const isShow: any = ref(false)
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const dataList: any = ref([])
-    let current: any = ref([])
-
-    // 监听
-    watch([isShow], async (newValues, prevValues) => {
-      if (isShow.value) {
-        init()
-      }
-    })
-
-    function handleclick(param: any) {
-      isShow.value = !isShow.value
+  name: {
+    type: String,
+    default: ""
+  },
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
+  },
+  api: {
+    type: String,
+    default: ""
+  },
+  isInt: {
+    type: Boolean,
+    default: false
+  },
+  isCurrent: {
+    type: Boolean,
+    default: false
+  },
+  // 确认按钮是否是提交
+  isUpdate: {
+    type: Boolean,
+    default: false
+  },
+  isMore: {
+    type: Boolean,
+    default: false
+  },
+  isGroup: {
+    type: Boolean,
+    default: false
+  }
+})
+const isShow: any = ref(false)
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const dataList: any = ref([])
+let current: any = ref([])
 
-    function choose(param: any) {
-      if (props.isMore === true) {
-        let index = current.value.findIndex((item: any) => item.value === param.value)
-        if (index > -1) {
-          current.value.splice(index, 1)
-        } else {
-          if (current.value.length > 4) {
-            proxy.$hlj.message({
-              msg: "最多只能选择5个分类"
-            })
-          } else {
-            current.value.push(param)
-          }
-        }
-      } else {
-        current.value = param
-      }
-    }
+// 监听
+watch([isShow], async (newValues, prevValues) => {
+  if (isShow.value) {
+    init()
+  }
+})
 
-    function splitFid() {
-      const {
-        item
-      } = props.data
+function handleclick(param: any) {
+  isShow.value = !isShow.value
+}
 
-      if (!item.fid) {
-        return
-      }
-      let arr: any = []
-      if (item.fid.indexOf("-") > -1) {
-        let ccc = item.fid.split("-")
-        ccc.map((data: any) => {
-          arr.push({
-            value: data
-          })
+function choose(param: any) {
+  if (props.isMore === true) {
+    let index = current.value.findIndex((item: any) => item.value === param.value)
+    if (index > -1) {
+      current.value.splice(index, 1)
+    } else {
+      if (current.value.length > 4) {
+        proxy.$hlj.message({
+          msg: "最多只能选择5个分类"
         })
       } else {
-        arr = [{
-          value: item.fid
-        }]
+        current.value.push(param)
       }
-      return arr
     }
+  } else {
+    current.value = param
+  }
+}
 
-    function init() {
-      let aaa = props.isMore && splitFid()
-      current.value = []
-      store.dispatch('common/Fetch', {
-        api: props.api || "cateList",
-        data: {
-          coding: props.data.coding.cate || props.data.coding || "P0001"
-        }
-      }).then(res => {
-        dataList.value = res.result
+function splitFid() {
+  const {
+    item
+  } = props.data
 
-        if (!props.isMore) {
-          return
+  if (!item.fid) {
+    return
+  }
+  let arr: any = []
+  if (item.fid.indexOf("-") > -1) {
+    let ccc = item.fid.split("-")
+    ccc.map((data: any) => {
+      arr.push({
+        value: data
+      })
+    })
+  } else {
+    arr = [{
+      value: item.fid
+    }]
+  }
+  return arr
+}
+
+function init() {
+  let aaa = props.isMore && splitFid()
+  current.value = []
+  store.dispatch('common/Fetch', {
+    api: props.api || "cateList",
+    data: {
+      coding: props.data.coding.cate || props.data.coding || "P0001"
+    }
+  }).then(res => {
+    dataList.value = res.result
+
+    if (!props.isMore) {
+      return
+    }
+    for (let i = 0; i < res.result.length; i++) {
+      aaa.map((item: any) => {
+
+        if (item.value.indexOf(`|${res.result[i].id}|`) > -1) {
+          item.name = res.result[i].name
         }
-        for (let i = 0; i < res.result.length; i++) {
+        return item
+      })
+
+      // 二级分类查询
+      let second: any = res.result[i].list
+      if (second.length > 0) {
+        for (let j = 0; j < second.length; j++) {
           aaa.map((item: any) => {
-
-            if (item.value.indexOf(`|${res.result[i].id}|`) > -1) {
-              item.name = res.result[i].name
+            if (item.value.indexOf(`|${second[j].id}|`) > -1) {
+              item.name = second[j].name
             }
             return item
           })
 
           // 二级分类查询
-          let second: any = res.result[i].list
-          if (second.length > 0) {
-            for (let j = 0; j < second.length; j++) {
+          let third: any = res.result[i].list[j].list
+          if (third.length > 0) {
+            for (let k = 0; k < third.length; k++) {
               aaa.map((item: any) => {
-                if (item.value.indexOf(`|${second[j].id}|`) > -1) {
-                  item.name = second[j].name
+                if (item.value.indexOf(`|${third[k].id}|`) > -1) {
+                  item.name = third[k].name
                 }
                 return item
               })
-
-              // 二级分类查询
-              let third: any = res.result[i].list[j].list
-              if (third.length > 0) {
-                for (let k = 0; k < third.length; k++) {
-                  aaa.map((item: any) => {
-                    if (item.value.indexOf(`|${third[k].id}|`) > -1) {
-                      item.name = third[k].name
-                    }
-                    return item
-                  })
-                }
-              }
             }
           }
         }
-        current.value = aaa
-      })
+      }
     }
+    current.value = aaa
+  })
+}
 
-    function submit() {
-      const {
-        data
-      }: any = props
+function submit() {
+  const {
+    data
+  }: any = props
 
-      // if (!props.isCurrent && data.item.id === current.value.value) {
-      //   proxy.$hlj.message({
-      //     msg: "不能以自己为父类"
-      //   })
-      //   return
-      // }
+  // if (!props.isCurrent && data.item.id === current.value.value) {
+  //   proxy.$hlj.message({
+  //     msg: "不能以自己为父类"
+  //   })
+  //   return
+  // }
 
-      let fid: any = ""
-      let parent = ""
-      if (props.isMore) {
+  let fid: any = ""
+  let parent = ""
+  if (props.isMore) {
 
-        current.value.map((item: any, index: number) => {
-          if (index === 0) {
-            fid = item.value
-            parent = item.name
-          } else {
-            fid += '-' + item.value
-            parent += '、' + item.name
-          }
-        })
-
-        data.item.fid = fid
-        data.item.parent = parent
+    current.value.map((item: any, index: number) => {
+      if (index === 0) {
+        fid = item.value
+        parent = item.name
       } else {
-        if(props.isGroup){
-          data.item.pid = current.value.value
-          data.item.group = current.value.name
-        }else{
-          data.item.fid = current.value.value
-          data.item.parent = current.value.name          
-        }
+        fid += '-' + item.value
+        parent += '、' + item.name
       }
+    })
 
-      isShow.value = !isShow.value
-      // 提交代码
-      if (props.isUpdate) {
-        store.dispatch('common/Fetch', {
-          api: 'update',
-          data: {
-            id: data.item.id,
-            fid: props.isMore ? fid : current.value.value,
-            coding: props.data.coding.art || props.data.coding
-          }
-        })
-      }
-    }
-    return {
-      isShow,
-      current,
-      handleclick,
-      choose,
-      submit,
-      dataList,
-      getParent,
-      showParent
+    data.item.fid = fid
+    data.item.parent = parent
+  } else {
+    if (props.isGroup) {
+      data.item.pid = current.value.value
+      data.item.group = current.value.name
+    } else {
+      data.item.fid = current.value.value
+      data.item.parent = current.value.name
     }
   }
-})
+
+  isShow.value = !isShow.value
+  // 提交代码
+  if (props.isUpdate) {
+    store.dispatch('common/Fetch', {
+      api: 'update',
+      data: {
+        id: data.item.id,
+        fid: props.isMore ? fid : current.value.value,
+        coding: props.data.coding.art || props.data.coding
+      }
+    })
+  }
+}
 </script>
 
 <style scoped>

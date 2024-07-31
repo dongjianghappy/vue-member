@@ -1,77 +1,44 @@
 <template>
-  <div>
-    <SpaceName v-if="module.personal_center.space_name" />
-    <div class="container w1100 relative clearfix">
-      <!-- 侧边菜单 -->
-      <div class="left-sidebar left">
-        <v-aside :data="module.groups"
-                 title="首页"
-                 :render="init" />
-      </div>
-      <!-- 主内容 -->
-      <div class="main-center left">
-        <Collect v-if="component==='collect'" />
-        <Comment v-else-if="component==='comment'" />
-        <Praise v-else-if="component==='praise'" />
-        <Forwarding v-else-if="component==='forwarding'" />
-        <Center ref="talk"
-                v-else />
-      </div>
-      <!-- 右侧 -->
-      <div class="w280 right">
-        <RightView :render="init" />
-      </div>
+<div v-if="route.path === '/home' || loginuser.currentUser">
+  <SpaceName v-if="module.personal_center.space_name" />
+  <div class="container w1100 relative clearfix">
+    <div class="left-sidebar left">
+      <v-aside :data="module.groups" title="首页" :render="init" />
+    </div>
+    <div class="main-center left">
+      <Center ref="talk" />
+    </div>
+    <div class="w280 right">
+      <RightView :render="init" />
     </div>
   </div>
+</div>
+<div v-else>
+  <Home />
+</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  useStore,
-  useRoute,
   computed,
-  ref
+  ref,
+  useStore,
+  useRoute  
 } from '@/utils'
-import SpaceName from '../../views/layout/components/name/index.vue'
+import SpaceName from '@/views/layout/components/name/index.vue'
 import Center from './center/index.vue'
-import Collect from './collect/index.vue'
-import Comment from './comment/index.vue'
-import Praise from './praise/index.vue'
-import Forwarding from './forwarding/index.vue'
 import RightView from './components/right_aside.vue'
 
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-    SpaceName,
-    Center,
-    Collect,
-    Comment,
-    Praise,
-    Forwarding,
-    RightView
-  },
-  setup() {
-    const store = useStore();
-    const route = useRoute();
-    const component = computed(() => route.query.mod);
-    const module = computed(() => store.getters['user/config_talk']);
-    const talk: any = ref(null)
+import Home from '../home/index.vue'
 
-    function init(param: any = {}) {
-      if(!route.query.mod){
-        return
-      }
-      return talk.value.init(param)
-    }
+const store = useStore();
+const route = useRoute();
+const loginuser = computed(() => store.getters['user/loginuser']);
+const module = computed(() => store.getters['user/config_talk']);
+const talk: any = ref(null)
 
-    return {
-      component,
-      module,
-      init,
-      talk
-    }
-  }
-})
+function init(param: any = {}) {
+  if (!route.query.mod) return
+  return talk.value.init(param)
+}
 </script>

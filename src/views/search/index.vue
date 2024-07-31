@@ -11,32 +11,15 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   computed,
-  useStore,
-  useRoute
+  useStore
 } from '@/utils'
 
 import Center from './center/index.vue'
 import RightView from './components/right_aside.vue'
 
-export default defineComponent({
-  name: 'HomeViewdddf',
-  components: {
-    Center,
-    RightView
-  },
-  setup() {
-    const store = useStore();
-    const route = useRoute();
-    const module = computed(() => store.getters['user/config_talk']);
-    const component = computed(() => route.query.mod);
-    return {
-      module,
-      component
-    }
-  }
-})
+const store = useStore();
+const module = computed(() => store.getters['user/config_talk']);
 </script>

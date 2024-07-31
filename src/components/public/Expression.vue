@@ -26,77 +26,45 @@
 </v-popover>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  codings,
-  defineComponent,
+  defineProps,
+  defineEmits,
   ref,
   useStore,
 } from '@/utils'
-import {
-  expression
-} from '@/assets/const'
-export default defineComponent({
-  name: 'v-Expression',
-  props: {
-    move: {
-      type: String,
-      default: -10
-    }
-  },
-  emits: ['onEmoji'],
-  setup(props, context) {
-    const store = useStore()
-    const coding = codings.expression
-    const currentCate = ref([])
-    const expressionList: any = expression;
-    const dataList = ref([])
-    const currentIndex: any = ref('0')
 
-    function handleClick(param: any) {
-      currentIndex.value = "0"
-      if (!param) {
-        return
-      }
-      store.dispatch('common/Fetch', {
-        api: 'expression'
-      }).then(res => {
-        dataList.value = res.result
-        currentCate.value = res.result.length > 0 ? res.result[0].list : []
-      })
-    }
-
-    function handleCate(param: any, index: any) {
-      debugger
-      currentCate.value = param.list || []
-      currentIndex.value = index
-    }
-
-    function ChooseEmoji(data: any) {
-      context.emit('onEmoji', `[${data}]`)
-    }
-    return {
-      ChooseEmoji,
-      expressionList,
-      dataList,
-      handleClick,
-      handleCate,
-      currentCate,
-      currentIndex
-    }
+const props: any = defineProps({
+  move: {
+    type: String,
+    default: -10
   }
 })
-</script>
+const emit: any = defineEmits(['onEmoji'])
+const store = useStore()
+const currentCate = ref([])
+const dataList = ref([])
+const currentIndex: any = ref('0')
 
-<style lang="less" scoped>
-.facebox {
-  li {
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    line-height: 32px;
-    float: left;
-    text-align: center;
+function handleClick(param: any) {
+  currentIndex.value = "0"
+  if (!param) {
+    return
   }
+  store.dispatch('common/Fetch', {
+    api: 'expression'
+  }).then(res => {
+    dataList.value = res.result
+    currentCate.value = res.result.length > 0 ? res.result[0].list : []
+  })
 }
-</style>
+
+function handleCate(param: any, index: any) {
+  currentCate.value = param.list || []
+  currentIndex.value = index
+}
+
+function ChooseEmoji(data: any) {
+  emit('onEmoji', `[${data}]`)
+}
+</script>

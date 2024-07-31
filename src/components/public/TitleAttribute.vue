@@ -65,70 +65,52 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
+  defineProps,
   ref
 } from 'vue'
 import {
-  color
+  colorList
 } from '@/assets/const'
 
-export default defineComponent({
-  name: 'v-Search',
-  data() {
-    return {
-      background: "#f1f1f1"
+const props: any = defineProps({
+  style: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  props: {
-    style: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    setStyle: {
-      type: Function,
-      default: () => {
-        return
-      }
-    }
-  },
-  setup(props, context) {
-    const colorList: any = ref(color)
-    const currentColor: any = ref("#fff")
-
-    let attr: any = ref({})
-
-    function handleclick(param: any) {
-      attr.value = props.style
-
-      if (param === 'bold') {
-        !attr.value.fontWeight ? attr.value.fontWeight = "bold" : delete attr.value.fontWeight
-      } else if (param === 'style') {
-        !attr.value.fontStyle ? attr.value.fontStyle = "italic" : delete attr.value.fontStyle
-      } else if (param === 'underline') {
-        !attr.value.textDecoration ? attr.value.textDecoration = "underline" : delete attr.value.textDecoration
-      }
-      props.setStyle(attr)
-    }
-
-    function choose(color: any) {
-      attr.value = props.style
-      currentColor.value = color
-      currentColor.value ? attr.value.color = color : delete attr.value.color
-      props.setStyle(attr)
-    }
-    return {
-      handleclick,
-      colorList,
-      choose,
-      currentColor
+  setStyle: {
+    type: Function,
+    default: () => {
+      return
     }
   }
 })
+const currentColor: any = ref("#fff")
+
+let attr: any = ref({})
+
+function handleclick(param: any) {
+  attr.value = props.style
+
+  if (param === 'bold') {
+    !attr.value.fontWeight ? attr.value.fontWeight = "bold" : delete attr.value.fontWeight
+  } else if (param === 'style') {
+    !attr.value.fontStyle ? attr.value.fontStyle = "italic" : delete attr.value.fontStyle
+  } else if (param === 'underline') {
+    !attr.value.textDecoration ? attr.value.textDecoration = "underline" : delete attr.value.textDecoration
+  }
+  props.setStyle(attr)
+}
+
+function choose(color: any) {
+  attr.value = props.style
+  currentColor.value = color
+  currentColor.value ? attr.value.color = color : delete attr.value.color
+  props.setStyle(attr)
+}
 </script>
 
 <style scoped>

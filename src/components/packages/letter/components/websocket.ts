@@ -27,8 +27,7 @@ export const websocket = (param: any) => {
 		  //}
 		};
 		
-		sock.onmessage = function (msg: any){ 
-			debugger
+		sock.onmessage = function (msg: any){
 		  var data = JSON.parse(msg.data)
 		  VueEvent.emit("content", data);
 		};

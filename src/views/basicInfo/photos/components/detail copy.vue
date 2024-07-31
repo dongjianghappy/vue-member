@@ -168,7 +168,6 @@ export default defineComponent({
           xs = (410 - img_width) / 2
           ys = 0;
         }
-        debugger
         canvas.drawImage(img, 0, 0, img.width, img.height, xs, ys, img_width, img_height);
       }
 

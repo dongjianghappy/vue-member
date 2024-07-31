@@ -4,28 +4,22 @@
 </v-button>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent
+  defineProps
 } from '@/utils'
 import VueEvent from '@/utils/event'
-export default defineComponent({
-  name: 'v-Category',
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  setup(props, context) {
-    function handleclick(param: any) {
-      VueEvent.emit("graph", props.data);
-    }
-    return {
-      handleclick
+
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
 })
+
+function handleclick(param: any) {
+  VueEvent.emit("graph", props.data);
+}
 </script>

@@ -185,7 +185,6 @@ export default defineComponent({
         }
       }).then((res: any) => {
         calendarData.value = res.result
-        debugger
       })
 
       store.dispatch('common/Fetch', {
@@ -265,7 +264,7 @@ export default defineComponent({
     }
 
     // 提交
-    async function save() {
+    async function save(param: any) {
 
       const dom: any = document.getElementById("imgs")
       hideCamera.value = true
@@ -281,6 +280,7 @@ export default defineComponent({
               year: date.getFullYear(),
               month: date.getMonth() + 1,
               day: date.getDate(),
+              summary: param.name
             }
           }).then(res => {
             proxy.$hlj.message({

@@ -18,7 +18,7 @@
     </span>
   </div>
   <div class="module-content content-wrap ptb15 pr10" style="min-height: 590px">
-    <div class="notes-list relative" v-for="(item, index) in dataList" :key="index">
+    <div class="notes-list relative" v-for="(item, index) in dataList.list" :key="index">
       <div class="notes-content plr5 ptb10" style="background: none; margin-bottom: 0px; border: 0px solid #f3f3f3">
         <div class="pb5 font12">{{item.times}}</div>
         <span class="bold">【{{item.parent}}】</span>
@@ -32,10 +32,9 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
+  defineProps,
   useStore,
   useRoute,
   watch,
@@ -43,117 +42,79 @@ import {
   computed,
   ref,
   getUid,
-  useRouter
 } from '@/utils'
 import AddBookmark from './components/addBookmark.vue'
 import {
   visibles
 } from '@/assets/const'
-export default defineComponent({
-  name: 'HomeView',
-  components: {
-    AddBookmark
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    group: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    query: {
-      type: String,
-      default: 'all'
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const route = useRoute();
-    const router = useRouter()
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    const userInfo = computed(() => store.getters['user/userInfo']);
-    const dataList = ref([])
-    let m: any = route.query.mod;
-    const loading: any = ref(false)
-    const cateName: any = ref({
-      id: '',
-      name: '所有的'
-    })
-    const typeName: any = ref("")
-    const sidebar = computed(() => {
-      const sidebars = props.group.map((item: any) => {
-        return {
-          name: item.name,
-          value: item.id
-        }
-      })
-      return sidebars
-    });
-
-    watch(() => route.query.item, () => {
-      init()
-    })
-
-    function handleclick(param: any) {
-      init(param)
+  group: {
+    type: Object,
+    default: () => {
+      return {}
     }
-    
-    function handleedit(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: getUid(),
-        query: `/journal?item=details&action=edit&id=${param.id}`
-      }))
-    }
-
-    function visit(param: any) {
-      window.open(param.url)
-    }
-
-    function init(param: any = {}) {
-      const params: any = {
-        uid: getUid(),
-        fid: param.id,
-      }
-
-      Object.assign(params, param)
-
-      loading.value = false
-      dataList.value = []
-      store.dispatch('common/Fetch', {
-        api: 'bookmark',
-        data: {
-          ...params
-        }
-      }).then(res => {
-        loading.value = true
-        dataList.value = res.result || []
-      })
-    }
-
-    onMounted(init)
-    return {
-      visibles,
-      loginuser,
-      userInfo,
-      dataList,
-      loading,
-      init,
-      cateName,
-      typeName,
-      handleclick,
-      handleedit,
-      visit,
-      sidebar
-    }
+  },
+  query: {
+    type: String,
+    default: 'all'
   }
 })
+const store = useStore();
+const route = useRoute();
+const loginuser = computed(() => store.getters['user/loginuser']);
+const userInfo = computed(() => store.getters['user/userInfo']);
+const dataList = ref([])
+const loading: any = ref(false)
+const sidebar = computed(() => {
+  const sidebars = props.group.map((item: any) => {
+    return {
+      name: item.name,
+      value: item.id
+    }
+  })
+  return sidebars
+});
+
+watch(() => route.query.item, () => {
+  init()
+})
+
+function handleclick(param: any) {
+  init(param)
+}
+
+function visit(param: any) {
+  window.open(param.url)
+}
+
+function init(param: any = {}) {
+  const params: any = {
+    page: 1,
+    pagesize: 25,
+    uid: getUid(),
+    fid: param.id,
+  }
+
+  Object.assign(params, param)
+
+  loading.value = false
+  dataList.value = []
+  store.dispatch('common/Fetch', {
+    api: 'bookmark',
+    data: {
+      ...params
+    }
+  }).then(res => {
+    loading.value = true
+    dataList.value = res.result || {}
+  })
+}
+
+onMounted(init)
 </script>

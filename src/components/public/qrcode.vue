@@ -12,52 +12,18 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   ref,
 } from 'vue'
-import {
-  useStore
-} from 'vuex'
-// yarn add qrcode.vue
+
 import QrcodeVue from 'qrcode.vue'
-export default defineComponent({
-  name: 'v-Mood',
-  components: {
-    QrcodeVue
-  },
-  props: {
-    user: {
-      type: String,
-      default: ""
-    }
-  },
-  setup(props, context) {
-
-    const isShow = ref(false)
-
-    return {
-      isShow
-    }
+const props: any = defineProps({
+  user: {
+    type: String,
+    default: ""
   }
 })
+const isShow = ref(false)
 </script>
-
-<style scoped>
-.li {
-  background: #ccc;
-  height: 75px;
-  border-radius: 5px;
-  line-height: 75px;
-  color: #fff;
-}
-
-.current {
-  background: #8bc34a;
-}
-
-.ps {
-  height: 320px;
-}
-</style>

@@ -7,7 +7,6 @@ const mutations = {
     sessionStorage.setItem('editPendant', params)
   },  
   setData: (state: any, params: any) => {
-    debugger
     state[params.state] = params.data
   },   
   setTalkList: (state: any, params: any) => {
@@ -39,7 +38,14 @@ const mutations = {
       result.push(params.slice(i,i+4));
     } 
     state.recommendUser = result 
-  },    
+  },  
+  setHot: (state: any, params: any) => {
+    const result = [];
+    for(let i=0,len=params.length;i<len;i+=5){
+      result.push(params.slice(i,i+5));
+    } 
+    state.hot = result
+  }, 
   setHotTalk: (state: any, params: any) => {
     const result = [];
     for(let i=0,len=params.hotTalk.length;i<len;i+=5){
@@ -68,9 +74,15 @@ const mutations = {
   setGoldcoin: (state: any, params: any) => {
     state.goldcoin = params
   }, 
+  setEnergyList: (state: any, params: any) => {
+    state.energyList = params
+  }, 
   setSignList: (state: any, params: any) => {
     state.signList = params
-  },   
+  },  
+  setBlacklist: (state: any, params: any) => {
+    state.blacklist = params
+  },  
   setMessageBoard: (state: any, params: any) => {
     state.messageBoard = params
   }, 

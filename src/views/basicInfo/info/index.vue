@@ -20,16 +20,13 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   getCurrentInstance,
   onMounted,
-  computed
-} from 'vue'
-import {
+  computed,
   useStore
-} from 'vuex'
+} from '@/utils'
 import Basic from './components/basic.vue'
 import Contact from './components/contact.vue'
 import Blog from './components/blog.vue'
@@ -38,68 +35,42 @@ import Education from './components/education.vue'
 import Photos from '../photos/index.vue'
 import PersonalPhotos from './components/personalPhotos.vue'
 
-export default defineComponent({
-  name: 'HomeViewdd',
-  components: {
-    Basic,
-    Contact,
-    Blog,
-    Industry,
-    Education,
-    Photos,
-    PersonalPhotos
-  },
-  props: {
-    type: {
-      type: String,
-      defult: "index"
-    }
-  },
-  setup(props, context) {
-    const {
-      ctx,
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const basicInfo = computed(() => store.getters['user/basicInfo']);
-
-    function init() {
-      store.dispatch('user/UserBaiscInfo', {})
-    }
-
-    function edit(param: any) {
-      store.dispatch('common/Fetch', {
-        api: "editUserInfo",
-        data: {
-          ...param
-        }
-      }).then(res => {
-        proxy.$hlj.message(res.returnMessage)
-        console.log("ss");
-      })
-    }
-
-    function secrecy(param: any) {
-
-      store.dispatch('common/Fetch', {
-        api: "secrecySetting",
-        data: {
-          field: param
-        }
-      }).then(res => {
-
-      })
-    }
-
-    onMounted(init)
-
-    return {
-      basicInfo,
-      edit,
-      init,
-      secrecy
-
-    }
+const props: any = defineProps({
+  type: {
+    type: String,
+    defult: "index"
   }
 })
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const basicInfo = computed(() => store.getters['user/basicInfo']);
+
+function init() {
+  store.dispatch('user/UserBaiscInfo', {})
+}
+
+function edit(param: any) {
+  store.dispatch('common/Fetch', {
+    api: "editUserInfo",
+    data: {
+      ...param
+    }
+  }).then(res => {
+    proxy.$hlj.message(res.returnMessage)
+    console.log("ss");
+  })
+}
+
+function secrecy(param: any) {
+  store.dispatch('common/Fetch', {
+    api: "secrecySetting",
+    data: {
+      field: param
+    }
+  })
+}
+
+onMounted(init)
 </script>

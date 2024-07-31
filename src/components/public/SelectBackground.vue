@@ -17,106 +17,85 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
+  defineProps,
   useStore,
   ref,
 } from '@/utils'
 import List from '@/views/index/album/components/list.vue'
 
-export default defineComponent({
-  name: 'HomeViewh',
-  components: {
-    List
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
+    }
   },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    kind: {
-      type: String,
-      default: 'head_background'
-    },
-    mask: {
-      type: Object,
-      default: {
-        w: 1050,
-        h: 350,
-        tb: 50,
-        lr: 50
-      }
-    },
-    size: {
-      type: Object,
-      default: () => {
-        return {
-          width: 500,
-          height: 300
-        }
-      }
-    },
-    style: {
-      type: Object,
-      default: () => {
-        return {
-          width: 670,
-          height: 570
-        }
-      }
-    },
-    img: {
-      type: Object,
-      default: () => {
-        return {
-          width: 800
-        }
+  kind: {
+    type: String,
+    default: 'head_background'
+  },
+  mask: {
+    type: Object,
+    default: {
+      w: 1050,
+      h: 350,
+      tb: 50,
+      lr: 50
+    }
+  },
+  size: {
+    type: Object,
+    default: () => {
+      return {
+        width: 500,
+        height: 300
       }
     }
   },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const aaaaaaaaa: any = ref(null)
-    const isShow = ref(false)
-    const cover: any = ref(null)
-    const pic: any = ref(null)
-    let offX: any = 0 // 图片默认x坐标
-    let offY: any = 0 // 图片默认y坐标
-
-    function submit() {
-      let src = aaaaaaaaa.value.cutPicture()
-      store.dispatch('common/Fetch', {
-        api: "UploadPhotos",
-        data: {
-          uploadType: props.kind,
-          type: 0,
-          root: 1,
-          img: src,
-          ...props.data
-        }
-      }).then(res => {
-        isShow.value = false
-        store.dispatch('user/Detect')
-      })
+  style: {
+    type: Object,
+    default: () => {
+      return {
+        width: 670,
+        height: 570
+      }
     }
-
-    return {
-      isShow,
-      cover,
-      pic,
-      submit,
-      aaaaaaaaa,
-      onmousedown
+  },
+  img: {
+    type: Object,
+    default: () => {
+      return {
+        width: 800
+      }
     }
   }
 })
+const store = useStore();
+const aaaaaaaaa: any = ref(null)
+const isShow = ref(false)
+const cover: any = ref(null)
+const pic: any = ref(null)
+let offX: any = 0 // 图片默认x坐标
+let offY: any = 0 // 图片默认y坐标
+
+function submit() {
+  let src = aaaaaaaaa.value.cutPicture()
+  store.dispatch('common/Fetch', {
+    api: "UploadPhotos",
+    data: {
+      uploadType: props.kind,
+      type: 0,
+      root: 1,
+      img: src,
+      ...props.data
+    }
+  }).then(res => {
+    isShow.value = false
+    store.dispatch('user/Detect')
+  })
+}
 </script>
 
 <style lang="less" scoped>

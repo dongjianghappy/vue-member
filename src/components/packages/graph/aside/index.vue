@@ -1,11 +1,13 @@
 <template>
-<!-- 绘图工具栏 -->
-<div id="stencil" v-show="graphType === 0"></div>
-<!-- 机器人工具栏 -->
-<div id="chatbot" v-show="graphType === 1"></div>
+  <!-- 绘图工具栏 -->
+  <div id="stencil"
+       v-show="graphType === 0"></div>
+  <!-- 机器人工具栏 -->
+  <div id="chatbot"
+       v-show="graphType === 1"></div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   defineComponent,
   computed,
@@ -16,17 +18,17 @@ import {
 import * as joint from 'jointjs'
 import $ from 'jquery'
 import config from '../config'
-export default defineComponent({
-  name: "MymodalD",
-  props: {
-    graph: {
-      type: Object,
-      default: () => {
-        return {}
+import { _circle, _rectangle, _polygon, _ellipse } from './components/node'
+
+  const props: any = defineProps({
+      graph: {
+        type: Object,
+        default: () => {
+          return {}
+        }
       }
-    }
-  },
-  setup(props, context) {
+    })
+
     const store = useStore()
     const graphType: any = computed(() => store.getters['graph/graphType']);
 
@@ -35,76 +37,51 @@ export default defineComponent({
       initGraph()
     })
 
-    function dragstart(e: any, fType: any, text: any) {
-      e.dataTransfer.setData('ftype', fType)
-      e.dataTransfer.setData('text', text)
-      e.dataTransfer.setData('offsetX', e.offsetX)
-      e.dataTransfer.setData('offsetY', e.offsetY)
-    }
-
     // 绘图工具栏
     function initGraph() {
       var stencilGraph = new joint.dia.Graph,
-        stencilPaper = new joint.dia.Paper(
+      stencilPaper = new joint.dia.Paper(
 
-          Object.assign({
-            el: document.getElementById('stencil'),
-            width: 180,
-            height: '100%',
-            model: stencilGraph,
-            gridSize: 10,
-            background: {
-              color: 'transparent'
-            },
-            interactive: false,
+      Object.assign({
+        el: document.getElementById('stencil'),
+        width: 180,
+        height: '100%',
+        model: stencilGraph,
+        gridSize: 10,
+        background: {
+          color: 'transparent'
+        },
+        interactive: false,
+      }));
 
-          }));
+      // 圆形
+      _circle({
+        joint,
+        config,
+        stencilGraph
+      })
 
-      var circle = new joint.shapes.standard.Circle();
-      circle.resize(100, 100);
-      circle.position(40, 20);
-      circle.attr('root/title', 'joint.shapes.standard.Circle');
-      circle.attr('label/text', '圆形1');
-      circle.attr('body/stroke', config.circle.borderColor);
-      circle.prop('ftype', 'circle')
-      circle.addTo(stencilGraph);
+      // 矩形
+      _rectangle({
+        joint,
+        config,
+        stencilGraph
+      })
 
-      var rectangle = new joint.shapes.standard.Rectangle();
-      rectangle.resize(100, 50);
-      rectangle.position(40, 140);
-      rectangle.attr('root/title', 'joint.shapes.standard.Rectangle');
-      rectangle.attr('label/text', '矩形');
-      rectangle.attr('body/stroke', config.rect.borderColor);
-      rectangle.prop('ftype', 'rect')
-      rectangle.addTo(stencilGraph);
+      // 多边形
+      _polygon({
+        joint,
+        config,
+        stencilGraph
+      })
 
-      var polygon = new joint.shapes.standard.Polygon();
-      polygon.resize(100, 100);
-      polygon.position(40, 210);
-      polygon.attr('root/title', 'joint.shapes.standard.Polygon');
-      polygon.attr('label/text', '多边形');
-      polygon.attr('body/stroke', config.polygon.borderColor);
-      polygon.attr('body/refPoints', '0,10 10,0 20,10 10,20');
-      polygon.prop('ftype', 'polygon')
-      polygon.addTo(stencilGraph);
-
-      var ellipse = new joint.shapes.standard.Ellipse();
-      ellipse.resize(100, 60);
-      ellipse.position(40, 330);
-      ellipse.attr('root/title', 'joint.shapes.standard.Ellipse');
-      ellipse.attr('label/text', '椭圆形');
-      ellipse.attr('body/stroke', config.ellipse.borderColor);
-      ellipse.prop('ftype', 'ellipse')
-      ellipse.addTo(stencilGraph);
-
-      var check = new joint.shapes.standard.Circle();
-      check.resize(30, 30);
-      check.position(75, 420);
-      check.attr('root/title', 'joint.shapes.standard.Circle');
-      check.attr('label/text', '是');
-      check.attr('body/stroke', config.check.borderColor);
-      check.prop('ftype', 'check')
-      check.addTo(stencilGraph);
+      // 椭圆形
+      _ellipse({
+        joint,
+        config,
+        stencilGraph
+      })
+      
 
       stencilPaper.on('cell:pointerdown', function (cellView: any, e, x, y) {
 
@@ -256,12 +233,6 @@ export default defineComponent({
       robotInitGraph()
     })
 
-    return {
-      dragstart,
-      graphType
-    }
-  }
-})
 </script>
 
 <style lang="less" scoped>

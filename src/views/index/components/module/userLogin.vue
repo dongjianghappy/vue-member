@@ -16,51 +16,19 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   useRouter,
   computed,
   useStore
 } from '@/utils'
-import Mood from '../mood.vue'
 
-export default defineComponent({
-  name: 'UserInfoView',
-  components: {
-    Mood
-  },
-  props: {
-    userInfo: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  setup(props, context) {
-    const store = useStore()
-    const router = useRouter()
+const store = useStore()
+const router = useRouter()
+const userInfo = computed(() => store.getters['user/loginuser']);
+const siteInfo = computed(() => store.getters['user/siteInfo']);
 
-    const siteInfo = computed(() => store.getters['user/siteInfo']);
-    function handleClick() {
-      router.push('/login')
-    }
-    return {
-      siteInfo,
-      handleClick
-    }
-  },
-})
-</script>
-
-<style lang="less" scoped>
-.user-content {
-  background: var(--color-primary-background);
-  line-height: 30px;
-
-  &:after {
-    content: "દ ᵕ̈ ૩ ☁️ ՞•🐽•՞ ᴴᴬᵛᴱ ᴬ ᴳᴼᴼᴰ ᵀᴵᴹᴱ ˃̶͈🐽˂̶͈ 、 ʚ🐷ɞ  ʘᴗʘ 、˙Ꙫ˙、📷 ૮꒰ ˶• ༝ ◡̈ ᶜᵘᵗᵉ ✐.ɴɪᴄᴇ ᴅᴀʏ 〰︎ •˶꒱ა ʚ🐷ɞ 、՞•🐽•՞、 📧・🌷・🍒・🍨 ✨💬  (*☻-☻*)"
-  }
+function handleClick() {
+  router.push('/login')
 }
-</style>
+</script>

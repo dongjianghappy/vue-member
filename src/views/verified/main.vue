@@ -14,13 +14,11 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   useStore,
   useRoute,
   useRouter,
-  computed,
   ref,
   onMounted,
   getUid,
@@ -28,77 +26,49 @@ import {
 } from '@/utils'
 import Send from './components/send.vue'
 import List from './components/list.vue'
-import {
-  feedback
-} from '@/assets/const'
 
-export default defineComponent({
-  name: 'MessageBoardView',
-  components: {
-    Send,
-    List
-  },
-  setup(props, context) {
-    const store = useStore();
-    const route = useRoute();
-    const router = useRouter()
-    const isTome: any = ref(true);
-    let dataList: any = ref({})
-    const loading: any = ref(false)
+const store = useStore();
+const route = useRoute();
+const router = useRouter()
+const isTome: any = ref(true);
+let dataList: any = ref({})
+const loading: any = ref(false)
 
-    watch(() => route.query.item, () => {
-      isTome.value = route.query.item === 'tome' ? true : false
-    })
-
-    function init(param: any = {}) {
-      loading.value = false
-
-      const params: any = {
-        item: route.query.item,
-        uid: getUid(),
-        page: 1,
-        pagesize: 2
-      }
-
-      Object.assign(params, param)
-
-      store.dispatch('common/Fetch', {
-        api: "userMessageBoard",
-        data: {
-          ...params
-        }
-      }).then(res => {
-        loading.value = true
-        dataList.value = res.result
-      })
-    }
-
-    function handleClick(){
-      router.push('?item=institution')
-    }
-
-    onMounted(init)
-
-    return {
-      route,
-      isTome,
-      dataList,
-      loading,
-      init,
-      handleClick
-    }
-  }
+watch(() => route.query.item, () => {
+  isTome.value = route.query.item === 'tome' ? true : false
 })
+
+function init(param: any = {}) {
+  loading.value = false
+
+  const params: any = {
+    item: route.query.item,
+    uid: getUid(),
+    page: 1,
+    pagesize: 2
+  }
+
+  Object.assign(params, param)
+
+  store.dispatch('common/Fetch', {
+    api: "userMessageBoard",
+    data: {
+      ...params
+    }
+  }).then(res => {
+    loading.value = true
+    dataList.value = res.result
+  })
+}
+
+function handleClick() {
+  router.push('?item=institution')
+}
+
+onMounted(init)
 </script>
 
 <style lang="less" scoped>
-.open-text {
-  position: absolute;
-  width: 400px;
-  height: 300px;
-  color: #fff;
-}
-
 .verified-box {
   background: var(--label-background);
   position: absolute;

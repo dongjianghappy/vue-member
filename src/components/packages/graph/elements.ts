@@ -177,7 +177,7 @@ export const polygon = shapes.custom.polygon =(basicNode as any).define('custom.
  }
  }, {
  markup: [{
-   tagName: 'rect',
+   tagName: 'polygon',
    selector: 'body',
  }, {
    tagName: 'text',
@@ -231,8 +231,8 @@ export const end = shapes.custom.end =(basicNode as any).define('custom.end', {
 export const circle = shapes.custom.circle =(basicNode as any).define('custom.circle', {
   ftype: 'circle',
   size: {
-   width: 100,
-   height: 100
+   width: 64,
+   height: 64
   },attrs: {
    body: {
        width: 'calc(w)',
@@ -267,7 +267,7 @@ export const circle = shapes.custom.circle =(basicNode as any).define('custom.ci
  },
  )
 
- // 大圆形节点
+ // 椭圆形
 export const ellipse = shapes.custom.ellipse =(basicNode as any).define('custom.ellipse', {
   ftype: 'ellipse',
   size: {

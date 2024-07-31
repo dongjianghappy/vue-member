@@ -1,29 +1,20 @@
 <template>
-  <span class="font16 left"
-        @click="handleBack">
-    <i class="iconfont icon-back" />
-  </span>
+<span @click="handleBack">
+  <i class="iconfont icon-back" />
+  <span class="font14">返回</span>
+</span>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   defineComponent,
 } from 'vue'
 import {
   useRouter
 } from 'vue-router';
+const router = useRouter()
 
-export default defineComponent({
-  name: 'v-Back',
-  setup(props, context) {
-    const router = useRouter()
-
-    function handleBack() {
-      router.go(-1);
-    }
-    return {
-      handleBack
-    }
-  }
-})
+function handleBack() {
+  router.go(-1);
+}
 </script>

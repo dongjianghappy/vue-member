@@ -8,33 +8,18 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   useRouter,
   computed,
   useStore
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Footer',
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-  const store = useStore();
-    const router = useRouter()
-    const module = computed(() => store.getters['user/config_talk'].footer);
+const store = useStore();
+const router = useRouter()
+const module = computed(() => store.getters['user/config_talk'].footer);
 
-    function handleClick(param: any) {
-
-      router.push(param)
-    }
-    return {
-      module,
-      handleClick
-    }
-  }
-})
+function handleClick(param: any) {
+  router.push(param)
+}
 </script>

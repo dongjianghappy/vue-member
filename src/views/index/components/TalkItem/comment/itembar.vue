@@ -9,79 +9,57 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   ref,
   computed,
   useStore
 } from '@/utils'
 import Detail from "./detail.vue"
-export default defineComponent({
-  name: 'DetailView',
-  components: {
-    Detail
+
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return
+    }
   },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return
-      }
-    },
-    method: {
-      type: String,
-      default: ""
-    },
+  method: {
+    type: String,
+    default: ""
   },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const fn_talk: any = computed(() => store.getters['user/config_talk'].fn_talk);
-    let showCommit: any = ref(false)
-    let isShow: any = ref(false)
-
-    function onClick(param: any) {
-      store.dispatch('common/Fetch', param).then(res => {
-        props.data.collect = res.result.num
-        if (res.result.state === 1) {
-          props.data.hascollect = 1
-        } else {
-          props.data.hascollect = 0
-        }
-        proxy.$hlj.message({
-          msg: res.returnMessage
-        })
-      })
-    }
-
-    function forwarding() {
-      showCommit.value = false
-      isShow.value = !isShow.value
-    }
-
-    function comment() {
-      showCommit.value = !showCommit.value
-      isShow.value = false
-    }
-
-    return {
-      onClick,
-      isShow,
-      showCommit,
-      forwarding,
-      comment,
-      fn_talk
-    }
-  }
 })
-</script>
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const fn_talk: any = computed(() => store.getters['user/config_talk'].fn_talk);
+let showCommit: any = ref(false)
+let isShow: any = ref(false)
 
-<style scoped>
-.current {
-  color: #eb7350;
+function onClick(param: any) {
+  store.dispatch('common/Fetch', param).then(res => {
+    props.data.collect = res.result.num
+    if (res.result.state === 1) {
+      props.data.hascollect = 1
+    } else {
+      props.data.hascollect = 0
+    }
+    proxy.$hlj.message({
+      msg: res.returnMessage
+    })
+  })
 }
-</style>
+
+function forwarding() {
+  showCommit.value = false
+  isShow.value = !isShow.value
+}
+
+function comment() {
+  showCommit.value = !showCommit.value
+  isShow.value = false
+}
+</script>

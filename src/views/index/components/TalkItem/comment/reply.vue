@@ -40,7 +40,7 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   defineComponent,
   onMounted,
@@ -52,76 +52,35 @@ import {
 } from 'vuex'
 import Images from '../components/image.vue'
 import Itembar from './itembar.vue'
-export default defineComponent({
-  name: 'HomeViewh',
-  components: {
-    Images,
-    Itembar
-  },
-  props: {
-    title: {
-      type: String,
-      default: "创建组"
-    },
-    action: {
-      type: String,
-      default: "add"
-    },
-    group: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
+
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  setup(props, context) {
-    const store = useStore();
-    const isShow = ref(false)
-    const dataList = ref([])
+})
+const store = useStore();
+const isShow = ref(false)
+const dataList = ref([])
 
-    // 监听
-    watch([isShow], async (newValues, prevValues) => {
-      if (isShow.value) {
-        int()
-      }
-    })
-
-    function int() {
-      // loading.value = true
-      store.dispatch('common/Fetch', {
-        api: 'commentReplyList',
-        data: {
-          coding: props.data.coding3,
-          artid: props.data.id
-        }
-      }).then(res => {
-        dataList.value = res.result
-        // loading.value = false
-      })
-    }
-
-    return {
-      isShow,
-      dataList
-    }
+// 监听
+watch([isShow], async (newValues, prevValues) => {
+  if (isShow.value) {
+    int()
   }
 })
-</script>
 
-<style lang="less" scoped>
-.ps {
-  height: 560px;
+function int() {
+  store.dispatch('common/Fetch', {
+    api: 'commentReplyList',
+    data: {
+      coding: props.data.coding3,
+      artid: props.data.id
+    }
+  }).then(res => {
+    dataList.value = res.result
+  })
 }
-</style>
+</script>

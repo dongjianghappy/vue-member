@@ -155,7 +155,8 @@ const codings: any = {
     blog_group: "U0620008",
     picture_group: "U0620019",
     background_music: 'U0620048',
-    watch_history: "U0620050"
+    watch_history: "U0620050",
+    content_collect: "U0620055"
   },
   questions: {
     name: "questions",
@@ -433,6 +434,7 @@ const codings: any = {
     search: 'U0680025'
   },
   label: 'U0610000',
+  location: 'U0610002',
   tag: 'U0690000',
   theme: 'U0690001',
   effects: 'U0690002',
@@ -480,7 +482,9 @@ const codings: any = {
     schedule: {
       cate: 'U0700032',
       list: 'U0700033'
-    }
+    },
+    privilege: 'U0700043',
+    blacklist: "U0700044"
 
   }
 };

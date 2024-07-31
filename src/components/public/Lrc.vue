@@ -5,53 +5,26 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   ref
 } from '@/utils'
 import VueEvent from '@/utils/event'
-export default defineComponent({
-  name: 'v-Button',
-  props: {
-    disabled: {
-      type: Boolean,
-      default: true
-    },
-    buttonType: {
-      type: String,
-      default: "text"
-    },
-    show: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['update:show', 'onClick'],
-  setup(props, context) {
-    const isShow = ref(false)
-    const LRC: any = ref("")
 
-    VueEvent.on("lrc", (data: any) => {
-      isShow.value = !isShow.value
-    })
+const isShow = ref(false)
+const LRC: any = ref("")
 
-    VueEvent.on("showLrc", (data: any) => {
-      LRC.value = data
-    })
+VueEvent.on("lrc", (data: any) => {
+  isShow.value = !isShow.value
+})
 
-    return {
-      isShow,
-      LRC
-    }
-  }
+VueEvent.on("showLrc", (data: any) => {
+  LRC.value = data
 })
 </script>
 
 <style lang="less" scoped>
 .lrc {
-  // text-shadow: 0 1px 0 rgba(255, 255, 255, 0.15), 5px 2px rgba(0, 0, 0, 0.075);
-  // text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px var(--input-background), 0 0 35px var(--input-background), 0 0 40px var(--input-background), 0 0 50px var(--input-background), 0 0 75px var(--input-background);
   text-shadow: 0 0 5px var(--input-background), 0 0 10px var(--input-background);
 }
 </style>

@@ -128,7 +128,7 @@ import NodeSpeech from './components/nodeSpeech.vue'
 import LinkSpeech from './components/linkSpeech.vue'
 import Broadcast from './components/broadcast.vue'
 import {
-  color,
+  colorList,
 } from '@/assets/const'
 import {
   useStore

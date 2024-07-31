@@ -28,9 +28,9 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   ref,
   reactive,
@@ -44,64 +44,40 @@ import Form from './formsss.vue'
 import Images from '../../../../content/expression/detail.vue'
 import Itembar from './itembar.vue'
 import Reply from './reply.vue'
-export default defineComponent({
-  name: 'HomeViewe',
-  components: {
-    Form,
-    Images,
-    Itembar,
-    Reply
-  },
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return
-      }
-    },
-    isShow: {
-      type: Boolean,
-      default: false
+
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return
     }
   },
-  data() {
-    return {
-      summary: "",
-    }
-  },
-
-  setup(props, context) {
-    const store = useStore();
-    const userInfo = computed(() => store.getters['user/userInfo']);
-    const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
-    let dataList: any = ref({})
-    let loading: any = ref(false)
-
-    function int() {
-      loading.value = true
-      store.dispatch('common/Fetch', {
-
-        api: 'ArtList',
-        data: {
-          coding: props.data.coding3,
-          artid: props.data.id
-        }
-      }).then(res => {
-        dataList.value = res.result
-        loading.value = false
-      })
-    }
-
-    onMounted(() => {
-      int()
-    })
-    return {
-      module,
-      int,
-      userInfo,
-      dataList,
-      loading
-    }
+  isShow: {
+    type: Boolean,
+    default: false
   }
+})
+const store = useStore();
+const userInfo = computed(() => store.getters['user/userInfo']);
+const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
+let dataList: any = ref({})
+let loading: any = ref(false)
+
+function int() {
+  loading.value = true
+  store.dispatch('common/Fetch', {
+    api: 'ArtList',
+    data: {
+      coding: props.data.coding3,
+      artid: props.data.id
+    }
+  }).then(res => {
+    dataList.value = res.result
+    loading.value = false
+  })
+}
+
+onMounted(() => {
+  int()
 })
 </script>

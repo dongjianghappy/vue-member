@@ -8,7 +8,7 @@
         </div>
         <div class="module-content plr15 clearfix" style="height: 205px; overflow-y: auto;">
           <div class="left align_center" style="width: 60px;" v-for="(item, index) in dataList" :key="index" @click="chooseTopic(`${item.nickname}`)">
-            <img :src="item.photos" onerror="this.src='http://www.yunxi10.com/source/public/images/head_normal_100.png'" class="photos p5" style="width: 50px; height: 50px; border-radius: 50%;">
+            <img :src="item.photos" class="photos p5" style="width: 50px; height: 50px; border-radius: 50%;">
             <div class="font12 nowrap">{{`${item.nickname}`}}</div>
           </div>
         </div>

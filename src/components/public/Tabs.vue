@@ -72,85 +72,80 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   ref,
   useRouter,
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Tabs',
-  props: {
-    className: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    title: {
-      type: String,
-      default: ""
-    },
-    tabs: {
-      type: Array,
-      default: []
-    },
-    icon: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: "level"
-    },
-    aaa: {
-      type: Boolean,
-      default: false
-    },
-    query: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    method: {
-      type: String,
-      default: "route"
-    },
-    isEmit: {
-      type: Boolean,
-      default: false
-    },
-    extra: {
-      type: Boolean,
-      default: true
-    },
-  },
-  emits: ['update:index'],
-  setup(props, context) {
-    const router = useRouter();
-    let currentIndex = ref(0)
-
-    function handleClick(index: any) {
-      if (props.isEmit === true) {
-        currentIndex.value = index
-        context.emit('update:index', index)
-      } else {
-        if (props.method === 'click') {
-          currentIndex.value = index
-        } else {
-          currentIndex.value = index
-          router.push(props.aaa ? `?${props.query.url}&${props.query.name}=${index}` : `?type=${index}`)
-        }
-      }
+const props: any = defineProps({
+  className: {
+    type: Object,
+    default: () => {
+      return {}
     }
-    return {
-      handleClick,
-      currentIndex
+  },
+  title: {
+    type: String,
+    default: ""
+  },
+  tabs: {
+    type: Array,
+    default: []
+  },
+  icon: {
+    type: String,
+    default: ""
+  },
+  type: {
+    type: String,
+    default: "level"
+  },
+  aaa: {
+    type: Boolean,
+    default: false
+  },
+  query: {
+    type: Object,
+    default: () => {
+      return {}
+    }
+  },
+  method: {
+    type: String,
+    default: "route"
+  },
+  isEmit: {
+    type: Boolean,
+    default: false
+  },
+  extra: {
+    type: Boolean,
+    default: true
+  },
+})
+defineExpose({
+  handleClick
+})
+const emit: any = defineEmits(['update:index'])
+const router = useRouter();
+let currentIndex = ref(0)
+
+function handleClick(index: any) {
+  if (props.isEmit === true) {
+    currentIndex.value = index
+    emit('update:index', index)
+  } else {
+    if (props.method === 'click') {
+      currentIndex.value = index
+    } else {
+      currentIndex.value = index
+      router.push(props.aaa ? `?${props.query.url}&${props.query.name}=${index}` : `?type=${index}`)
     }
   }
-})
+}
 </script>
 
 <style scoped>

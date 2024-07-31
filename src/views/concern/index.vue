@@ -1,152 +1,123 @@
 <template>
 <div class="container w1100 clearfix">
   <div class="w180 left">
-    <v-aside :data="module.concern" title="用户组" :render="Grouping">
+    <v-aside title="用户组" v-if="loginuser.currentUser">
       <template v-slot:button>
-        <v-group action='add' :data="data" :group="userGroup" :coding="coding.group" :render="Grouping"  />
+        <v-group action='add' :data="data" :group="userGroup" :coding="coding.group" :render="Grouping" />
       </template>
-      <template v-slot:aside v-if="loginuser.currentUser">
+      <template v-slot:aside>
         <ul>
           <li v-for="(item, index) in userGroup" :key="index" @click="handleclick(`/concern?mod=myconcern&ground=${item.id}`)" class="aside">
-            <i class="iconfont icon-dot font20"></i> {{item.name}}({{item.num}})
+            <i class="iconfont icon-dot font20"></i> {{item.name}}
           </li>
         </ul>
       </template>
-
     </v-aside>
+    <v-aside :data="module.home_nav" title="Ta的主页" v-else />
   </div>
-  <div class="m0 right" style="width: 910px;">
+  <div class="w280 right">
+    <RightView :render="init" />
+  </div>
+  <div class="main-center right">
+    <TalkTabs :data="[{name: '关注', value: 'myconcern'}, {name: '粉丝', value: 'concernmy'}]" :render="init" :query="{tab: 'mod', value: route.query.mod || ''}" />
     <div class="module-wrap">
       <div class="module-content p15" style="min-height: 570px;">
-        <div class="mb15 font18 bold">粉丝关注</div>
-        <Card :data="concern" :mod="mod" :group="userGroup" :render="Grouping" v-if="concern.length> 0 " />
-        <v-nodata v-else trip="暂时没有数据" />
+        <Card :data="dataList.list" :mod="mod" :group="userGroup" :render="Grouping" v-if="dataList.list && dataList.list.length> 0 " />
+        <v-nodata v-else trip="对方未开启关注和粉丝列表" />
+        <div class="mt25 align_center" v-if="dataList.total > 20">
+          <v-pagination :pagination="{total: dataList.total, pages: dataList.pages, page: dataList.page ||  1, pagesize: dataList.pagesize}" :render="init" :simple="true" />
+        </div>
       </div>
     </div>
-
   </div>
-
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   getCurrentInstance,
   computed,
   onMounted,
   ref,
   getUid,
-  codings
-} from '@/utils'
-import {
-  useStore
-} from 'vuex'
-import {
-  group
-} from '@/assets/const'
-import Card from './components/card.vue'
-import {
+  codings,
+  useStore,
   useRouter,
   useRoute
-} from 'vue-router'
+} from '@/utils'
+import Card from './components/card.vue'
+import TalkTabs from '../index/components/module/TalkTabs.vue'
+import RightView from '../module/right_aside.vue'
 
-export default defineComponent({
-  name: 'IndexView1',
-  components: {
-    Card
-  },
-  setup(props, context) {
-    const {
-      ctx,
-      proxy
-    }: any = getCurrentInstance();
-    const coding: any = codings.user
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const showAlbum = ref(false)
-    const userGroup = ref([])
-    const menu: any = group
-    const userInfo: any = computed(() => store.getters['user/userInfo']);
-    const module = computed(() => store.getters['user/config_talk']);
-    const currentData = ref({})
-    module.value.concern.map((item: any) => {
-      item.path = `/concern${item.value}`
-      if (item.url === 'myconcern') {
-        item.num = userInfo.myconcern || '0'
-      } else {
-        item.num = userInfo.concernmy || '0'
-      }
+const {
+  proxy
+}: any = getCurrentInstance();
+const coding: any = codings.user
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const userGroup = ref([])
+const loginuser = computed(() => store.getters['user/loginuser']);
+const module = computed(() => store.getters['user/config_talk']);
+const dataList: any = ref({})
+module.value.concern.map((item: any) => {
+  item.path = `/concern${item.value}`
+  item.num = item.value.indexOf('myconcern') > -1 ? loginuser.value.myconcern : loginuser.value.concernmy
+})
 
-    })
-    const mod = computed(() => route.query.mod);
-
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    const concern = computed(() => store.getters['common/concernList']);
-
-   
-
-    function Grouping() {
-      store.dispatch('common/Fetch', {
-        api: "customGroup",
-        data: {
-          coding: coding.group,
-          uid: getUid()
-        }
-      }).then(res => {
-        userGroup.value = res.result
-        init()
-      })
-    }
-
-    function init() {
-      store.dispatch('common/ConcernList', {
-        uid: getUid(),
-        ground: route.query.ground,
-        type: mod.value === 'myconcern' ? "myconcern" : "concernmy"
-      })
-    }
-
-    function add(action: any, item: any) {
-
-      showAlbum.value = true
-      currentData.value = {
-        action,
-        item
-      }
-
-    }
-
-    function handleclick(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: loginuser.value.account,
-        query: param
-      }))
-
-      setTimeout(() => {
-        init()
-      }, 100)
-    }
-
-    onMounted(() => {
-      Grouping()
-    })
-    return {
-      coding,
-      init,
-      mod,
-      concern,
-      menu,
-      userGroup,
-      Grouping,
-      add,
-      showAlbum,
-      handleclick,
-      currentData,
-      loginuser,
-      module
-    }
+const currentAside = computed(() => {
+  let arr = module.value.concern.filter((item: any) => item.path.indexOf(route.query.mod) > -1)
+  if(route.query.mod == 'myconcern' && route.query.ground !== undefined){
+    arr = userGroup.value.filter((item: any) => item.id === route.query.ground)
   }
+  return arr[0] || {}
+});
+
+const mod = computed(() => route.query.mod);
+const concern = computed(() => store.getters['common/concernList']);
+
+function Grouping() {
+  store.dispatch('common/Fetch', {
+    api: "customGroup",
+    data: {
+      coding: coding.group,
+    }
+  }).then(res => {
+    userGroup.value = res.result
+    init()
+  })
+}
+
+function init(param: any = {}) {
+  const params: any = {
+    page: 1,
+    pagesize: 20
+  }
+
+  Object.assign(params, param)
+
+  store.dispatch('common/ConcernList', {
+    uid: getUid(),
+    ground: route.query.ground,
+    type: mod.value,
+    ...params
+  }).then((res: any) => {
+    dataList.value = res.result
+  })
+}
+
+function handleclick(param: any) {
+  router.push(proxy.const.setUrl({
+    uid: loginuser.value.account,
+    query: param
+  }))
+
+  setTimeout(() => {
+    init()
+  }, 100)
+}
+
+onMounted(() => {
+  Grouping()
 })
 </script>

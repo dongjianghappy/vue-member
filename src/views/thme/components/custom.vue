@@ -77,15 +77,6 @@
               <input v-model="detail.font_color" type="text" placeholder="请输入主题主色调" class="input-sm input-150" />
             </div>
           </div>
-          <!-- <div class="col-md-6">
-            <div class="font12">表单色</div>
-            <div class="flex">
-              <div class="mr10" style="width: 32px;">
-                <input v-model="detail.input_color" type="color" class="p0" style="width: 35px; height: 32px;" />
-              </div>
-              <input v-model="detail.input_color" type="text" placeholder="请输入主题主色调" class="input-sm input-150" />
-            </div>
-          </div> -->
         </li>
       </ul>
     </div>
@@ -93,206 +84,175 @@
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
+  defineProps,
   ref,
   useStore,
   watch,
   writeNewStyle
 } from '@/utils'
-import {
-  color
-} from '@/assets/const'
-export default defineComponent({
-  name: 'v-Category',
-  props: {
-    action: {
-      type: String,
-      default: "add"
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return
-      }
-    },
+
+const props: any = defineProps({
+  action: {
+    type: String,
+    default: "add"
   },
-  setup(props, context) {
-    const isShow: any = ref(false)
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const element: any = document.getElementsByTagName('html');
-    const dialog: any = ref(null)
-    const dataList: any = ref([])
-    const detail: any = ref({})
-    let current: any = ref({})
-    const img = ref("")
-    const thumbnail = ref("")
-    const transparentIndex: any = ref(1)
-    const transparent = ref([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
-
-    // 监听
-    watch([isShow], async (newValues, prevValues) => {
-      if (isShow.value) {
-        detail.value = await dialog.value.init()
-        transparentIndex.value = detail.value.background_transparent
-        if (detail.value.image) {
-          thumbnail.value = detail.value.img
-        }
-      }
-    })
-    // 监听路由
-    watch(() => detail, (newValues, prevValues) => {
-      const {
-        intelligent,
-        img,
-        background_transparent,
-        background_color,
-        primary_color,
-        module_background,
-        font_color,
-        input_color
-      } = detail.value
-
-      writeNewStyle({
-        intelligent,
-        background_transparent,
-        theme_background: `${background_color} url(${img[0].replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
-        background_color,
-        primary_color,
-        module_background,
-        font_color,
-        input_color
-      })
-    }, {
-      deep: true
-    })
-
-    function init(param: any = "") {
-      store.dispatch('common/Fetch', {
-        api: 'getVote',
-        data: {
-          talk_id: props.data.id
-        }
-      }).then(res => {
-        detail.value = res.result
-        dataList.value = res.result.list
-      })
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
-
-    // 监听图片上传
-    function image(a: any) {
-      img.value = a
-      thumbnail.value = (process.env.NODE_ENV === 'development' ? 'http://127.0.0.1/uploadfile/temporary/theme/' : 'http://www.dongblog.com/uploadfile/temporary/theme/') + a.slice(1, -1)
-      const {
-        background_transparent,
-        background_color,
-        primary_color,
-        module_background,
-        font_color,
-        input_color
-      } = detail.value
-
-      writeNewStyle({
-        background_transparent,
-        theme_background: `${background_color} url(${thumbnail.value.replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
-        background_color,
-        primary_color,
-        module_background,
-        font_color,
-        input_color
-      })
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return
     }
+  },
+})
+const isShow: any = ref(false)
+const store = useStore();
+const dialog: any = ref(null)
+const dataList: any = ref([])
+const detail: any = ref({})
+const img = ref("")
+const thumbnail = ref("")
+const transparentIndex: any = ref(1)
+const transparent = ref([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1])
 
-    function handleclick(param: any) {
-      isShow.value = !isShow.value
-    }
-
-    function handleTransparent(param: any) {
-      transparentIndex.value = param
-      detail.value.background_transparent = param
-    }
-
-    // 确认按钮
-    function submit(params: any) {
-      const {
-        id,
-        fid,
-        name,
-        background_color,
-        module_background,
-        primary_color,
-        font_color,
-        input_color,
-        isfixed,
-        intelligent,
-        grade,
-        description,
-        status
-      } = detail.value
-
-      const param: any = {
-        name,
-        fid,
-        background_transparent: transparentIndex.value,
-        background_color,
-        module_background,
-        primary_color,
-        font_color,
-        input_color,
-        isfixed,
-        intelligent,
-        grade,
-        img: img.value,
-        description,
-        status,
-        custom: '1',
-        coding: props.data.coding
-      }
-      if (props.action === 'edit') {
-        param.id = id
-      }
-
-      store.dispatch('common/Fetch', {
-        api: props.action !== 'add' ? 'Update' : 'Insert',
-        data: {
-          ...param,
-        }
-      }).then(() => {
-        isShow.value = false
-        props.render()
-      })
-    }
-
-    return {
-      dialog,
-      isShow,
-      current,
-      handleclick,
-      handleTransparent,
-      dataList,
-      detail,
-      color,
-      transparent,
-      transparentIndex,
-      submit,
-      image,
-      img,
-      thumbnail
+// 监听
+watch([isShow], async (newValues, prevValues) => {
+  if (isShow.value) {
+    detail.value = await dialog.value.init()
+    transparentIndex.value = detail.value.background_transparent
+    if (detail.value.image) {
+      thumbnail.value = detail.value.img
     }
   }
 })
+// 监听路由
+watch(() => detail, (newValues, prevValues) => {
+  const {
+    intelligent,
+    img,
+    background_transparent,
+    background_color,
+    primary_color,
+    module_background,
+    font_color,
+    input_color
+  } = detail.value
+
+  writeNewStyle({
+    intelligent,
+    background_transparent,
+    theme_background: `${background_color} url(${img[0].replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
+    background_color,
+    primary_color,
+    module_background,
+    font_color,
+    input_color
+  })
+}, {
+  deep: true
+})
+
+function init(param: any = "") {
+  store.dispatch('common/Fetch', {
+    api: 'getVote',
+    data: {
+      talk_id: props.data.id
+    }
+  }).then(res => {
+    detail.value = res.result
+    dataList.value = res.result.list
+  })
+}
+
+// 监听图片上传
+function image(a: any) {
+  img.value = a
+  thumbnail.value = (process.env.NODE_ENV === 'development' ? 'http://127.0.0.1/uploadfile/temporary/theme/' : 'http://www.dongblog.com/uploadfile/temporary/theme/') + a.slice(1, -1)
+  const {
+    background_transparent,
+    background_color,
+    primary_color,
+    module_background,
+    font_color,
+    input_color
+  } = detail.value
+
+  writeNewStyle({
+    background_transparent,
+    theme_background: `${background_color} url(${thumbnail.value.replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
+    background_color,
+    primary_color,
+    module_background,
+    font_color,
+    input_color
+  })
+}
+
+function handleclick(param: any) {
+  isShow.value = !isShow.value
+}
+
+function handleTransparent(param: any) {
+  transparentIndex.value = param
+  detail.value.background_transparent = param
+}
+
+// 确认按钮
+function submit(params: any) {
+  const {
+    id,
+    fid,
+    name,
+    background_color,
+    module_background,
+    primary_color,
+    font_color,
+    input_color,
+    isfixed,
+    intelligent,
+    grade,
+    description,
+    status
+  } = detail.value
+
+  const param: any = {
+    name,
+    fid,
+    background_transparent: transparentIndex.value,
+    background_color,
+    module_background,
+    primary_color,
+    font_color,
+    input_color,
+    isfixed,
+    intelligent,
+    grade,
+    img: img.value,
+    description,
+    status,
+    custom: '1',
+    coding: props.data.coding
+  }
+  if (props.action === 'edit') {
+    param.id = id
+  }
+
+  store.dispatch('common/Fetch', {
+    api: props.action !== 'add' ? 'Update' : 'Insert',
+    data: {
+      ...param,
+    }
+  }).then(() => {
+    isShow.value = false
+    props.render()
+  })
+}
 </script>
 
 <style lang="less" scoped>
@@ -324,7 +284,8 @@ export default defineComponent({
     padding-bottom: 0px !important;
   }
 }
-.current{
+
+.current {
   border: 3px solid #fff;
 }
 </style>

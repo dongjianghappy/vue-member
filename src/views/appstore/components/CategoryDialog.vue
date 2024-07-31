@@ -77,7 +77,6 @@ export default defineComponent({
 
     // 初始化数据
     function init() {
-      debugger
       store.dispatch('common/Fetch', {
         api,
         data: {

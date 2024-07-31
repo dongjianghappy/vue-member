@@ -26,68 +26,48 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
-  reactive,
-  ref,
-  computed
+  ref
 } from 'vue'
 
-export default defineComponent({
-  name: 'AsideView',
-  props: {
-    basicInfo: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    edit: {
-      type: Function,
-      default: () => {
-        return
-      }
+const props: any = defineProps({
+  basicInfo: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  emits: ['update:basicInfo'],
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    let isEdit = ref(true)
-    const userInfo: any = ref(props.basicInfo)
-
-    function Edit() {
-      isEdit.value = !isEdit.value
-      userInfo.value = props.basicInfo
-      context.emit('update:basicInfo', userInfo.value)
-
-      if (isEdit.value) {
-        const {
-          blog_tag,
-          blog_desc
-        } = props.basicInfo
-        props.edit({
-          blog_tag,
-          blog_desc
-        })
-      }
-    }
-
-    // 取消
-    function handelCancel() {
-      isEdit.value = !isEdit.value
-    }      
-
-    return {
-      isEdit,
-      Edit,
-      handelCancel,
-      userInfo
+  edit: {
+    type: Function,
+    default: () => {
+      return
     }
   }
 })
+const emit: any = defineEmits(['update:basicInfo'])
+
+let isEdit = ref(true)
+const userInfo: any = ref(props.basicInfo)
+
+function Edit() {
+  isEdit.value = !isEdit.value
+  userInfo.value = props.basicInfo
+  emit('update:basicInfo', userInfo.value)
+
+  if (isEdit.value) {
+    const {
+      blog_tag,
+      blog_desc
+    } = props.basicInfo
+    props.edit({
+      blog_tag,
+      blog_desc
+    })
+  }
+}
+
+function handelCancel() {
+  isEdit.value = !isEdit.value
+}
 </script>

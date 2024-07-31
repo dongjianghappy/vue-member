@@ -52,12 +52,9 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   onMounted,
-  reactive,
   ref,
   computed
 } from 'vue'
@@ -66,71 +63,49 @@ import {
 } from 'vuex'
 import TagList from '@/components/tag/index.vue'
 
-export default defineComponent({
-  name: 'AsideView',
-  components: {
-    TagList
-  },
-  props: {
-    user: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    edit: {
-      type: Function,
-      default: () => {
-        return
-      }
+const props: any = defineProps({
+  user: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  emits: ['update:user'],
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    let isEdit = ref(false)
-    const userInfo: any = ref(props.user)
-    const hobby = computed(() => store.getters['user/hobby']);
-
-    function init() {
-      store.dispatch('user/UserHobby', {})
-    }
-
-    function Edit() {
-      isEdit.value = !isEdit.value
-
-      if (!isEdit.value) {
-        debugger
-        const data: any = {}
-        for (let key in hobby.value) {
-          if (hobby.value[key].length > 0) {
-            data[key] = `|${hobby.value[key].join("|")}|`
-          } else {
-            data[key] = ""
-          }
-        }
-
-        store.dispatch('common/Fetch', {
-          api: "EdituserHobby",
-          data: {
-            ...data
-          }
-        }).then(res => {
-          console.log("ss");
-        })
-      }
-    }
-
-    onMounted(init)
-    return {
-      isEdit,
-      Edit,
-      userInfo,
-      hobby
+  edit: {
+    type: Function,
+    default: () => {
+      return
     }
   }
 })
+const store = useStore();
+let isEdit = ref(false)
+const hobby = computed(() => store.getters['user/hobby']);
+
+function init() {
+  store.dispatch('user/UserHobby', {})
+}
+
+function Edit() {
+  isEdit.value = !isEdit.value
+
+  if (!isEdit.value) {
+    const data: any = {}
+    for (let key in hobby.value) {
+      if (hobby.value[key].length > 0) {
+        data[key] = `|${hobby.value[key].join("|")}|`
+      } else {
+        data[key] = ""
+      }
+    }
+
+    store.dispatch('common/Fetch', {
+      api: "EdituserHobby",
+      data: {
+        ...data
+      }
+    })
+  }
+}
+
+onMounted(init)
 </script>

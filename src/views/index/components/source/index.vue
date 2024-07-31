@@ -84,7 +84,6 @@ export default defineComponent({
     const loginuser = computed(() => store.getters['user/loginuser']);
 
     function handleTabs(param: any) {
-      debugger
       let obj: any = {}
       if (param) {
         obj.fid = `|${param}|`

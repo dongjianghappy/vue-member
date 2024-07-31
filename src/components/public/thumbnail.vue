@@ -8,7 +8,6 @@
     <div class="thumbnail"
          v-else>
       <v-img :src="data.cover || data.image[0]"
-             onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'"
              @click="showImg(data)" />
     </div>
     <!-- <img :src="data.cover || data.image[0]" style="border-radius: 8px; width: 100%; height: 150px;" @click="showImg(data)" v-else> -->

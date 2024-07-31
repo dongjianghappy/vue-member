@@ -70,10 +70,9 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   getCurrentInstance,
-  defineComponent,
   useStore,
   ref,
   watch,
@@ -84,235 +83,207 @@ import {
   codings
 } from '@/utils'
 
-export default defineComponent({
-  name: 'HomeViewdddf',
-  components: {},
-  setup() {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const coding: any = codings.talk
-    const img = ref("")
-    const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
-    const fileInfo: any = ref({})
-    const show_video: any = ref(null)
-    const imgNum = ref(0)
-    const upload: any = ref(null);
-    const file: any = ref("")
-    const reftopic: any = ref(null)
-    const topicFlag: any = ref(false)
-    const refaite: any = ref(null)
-    const visible: any = ref('public')
-    const sssss: any = ref(false)
-    const dataList: any = ref([])
-    const coverList: any = ref([])
-    const data: any = reactive({
-      title: "",
-      summary: "",
-      img: "",
-    })
-
-    const checkField = [{
-      name: 'content',
-      message: "请输入摘要内容"
-    }]
-
-    // 监听
-    watch([() => fileInfo.value.fileUrl], async (newValues: any, prevValues) => {
-      show_video.value.load()
-      coverList.value = []
-      setTimeout(() => {
-
-        let audio: any = document.getElementById('show_video');
-        data.title = fileInfo.value.name.substring(0, fileInfo.value.name.lastIndexOf("."))
-        // data.duration = show_video.value.duration
-        data.format = fileInfo.value.format
-        data.duration = fileInfo.value.duration
-        data.time = durationTrans(fileInfo.value.duration)
-        data.size = fileInfo.value.progresstotal
-
-        let unit = data.duration / 4
-
-        const canvas = document.createElement('canvas');
-        canvas.width = 250;
-        canvas.height = 500;
-        const ctx: any = canvas.getContext('2d');
-        ctx.drawImage(show_video.value, 0, 0, 250, 500);
-        const dataBase64 = canvas.toDataURL('image/png'); // 完成base64图片的创建
-        fileInfo.value.cover = dataBase64;
-        if (dataBase64) {
-          const imgFile = dataURLtoFile(dataBase64, `${new Date().getTime()}.png`);
-          coverList.value.push(dataBase64)
-        }
-      }, 1000)
-
-    })
-
-    function getCover() {
-      coverList.value = []
-      const canvas = document.createElement('canvas');
-      canvas.width = 250;
-      canvas.height = 500;
-      const ctx: any = canvas.getContext('2d');
-      ctx.drawImage(show_video.value, 0, 0, 250, 500);
-      const dataBase64 = canvas.toDataURL('image/png'); // 完成base64图片的创建
-      fileInfo.value.cover = dataBase64;
-      if (dataBase64) {
-        const imgFile = dataURLtoFile(dataBase64, `${new Date().getTime()}.png`);
-        coverList.value.push(dataBase64)
-      }
-    }
-
-    function dataURLtoFile(dataBase64: any, filename: any) {
-      const arr = dataBase64.split(",");
-      const mime = arr[0].match(/:(.*?);/)[1];
-      const bstr = atob(arr[1]);
-      let n: any = bstr.length;
-      const u8arr = new Uint8Array(n);
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new File([u8arr], filename, {
-        type: mime
-      });
-    }
-
-    function handleClose() {
-      window.postMessage("message", '*');
-    }
-
-    // 监听图片上传
-    function image(a: any) {
-      let len = a.split("|").length
-      img.value = a
-      if (len > 2) {
-        imgNum.value = a.split("|").length - 2
-      }
-    }
-
-    // 选择表情或话题
-    function choose(param: any) {
-      debugger
-      let word_arr = data.summary.split('#')
-      let arr2 = data.summary.split('@')
-
-      if (param[0] === '@' || (param.indexOf("@") > -1 && arr2[arr2.length - 1].indexOf(" ") === -1)) {
-        if (data.summary[data.summary.length - 1] === '@') {
-          let str = data.summary.substring(0, data.summary.length - 1)
-          data.summary = str + param
-        } else if (arr2[arr2.length - 1].indexOf(" ") === -1) {
-          let index = data.summary.lastIndexOf('@' + arr2[arr2.length - 1])
-          let str = data.summary.substr(0, index)
-          data.summary = str + param
-        } else {
-          data.summary = data.summary + param
-        }
-      } else if (param[0] === '#' || (param.indexOf("#") > -1 && word_arr[word_arr.length - 1].indexOf(" ") === -1)) {
-        debugger
-        if (data.summary[data.summary.length - 1] === '#') {
-          let str = data.summary.substring(0, data.summary.length - 1)
-          data.summary = str + param
-        } else if (word_arr[word_arr.length - 1].indexOf(" ") === -1) {
-          let index = data.summary.lastIndexOf('#' + word_arr[word_arr.length - 1])
-          let str = data.summary.substr(0, index)
-          data.summary = str + param
-        } else {
-          data.summary = data.summary + param
-        }
-      } else {
-        data.summary = data.summary + param
-      }
-    }
-
-    function handleFocus(param: any) {
-      if (param.data === "@" && !sssss.value) {
-        sssss.value = true
-        refaite.value.click(sssss.value)
-      }
-    }
-
-    function handleKeyup(param: any) {
-      if (param.key === "@" && !sssss.value) {
-        sssss.value = true
-        refaite.value.click(sssss.value)
-      } else if (param.key === "#" && !topicFlag.value) {
-        topicFlag.value = true
-        reftopic.value.click(topicFlag.value)
-      }
-    }
-
-    function init() {
-      dataList.value = []
-      store.dispatch('common/Fetch', {
-        data: {
-          coding: coding.cate
-        }
-      }).then(res => {
-        res.result.map((item: any) => {
-          dataList.value.push({
-            name: item.name,
-            value: item.id
-          })
-        })
-      })
-    }
-
-    // 话题发布
-    function sendTalk() {
-      // proxy.$hlj.loading()
-      store.dispatch('common/Fetch', {
-        api: 'InsertTalk',
-        data: {
-          cid: `|${data.cid}|`,
-          visible: visible.value,
-          type: "video",
-          img: data.img,
-          summary: data.summary,
-          cover: fileInfo.value.cover,
-          format: data.format,
-          duration: data.duration,
-          time: data.time,
-          size: data.size
-        }
-      }).then(res => {
-        if (res.ifSuccess === 0) {
-          proxy.$hlj.message({
-            msg: res.returnMessage
-          })
-          return
-        }
-        data.summary = ""
-        data.img = ""
-        data.video = {}
-        proxy.$message.message({
-          msg: "发布成功",
-          type: 'success'
-        })
-      })
-    }
-
-    onMounted(init)
-
-    return {
-      data,
-      module,
-      dataList,
-      handleClose,
-      imgNum,
-      image,
-      upload,
-      fileInfo,
-      show_video,
-      file,
-      choose,
-      handleFocus,
-      handleKeyup,
-      visible,
-      sendTalk,
-      coverList,
-      getCover
-    }
-  }
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const coding: any = codings.talk
+const img = ref("")
+const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
+const fileInfo: any = ref({})
+const show_video: any = ref(null)
+const imgNum = ref(0)
+const upload: any = ref(null);
+const file: any = ref("")
+const reftopic: any = ref(null)
+const topicFlag: any = ref(false)
+const refaite: any = ref(null)
+const visible: any = ref('public')
+const sssss: any = ref(false)
+const dataList: any = ref([])
+const coverList: any = ref([])
+const data: any = reactive({
+  title: "",
+  summary: "",
+  img: "",
 })
+
+const checkField = [{
+  name: 'content',
+  message: "请输入摘要内容"
+}]
+
+// 监听
+watch([() => fileInfo.value.fileUrl], async (newValues: any, prevValues) => {
+  show_video.value.load()
+  coverList.value = []
+  setTimeout(() => {
+
+    let audio: any = document.getElementById('show_video');
+    data.title = fileInfo.value.name.substring(0, fileInfo.value.name.lastIndexOf("."))
+    // data.duration = show_video.value.duration
+    data.format = fileInfo.value.format
+    data.duration = fileInfo.value.duration
+    data.time = durationTrans(fileInfo.value.duration)
+    data.size = fileInfo.value.progresstotal
+
+    let unit = data.duration / 4
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 250;
+    canvas.height = 500;
+    const ctx: any = canvas.getContext('2d');
+    ctx.drawImage(show_video.value, 0, 0, 250, 500);
+    const dataBase64 = canvas.toDataURL('image/png'); // 完成base64图片的创建
+    fileInfo.value.cover = dataBase64;
+    if (dataBase64) {
+      const imgFile = dataURLtoFile(dataBase64, `${new Date().getTime()}.png`);
+      coverList.value.push(dataBase64)
+    }
+  }, 1000)
+
+})
+
+function getCover() {
+  coverList.value = []
+  const canvas = document.createElement('canvas');
+  canvas.width = 250;
+  canvas.height = 500;
+  const ctx: any = canvas.getContext('2d');
+  ctx.drawImage(show_video.value, 0, 0, 250, 500);
+  const dataBase64 = canvas.toDataURL('image/png'); // 完成base64图片的创建
+  fileInfo.value.cover = dataBase64;
+  if (dataBase64) {
+    const imgFile = dataURLtoFile(dataBase64, `${new Date().getTime()}.png`);
+    coverList.value.push(dataBase64)
+  }
+}
+
+function dataURLtoFile(dataBase64: any, filename: any) {
+  const arr = dataBase64.split(",");
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n: any = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, {
+    type: mime
+  });
+}
+
+function handleClose() {
+  window.postMessage("message", '*');
+}
+
+// 监听图片上传
+function image(a: any) {
+  let len = a.split("|").length
+  img.value = a
+  if (len > 2) {
+    imgNum.value = a.split("|").length - 2
+  }
+}
+
+// 选择表情或话题
+function choose(param: any) {
+  let word_arr = data.summary.split('#')
+  let arr2 = data.summary.split('@')
+
+  if (param[0] === '@' || (param.indexOf("@") > -1 && arr2[arr2.length - 1].indexOf(" ") === -1)) {
+    if (data.summary[data.summary.length - 1] === '@') {
+      let str = data.summary.substring(0, data.summary.length - 1)
+      data.summary = str + param
+    } else if (arr2[arr2.length - 1].indexOf(" ") === -1) {
+      let index = data.summary.lastIndexOf('@' + arr2[arr2.length - 1])
+      let str = data.summary.substr(0, index)
+      data.summary = str + param
+    } else {
+      data.summary = data.summary + param
+    }
+  } else if (param[0] === '#' || (param.indexOf("#") > -1 && word_arr[word_arr.length - 1].indexOf(" ") === -1)) {
+    if (data.summary[data.summary.length - 1] === '#') {
+      let str = data.summary.substring(0, data.summary.length - 1)
+      data.summary = str + param
+    } else if (word_arr[word_arr.length - 1].indexOf(" ") === -1) {
+      let index = data.summary.lastIndexOf('#' + word_arr[word_arr.length - 1])
+      let str = data.summary.substr(0, index)
+      data.summary = str + param
+    } else {
+      data.summary = data.summary + param
+    }
+  } else {
+    data.summary = data.summary + param
+  }
+}
+
+function handleFocus(param: any) {
+  if (param.data === "@" && !sssss.value) {
+    sssss.value = true
+    refaite.value.click(sssss.value)
+  }
+}
+
+function handleKeyup(param: any) {
+  if (param.key === "@" && !sssss.value) {
+    sssss.value = true
+    refaite.value.click(sssss.value)
+  } else if (param.key === "#" && !topicFlag.value) {
+    topicFlag.value = true
+    reftopic.value.click(topicFlag.value)
+  }
+}
+
+function init() {
+  dataList.value = []
+  store.dispatch('common/Fetch', {
+    data: {
+      coding: coding.cate
+    }
+  }).then(res => {
+    res.result.map((item: any) => {
+      dataList.value.push({
+        name: item.name,
+        value: item.id
+      })
+    })
+  })
+}
+
+// 话题发布
+function sendTalk() {
+  // proxy.$hlj.loading()
+  store.dispatch('common/Fetch', {
+    api: 'InsertTalk',
+    data: {
+      cid: `|${data.cid}|`,
+      visible: visible.value,
+      type: "video",
+      img: data.img,
+      summary: data.summary,
+      cover: fileInfo.value.cover,
+      format: data.format,
+      duration: data.duration,
+      time: data.time,
+      size: data.size
+    }
+  }).then(res => {
+    if (res.ifSuccess === 0) {
+      proxy.$hlj.message({
+        msg: res.returnMessage
+      })
+      return
+    }
+    data.summary = ""
+    data.img = ""
+    data.video = {}
+    proxy.$message.message({
+      msg: "发布成功",
+      type: 'success'
+    })
+  })
+}
+
+onMounted(init)
 </script>

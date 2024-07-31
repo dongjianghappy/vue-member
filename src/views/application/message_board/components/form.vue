@@ -3,7 +3,7 @@
   <div class="module-content send_info p0" style="overflow: inherit;">
     <div class="send-input ptb0">
       <div class="send-input-box relative">
-        <textarea :placeholder="placeholder" v-model="detail.summary" @focus="handleFocus($event)" @keyup="handleKeyup" class="talkcontent-wrap" style="background: transparent; resize: none;"></textarea>
+        <textarea :placeholder="placeholder" v-model="detail.summary" class="talkcontent-wrap" style="background: transparent; resize: none;"></textarea>
       </div>
     </div>
     <div style="overflow: auto;">
@@ -19,16 +19,16 @@
         </span>
       </div>
       <div class="operate-right" style=" width: 200px;">
-        <button @click="sendTalk" class="btn" :class="{disabled: !detail.summary}" :disabled="!detail.summary">发送</button>
+        <button @click="sendTalk" class="btn" :class="{disabled: !isCommit}" :disabled="!isCommit">发送</button>
       </div>
     </div>
   </div>
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   ref,
   reactive,
@@ -36,102 +36,79 @@ import {
   useStore
 } from '@/utils'
 
-export default defineComponent({
-  name: 'HomeViewdd',
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    placeholder: {
-      type: String,
-      default: "有什么新鲜事想分享给大家？"
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const isShow = ref(false)
-    const loginuser: any = computed(() => store.getters['user/loginuser']);
-    const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
-    const upload: any = ref(null);
-    const detail: any = reactive({
-      summary: "",
-      img: "",
-      video: {}
-    })
-
-    // 监听图片上传
-    function image(a: any) {
-      detail.img = a
-    }
-
-    // 选择表情
-    function choose(param: any) {
-      detail.summary = detail.summary + param
-    }
-
-    // 发布留言
-    function sendTalk() {
-      store.dispatch('common/Fetch', {
-        api: 'writeMessageBoard',
-        data: {
-          coding: props.data.coding,
-          uid: loginuser.value.account,
-          img: detail.img,
-          content: detail.summary
-        }
-      }).then(res => {
-        if (res.ifSuccess === 2) {
-          return
-        }
-
-        if (res.ifSuccess === 0) {
-          proxy.$hlj.message({
-            msg: res.returnMessage
-          })
-          return
-        }
-        detail.summary = ""
-        detail.img = ""
-        detail.video = {}
-        proxy.$message.message({
-          msg: "发布成功",
-          type: 'success'
-        })
-        props.render()
-      })
-    }
-
-    function handleFocus(param: any) {
-
-    }
-
-    function handleKeyup(param: any) {
-
-    }
-
-    return {
-      detail,
-      isShow,
-      upload,
-      image,
-      choose,
-      sendTalk,
-      module,
-      handleFocus,
-      handleKeyup
+  placeholder: {
+    type: String,
+    default: "有什么新鲜事想分享给大家？"
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return 'Default function'
     }
   }
 })
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const loginuser: any = computed(() => store.getters['user/loginuser']);
+const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
+const isCommit = computed(() => {
+  return detail.summary || detail.img
+});
+const upload: any = ref(null);
+const detail: any = reactive({
+  summary: "",
+  img: "",
+  video: {}
+})
+
+// 监听图片上传
+function image(a: any) {
+  detail.img = a
+}
+
+// 选择表情
+function choose(param: any) {
+  detail.summary = detail.summary + param
+}
+
+// 发布留言
+function sendTalk() {
+  store.dispatch('common/Fetch', {
+    api: 'writeMessageBoard',
+    data: {
+      coding: props.data.coding,
+      uid: loginuser.value.account,
+      img: detail.img,
+      content: detail.summary
+    }
+  }).then(res => {
+    if (res.ifSuccess === 2) {
+      return
+    }
+
+    if (res.ifSuccess === 0) {
+      proxy.$hlj.message({
+        msg: res.returnMessage
+      })
+      return
+    }
+    detail.summary = ""
+    detail.img = ""
+    detail.video = {}
+    proxy.$message.message({
+      msg: "发布成功",
+      type: 'success'
+    })
+    props.render()
+  })
+}
 </script>

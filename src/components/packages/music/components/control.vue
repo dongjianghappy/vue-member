@@ -112,7 +112,6 @@ export default defineComponent({
           seconds = '0' + seconds
         }
         if (props.data.time == undefined &&  durationTrans(audio.duration) != 'NaN:NaN') {
-          debugger
           props.data.time = durationTrans(audio.duration)
         }
         second.value = durationTrans(audio.currentTime)

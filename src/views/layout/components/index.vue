@@ -1,11 +1,14 @@
 <template>
 <!-- 登录框 -->
 <v-login :displayButton="false" />
+<!-- 欢迎消息 -->
+<v-welcome v-if="loginMessage == 'true'" />
 <!-- 聊天窗口 -->
 <!-- <v-chat /> -->
 <v-messageboard v-if="module.personal_center && module.personal_center.message_board" />
 <v-time v-if="module.personal_center && module.personal_center.time" />
 <v-letter />
+<v-energy v-if="loginuser.account" />
 <!-- 主题 -->
 <Thme v-if="loginuser.currentUser && module.personal_center && module.personal_center.theme" />
 <v-layer v-model:isShow="showFlag" :data="currentData.data" :currentImg="currentData.img" v-if="showFlag" type="image" :hasInfo="currentData.hasInfo || true" :hasComment="false" />
@@ -14,11 +17,11 @@
 <v-gotop />
 <BirthdayPrompt v-if="loginuser.birthday && module.prompt && module.prompt.birthday" />
 <MessagePrompt v-else-if="module.prompt && module.prompt.message_prompt" />
+<v-theme />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   onMounted,
   ref,
   computed,
@@ -27,59 +30,33 @@ import {
 import VueEvent from '@/utils/event'
 import Thme from '@/views/thme/index.vue'
 import Graph from '@/views/graph/index.vue'
-import BirthdayPrompt from './BirthdayPrompt.vue'
-import MessagePrompt from './MessagePrompt.vue'
-export default defineComponent({
-  name: 'v-Button',
-  components: {
-    Thme,
-    Graph,
-    BirthdayPrompt,
-    MessagePrompt
-  },
-  props: {
-    loginuser: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
-  setup(props, context) {
-    const store = useStore();
-    const showFlag = ref(false)
-    const displayScreen = ref(false)
-    const displayGraph = ref(false)
-    const currentData = ref()
-    const module: any = computed(() => store.getters['user/config_talk']);
+import BirthdayPrompt from './prompt/BirthdayPrompt.vue'
+import MessagePrompt from './prompt/MessagePrompt.vue'
 
-    onMounted(() => {
-      // 大图查看
-      VueEvent.on("layout", (data: any) => {
-        currentData.value = data
-        showFlag.value = !showFlag.value
-      })
-      // 播放查看
-      VueEvent.on("screen", (data: any) => {
-        currentData.value = data
-        displayScreen.value = !displayScreen.value
-      })
-      // 图表结构
-      VueEvent.on("graph", (data: any) => {
-        currentData.value = data
-        displayGraph.value = !displayGraph.value
-      })
+const store = useStore();
+const showFlag = ref(false)
+const displayScreen = ref(false)
+const displayGraph = ref(false)
+const currentData = ref()
+const loginuser = computed(() => store.getters['user/loginuser']);
+const module: any = computed(() => store.getters['user/config_talk']);
+const loginMessage: any = sessionStorage.getItem('loginMessage');
 
-    })
-
-    return {
-      showFlag,
-      displayScreen,
-      displayGraph,
-      currentData,
-      module
-    }
-
-  }
+onMounted(() => {
+  // 大图查看
+  VueEvent.on("layout", (data: any) => {
+    currentData.value = data
+    showFlag.value = !showFlag.value
+  })
+  // 播放查看
+  VueEvent.on("screen", (data: any) => {
+    currentData.value = data
+    displayScreen.value = !displayScreen.value
+  })
+  // 图表结构
+  VueEvent.on("graph", (data: any) => {
+    currentData.value = data
+    displayGraph.value = !displayGraph.value
+  })
 })
 </script>

@@ -34,89 +34,73 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
   getCurrentInstance,
   onMounted,
   ref,
-  reactive,
   useStore,
   useRoute,
   codings,
   useRouter,
-  watch,
   getUid
 } from '@/utils'
 
-export default defineComponent({
-  name: 'ArticleView',
-  props: {
-    channel: {
-      type: String,
-      default: ""
-    },
+const props: any = defineProps({
+  channel: {
+    type: String,
+    default: ""
   },
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter();
-    const route = useRoute();
-    const data: any = ref({})
-    const loading: any = ref(false)
-    const channel: any = props.channel;
-    const {
-      art
-    }: any = codings[props.channel]
+})
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const router = useRouter();
+const route = useRoute();
+const data: any = ref({})
+const loading: any = ref(false)
+const {
+  art
+}: any = codings[props.channel]
 
-
-    // 初始化数据
-    function init() {
-      loading.value = false
-      store.dispatch('common/Fetch', {
-        api: 'ArticleView',
-        data: {
-          coding: art,
-          id: route.query.id
-        }
-      }).then(res => {
-        loading.value = true
-        data.value = res.result
-        data.value.style = {}
-        // data.value.style = JSON.parse(res.result.style)
-      })
+// 初始化数据
+function init() {
+  loading.value = false
+  store.dispatch('common/Fetch', {
+    api: 'ArticleView',
+    data: {
+      coding: art,
+      id: route.query.id
     }
+  }).then(res => {
+    loading.value = true
+    data.value = res.result
+    data.value.style = {}
+  })
+}
 
-    function handleclick(param: any) {
-      router.push(proxy.const.setUrl({
-        uid: getUid(),
-        query: `/${props.channel}?item=view&id=${param}`
-      }))
-      setTimeout(() => {
-        window.scrollTo(0, 0)
-        init()
-      }, 100)
-    }
+function handleclick(param: any) {
+  router.push(proxy.const.setUrl({
+    uid: getUid(),
+    query: `/${props.channel}?item=view&id=${param}`
+  }))
+  setTimeout(() => {
+    window.scrollTo(0, 0)
+    init()
+  }, 100)
+}
 
-    function handlePrev() {
-      router.push(proxy.const.setUrl({
-        uid: getUid(),
-        query: `/article?item=audited`
-      }))
-    }
+function handlePrev() {
+  router.push(proxy.const.setUrl({
+    uid: getUid(),
+    query: `/article?item=audited`
+  }))
+}
 
-    onMounted(() => {
-      init()
-    })
-    return {
-      data,
-      handleclick,
-      loading,
-      handlePrev
-    }
-  }
+onMounted(() => {
+  init()
 })
 </script>
 

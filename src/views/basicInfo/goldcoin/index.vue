@@ -1,8 +1,8 @@
 <template>
 <div class="module-wrap">
   <div class="module-head">金币明细</div>
+  <div class="p10 cl-white">可用金币 {{loginuser.goldcoin}}</div>
   <div class="module-content p10" style="padding-bottom: 25px !important; height:auto" v-for="(item, index) in appstore" :key="index">
-    <div class="p10 cl-white">可用金币 {{loginuser.goldcoin}}</div>
     <div class="p10" style="color: #f67f00">{{item.month}}</div>
     <div class="flex p10" style=" border-bottom: 1px solid var(--default-border);" v-for="(list, i) in item.list" :key="i">
       <div class="w50 mr15"><i :class="`iconfont icon-${list.icon} font32`" /></div>
@@ -16,30 +16,21 @@
 </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, getCurrentInstance, computed } from 'vue'
-import {useStore} from 'vuex'
+<script setup lang="ts">
+import {
+  computed,
+  onMounted,
+  useStore
+} from '@/utils'
 
-export default defineComponent({
-  name: 'AsideView',
-  setup(props, context) {
-    const {ctx}:any = getCurrentInstance();
-    const store = useStore();
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    const appstore = computed(() => store.getters['common/goldcoin']);
+const store = useStore();
+const loginuser = computed(() => store.getters['user/loginuser']);
+const appstore = computed(() => store.getters['common/goldcoin']);
 
-    function init(param: any){
-      store.dispatch('common/Goldcoin', {
-        ...param
-      })
-    }
-    init({})
-    return { 
-      init,
-      loginuser,
-      appstore
-    }  
-  }
-  
-})
+function init(param: any = {}) {
+  store.dispatch('common/Goldcoin', {
+    ...param
+  })
+}
+onMounted(init)
 </script>

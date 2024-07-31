@@ -7,7 +7,6 @@ const install = (Vue:any) => {
     const theme: any = user != 'undefined' ? JSON.parse(user) : {}
     // 背景图和背景特效
     if(theme &&  theme.effects){
-      debugger
       for(let i=0; i<theme.effects.length; i++){
         render(theme.effects[i], i)
       }
@@ -70,29 +69,29 @@ const install = (Vue:any) => {
     let box = JSON.parse(obj)
     
     for(let i=0; i< box.length; i++){
-      let arrs = []
-      let arr = box[i].img.style.split(";") 
-      for(let j=0; j<arr.length; j++){
-        let b = arr[j].split(":") 
-        b[0].trim() && arrs.push(b[0].trim())
-      }
-
       // 创建图片
       var img: any = document.createElement('img') //创建ul节点
       img.style = box[i].img.style
       img.src = box[i].img.src
       img.title = box[i].img.title
-      img.setAttribute('data', arrs)
+      let arrs = box[i].style.split(';')
+      let style = []
+      for(let i=0; i<arrs.length; i++){
+        let arr = arrs[i].split(':')
+        if(arr[0].trim() == 'left'){
+          style.push(`${arr[0]}: ${window.innerWidth/2-parseInt(arr[1])}px`)
+        }else{
+          style.push(arrs[i])
+        }
+      }
 
+      // box[i].style
       var container: any = document.createElement('div') //创建ul节点
-        container.style = box[i].style
+        container.style = style.join(';') //box[i].style
         container.draggable = true
         container.classList.add(box[i].class)
         container.appendChild(img);
-        
         document.body.appendChild(container)
-
-        
     }
     Vue.config.globalProperties.$pendant.init()
   }   

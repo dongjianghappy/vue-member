@@ -36,7 +36,10 @@ export default class http {
   // 请求头设置
   requestHeaders (request: any) {
     // POST传参序列化
-    request.interceptors.request.use((config: any) => {
+    request.interceptors.request.use((config: any) => {  
+      if(config.data.responseType){
+        config.responseType = "blob"
+      }   
       if (config.method === 'post' && config.data.upload !== true) {
         config.data = qs.stringify(config.data)
       }
@@ -78,6 +81,7 @@ export default class http {
     params.m = params.m ? params.m : m
     let progress: any = params.progress ? params.progress : ()=>{}
     const request = this.axios()
+    
     this.requestHeaders(request)
     this.responseHeaders(request)
 
@@ -100,14 +104,21 @@ export default class http {
     return new Promise((resolve, reject) => {
       let dir = process.env.NODE_ENV === 'development' ? 'interface_new.php' : 'interface_vue.php'
       const url = params.uploadtype ? `?&type=${params.uploadtype}` : ''
-      request.request({
+
+      const param: any = {
         url: `${dir}${url}`,
         method: 'post',
         data: params,
         onUploadProgress: (e: any) => {
           progress(e)
         }
-      }) 
+      }
+
+      // if(params.responseType){
+      //   param.responseType = "blob"
+      // }    
+      
+      request.request(param) 
         .then(response => {
           resolve({
             result: response

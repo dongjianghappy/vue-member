@@ -22,79 +22,46 @@
         </div>
       </div>
     </div>
-   </div>
+  </div>
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  computed,
+  defineProps,
   ref,
-  getUid
-} from '@/utils'
-import {
+  getUid,
+  onMounted,
   useStore
-} from 'vuex'
+} from '@/utils'
 
-export default defineComponent({
-  name: 'HomeViews',
-  components: {
-
-  },
-  props: {
-    channel: {
-      type: String,
-      default: ""
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
-  },
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const coding: any = props.data.coding
-    const dataList: any = ref([]);
-    const loading: any = ref(false)
-    let tabMenu: any = ref([{
-        name: "我点赞的",
-        value: "appstore1"
-      },
-      {
-        name: "点赞我的",
-        value: "appstore2"
-      }
-    ])
-
-    function init() {
-      loading.value = false
-      store.dispatch('common/Fetch', {
-        api: "getPraise",
-        data: {
-          uid: getUid(),
-          coding: coding.art,
-          page: 1,
-          pagesize: 25,
-        }
-      }).then(res => {
-        loading.value = true
-        dataList.value = res.result
-      })
-    }
-    init()
-    return {
-      loading,
-      init,
-      dataList,
-      tabMenu
-    }
-  },
+  }
 })
+const store = useStore();
+const coding: any = props.data.coding
+const dataList: any = ref([]);
+const loading: any = ref(false)
+
+function init() {
+  loading.value = false
+  store.dispatch('common/Fetch', {
+    api: "getPraise",
+    data: {
+      uid: getUid(),
+      coding: coding.art,
+      page: 1,
+      pagesize: 25,
+    }
+  }).then(res => {
+    loading.value = true
+    dataList.value = res.result
+  })
+}
+onMounted(init)
 </script>

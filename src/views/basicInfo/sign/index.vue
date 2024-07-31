@@ -13,36 +13,20 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  computed
-} from 'vue'
-import {
+  computed,
+  onMounted,
   useStore
-} from 'vuex'
+} from '@/utils'
 
-export default defineComponent({
-  name: 'AsideView',
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const dataList = computed(() => store.getters['common/signList']);
+const store = useStore();
+const dataList = computed(() => store.getters['common/signList']);
 
-    function init(param: any) {
-      store.dispatch('common/SignList', {
-        ...param
-      })
-    }
-    init({})
-    return {
-      init,
-      dataList
-    }
-  }
-
-})
+function init(param: any = {}) {
+  store.dispatch('common/SignList', {
+    ...param
+  })
+}
+onMounted(init)
 </script>

@@ -1,13 +1,13 @@
 <template>
 <div v-if="data.image.length === 1">
   <div style="margin-top: 25px; margin-right: 25px;" v-if="data.type === 'sign'">
-    <img :src="data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style=" width: 100%; height: auto; cursor: zoom-in;" />
+    <img :src="data.image[0]" class="showimg" @click="showImg(data, data.image[0])" style=" width: 100%; height: auto; cursor: zoom-in;" />
   </div>
-  <img :src="data.image[0]" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 8px;width: 250px; height: auto; cursor: zoom-in;" v-else />
+  <img :src="data.image[0]" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 8px;width: 250px; height: auto; cursor: zoom-in;" v-else />
 </div>
 <ul v-else class="img-grid smallimg-wrap clearfix">
   <li v-for="(img, k) in data.image" :key="k" style="border-radius: 8px; overflow:hidden;">
-    <v-img :src="img" @click="showImg(data, img)" onerror="this.src='http://yunxi10.com/source/public/images/noimage.png'" />
+    <v-img :src="img" @click="showImg(data, img)" />
   </li>
 </ul>
 <v-layer v-model:isShow="showFlag" :data="currentData" :img="currentImg" v-if="showFlag" type="image" :hasComment="true" />

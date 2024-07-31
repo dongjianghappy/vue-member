@@ -8,7 +8,7 @@
     left: 50%; margin-left: -16px;
     margin-top: -16px;" v-if="!data.isplay" />
     <div class="control-wrap" v-if="mask">
-      <v-control ref="control" :data="data" />
+      <v-control :data="data" />
     </div>
     <video :src="data.video" class="playmp4" :class="`video_${item.id || data.id}`" @click="handlePlay(data)" style="width: 100%;" :style="`height: ${style.height}`">
       您的浏览器不支持HTML5
@@ -17,76 +17,66 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  ref
+  defineProps
 } from '@/utils'
 import VueEvent from '@/utils/event'
 
-export default defineComponent({
-  name: 'v-Video',
-  props: {
-    sourceData: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    item: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    data: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
-    style: {
-      type: Object,
-      default: () => {
-        return {
-          width: '250px',
-          height: '400px'
-        }
-      }
-    },
-    mask: {
-      type: Boolean,
-      default: true
+const props: any = defineProps({
+  sourceData: {
+    type: Array,
+    default: () => {
+      return []
     }
   },
-  setup(props, context) {
-
-    function handlePlay(param: any) {
-      let audio: any = document.getElementsByClassName('video_' + param.id)
-
-      props.sourceData.map((item: any) => {
-        if (param.id !== item.id && item.type == "video") {
-          let audio1: any = document.getElementsByClassName('video_' + item.id)
-          item.isplay = false
-          audio1[0].pause()
-        }
-      })
-
-      param.isplay = !param.isplay
-      if (param.isplay) {
-        audio[0].play()
-      } else {
-        audio[0].pause()
+  item: {
+    type: Object,
+    default: () => {
+      return {}
+    }
+  },
+  data: {
+    type: Array,
+    default: () => {
+      return []
+    }
+  },
+  style: {
+    type: Object,
+    default: () => {
+      return {
+        width: '250px',
+        height: '400px'
       }
-
-      VueEvent.emit("plays", param);
     }
-
-    return {
-      handlePlay
-    }
+  },
+  mask: {
+    type: Boolean,
+    default: true
   }
 })
+
+function handlePlay(param: any) {
+  let audio: any = document.getElementsByClassName('video_' + param.id)
+
+  props.sourceData.map((item: any) => {
+    if (param.id !== item.id && item.type == "video") {
+      let audio1: any = document.getElementsByClassName('video_' + item.id)
+      item.isplay = false
+      audio1[0].pause()
+    }
+  })
+
+  param.isplay = !param.isplay
+  if (param.isplay) {
+    audio[0].play()
+  } else {
+    audio[0].pause()
+  }
+
+  VueEvent.emit("plays", param);
+}
 </script>
 
 <style lang="less" scoped>

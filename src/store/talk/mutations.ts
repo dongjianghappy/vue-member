@@ -1,6 +1,5 @@
 const mutations = {
   setData: (state: any, params: any) => {
-    debugger
     state[params.state] = params.data
   }, 
   setComprehensiveList: (state: any, params: any) => {
@@ -10,7 +9,6 @@ const mutations = {
     }else{
       state.channel[params.state] = state.channel[params.state].concat(data.list)
     }
-    debugger
     state.channel.page = data.page
     state.channel.pages = data.pages
     state.channel.checked_num = data.checked_num
@@ -24,7 +22,6 @@ const mutations = {
     // state.talkList = params
   }, 
   setArchive: (state: any, params: any) => {
-    debugger
     state.archive = params
   }, 
   setSearchList: (state: any, params: any) => {
@@ -34,7 +31,6 @@ const mutations = {
     }else{
       state.search[params.state] = state.search[params.state].concat(data.list)
     }
-    debugger
     state.search.page = data.page
     state.search.pages = data.pages
     state.search.related = data.related || []
@@ -85,7 +81,6 @@ const mutations = {
     state.wordsList = params
   },
   setQuestionsCate: (state: any, params: any) => {
-    debugger
     let index = {id: '', name: "综合", icon: 'home'}
     params.unshift(index)
     state.questionCate = params

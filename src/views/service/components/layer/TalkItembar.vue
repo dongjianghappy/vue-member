@@ -42,6 +42,7 @@ export default defineComponent({
     function onClick(param: any){
       store.dispatch('common/Fetch', param).then(res => {
         proxy.$hlj.message({
+          type: 'info',
           msg: res.returnMessage
         })
       })

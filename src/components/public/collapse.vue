@@ -16,41 +16,34 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   ref
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Collapse',
-  props: {
-    title: {
-      type: String,
-      default: ""
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
+const props: any = defineProps({
+  title: {
+    type: String,
+    default: ""
   },
-  emits: ['onClick'],
-  setup(props, context) {
-    let collapse: any = ref(true)
-
-    function handleClick(params: any) {
-      if (props.disabled) {
-        return
-      }
-      collapse.value = !collapse.value
-      if(collapse.value){
-        context.emit('onClick')
-      }
-    }
-    return {
-      handleClick,
-      collapse
-    }
+  disabled: {
+    type: Boolean,
+    default: false
   }
 })
+
+const emit: any = defineEmits(['onClick'])
+let collapse: any = ref(true)
+
+function handleClick(params: any) {
+  if (props.disabled) {
+    return
+  }
+  collapse.value = !collapse.value
+  if (collapse.value) {
+    emit('onClick')
+  }
+}
 </script>

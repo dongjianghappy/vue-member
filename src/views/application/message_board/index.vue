@@ -30,7 +30,7 @@
                   </template>
                 </div>
               </div>
-              
+
               <List :data="{coding: coding.reply}" :dataList="dataList" :isTome="isTome" :render="init" />
             </template>
             <template v-slot:content2>
@@ -45,9 +45,8 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   useStore,
   useRoute,
   computed,
@@ -60,71 +59,40 @@ import {
 import UserInfoHead from '../../home/components/UserInfoHead.vue'
 import Form from './components/form.vue'
 import List from './components/list.vue'
-import {
-  feedback
-} from '@/assets/const'
 
-export default defineComponent({
-  name: 'MessageBoardView',
-  components: {
-    UserInfoHead,
-    Form,
-    List
-  },
-  setup(props, context) {
-    const store = useStore();
-    const route = useRoute();
-    const coding = codings.talk.message_board
-    const isShow = ref(false)
-    const isTome: any = ref(true);
-    const userInfo: any = computed(() => store.getters['user/userInfo']);
-    const loginuser = computed(() => store.getters['user/loginuser']);
-    let dataList: any = ref({})
-    const loading: any = ref(false)
-    const module = computed(() => store.getters['user/config_talk']);
+const store = useStore();
+const route = useRoute();
+const coding = codings.talk.message_board
+const isShow = ref(false)
+const isTome: any = ref(true);
+const userInfo: any = computed(() => store.getters['user/userInfo']);
+let dataList: any = ref({})
+const module = computed(() => store.getters['user/config_talk']);
 
-    watch(() => route.query.item, () => {
-      isTome.value = route.query.item === 'tome' ? true : false
-    })
-
-    function init(param: any = {}) {
-      loading.value = false
-
-      const params: any = {
-        coding: coding.list,
-        item: route.query.item,
-        uid: getUid(),
-        page: 1,
-        pagesize: 25
-      }
-
-      Object.assign(params, param)
-
-      store.dispatch('common/Fetch', {
-        api: "userMessageBoard",
-        data: {
-          ...params
-        }
-      }).then(res => {
-        loading.value = true
-        dataList.value = res.result
-      })
-    }
-
-    onMounted(init)
-
-    return {
-      coding,
-      route,
-      isTome,
-      isShow,
-      dataList,
-      loading,
-      userInfo,
-      loginuser,
-      init,
-      module
-    }
-  }
+watch(() => route.query.item, () => {
+  isTome.value = route.query.item === 'tome' ? true : false
 })
+
+function init(param: any = {}) {
+  const params: any = {
+    coding: coding.list,
+    item: route.query.item,
+    uid: getUid(),
+    page: 1,
+    pagesize: 25
+  }
+
+  Object.assign(params, param)
+
+  store.dispatch('common/Fetch', {
+    api: "userMessageBoard",
+    data: {
+      ...params
+    }
+  }).then(res => {
+    dataList.value = res.result
+  })
+}
+
+onMounted(init)
 </script>

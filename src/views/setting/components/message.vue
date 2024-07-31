@@ -31,82 +31,64 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   onMounted,
-  ref
-} from 'vue'
-import {
+  ref,
   useStore
-} from 'vuex'
+} from '@/utils'
 import {
   messageNotification
 } from '@/assets/const'
-export default defineComponent({
-  name: 'AsideView',
-  setup(props, context) {
-    const store = useStore();
-    const dataList: any = ref([])
-    const list: any = messageNotification
 
-    function init() {
-      store.dispatch('common/Fetch', {
-        api: 'settingList',
-        data: {
-          sub: 'message'
-        }
-      }).then(res => {
-        dataList.value = res.result
-      })
+const store = useStore();
+const dataList: any = ref([])
+const list: any = messageNotification
+
+function init() {
+  store.dispatch('common/Fetch', {
+    api: 'settingList',
+    data: {
+      sub: 'message'
     }
+  }).then(res => {
+    dataList.value = res.result
+  })
+}
 
-    function getValue(param: any) {
-      store.dispatch('user/Detect')
+function getValue(param: any) {
+  store.dispatch('user/Detect')
+}
+
+function handleClick(param: any, value: any) {
+  store.dispatch('common/Fetch', {
+    api: 'userSetting',
+    data: {
+      status: param.name,
+      value: value,
+      sub: 'message'
     }
+  }).then(res => {
+    param[param.name] = res.result.value
+    store.dispatch('user/Detect')
+  })
+}
 
-    function handleClick(param: any, value: any) {
-      debugger
-      store.dispatch('common/Fetch', {
-        api: 'userSetting',
-        data: {
-          status: param.name,
-          value: value,
-          sub: 'message'
-        }
-      }).then(res => {
-        param[param.name] = res.result.value
-        store.dispatch('user/Detect')
-      })
+function handleChange(e: any, param: any) {
+  param.broadcast = e.currentTarget.checked ? '1' : '0'
+
+  store.dispatch('common/Fetch', {
+    api: 'userSetting',
+    data: {
+      status: param.name,
+      type: 'broadcast',
+      value: param.broadcast,
+      sub: 'message'
     }
+  }).then(res => {
+    store.dispatch('user/Detect')
+  })
+}
 
-    function handleChange(e: any, param: any) {
-      param.broadcast = e.currentTarget.checked ? '1' : '0'
-
-      store.dispatch('common/Fetch', {
-        api: 'userSetting',
-        data: {
-          status: param.name,
-          type: 'broadcast',
-          value: param.broadcast,
-          sub: 'message'
-        }
-      }).then(res => {
-        store.dispatch('user/Detect')
-
-      })
-    }
-
-    onMounted(init)
-    return {
-      list,
-      dataList,
-      getValue,
-      handleClick,
-      handleChange
-    }
-  }
-
-})
+onMounted(init)
 </script>

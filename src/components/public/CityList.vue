@@ -15,77 +15,67 @@
 </span>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
+  defineProps,
+  defineEmits,
   onMounted,
   reactive
 } from 'vue'
 import citys from '@/assets/cityData'
 
-export default defineComponent({
-  name: 'v-Search',
-  props: {
-    data: {
-      type: Object,
-      default: () => {
-        return {
-          province: "",
-          city: "",
-          area: ""
-        }
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {
+        province: "",
+        city: "",
+        area: ""
       }
-    }
-  },
-  emits: ['choose'],
-  setup(props, context) {
-    const cityData: any = reactive(citys)
-    const cityList: any = reactive({
-      province: {},
-      city: {},
-      area: {}
-    })
-    const current: any = props.data
-
-    function init(level: any, pid: any) {
-      for (var i in cityData) {
-        const arr = i.split(',');
-        if (arr.length == 1) {
-          cityList.province = cityData[i]
-        }
-        if (arr.length == 2 && arr[1] == pid) {
-          cityList.city = cityData[i]
-          cityList.area = {}
-        }
-        if (arr.length == 3 && arr[2] == pid) {
-          cityList.area = cityData[i]
-        }
-      }
-    }
-
-    function handleClick(level: any) {
-      if (level === 2) {
-        init(level, current.province)
-        current.city = ""
-        current.area = ""
-      } else if (level === 3) {
-        init(level, current.city)
-        current.area = ""
-      }
-
-      context.emit('choose', current)
-    }
-    onMounted(() => {
-      init(1, 0)
-      init(2, current.province)
-      init(3, current.city)
-    })
-    return {
-      cityList,
-      current,
-      handleClick
     }
   }
+})
+const emit: any = defineEmits(['choose'])
+const cityData: any = reactive(citys)
+const cityList: any = reactive({
+  province: {},
+  city: {},
+  area: {}
+})
+const current: any = props.data
+
+function init(level: any, pid: any) {
+  for (var i in cityData) {
+    const arr = i.split(',');
+    if (arr.length == 1) {
+      cityList.province = cityData[i]
+    }
+    if (arr.length == 2 && arr[1] == pid) {
+      cityList.city = cityData[i]
+      cityList.area = {}
+    }
+    if (arr.length == 3 && arr[2] == pid) {
+      cityList.area = cityData[i]
+    }
+  }
+}
+
+function handleClick(level: any) {
+  if (level === 2) {
+    init(level, current.province)
+    current.city = ""
+    current.area = ""
+  } else if (level === 3) {
+    init(level, current.city)
+    current.area = ""
+  }
+  emit('choose', current)
+}
+
+onMounted(() => {
+  init(1, 0)
+  init(2, current.province)
+  init(3, current.city)
 })
 </script>

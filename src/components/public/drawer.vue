@@ -24,150 +24,135 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   marked
 } from 'marked';
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   getCurrentInstance,
   watch,
   ref,
   useStore
 } from '@/utils'
 
-export default defineComponent({
-  name: 'v-Drawer',
-  props: {
-    mask: {
-      type: Boolean,
-      default: true
-    },
-    style: {
-      type: Object,
-      default: () => {
-        return {
-          top: "64",
-          width: "700",
-          height: "100%"
-        }
-      }
-    },
-    action: {
-      type: String,
-      default: "add"
-    },
-    show: {
-      type: Boolean,
-      default: false
-    },
-    title: {
-      type: String,
-      default: ""
-    },
-    hasfooter: {
-      type: Boolean,
-      default: true
-    },
-    param: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    api: {
-      type: String,
-      default: ""
-    },
-    submitApi: {
-      type: Object,
-      default: ""
-    },
-    submit: {
-      type: Function,
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
+const props: any = defineProps({
+  mask: {
+    type: Boolean,
+    default: true
+  },
+  style: {
+    type: Object,
+    default: () => {
+      return {
+        top: "64",
+        width: "700",
+        height: "100%"
       }
     }
   },
-  emits: ['update:show'],
-  setup(props, context) {
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const isShow = ref(props.show)
-
-    watch([isShow], (newValues, prevValues) => {
-      context.emit('update:show', false)
-    })
-
-    async function init(param: any) {
-      let data = {}
-      if (props.action === 'edit') {
-        await store.dispatch('common/Fetch', {
-          api: props.api || "detail",
-          data: {
-            ...props.data,
-            ...param
-          }
-        }).then(res => {
-          data = res.result
-        })
-      }
-      return data
+  action: {
+    type: String,
+    default: "add"
+  },
+  show: {
+    type: Boolean,
+    default: false
+  },
+  title: {
+    type: String,
+    default: ""
+  },
+  hasfooter: {
+    type: Boolean,
+    default: true
+  },
+  param: {
+    type: Object,
+    default: () => {
+      return {}
     }
-
-    function submit(params: any) {
-      if (props.submit) {
-        props.submit({
-          cancel: cancel,
-          message: () => {}
-          // message: proxy.$hlj.message({
-          //   msg: props.action !== "add" ? "编辑成功" : "新增成功"
-          // })
-        })
-      } else {
-
-        if(props.param.markdown){
-          props.param.content = props.param.markdown ? marked.parse(props.param.markdown) : ""
-        }
-
-        store.dispatch('common/Fetch', {
-          api: props.action !== "add" ? props.submitApi['update'] || 'update' : props.submitApi['insert'] || "insert",
-          data: {
-            ...props.data,
-            ...props.param
-          }
-        }).then(res => {
-          proxy.$hlj.message({
-            msg: "编辑成功"
-          })
-          props.render()
-          cancel()
-        })
-      }
+  },
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
-    
-    function cancel() {
-      context.emit('update:show', false)
-    }
-
-    return {
-      isShow,
-      init,
-      submit,
-      cancel
+  },
+  api: {
+    type: String,
+    default: ""
+  },
+  submitApi: {
+    type: Object,
+    default: ""
+  },
+  submit: {
+    type: Function,
+  },
+  render: {
+    type: Function,
+    default: () => {
+      return 'Default function'
     }
   }
 })
+const emit: any = defineEmits(['update:show'])
+const {
+  proxy
+}: any = getCurrentInstance();
+const store = useStore();
+const isShow = ref(props.show)
+
+watch([isShow], (newValues, prevValues) => {
+  emit('update:show', false)
+})
+
+async function init(param: any) {
+  let data = {}
+  if (props.action === 'edit') {
+    await store.dispatch('common/Fetch', {
+      api: props.api || "detail",
+      data: {
+        ...props.data,
+        ...param
+      }
+    }).then(res => {
+      data = res.result
+    })
+  }
+  return data
+}
+
+function submit(params: any) {
+  if (props.submit) {
+    props.submit({
+      cancel: cancel,
+      message: () => {}
+    })
+  } else {
+    if (props.param.markdown) {
+      props.param.content = props.param.markdown ? marked.parse(props.param.markdown) : ""
+    }
+
+    store.dispatch('common/Fetch', {
+      api: props.action !== "add" ? props.submitApi['update'] || 'update' : props.submitApi['insert'] || "insert",
+      data: {
+        ...props.data,
+        ...props.param
+      }
+    }).then(res => {
+      proxy.$hlj.message({
+        msg: "编辑成功"
+      })
+      props.render()
+      cancel()
+    })
+  }
+}
+
+function cancel() {
+  emit('update:show', false)
+}
 </script>

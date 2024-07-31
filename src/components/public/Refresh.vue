@@ -4,45 +4,38 @@
 </span>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  defineProps,
+  defineEmits,
   ref
 } from 'vue'
 
-export default defineComponent({
-  name: 'v-Refresh',
-  props: {
-    data: {
-      type: Array,
-      default: () => {
-        return
-      }
-    },
-    number: {
-      type: Number,
-      default: 0
-    },
-    size: {
-      type: String,
-      default: 0
-    },
+const props: any = defineProps({
+  data: {
+    type: Array,
+    default: () => {
+      return
+    }
   },
-  emits: ['update:number'],
-  setup(props, context) {
-    let current: any = ref(0)
-
-    function handleClick() {
-      if (current.value === props.size || current.value === props.data.length - 1) {
-        current.value = 0
-      } else {
-        current.value++
-      }
-      context.emit('update:number', current.value)
-    }
-    return {
-      handleClick
-    }
-  }
+  number: {
+    type: Number,
+    default: 0
+  },
+  size: {
+    type: String,
+    default: 0
+  },
 })
+const emit: any = defineEmits(['update:number'])
+let current: any = ref(0)
+
+function handleClick() {
+  if (current.value === props.size || current.value === props.data.length - 1) {
+    current.value = 0
+  } else {
+    current.value++
+  }
+  emit('update:number', current.value)
+}
 </script>

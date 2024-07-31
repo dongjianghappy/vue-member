@@ -6,100 +6,41 @@
 <v-dialog v-model:show="isShow" ref="form" :title="title || name" width="950px" :style="{width: 600, height: 600}" :hasfooter="false" :confirm="true" :cancel="true" @submit="submit">
   <template v-slot:content v-if="isShow">
     <slot name="content">
-     <v-graph :data="data" :isShow="true" />
+      <v-graph :data="data" :isShow="true" />
     </slot>
   </template>
 </v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
-  onMounted,
-  ref,
-  useStore,
-  watch
+  defineProps,
+  ref
 } from '@/utils'
-export default defineComponent({
-  name: 'v-Category',
-  props: {
-    title: {
-      type: String,
-      default: ""
-    },
-    name: {
-      type: String,
-      default: ""
-    },
-    type: {
-      type: String,
-      default: "button"
-    },
-    data: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    api: {
-      type: String,
-      default: ""
-    },
-    render: {
-      type: Function,
-      default: () => {
-        return 'Default function'
-      }
-    },
-    isInt: {
-      type: Boolean,
-      default: false
-    },
-    // 是否更新
-    isUpdate: {
-      type: Boolean,
-      default: false
-    },
-    operating: {
-      type: String,
-      default: ""
-    },
+
+const props: any = defineProps({
+  title: {
+    type: String,
+    default: ""
   },
-  emits: ['update:cate'],
-  setup(props, context) {
-    const isShow: any = ref(false)
-    const {
-      proxy
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const dataList: any = ref([])
-    let current: any = ref({})
-
-    function handleclick(param: any) {
-      isShow.value = !isShow.value
-    }
-
-    function choose(param: any) {
-      current.value = param
-    }
-
-    return {
-      isShow,
-      current,
-      handleclick,
-      choose,
-      dataList
+  name: {
+    type: String,
+    default: ""
+  },
+  type: {
+    type: String,
+    default: "button"
+  },
+  data: {
+    type: Object,
+    default: () => {
+      return {}
     }
   }
 })
-</script>
+const isShow: any = ref(false)
 
-<style scoped>
-.current {
-  background: #1890ff;
-  border-radius: 2px;
-  color: #fff;
-
+function handleclick(param: any) {
+  isShow.value = !isShow.value
 }
-</style>
+</script>

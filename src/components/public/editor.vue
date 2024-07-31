@@ -98,10 +98,10 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
+  defineProps,
+  defineEmits,
   ref,
   watch,
   selection,
@@ -128,60 +128,54 @@ marked.setOptions({
   smartypants: false,
   xhtml: false
 });
-export default defineComponent({
-      name: 'v-Search',
-      props: {
-        style: {
-          type: Object,
-          default: () => {
-            return {}
-          }
-        },
-        contentsss: {
-          type: String,
-          default: ""
-        },
-        data: {
-          type: Object,
-          default: () => {
-            return {}
-          }
-        },
-        coding: {
-          type: String,
-          default: ""
-        }
-      },
-      emits: ['update:contentsss'],
-      setup(props, context) {
-        const {
-          ctx
-        }: any = getCurrentInstance();
-        const isview: any = ref(true)
-        const isScreen: any = ref(false)
-        // 预览状态
-        const popoverStatus: any = ref(false)
-        const content: any = computed({
-          get: () => props.contentsss,
-          set: (val) => context.emit('update:contentsss', val)
-        });
-        const preview: any = ref(marked.parse(props.contentsss))
+const props: any = defineProps({
+  style: {
+    type: Object,
+    default: () => {
+      return {}
+    }
+  },
+  contentsss: {
+    type: String,
+    default: ""
+  },
+  data: {
+    type: Object,
+    default: () => {
+      return {}
+    }
+  },
+  coding: {
+    type: String,
+    default: ""
+  }
+})
+const emit: any = defineEmits(['update:contentsss'])
+const isview: any = ref(true)
+const isScreen: any = ref(false)
+// 预览状态
+const popoverStatus: any = ref(false)
+const content: any = computed({
+  get: () => props.contentsss,
+  set: (val) => emit('update:contentsss', val)
+});
+const preview: any = ref(marked.parse(props.contentsss))
 
-        const Doc: any = document
+const Doc: any = document
 
-        const data: any = {
-          link: '[链接](http://www.dongblog.com)',
-          img: '![Description](http://www.07sucai.com/images/album/16875.jpg)',
-          line: '------',
-          orderly: '1 列表内容',
-          disorder: '- 列表内容'
-        }
+const data: any = {
+  link: '[链接](http://www.dongblog.com)',
+  img: '![Description](http://www.07sucai.com/images/album/16875.jpg)',
+  line: '------',
+  orderly: '1 列表内容',
+  disorder: '- 列表内容'
+}
 
-        const array = ['link', 'img', 'line', 'orderly', 'disorder']
+const array = ['link', 'img', 'line', 'orderly', 'disorder']
 
-        const code = [{
-              name: 'html',
-              value: `${'```html'}
+const code = [{
+      name: 'html',
+      value: `${'```html'}
 
 ${'```'}`
       },
@@ -269,7 +263,6 @@ ${'```'}`
 
       // 标题设置
       if (type === 'object') {
-        debugger
         if(param.type === 'title'){
           str = title[param.value].value + title[param.value].name
         }else if(param.type === 'code'){
@@ -311,7 +304,7 @@ ${'```'}`
       content.value = editor.value;
       preview.value = marked.parse(editor.value);
 
-      context.emit('update:contentsss', content.value)
+      emit('update:contentsss', content.value)
       setTimeout(() => {
         popoverStatus.value = false
       }, 1000)
@@ -321,7 +314,7 @@ ${'```'}`
       if (param === 'clear') {
         content.value = ""
         preview.value = ""
-        context.emit('update:contentsss', content.value)
+        emit('update:contentsss', content.value)
         autoTextarea()
         return
       } else if (param === 'Screen') {
@@ -342,21 +335,6 @@ ${'```'}`
     function handleMouseup(e: any) {
       selection.mouseup(e, props.data.tag)
     }
-
-    return {
-      isview,
-      isScreen,
-      content,
-      popoverStatus,
-      marked,
-      preview,
-      handelClick,
-      handleInput,
-      selectImage,
-      handleMouseup
-    }
-  }
-})
 </script>
 
 <style scoped>
@@ -386,10 +364,5 @@ textarea {
   line-height: 1.5;
   word-break: break-all;
   min-height: 490px;
-}
-
-.ps {
-  background: var(--input-background);
-  height: 500px;
 }
 </style>

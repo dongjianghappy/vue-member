@@ -114,7 +114,7 @@ export const expression = [
 	{id: "e204", name: "右太极"},
 ]
 
-export const color: any = [
+export const colorList: any = [
 	"#4D4D4D",
 	"#999999",
 	"#FFFFFF",

@@ -4,7 +4,7 @@
     热门话题
     <span class="right">
       <v-refresh :data="hotTalkList" v-model:number="current" size="4" />
-      </span>
+    </span>
   </div>
   <div class="module-content">
     <ul>
@@ -18,9 +18,8 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
   useStore,
   useRouter,
   computed,
@@ -28,29 +27,17 @@ import {
   ref
 } from '@/utils'
 
-export default defineComponent({
-  name: 'HomeViewr',
-  setup(props, context) {
-    const store = useStore();
-    const router = useRouter();
-    const hotTalkList = computed(() => store.getters['common/hotTalk']);
-    let current: any = ref(0)
+const store = useStore();
+const router = useRouter();
+const hotTalkList = computed(() => store.getters['common/hotTalk']);
+let current: any = ref(0)
 
-    function init() {
-      store.dispatch('common/HotTalk')
-    }
+function init() {
+  store.dispatch('common/HotTalk')
+}
 
-    function huati(param: any) {
-      router.push(`/activity?item=${param}`)
-    }
-
-    onMounted(init)
-
-    return {
-      hotTalkList,
-      huati,
-      current
-    }
-  },
-})
+function huati(param: any) {
+  router.push(`/activity?item=${param}`)
+}
+onMounted(init)
 </script>

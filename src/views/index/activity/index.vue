@@ -8,7 +8,7 @@
         <div class="col-md-4 p10" v-for="(item, index) in dataList.list" :key="index">
           <div class="thumbnail p10 relative radius-4" style="background: var(--card-background);" @click="show(item.name)">
             <div class="radius-4" style="overflow: hidden;">
-              <img :src="item.image" onerror="this.src='http://www.yunxi10.com/source/public/images/topic_page_2x.png'" class="img-scale" style="width: 100%; height: 160px;">
+              <img :src="item.image" class="img-scale" style="width: 100%; height: 160px;">
             </div>
             <div class="caption relative" style="padding: 10px 0px; height: 40px;">
               <span>#{{item.name}}#
@@ -27,10 +27,8 @@
 </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
-  getCurrentInstance,
   computed,
   ref,
   onMounted,
@@ -40,54 +38,33 @@ import {
 } from '@/utils'
 import TalkTabs from '../components/module/TalkTabs.vue'
 
-export default defineComponent({
-  name: 'HomeViewsss',
-  components: {
-    TalkTabs
-  },
-  setup(props, context) {
-    const {
-      ctx
-    }: any = getCurrentInstance();
-    const store = useStore();
-    const router = useRouter()
-    const route = useRoute()
-    const Loading: any = ref(false)
-    const talkCollect = computed(() => store.getters['talk/talkCollect']);
-    const dataList: any = ref({})
+const store = useStore();
+const router = useRouter()
+const route = useRoute()
+const talkCollect = computed(() => store.getters['talk/talkCollect']);
+const dataList: any = ref({})
 
-    function init(param: any = {}) {
-      const params: any = {
-        page: 1,
-        pagesize: 30,
-        type: 'myactivity'
-      }
+function init(param: any = {}) {
+  const params: any = {
+    page: 1,
+    pagesize: 30,
+    type: 'myactivity'
+  }
 
-      Object.assign(params, param)
-      store.dispatch('common/Fetch', {
-        api: params.type == 'collect' ? 'ActivityCollectList' : 'ActivityList',
-        data: {
-          ...params
-        }
-      }).then((res) => {
-        dataList.value = res.result
-      })
+  Object.assign(params, param)
+  store.dispatch('common/Fetch', {
+    api: params.type == 'collect' ? 'ActivityCollectList' : 'ActivityList',
+    data: {
+      ...params
     }
+  }).then((res) => {
+    dataList.value = res.result
+  })
+}
 
-    function show(name: any) {
-      router.push(`/activity?item=${name}`)
-    }
+function show(name: any) {
+  router.push(`/activity?item=${name}`)
+}
 
-    onMounted(init)
-
-    return {
-      route,
-      init,
-      Loading,
-      talkCollect,
-      dataList,
-      show
-    }
-  },
-})
+onMounted(init)
 </script>
