@@ -147,6 +147,11 @@ function Color(color: any) {
     return str
   }
   
+  // 校验色值
+  function isValidRgbColor(color: any){
+    return /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(color)
+  }
+
   function set_rgb(color: any) {
     const getColor = color
   
@@ -197,10 +202,12 @@ function Color(color: any) {
   }
   
   export const setColor = (colors: any) => {
-  
+    
+    let color = isValidRgbColor(colors) ? colors : '#000'
+
     // 主题颜色处理成rgb格式
-    const rgb = set_rgb(colors)
-    const hsl = set_hsl(colors)
+    const rgb = set_rgb(color)
+    const hsl = set_hsl(color)
 
     let domRootHtml = document.getElementsByTagName('html')[0]
     if (domRootHtml) {
@@ -290,3 +297,8 @@ export const colorRgb2Hex = (color: any) => {
       return that.toUpperCase();    
   }
 };
+
+// 校验颜色有效值
+// export const isValidRgbColor = (color: any) => {
+//   return /^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/.test(color)
+// }

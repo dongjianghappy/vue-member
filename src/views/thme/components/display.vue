@@ -20,7 +20,7 @@
           <div class="col-md-4 p10" v-for="(item, index) in usertheme.theme" :key="index">
             <div class="align_center">
               <div style="height: 80px;">
-                <img :src="item.image" style="height: 80px;">
+                <img :src="item.image" style="width: 100%; height: 80px;">
               </div>
               {{item.name}}
             </div>

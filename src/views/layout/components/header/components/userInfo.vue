@@ -81,10 +81,7 @@ function handleRouter(param: any) {
   color: #fff !important;
 }
 
-.icon-audio {
-  font-size: 20px;
-  color: #03a9f4;
-}
+
 
 .box {
   width: 24px;

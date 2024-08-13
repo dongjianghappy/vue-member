@@ -156,7 +156,8 @@ const codings: any = {
     picture_group: "U0620019",
     background_music: 'U0620048',
     watch_history: "U0620050",
-    content_collect: "U0620055"
+    content_collect: "U0620055",
+    download: "U0620056"
   },
   questions: {
     name: "questions",
@@ -484,8 +485,8 @@ const codings: any = {
       list: 'U0700033'
     },
     privilege: 'U0700043',
-    blacklist: "U0700044"
-
+    blacklist: "U0700044",
+    play_setting: 'U0700046'
   }
 };
 

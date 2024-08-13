@@ -94,7 +94,7 @@
             <Audio :dataList="sourceData" :data="item" v-else-if="item.model=='sound'" />
             <Images :data="item" v-else />
           </div>
-          <div class="font12 cl-999" v-if="item.location"><i class="iconfont icon-position font12" />{{item.location}}</div>
+          <div class="mt10 font12 cl-999" v-if="item.location"><i class="iconfont icon-position m0 font12" />{{item.location}}</div>
         </div>
       </div>
       <TalkItembar :data="item" :showComment="showComment" />

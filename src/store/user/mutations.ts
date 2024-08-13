@@ -6,6 +6,8 @@ const mutations = {
     if(params.account){
       state.user.basic = params
     }
+    state.music.list = params.userInfo.music.list
+    state.music.setting = params.userInfo.music.setting
     VueEvent.emit("setTheme", params);
   },
   setOtherUser: (state: any, params: any) => {
@@ -23,7 +25,16 @@ const mutations = {
   setEnergy: (state: any, params: any) => {
     state.user.login.userInfo.energy = params.energy
     state.user.login.userInfo.energy_ball = params.energy_ball
-  },     
+  },
+  setMusicList: (state: any, params: any) => {
+    state.music.list = params
+  },   
+  setCurrentMusic: (state: any, params: any) => {
+    state.music.currentMusic = params
+  },    
+  setPlaySetting: (state: any, params: any) => {
+    state.music.setting[params.name] = params.value
+  },       
 }
 
 export default mutations

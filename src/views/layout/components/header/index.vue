@@ -12,6 +12,7 @@
           <li class="pointer ptb10" @click="handleClick(item.value)">
             <div class="nav-box">
               <i class="iconfont" :class="`icon-${item.icon}`"></i>{{item.name}}
+              <v-flag :data="item" v-if="item.flag" />
             </div>
           </li>
         </template>
@@ -28,7 +29,6 @@
         </li>
         <li class="plr15" style="width: 100px; line-height: 60px;">
           <v-play :userInfo="loginuser" :style="{background: 'bg-red',color: 'cl-red', top: '60px'}" />
-          <v-lrc />
         </li>
         <li class="relative user-login-btn plr0" v-if="loginuser.account">
           <img :src="loginuser.photos" class="photos p10" @click="handleClick('')" style="width:60px; height:60px; border-radius:50%;" />

@@ -1,96 +1,106 @@
 <template>
-  <div class="margin-left-5" style="background:#eee">
-    <audio id='aa' src="http://127.0.0.1/uploadfile/music/a739d236bda6a83977d9ad03f5d4dac8.mp3" autoplay="true"></audio>
-    <canvas  id="myCanvas" class="margin-top-8" style="border: 1px solid red;width: 500px; height: 40px;"></canvas>
-
-    <!-- <video id="aa" controls="" autoplay="" name="media"><source src="" type="audio/mpeg"></video> -->
-    
-  </div>
+<!-- <div id="canvas-wrap"></div> -->
+<canvas id="canvas" style="width: 100%; height: 100%;"></canvas>
 </template>
+
 <script setup lang="ts">
-import { nextTick, inject,watch, onMounted } from 'vue'
-
-defineExpose({
-  canvas
-})
-
-const canvasObj = inject('canvasObj')
-let audio: any = document.getElementById('listen_music');
-
-  // watch(canvasObj, (newVal: any) => {
-  //       nextTick(() => {
-  //           if (newVal) {
-  //               if (canvasObj) {
-  //                   canvas(newVal)
-  //               }
-  //           }
-  //       })
-  //   })
-
-onMounted(()=>{
-    const aaaaa = document.getElementById("aa");
-  if(aaaaa){
-canvas(aaaaa)
+import {
+  defineExpose,
+  nextTick,
+  inject,
+  watch,
+  onMounted,
+  ref
+} from 'vue'
+import VueEvent from '@/utils/event'
+const props: any = defineProps({
+  data: {
+    type: Object,
+    default: () => {
+      return {}
+    }
   }
 })
+
+let animationId: any = ref("")
+
+defineExpose({
+  canvas,
+  animationId
+})
+function canvas() {
+  // audio.load();
+  // audio.play();
+  console.log("11111111111111111");
   
-  function canvas(audio:any) {
-     var files = this.files;
-    audio.src = URL.createObjectURL(files[0]);
-    audio.load();
-    audio.play();
-    var context = new AudioContext();
-    var src = context.createMediaElementSource(audio);
-    var analyser = context.createAnalyser();
+   let canv = document.createElement('canvas')
+   canv.id = "canvas"
+   canv.style.width = "100%"
+   canv.style.height = "100%"
 
-    var canvas: any = document.getElementById("canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    var ctx = canvas.getContext("2d");
+  //  let canvasWrap = document.getElementById('canvas-wrap')
+  //  canvasWrap?.appendChild(canv)
+  
+  let audio: any = document.getElementById('listen_music')
+  let context = new AudioContext();
+  let src = context.createMediaElementSource(audio);
+  let analyser = context.createAnalyser();
+  
+  let canvas: any = document.getElementById("canvas");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let ctx = canvas.getContext("2d");
+  // audio.load();
+  // audio.play();
+  src.connect(analyser);
+  analyser.connect(context.destination);
 
-    src.connect(analyser);
-    analyser.connect(context.destination);
+  analyser.fftSize = 256;
 
-    analyser.fftSize = 256;
+  let bufferLength = analyser.frequencyBinCount;
 
-    var bufferLength = analyser.frequencyBinCount;
-    console.log(bufferLength);
+  let dataArray = new Uint8Array(bufferLength);
 
-    var dataArray = new Uint8Array(bufferLength);
+  let WIDTH = canvas.width;
+  let HEIGHT = canvas.height;
 
-    var WIDTH = canvas.width;
-    var HEIGHT = canvas.height;
+  let barWidth = (WIDTH / bufferLength) * 1.5;
+  let barHeight;
+  let x = 0;
 
-    var barWidth = (WIDTH / bufferLength) * 2.5;
-    var barHeight;
-    var x = 0;
-
-    function renderFrame() {
-      requestAnimationFrame(renderFrame);
-
-      x = 0;
-
-      analyser.getByteFrequencyData(dataArray);
-
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, WIDTH, HEIGHT);
-
-      for (var i = 0; i < bufferLength; i++) {
-        barHeight = dataArray[i];
-        
-        var r = barHeight + (25 * (i/bufferLength));
-        var g = 250 * (i/bufferLength);
-        var b = 50;
-
-        ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
-        ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-
-        x += barWidth + 1;
-      }
+  function renderFrame() {
+    if(props.data.isplay){
+      animationId.value = requestAnimationFrame(renderFrame);
+    }else{
+      cancelAnimationFrame(animationId.value)
     }
+    
 
-    audio.play();
+    x = 0;
+
+    analyser.getByteFrequencyData(dataArray);
+
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    for (let i = 0; i < bufferLength; i++) {
+      barHeight = dataArray[i];
+
+      let r = barHeight + (25 * (i / bufferLength));
+      let g = 250 * (i / bufferLength);
+      let b = 50;
+
+      ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ", 0.5)";
+      ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+
+      x += barWidth + 1;
+    }
+    
+  }
+  renderFrame();
+  VueEvent.on("isPlay", () => {
     renderFrame();
+  })
 }
-
 </script>

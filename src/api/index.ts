@@ -83,6 +83,11 @@ updateConcernRemark(params: any) {
     return http.request('user', 'TalkForwarding', params)
   },
 
+  // 话题下载
+  TalkDownload (params: any) {
+    return http.request('talk', 'TalkDownload', params)
+  },
+
   // 创建话题
   insertActivity (params: any) {
     return http.request('talk', 'insertActivity', params)
@@ -604,6 +609,11 @@ announcement (params: any) {
     return http.request('user', 'getPraise', params)
   } , 
 
+  // 下载前验证
+  downloadVerification (params: any) {
+    return http.request('talk', 'downloadVerification', params)
+  } , 
+
    // 下载
    download (params: any) {
     return http.request('talk', 'download', params)
@@ -737,7 +747,11 @@ messageSettingList (params: any) {
 // 语音播报
 voiceBroadcast (params: any) {
   return http.request('user', 'voiceBroadcast', params)
-},  
+}, 
+// 水印设置
+watermarkSetting (params: any) {
+  return http.request('user', 'watermarkSetting', params)
+}, 
 // 搜素相关词
 relatedWords (params: any) {
   return http.request('talk', 'relatedWords', params)
@@ -976,6 +990,21 @@ blacklist (params: any) {
 // 获取地址
 getLocation (params: any) {
   return http.request('common', 'getLocation', params)
+},
+
+// 参数能量用户列表
+energyUserList (params: any) {
+  return http.request('user', 'energyUserList', params)
+},
+
+// 播放器设置
+playSetting (params: any) {
+  return http.request('user', 'playSetting', params)
+},
+
+// 播放器信息
+playInfo (params: any) {
+  return http.request('user', 'playInfo', params)
 },
 }
 

@@ -11,6 +11,7 @@
     <div class="theme-name ptb10 font12">{{item.name}}</div>
   </div>
 </div>
+<div class="pt50 cl-666 align_center" v-if="currentCate.length === 0">暂无特效</div>
 </template>
 
 <script setup lang="ts">

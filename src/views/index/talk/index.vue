@@ -14,6 +14,8 @@
       <Activity v-else-if="component==='activity'" />
       <History v-else-if="component==='history'" />
       <Vote v-else-if="component==='vote'" />
+      <Download v-else-if="component==='download'" />
+      <Share v-else-if="component==='share'" />
       <Center ref="talk" v-else />
     </div>
     <!-- 右侧 -->
@@ -41,6 +43,8 @@ import Activity from '../../index/activity/index.vue'
 import History from '../../index/history/index.vue'
 import Vote from '../../index/vote/index.vue'
 import RightView from '../../index/components/right_aside.vue'
+import Download from '../../index/download/index.vue'
+import Share from '../../index/share/index.vue'
 
 const store = useStore();
 const route = useRoute();

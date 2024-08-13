@@ -49,8 +49,12 @@ let height: any = ref("")
 // 监听路由
 watch(route, (newValues, prevValues) => {
   let theme: any = document.getElementsByClassName('theme')
+  let energy: any = document.getElementById('energy-wrap')
+  let themeAlbum: any = document.getElementById('theme-album')
+  
   let arr = ['/recommend', '/camera', '/vlog', '/album', '/bookmark', '/journal']
   if (arr.indexOf(route.path) > -1) {
+    
     if(route.path === '/album' || route.path === '/bookmark' || route.path === '/journal') {
       return
     }
@@ -58,7 +62,12 @@ watch(route, (newValues, prevValues) => {
     component.value = arr[arr.length - 1]
     init()
   } else {
-    theme[0].style.zIndex = "10000"
+    debugger
+    energy.style.display = "block"
+    themeAlbum.style.display = "block"
+    if (theme.length) {
+      theme[0].style.zIndex = "10000"
+    }
     store.commit('talk/setCommentStatus', false)
   }
 })
@@ -68,6 +77,10 @@ function init() {
   if (theme.length) {
     theme[0].style.zIndex = "-1"
   }
+  let energy: any = document.getElementById('energy-wrap')
+  energy.style.display = "none"
+  let themeAlbum: any = document.getElementById('theme-album')
+  themeAlbum.style.display = "none"
 
   let params: any = {
     pagesize: '25',

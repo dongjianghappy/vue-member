@@ -9,7 +9,9 @@
   <div class="module-content p0" :style="{height: loginuser.currentUser ? '650px' : '650px'}">
     <ul v-if="data.length">
       <li v-for="(item, index) in data" :key="index" @click="handleClick(item.path || item.value)" class="aside">
-        <i class="iconfont" :class="`icon-${item.icon || 'dot'}`" v-if="hasIcon" /> {{item.name}} <span v-if="item.num">({{item.num}})</span>
+        <i class="iconfont" :class="`icon-${item.icon || 'dot'}`" v-if="hasIcon" /> {{item.name}} 
+        <span v-if="item.num">({{item.num}})</span>
+        <v-flag :data="item" v-if="item.flag" />
       </li>
     </ul>
     <slot name="aside"></slot>
@@ -86,7 +88,7 @@ function init() {
 }
 
 function handleClick(param: any) {
-  let asideArr = ['/', '?mod=concern', '?mod=friend', '/talk']
+  let asideArr = ['/', '?mod=concern', '?mod=friend', '/talk', '/album', '/my_video', '/journal', '/application?mod=feedback&item=tome', '/schedule']
   if (!loginuser.value.account && asideArr.indexOf(param) > -1) {
     VueEvent.emit("login");
     return

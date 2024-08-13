@@ -20,6 +20,7 @@
             <v-switch :data="{ item, field: item.name}" :param="{sub: 'basic'}" api="userSetting" @toggle="getValue" className="right" :auth="true" v-else />
           </div>
         </div>
+        <WatermarkPosition v-if="item.name === 'image_watermark' && item.image_watermark === '1'" />
       </div>
     </div>
   </div>
@@ -35,6 +36,7 @@ import {
 import {
   messageNotification
 } from '@/assets/const'
+import WatermarkPosition from './components/watermark_position.vue'
 
 const store = useStore();
 const dataList: any = ref([])

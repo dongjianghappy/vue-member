@@ -131,8 +131,13 @@ watch([isShow], async (newValues, prevValues) => {
     }
   }
 })
+
 // 监听路由
 watch(() => detail, (newValues, prevValues) => {
+
+  if(props.action === 'add'){
+    return
+  }
   const {
     intelligent,
     img,
@@ -147,7 +152,7 @@ watch(() => detail, (newValues, prevValues) => {
   writeNewStyle({
     intelligent,
     background_transparent,
-    theme_background: `${background_color} url(${img[0].replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
+    theme: `${background_color} url(${img[0].replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
     background_color,
     primary_color,
     module_background,
@@ -185,7 +190,7 @@ function image(a: any) {
 
   writeNewStyle({
     background_transparent,
-    theme_background: `${background_color} url(${thumbnail.value.replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
+    theme: `${background_color} url(${thumbnail.value.replace(/thumb/g, 'original')}) fixed no-repeat center 60px !important`,
     background_color,
     primary_color,
     module_background,

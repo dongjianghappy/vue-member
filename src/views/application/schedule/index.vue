@@ -12,9 +12,18 @@
         <span class="ml15 pointer" :class="{'opacity': tabIndex == 0}" @click="handleTabs(1)">我的日程</span>
       </div>
       <div class="module-content plr15" style="min-height: 650px;">
-        <div class="mb30" v-if="tabIndex == 0">
-          <i class="iconfont icon-info" />
+        <div class="mb20 flex" v-if="tabIndex == 0">
+          <div style="flex: 1">
+            <i class="iconfont icon-info" />
           能量日程打卡后会获得一定的能量值。
+          </div>
+          <div class="w50" style="display: inline-flex;">
+            <i class="iconfont icon-arrow deg180 pointer" @click="handleToggle(-1)" />
+            <i class="iconfont icon-arrow pointer" @click="handleToggle(1)" />
+          </div>
+          <div class="pt5 w100 align_right">
+            <SystemDetail :data="{schedule_id, coding}" :render="init" />
+          </div>
         </div>
         <div class="mb20 flex" v-else>
           <div class="font14" style="flex: 1">
@@ -56,6 +65,7 @@
             <span class="cl-999" v-else>-</span>
           </div>
         </div>
+        <div class="p30 cl-666 align_center" v-if="!dataList.length">暂无日程</div>
       </div>
     </div>
   </div>
@@ -77,6 +87,7 @@ import {
 } from '@/utils'
 
 import Detail from './components/detail.vue'
+import SystemDetail from './components/systemDetail.vue'
 import RightView from '../../index/components/right_aside.vue'
 import Clockin from './components/clock_in.vue'
 
@@ -89,6 +100,7 @@ let weekDates: any = ref([])
 let dataList: any = ref([])
 const current: any = ref(0)
 const tabIndex: any = ref(0)
+const schedule_id: any = ref([])
 
 function getDatas() {
   // 获取当前日期  
@@ -124,7 +136,10 @@ function init() {
       system: (tabIndex.value === 0 ? '1' : '0')
     }
   }).then(res => {
-    dataList.value = res.result
+    dataList.value = res.result || []
+    res.result && res.result.map((item: any) => {
+      schedule_id.value.push(item.id)
+    })
     getDatas()
   })
 }

@@ -1,6 +1,8 @@
 <template>
 <div class="container w1100 space-name">
-  <div class="text">{{userInfo.space_name || siteInfo.talk_space_name}}</div>
+  <div class="text">
+    {{userInfo.space_name || siteInfo.talk_space_name}}</div>
+    <!-- <canvas id="canvas" style="width: 100%; height: 10px" v-if="setting.yinpin === '1'"></canvas> -->
 </div>
 </template>
 
@@ -13,6 +15,7 @@ import {
 const store = useStore()
 const siteInfo = computed(() => store.getters['user/siteInfo']);
 const userInfo = computed(() => store.getters['user/userInfo']);
+const setting: any = computed(() => store.getters['user/music'].setting);
 </script>
 
 <style lang="less" scoped>

@@ -8,7 +8,7 @@
             <ul class="font14">
               <template v-if="loginuser.account === item.uid">
                 <li @click="handleDelete(item.id)">删除</li>
-                <li><v-download :data="{id: item.artid, file: item.content}" /></li>
+                <li><v-download :data="{id: item.artid, uid: data.uid, nickname: data.nickname, file: item.content}" /></li>
               </template>
             </ul>
           </div>

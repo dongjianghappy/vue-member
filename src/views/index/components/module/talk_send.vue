@@ -22,7 +22,7 @@
       <i class="iconfont icon-close font12" @click="()=>data.location = ''" />
     </div>
     <div class="pt10 pl10" v-if="data.video.song_name">
-      <i class="iconfont icon-music" />{{data.video.title}}
+      <i class="iconfont icon-music" />{{data.video.music_name}}
       <i class="iconfont icon-close font12" @click="()=>data.video = {}" />
     </div>
 

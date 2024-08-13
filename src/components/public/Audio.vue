@@ -1,12 +1,18 @@
 <template>
-  <i class="iconfont listen" :class="`icon-${isplay ? 'audio' : 'listen'}`" @click="handlePlay"></i>
+<i class="iconfont listen m0" :class="`icon-${data.music_id === musicLists.currentMusic.id ? 'audio cl-primary' : 'listen'}`" @click="handlePlay"></i>
 </template>
 
 <script setup lang="ts">
 import {
-  defineProps
+  defineProps,
+  computed,
+  useStore
 } from '@/utils'
 import VueEvent from '@/utils/event'
+import {
+  musicPush,
+  currentMusic
+} from '../packages/music/fn'
 
 const props: any = defineProps({
   data: {
@@ -17,7 +23,22 @@ const props: any = defineProps({
   }
 })
 
-function handlePlay(e: any, index: any, status: any) {
-  VueEvent.emit("musicPley", props.data);
+const store = useStore()
+const musicLists: any = computed(() => store.getters['user/music']);
+
+function handlePlay() {
+  const {
+    data
+  }: any = props
+  let music = [{
+    ...data
+  }]
+
+  const { list, setting } = musicLists.value
+
+  musicPush(music, list)
+  store.commit('user/setMusicList', list)
+  let index = list.findIndex((list: any) => list.id === music[0].music_id)
+  currentMusic(list[index], setting, store)
 }
 </script>

@@ -25,7 +25,7 @@
               <div class="rotate-right tool-btn" @click="handleScreen"><i class="iconfont icon-full-screen cl-white"></i></div>
               <div class="tool-btn" v-if="loginuser.currentUser">
                 <!-- <span class="mr5">原图</span> -->
-                <v-download :data="{id: data.id, file: currentImg}" />
+                <v-download :data="{id: data.id, uid: data.uid, nickname: data.nickname, file: currentImg}" />
                 <v-collect :data="{id: data.id, file: currentImg}" />
               </div>
             </div>

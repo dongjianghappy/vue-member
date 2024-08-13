@@ -78,11 +78,18 @@ export const handleCopy = (e: any, param: any) => {
 
 export const downloadBlob = (param: any) => {
   try {
-    let blob = new Blob([param], { type: 'video/mpeg' })
+    let blob = new Blob([param], { type: 'image/jpeg' })
+
+    // const fileReader = new FileReader()
+    // fileReader.onload = function(event: any){
+    //   debugger
+    //   const text = event.target.result.replace(/\s+/g, '')
+    // }
+    // fileReader.readAsText(blob)
               // 创建a标签，通过a标签实现下载
               const dom = document.createElement('a')
               dom.href = URL.createObjectURL(blob)
-              dom.download = '12.mp4'
+              dom.download = 'image.jpg'
               dom.style.display = 'none'
               document.body.appendChild(dom)
 
@@ -108,4 +115,35 @@ export const downloadBlob = (param: any) => {
   } catch (e) {
     console.log('下载失败')
   }
+}
+
+
+// 播报
+export const move = (param: any) => {
+  let isDrag: any = false
+  let el: any = document.getElementById('move-music')
+  el.addEventListener('mousedown', (ev: any) => {
+     let els = ev.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+    isDrag = true
+    ev.preventDefault()
+    // ev.stopPropagation()
+    let oevent = ev || event
+    let distanceX = oevent.clientX //鼠标点击位置
+    let distanceY = oevent.clientY //鼠标点击位置
+
+    document.onmousemove = function (e: any) {
+
+      if (!isDrag) {
+        return
+      }
+
+      els.style.top = e.clientY - ev.layerY + "px"
+      els.style.left = e.clientX - ev.layerX + "px"
+    }
+  })
+
+  el.addEventListener('mouseup', (ev: any) => {
+    isDrag = false
+
+  })
 }

@@ -34,6 +34,7 @@ const mutations = {
     state.search.page = data.page
     state.search.pages = data.pages
     state.search.related = data.related || []
+    state.search.user = data.user || []
     // state.talkList = params
   },     
   setTalkList: (state: any, params: any) => {

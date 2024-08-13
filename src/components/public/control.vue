@@ -12,8 +12,10 @@
     </div>
     <div style="flex: 1"></div>
     <div class="pr15 align_right" style="width: 80px" v-if="loginuser.currentUser">
-      <v-download :data="{id: data.id, file: data.video}" />
-      <v-collect :data="{id: data.id, file: data.video}" />
+      <v-space>
+        <v-download :data="{id: data.id, uid: data.uid, nickname: data.nickname, file: data.video}" />
+        <v-collect :data="{id: data.id, file: data.video}" />
+      </v-space>
       <!-- <v-space>
         <v-fullscreen2 /><v-fullscreen />
       </v-space> -->

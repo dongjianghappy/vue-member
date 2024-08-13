@@ -4,19 +4,20 @@
 </div>
 <div class="theme-wrap">
   <div class="theme-list left" v-for="(item, index) in currentCate" :key="index" @click="chooseTheme(item)">
-    <div :id="`pendant_${index}`" class="p10" style="cursor: move;" draggable="true" @dragstart="(e, fType, style)=>dragstart(e, `pendant_${index}`, item.style)">
+    <div :id="`pendant_${index}`" style="cursor: move;" draggable="true" @dragstart="(e, fType, style)=>dragstart(e, `pendant_${index}`, item.style)">
       <img :src="item.image" :title="item.name" style="height: 80px">
       <i class="iconfont icon-checkbox checkbox" v-if="currentData.pendants.indexOf(item.image) > -1"></i>
     </div>
     <div class="theme-name ptb10 font12">
       {{item.name}}
-      <Custom :data="{id: item.id, coding: coding}" action="edit" :render="init" v-if="item.custom === '1'" />
+      <Custom :data="{id: item.id, coding: coding}" action="edit" :render="init" v-if="module.custom_pendant && item.custom === '1'" />
     </div>
   </div>
-  <div class="theme-list left">
+  <div class="theme-list left" v-if="module.custom_pendant && themeList.length-1 === currentIndex">
       <Custom :data="{coding: coding}" :render="init" />
     </div>  
 </div>
+<div class="pt50 cl-666 align_center" v-if="currentCate.length === 0">暂无挂件</div>
 </template>
 
 <script setup lang="ts">
@@ -26,6 +27,7 @@ import {
   getCurrentInstance,
   ref,
   onMounted,
+  computed,
   useStore,
   codings
 } from '@/utils'
@@ -46,9 +48,10 @@ const {
   proxy
 }: any = getCurrentInstance();
 const store = useStore();
+const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
 const coding = codings.user.pendant
+const currentIndex: any = ref(0)
 const currentCate = ref([])
-const currentIndex: any = ref()
 const themeList: any = ref([])
 const index: any = ref(0)
 
@@ -63,10 +66,10 @@ function init() {
 
 function handleClick(param: any, index: any) {
   currentCate.value = param.list || []
+  currentIndex.value = index
 }
 
 function chooseTheme(param: any) {
-  currentIndex.value = param.id
   emit('onClick', param)
 
 }

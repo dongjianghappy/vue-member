@@ -79,6 +79,14 @@ const actions = {
     context.commit("setTalkForwarding" , result.result);
     return result
   },
+  TalkDownload: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.TalkDownload({
+      ...data 
+    })
+    context.commit("setTalkDownload" , result.result);
+    return result
+  },    
   download: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const data = params.data || {}
     const { result }:any = await api.downloadList({

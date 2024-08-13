@@ -10,7 +10,7 @@
          style="width: 620px;">
       <div class="module-wrap">
         <div class="module-content plr15"
-             style="height: 650px;">
+             style="height: 1500px;">
           <div class="mb15">
             <div class="font18"
                  style="flex: 1">我的音乐盒</div>
@@ -34,7 +34,7 @@
                      style="width: 150px">
                   <span class="mr10"
                         @click="handleClick(item)">
-                    <span class="cl-red"
+                    <span class="cl-primary"
                           v-if="item.background_music == '1'">取消背景音乐</span>
                     <span v-else>设为背景音乐</span>
                   </span>
@@ -69,7 +69,8 @@ import {
   useRoute,
   ref,
   getUid,
-  codings
+  codings,
+  toBlob
 } from '@/utils'
 
 import RightView from '../../index/components/right_aside.vue'
@@ -94,8 +95,14 @@ export default defineComponent({
         data: {
           uid: getUid()
         }
-      }).then(res => {
-        dataList.value = res.result
+      }).then( async res => {
+        await toBlob(res.result)
+        let newArr = res.result.map((item: any)=>{
+          item.music_file = item.file
+          delete item.file
+          return item
+        })
+        dataList.value = newArr
       })
     }
 

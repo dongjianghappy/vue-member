@@ -15,7 +15,7 @@
     <template v-slot:content>
       <div class="login-wrap">
         <div class="login-left">
-          <div class="font28">东江博客</div>
+          <div class="font28">{{siteInfo.talk_site_name}}</div>
           <div class="title mtb20">一个记录与分享的个人博客...</div>
           <ul>
             <li><i class="iconfont icon-right1"></i>动态发布</li>
@@ -66,6 +66,7 @@ import {
   defineComponent,
   onMounted,
   ref,
+  computed,
   watch,
   useRouter,
 } from '@/utils'
@@ -110,6 +111,7 @@ export default defineComponent({
   setup(props, context) {
     const store = useStore();
     const router = useRouter()
+    const siteInfo = computed(() => store.getters['user/siteInfo']);
     const isShow = ref(false)
     const detail: any = ref({
       id: "",
@@ -170,7 +172,8 @@ export default defineComponent({
       isShow,
       detail,
       submit,
-      handleClick
+      handleClick,
+      siteInfo
     }
   }
 })

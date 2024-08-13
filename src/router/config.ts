@@ -61,6 +61,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/user_zone/', component: () => import('../views/zone/index.vue')},
       { path: '/tool/', component: () => import('../views/tool/index.vue')},
       { path: '/ranking', component: () => import('../views/ranking/index.vue')},
+      { path: '/energy', component: () => import('../views/energy/index.vue')},
       { path: '/surrogate', component: () => import('../views/index/page/surrogate.vue')},
       { path: '/complaint', component: () => import('../views/index/page/complaint.vue')},
       { path: '/recommend', component: () => import('../views/recommend/index.vue')},

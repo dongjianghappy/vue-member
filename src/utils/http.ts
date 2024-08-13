@@ -37,9 +37,9 @@ export default class http {
   requestHeaders (request: any) {
     // POST传参序列化
     request.interceptors.request.use((config: any) => {  
-      if(config.data.responseType){
-        config.responseType = "blob"
-      }   
+      // if(config.data.responseType){
+      //   config.responseType = "blob"
+      // }   
       if (config.method === 'post' && config.data.upload !== true) {
         config.data = qs.stringify(config.data)
       }
@@ -114,9 +114,9 @@ export default class http {
         }
       }
 
-      // if(params.responseType){
-      //   param.responseType = "blob"
-      // }    
+      if(params.responseType){
+        param.responseType = "blob"
+      }    
       
       request.request(param) 
         .then(response => {

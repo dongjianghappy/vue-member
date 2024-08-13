@@ -1,7 +1,9 @@
 <template>
 <ul class="tab_ul relative">
   <li v-for="(item, index) in (data.length >5 ? data.slice(0, 7) : data)" :key="index" :style="style" :class="{current: (query.value || '') == item.value}">
-    <span @click="handelClick(item)">{{item.name}}</span>
+    <span @click="handelClick(item)">{{item.name}}
+    <v-flag :data="item" v-if="item.flag" />
+    </span>
   </li>
   <span class="span-icon absolute" style="top: 12px; right: 15px">
     <v-popover v-if="data.length > 7" content="<i class='iconfont icon-more icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-more`">
@@ -25,6 +27,10 @@ import {
   codings
 } from '@/utils'
 const props: any = defineProps({
+  name: {
+    type: String,
+    default: ""
+  },
   mod: {
     type: Object,
     default: () => {
@@ -32,6 +38,12 @@ const props: any = defineProps({
     }
   },
   query: {
+    type: Object,
+    default: () => {
+      return {}
+    }
+  },
+  param: {
     type: Object,
     default: () => {
       return {}
@@ -59,7 +71,9 @@ const props: any = defineProps({
   }
 })
 
-defineExpose({handelClick})
+defineExpose({
+  handelClick
+})
 const store = useStore()
 const router = useRouter();
 const coding: any = codings
@@ -67,13 +81,24 @@ const coding: any = codings
 function handelClick(param: any) {
   let query = ""
 
-  if(param.value === 'huodong'){
+  if (param.value === 'huodong') {
     router.push(`/${param.value}`)
     return
   }
 
-  if (props.mod.tab == undefined && param.value) {
-    query = `?${props.query.tab}=${param.value}`
+  if (props.mod.tab == undefined) {
+    if (param.value) {
+      query = `?${props.query.tab}=${param.value}`
+    }
+
+    if (props.name === 'search') {
+      if (param.value) {
+        query += `&${props.param.tab}=${props.param.value}`
+      } else {
+        query = `?${props.param.tab}=${props.param.value}`
+      }
+    }
+
   } else {
     if (props.mod.tab) {
       query = `?${props.mod.tab}=${props.mod.value}`
@@ -81,7 +106,6 @@ function handelClick(param: any) {
         query += `&${props.query.tab}=${param.value}`
       }
     }
-
   }
 
   router.push(window.location.pathname + query)

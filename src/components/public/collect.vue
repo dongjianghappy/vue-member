@@ -1,5 +1,5 @@
 <template>
-<i class="iconfont icon-star-1 font16 cl-white" style="font-size: 12px !important"  @click="handleDownload"></i>
+<i class="iconfont icon-star-1 cl-white" style="font-size: 16px !important"  @click="handleDownload"></i>
 </template>
 
 <script setup lang="ts">

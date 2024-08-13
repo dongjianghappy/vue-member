@@ -23,27 +23,49 @@ export const clearToken = () => {
 
 // 转成blob文件
 export const toBlob = async (fileList: any) => {
+  for(let i=0; i<fileList.length; i++){
+    
+    await fetch(`/uploadfile/${(fileList[i].file || fileList[i].music_file).split('uploadfile')[1]}`,{
+          method: 'GET',
+          mode: 'cors',
+          // credentials: 'same-origin',
+          // headers: {
+          //   'Content-Type': 'application/json'
+          // }
+        })
+        .then(response => response.blob())
+        .then(blob => {
+          // 在这里处理Blob对象
+          fileList[i].file = URL.createObjectURL(blob)
+        })
+        .catch(error => {
+          // 处理错误
+          console.error('Error fetching file:', error);
+        });
+  }
 
- // 使用fetch获取文件并将其转换为Blob
-await fetch("http://localhost:8081/ThatGirl.mp3",{
-  method: 'GET',
-  mode: 'cors',
-  // credentials: 'same-origin',
-  // headers: {
-  //   'Content-Type': 'application/json'
-  // }
-})
-.then(response => response.blob())
-.then(blob => {
-  // 在这里处理Blob对象
-  fileList[0].file = URL.createObjectURL(blob)
-  console.log(blob);
-})
-.catch(error => {
-  // 处理错误
-  console.error('Error fetching file:', error);
-});
-  fileList
+  // const aaa = fileList && fileList.map(async (item: any) => {
+  //   // 使用fetch获取文件并将其转换为Blob
+  //   await fetch(`/uploadfile/${item.file.split('uploadfile')[1]}`,{
+  //     method: 'GET',
+  //     mode: 'cors',
+  //     // credentials: 'same-origin',
+  //     // headers: {
+  //     //   'Content-Type': 'application/json'
+  //     // }
+  //   })
+  //   .then(response => response.blob())
+  //   .then(blob => {
+  //     // 在这里处理Blob对象
+  //     item.file = URL.createObjectURL(blob)
+  //   })
+  //   .catch(error => {
+  //     // 处理错误
+  //     console.error('Error fetching file:', error);
+  //   });
+
+  //   return item
+  // })
 }
 
 export const getUid = () => {

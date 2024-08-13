@@ -13,16 +13,18 @@
           </div>
           <div class="module-content plr15"
                style="height: 205px; overflow-y: auto;">
-            <div class="col-md-4 pb15"
+            <div class="col-md-6 flex mb15"
                  v-for="(item, index) in dataList"
                  :key="index">
-              <v-audio :data="{...item, index, number: dataList.length}" />
-              <span @click="chooseTopic(item)">
-                {{item.title}}
-              </span>
-              <span @click="handleCollect(item)">
-                {{item.hascollect == '1' ? '取消' : '收藏'}}
-              </span>
+                 <div style="width: 25px"><v-audio :data="{...item, index, number: dataList.length}" /></div>
+              
+              <div class="nowrap" style="flex: 1" @click="chooseTopic(item)">
+                {{item.music_name}}
+              </div>
+              <div class="font12 cl-666" style="width: 40px;" @click="handleCollect(item)">
+                <span class="cl-primary" v-if="item.hascollect == '1'">取消</span>
+                <span v-else>收藏</span>
+              </div>
             </div>
           </div>
         </div>
@@ -37,11 +39,10 @@ import {
   defineComponent,
   getCurrentInstance,
   ref,
-  watch
-} from 'vue'
-import {
-  useStore
-} from 'vuex'
+  watch,
+  useStore,
+  toBlob
+} from '@/utils'
 
 export default defineComponent({
   name: 'v-Search',
@@ -79,8 +80,14 @@ export default defineComponent({
         data: {
           word: param
         }
-      }).then(res => {
-        dataList.value = res.result
+      }).then(async res => {
+        await toBlob(res.result)
+        let newArr = res.result.map((item: any)=>{
+          item.music_file = item.file
+          delete item.file
+          return item
+        })
+        dataList.value = newArr     
       })
     }
 

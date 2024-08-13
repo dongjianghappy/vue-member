@@ -5,10 +5,13 @@
 <v-welcome v-if="loginMessage == 'true'" />
 <!-- 聊天窗口 -->
 <!-- <v-chat /> -->
+<!-- 播放器 -->
+<v-music v-model:isShow="showPlay" v-if="showPlay" />
+<v-lrc />
 <v-messageboard v-if="module.personal_center && module.personal_center.message_board" />
 <v-time v-if="module.personal_center && module.personal_center.time" />
 <v-letter />
-<v-energy v-if="loginuser.account" />
+<v-energy />
 <!-- 主题 -->
 <Thme v-if="loginuser.currentUser && module.personal_center && module.personal_center.theme" />
 <v-layer v-model:isShow="showFlag" :data="currentData.data" :currentImg="currentData.img" v-if="showFlag" type="image" :hasInfo="currentData.hasInfo || true" :hasComment="false" />
@@ -35,6 +38,7 @@ import MessagePrompt from './prompt/MessagePrompt.vue'
 
 const store = useStore();
 const showFlag = ref(false)
+const showPlay = ref(false)
 const displayScreen = ref(false)
 const displayGraph = ref(false)
 const currentData = ref()
@@ -58,5 +62,10 @@ onMounted(() => {
     currentData.value = data
     displayGraph.value = !displayGraph.value
   })
+  // 大图查看
+  VueEvent.on("musicPlay", (data: any) => {
+    // currentData.value = data
+    showPlay.value = true
+  })  
 })
 </script>

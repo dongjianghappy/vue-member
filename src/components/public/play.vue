@@ -1,7 +1,7 @@
 <template>
 <div class="relative sssss" style="display: flex;">
-  <i class="iconfont listen font20" :class="`icon-${music.isplay ? 'stop' : 'play'} ${style.color}`" @click="handlePlay($event)"></i>
-  <div :class="{box: music.isplay, 'stop-box': !music.isplay}">
+  <i class="iconfont listen font20" :class="`icon-${curentMusicss.isplay ? 'stop' : 'play'} ${style.color}`" @click="handlePlay($event)"></i>
+  <div :class="{box: curentMusicss.isplay, 'stop-box': !curentMusicss.isplay}">
     <ul>
       <p :class="style.background"></p>
       <p :class="style.background"></p>
@@ -14,18 +14,14 @@
       <div class="left">音乐盒</div>
       <div class="right">
         <v-space>
-          <span @click="handleMusicList">
+          <span @click="showPlay">
             播放列表
           </span>
           <span @click="handleLrc">
             歌词
           </span>
-          <!-- <span @click="handleRouter('my_music')"
-                  v-if="userInfo.account">
-              收藏
-            </span> -->
           <span @click="handleSetting" v-if="userInfo.account">
-            设置
+            背景音乐
           </span>
           <span @click="handleRouter" v-if="hasMusicList">
             音乐管理
@@ -33,20 +29,17 @@
         </v-space>
       </div>
     </div>
-    <template v-if="collapse">
-      <div class="plr15" v-if="isSetting">
-        <Setting :userInfo="userInfo" />
-      </div>
-      <div v-else>
-        <MusicList ref="aaaaaaa" :dataList="musicList" :data="music" :lrc="lrcList" />
-      </div>
-    </template>
+    <div class="plr15" v-if="collapse">
+      <Setting :userInfo="userInfo" />
+    </div>
     <div class="plr15 align_left" v-if="!collapse || collapse && isSetting">
       <i class="iconfont icon-music"></i>
-      {{(music.music_name) || '暂无歌曲'}}
+      {{(curentMusicss.music_name) || '暂无歌曲'}}
     </div>
   </div>
-  <audio id='listen_music' ref="audio" :src="userInfo.music_url" loop style="display: none"></audio>
+  <div id='audio_wrap' style="display: none">
+    <audio id="listen_music" :src="curentMusicss.file"></audio>
+  </div>
 </div>
 </template>
 
@@ -56,17 +49,33 @@ import {
   getCurrentInstance,
   ref,
   onMounted,
+  computed,
   useStore,
   durationTrans,
   timeToSeconds,
   useRouter,
   getUid,
   toBlob,
+  watch
 } from '@/utils'
-import { nextTick } from 'vue'
+import {
+  nextTick,
+  toRefs
+} from 'vue'
 import VueEvent from '@/utils/event'
-import Setting from '../packages/music/setting.vue'
-import MusicList from '../packages/music/index.vue'
+import Setting from '../packages/music/components/setting_background.vue'
+// import MusicList from './index11.vue'
+import {
+  musicPush,
+  currentMusic,
+  playMusic,
+  musicLrc,
+  canvas,
+  animationFrame
+} from '../packages/music/fn'
+import {
+  content
+} from '@/assets/const'
 const props: any = defineProps({
   style: {
     type: Object,
@@ -99,15 +108,15 @@ const {
   proxy
 }: any = getCurrentInstance();
 const store = useStore();
+const musicLists: any = computed(() => store.getters['user/music'].list);
+const setting: any = computed(() => store.getters['user/music'].setting);
+const curentMusicss: any = computed(() => store.getters['user/music'].currentMusic);
 const router = useRouter()
-const isplay: any = ref(false)
-const audio: any = ref(null)
+const timer: any = ref(null)
 const musicList: any = ref([])
 const music: any = ref({})
 const collapse: any = ref(false)
-const playBackgroundMusic: any = ref(true)
 const lrc: any = ref("")
-const aaaaaaa: any = ref(null)
 const lrcList: any = ref({
   time: [],
   list: []
@@ -115,16 +124,37 @@ const lrcList: any = ref({
 const lrcObj: any = ref({})
 const isSetting = ref(false)
 var time_array: any = ref([]);
+// 监听路由
+watch(curentMusicss, (newValues, prevValues) => {
+  lrcInit({
+    lrc: curentMusicss.value.music_lrc,
+    name: curentMusicss.value.music_name
+  })
+})
 
 function handlePlay(e: any) {
-  music.value.isplay = !music.value.isplay
-  if (music.value.isplay) {
-    // audio.value.play()
-    settime()
+  if (!curentMusicss.value.file) {
+    if(!musicLists.value[0]){
+      proxy.$hlj.message({
+        type: 'info',
+        msg: "请选择播放歌曲"
+      })
+      return
+    }
+    currentMusic(musicLists.value[0], setting, store)
   } else {
-    audio.value.pause()
+    playMusic(curentMusicss.value, store)
   }
-  VueEvent.emit("play_music", music);
+}
+
+function handleLrc(){
+  musicLrc(setting, store, props)
+  store.dispatch('common/Fetch', {
+    api: "playSetting",
+    data: {
+      lrc_display: setting.lrc_display
+    }
+  })
 }
 
 function handleSetting() {
@@ -132,55 +162,66 @@ function handleSetting() {
   isSetting.value = true
 }
 
-function handleMusicList() {
-  collapse.value = !collapse.value
-  isSetting.value = false
-  
+function showPlay() {
+  VueEvent.emit("musicPlay");
 }
 
 // 初始化歌词
-function lrcInit(param: any) {
+async function lrcInit(param: any) {
   lrc.value = ""
-  lrcObj.value = []
-  time_array.value = []
-  LrcArr.value[0] = ""
-  LrcArr.value[1] = ""
-  store.dispatch('common/Fetch', {
+  const res: any = await store.dispatch('common/Fetch', {
     api: 'Lrc',
     data: {
       ...param
     }
-  }).then(res => {
-    if (!res.result) {
-      return
-    }
+  })
+  if (res.result && res.result.content) {
     lrc.value = res.result.content
-    var lines = lrc.value.split('\n')
-    lines.forEach((data: any) => {
-      let aaa = data.split("]")
-      let str = aaa[0].slice(1);
-      lrcObj.value[str] = aaa[1]
-      lrcList.value.time.push(str)
-      lrcList.value.list.push(aaa[1])
-      time_array.value.push(str)
-    });
-    LrcArr.value[0] = lrcObj.value[time_array.value[0]]
-    LrcArr.value[1] = lrcObj.value[time_array.value[1]]
-    VueEvent.emit("showLrc", LrcArr.value);
+  }
+
+  let _audio: any = document.getElementById('listen_music')
+  nextTick(() => {
+    setTimeout(() => {
+      setLrc()
+    }, 1000)
   })
 }
 
-function handleLrc() {
-  VueEvent.emit("lrc", );
-}
 let LrcArr: any = ref([])
 
-function settime() {
+// 歌词设置
+function setLrc() {
+  time_array.value = []
+  lrcList.value.time = []
+  lrcList.value.list = []
+  clearInterval(timer.value)
+  if (!lrc.value) {
+    VueEvent.emit("showLrc", [])
+    return
+  }
   let audios: any = document.getElementById('listen_music');
-  const timer = setInterval(() => {
-    let time = `00:${durationTrans(audios.currentTime)}`
-    if (lrcObj.value[time] !== undefined && lrcObj.value[time] !== "") {
+  var lines = lrc.value.split('\n')
+  lrcObj.value = {}
+  lines.forEach((data: any) => {
+    let aaa = data.split("]")
+    let bbb = aaa[0].split(".")
+    let str = bbb[0].slice(1);
+    lrcObj.value[str] = aaa[1]
+    lrcList.value.time.push(str)
+    lrcList.value.list.push(aaa[1])
+    time_array.value.push(str)
+  });
+  LrcArr.value[0] = lrcObj.value[time_array.value[0]]
+  LrcArr.value[1] = lrcObj.value[time_array.value[1]]
 
+  curentMusicss.value.lrc = lrcObj.value
+  store.commit('user/setCurrentMusic', curentMusicss.value)
+  VueEvent.emit("showLrc", LrcArr.value);
+
+  timer.value = setInterval(() => {
+    let time = `${durationTrans(audios.currentTime)}`
+
+    if (lrcObj.value[time] !== undefined && lrcObj.value[time] !== "") {
       let index = time_array.value.indexOf(time)
       if (index % 2 == 0) {
         LrcArr.value[0] = lrcObj.value[time]
@@ -190,56 +231,18 @@ function settime() {
         LrcArr.value[1] = lrcObj.value[time]
       }
       VueEvent.emit("showLrc", LrcArr.value);
-      // VueEvent.emit("sliding", index);
+      VueEvent.emit("sliding", index);
     }
   }, 1000)
 }
 
-function handleRouter(param: any = "") {
-  if (param === 'my_music') {
-    router.push(proxy.const.setUrl({
-      uid: getUid(),
-      query: `/my_music`
-    }))
-  }
-  props.router('music/list', 'music')
-}
-
-function currentMusic(param: any) {
-  playBackgroundMusic.value = false
-  music.value = param
-  audio.value.src = param.file
-  music.value.isplay = true
-  
-  
-  lrcInit({
-    lrc: param.music_lrc,
-    name: param.music_name
-  })
-  settime()
-  nextTick(() => {
-    audio.value.load()
-  audio.value.play()
-      setTimeout(() => {
-        aaaaaaa.value && aaaaaaa.value.qqqqqq.canvas()
-      }, 5000)
-  })
-}
-
 onMounted(async () => {
-  let ddddd = props.userInfo.music || []
-  ddddd.map(((item: any) => {
-    let index = musicList.value.findIndex((list: any) => list.id === item.id)
-    if (index === -1) {
-      musicList.value.push({
-        id: item.id,
-        music_name: item.title,
-        file: item.music_file,
-        music_lrc: item.lrc_id,
-        time: item.time
-      })
-    }
-  }))
+
+  // 背景音乐
+  let bg_music = props.userInfo.music.list || []
+
+  musicPush(bg_music, musicList.value)
+  // 用户音乐收藏列表
   await store.dispatch('common/Fetch', {
     api: 'getMusic',
     data: {
@@ -247,51 +250,25 @@ onMounted(async () => {
       background_music: '1'
     }
   }).then(res => {
-    res.result && res.result.map(((item: any) => {
-      let index = musicList.value.findIndex((list: any) => list.id === item.id)
-      if (index === -1) {
-        musicList.value.push({
-          id: item.music_id,
-          music_name: item.music_name,
-          file: item.file,
-          music_lrc: item.music_lrc,
-          time: item.music_time
-        })
-      }
-    }))
+    res.result && musicPush(res.result, musicList.value)
   })
   await toBlob(musicList.value)
-  currentMusic(musicList.value[0])
-  // 点击歌曲播放，并加入到歌曲列表中
-  VueEvent.on("musicPley", (data: any) => {
-    let m = {
-      id: data.music_id || data.id,
-      music_name: data.music_name,
-      file: data.file,
-      music_lrc: data.music_lrc,
-      time: data.music_time || data.time
-    }
-    let index = musicList.value.findIndex((item: any) => item.id === data.music_id || item.id === data.id)
-    if (index === -1) {
-      musicList.value.push(m)
-    }
-    currentMusic(m)
+  nextTick(() => {
+    setTimeout(() => {
+      store.commit('user/setMusicList', musicList.value)
+      let el: any = document.getElementById('listen_music')
+      let music = curentMusicss.value
+      lrcInit({
+        lrc: music.music_lrc,
+        name: music.music_name
+      })
+
+      setLrc()
+    }, 1000)
   })
-  VueEvent.on("musicStop", () => {
-    music.value.isplay = false
-    audio.value.pause()
-  })
-  VueEvent.on("duration", (data) => {
-    let time = `00:${durationTrans(data)}`
-    let index = 0
-    for (let i = 0; i < lrcList.value.time.length; i++) {
-      if (timeToSeconds(lrcList.value.time[i]) > timeToSeconds(time)) {
-        index = i - 1
-        break;
-      }
-    }
-    // VueEvent.emit("sliding", index);
-  })
+  setTimeout(() => {
+    canvas(curentMusicss.value)
+  }, 2000)
 })
 </script>
 
@@ -301,10 +278,6 @@ onMounted(async () => {
   color: #fff !important;
 }
 
-.icon-audio {
-  font-size: 20px;
-  color: #03a9f4;
-}
 
 .box {
   width: 24px;
@@ -421,7 +394,6 @@ onMounted(async () => {
   }
 
   .music-name {
-    background: var(--module-background);
     display: none;
 
     .music-header {

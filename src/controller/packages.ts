@@ -26,7 +26,6 @@ const install = (Vue:any) => {
 
       // 转换为短横线分割命名法
       const componentName = `v-${name.replace(/^\.\//, '').replace(/\.\w+$/, '')}`
-      console.log(componentName+"====================")
 
       // 全局注册组件
       Vue.component(

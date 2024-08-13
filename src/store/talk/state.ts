@@ -66,6 +66,7 @@ const initState: State = {
     questions: [],
     page: 1,
     pages: 0,
+    user: [],
     related: []
   },  
   talkList: {

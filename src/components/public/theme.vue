@@ -1,11 +1,11 @@
 <template>
-<div class="p10 radius-4" style="background: rgba(0, 0, 0, 0.5);
+<div id="theme-album" class="p10 radius-4" style="background: rgba(0, 0, 0, 0.5);
     position: fixed;
     bottom: 60px;
     right: 5px;
     z-index: 100;
  width: 126px; height: auto"  v-show="userSetting && userSetting.theme && userSetting.theme.theme_album == '1'">
-  <div class="ptb10 align_center font12 cl-eee" @click="handleTime">
+  <div class="ptb10 align_center font12 cl-eee" @click="handleTime" v-if="userInfo.theme && userInfo.theme.theme.length>1">
     <span v-if="playStatus">{{index}} 秒后主题切换</span>
     <span v-else>自动轮播</span>
   </div>
@@ -76,10 +76,14 @@ function handleTime(){
 }
 
 function times() {
+  
   timer.value = setInterval(() => {
+    if(!userInfo.value.theme){
+      clearInterval(timer.value)
+      return
+    }    
     if (index.value == 0) {
       index.value = 15;
-      // clearInterval(timer)
       if (currentTheme.value == userInfo.value.theme.theme.length - 1) {
         currentTheme.value = 0
       } else {
@@ -94,7 +98,6 @@ function times() {
 
 onMounted(() => {
   times()
-  // writeNewStyle(userInfo.value.theme.theme[currentTheme])
 })
 </script>
 

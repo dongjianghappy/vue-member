@@ -16,6 +16,10 @@ import {
 } from '@/utils'
 
 const props: any = defineProps({
+  basic: {
+    type: Boolean,
+    default: false
+  },
   storage: {
     type: Boolean,
     default: false
@@ -64,7 +68,16 @@ const {
 }: any = props
 
 function handleclick(item: any) {
-  if (!props.storage) {
+  if (props.storage) {
+    let name: any = localStorage.getItem(field) == undefined || localStorage.getItem(field) == '1' ? '0' : '1'
+    localStorage.setItem(field, name)
+    emit('toggle', localStorage.getItem(field))
+  } else if(props.basic){
+    emit('toggle', {
+      field: field,
+      value: item[field] == '1' ? '0' : '1',
+    })
+  } else {
     store.dispatch('common/Fetch', {
       api: props.api || "updateStatus",
       data: {
@@ -85,10 +98,6 @@ function handleclick(item: any) {
         props.msg(res.returnMessage)
       }
     })
-  } else {
-    let name: any = localStorage.getItem(field) == undefined || localStorage.getItem(field) == '1' ? '0' : '1'
-    localStorage.setItem(field, name)
-    emit('toggle', localStorage.getItem(field))
   }
 }
 </script>
