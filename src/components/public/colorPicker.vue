@@ -10,7 +10,7 @@
             border: 1px solid #ccc;
             fontWeight: bold;
              fontStyle: italic;'>
-            </span>`" arrow="tb" offset="right" :move="-200" keys="popover-face">
+            </span>`" arrow="tb" offset="right" :move="-250" keys="popover-face">
   <div class="p5" style="width: 298px;">
     <div style="display: flex; flex-wrap: wrap;">
       <div style="width: 36px; height: 36px;" v-for="(color, index) in colorList" :key="index">

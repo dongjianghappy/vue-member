@@ -385,3 +385,58 @@ export const tabsSign = [
 	{name: "文章", value: "art"},
 	{name: "视频", value: "veo"},
 ]
+
+
+export const trackmapType = [
+	{name: "内容详解", value: 0},
+	{name: "行程轨迹", value: 1}
+]
+
+export const spaceX = [
+	{name: 50, value: 50},
+	{name: 100, value: 100},
+	{name: 150, value: 150},
+	{name: 200, value: 200},
+	{name: 250, value: 250},
+	{name: 300, value: 300},
+	{name: 350, value: 350},
+	{name: 400, value: 400},
+	{name: 450, value: 450},
+	{name: 500, value: 500},
+	{name: 550, value: 550},
+	{name: 600, value: 600}
+]
+
+export const spaceY = [
+	{name: 50, value: 50},
+	{name: 100, value: 100},
+	{name: 150, value: 150},
+	{name: 200, value: 200},
+	{name: 250, value: 250},
+	{name: 300, value: 300}
+]
+
+export const tripStyle = [
+	{name: "0px", value: 0},
+	{name: "4px", value: 4},
+	{name: "8px", value: 8},
+	{name: "16px", value: 16}
+]
+
+export const nodeType = [
+	{name: "基本", value: 'basic'},
+	{name: "用户", value: 'user'},
+	{name: "时间", value: 'time'},
+	{name: "地址", value: 'address'}
+]
+
+export const nodeShape = [
+	{name: "圆形", value: 'circle'},
+	{name: "方形", value: 'rect'}
+]
+
+export const tripShape = [
+	{name: "矩形", value: 'rect'},
+	{name: "圆形", value: 'circle'}
+]
+

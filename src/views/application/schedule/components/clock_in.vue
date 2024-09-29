@@ -6,25 +6,35 @@
   </span>
   <span v-else>已搭班车</span>
 </v-button>
-<v-dialog v-model:show="isShow" ref="dialog" title="去搭班车" :action="action" :style="{width: 550, height: 580}" width="520px" height="450px" :hasfooter="!data.status" @submit="submit">
+<v-dialog v-model:show="isShow" ref="dialog" title="去搭班车" :action="action" :style="{width: 550, height: 680}" width="520px" height="450px" :hasfooter="!data.status" @submit="submit">
   <template v-slot:content>
     <ul class="edit-list">
       <li>
         <div>日程名称：{{data.name}}</div>
       </li>
       <li>
-        <div class="h80">日程描述：{{data.description}}</div>
+        <div>日程介绍：{{data.description}}</div>
       </li>
       <li>
         <v-album :data="data" @onLocaltion="(e)=>data.location = e" />
-        <div class="font12 cl-666">点击图片以选择</div>
+        <div class="font12 cl-666">点击图片以选择
+        </div>
       </li>
+      <li class="vertical">
+        <div class="bg-white" style="overflow: hidden;">
+        <v-upload ref="upload" @imgList="image" file="talk" :mask="true" />
+        </div>
+        <div class="font12 cl-666" @click="upload.handleclick()">
+          上传图片
+        </div>
+      </li> 
+      <li class="vertical">
+        <div class="label">简单描述</div>
+        <textarea v-model="description" class="w-full" placeholder="投稿说明(必填)"></textarea>
+      </li>   
       <li>
         {{data.location}}
         <v-location @onLocaltion="(e)=>data.location = e" />
-      </li>
-      <li>
-        <!-- <v-sync v-model:sync="data.sync" /> -->
       </li>
     </ul>
   </template>
@@ -57,6 +67,14 @@ const props: any = defineProps({
 const store = useStore();
 const dialog: any = ref(null)
 const isShow = ref(false)
+const description: any = ref("")
+const img: any = ref("")
+const upload: any = ref(null);
+
+// 监听图片上传
+function image(a: any) {
+  img.value = a
+}
 
 function submit(params: any) {
   const {
@@ -75,6 +93,7 @@ function submit(params: any) {
     system,
     image: cover.split('thumb/')[1],
     summary: name,
+    description: description.value,
     style: JSON.stringify({left: Math.floor(Math.random() * 20 + 10), top: Math.floor(Math.random() * 100 - 150)})
   }
 

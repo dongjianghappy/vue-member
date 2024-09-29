@@ -1,5 +1,5 @@
 <template>
-<select class="w-full mr10" v-model="value" @change="handleclick" :disabled="disabled">
+<select class="w-full" v-model="value" @change="handleclick" :disabled="disabled">
   <option v-for="(item, index) in enums" :key="index" :value="item.value">
     {{item.name}}
   </option>

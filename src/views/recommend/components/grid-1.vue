@@ -1,20 +1,20 @@
 <template>
 <div class="relative">
-  <ul class="img-grid smallimg-wrap p15" style="flex-wrap: wrap; width: auto" v-if="data.image.length === 1">
+  <ul class="recommend-album img-grid smallimg-wrap p15" style="flex-wrap: wrap; width: auto" v-if="data.image.length === 1">
     <template v-for="(img, k) in data.image" :key="k">
       <li class="relative m0 radius-4 img-box" style="overflow:hidden; width: 100%; height: 100%;" @click="showImg(data, img)" v-if="data.image.length == 1">
         <v-img :src="img" />
       </li>
     </template>
   </ul>
-  <ul class="img-grid smallimg-wrap flex p15" style="flex-wrap: wrap; width: initial" v-else-if="data.image.length === 2">
+  <ul class="recommend-album img-grid smallimg-wrap flex p15" style="flex-wrap: wrap; width: initial" v-else-if="data.image.length === 2">
     <template v-for="(img, k) in data.image" :key="k">
       <li class="relative m0 radius-4 img-box" style=" overflow:hidden; width: 100%; height: calc(50% - 5px);" :class="{mb10: k==0}" @click="showImg(data, img)">
         <v-img :src="img" />
       </li>
     </template>
   </ul>
-  <ul class="img-grid smallimg-wrap flex p15" style="flex-wrap: wrap; width: initial" v-else-if="data.image.length === 3">
+  <ul class="recommend-album img-grid smallimg-wrap flex p15" style="flex-wrap: wrap; width: initial" v-else-if="data.image.length === 3">
     <li class="relative m0 mr10  radius-4 img-box flex" style="align-items: center; overflow:hidden; width: calc(50% - 5px); height: 100%;" @click="showImg(data, data.image[0])">
       <v-img :src="data.image[0]" />
     </li>
@@ -27,7 +27,7 @@
       </div>
     </li>
   </ul>
-  <ul class="img-grid smallimg-wrap flex p15" style="flex-wrap: wrap; width: initial" v-else>
+  <ul class="recommend-album img-grid smallimg-wrap flex p15" style="flex-wrap: wrap; width: initial" v-else>
     <template v-for="(img, k) in data.image" :key="k">
       <li class="relative m0 radius-4 img-box" style="overflow:hidden; width: calc(50% - 5px); height: calc(50% - 5px);" :class="{'mr5': k === 0 || k === 2, 'ml5': k === 1 || k === 3, 'mb5': k === 0 || k === 1, 'mt5': k === 2 || k === 3, }" @click="showImg(data, img)" v-if="k<4">
         <v-img :src="img" />

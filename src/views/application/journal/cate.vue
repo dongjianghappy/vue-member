@@ -5,7 +5,7 @@
     <v-group action='add' :group="group" :coding="data.coding.cate" :render="render" /></span>
 </div>
 <ul>
-  <li v-for="(item, index) in group" :key="index">
+  <li class="ptb5" v-for="(item, index) in group" :key="index" @click="handleclick(item)">
     {{item.name}}
     <span class="right">({{item.num || 0}})</span>
   </li>
@@ -33,4 +33,10 @@ const props: any = defineProps({
     }
   }
 })
+
+function handleclick(param: any){
+  props.render({
+    fid: param.id
+  })
+}
 </script>

@@ -435,7 +435,11 @@ announcement (params: any) {
   // 详情内容
   Update (params: any) {
     return http.request('common', 'update', params)
-  } ,  
+  } , 
+  // 复制记录
+  copy (params: any) {
+    return http.request('common', 'copy', params)
+  } , 
   // 详情内容
   detail (params: any) {
     return http.request('common', 'detail', params)
@@ -1005,6 +1009,33 @@ playSetting (params: any) {
 // 播放器信息
 playInfo (params: any) {
   return http.request('user', 'playInfo', params)
+},
+
+// 足迹
+footprint (params: any) {
+  return http.request('talk', 'footprint', params)
+},
+
+// 轨迹详情
+footprintDetail (params: any) {
+  return http.request('common', 'footprintDetail', params)
+},
+// 轨道图列表
+trackMapList (params: any) {
+  return http.request('talk', 'trackMapList', params)
+},
+// 轨道图关联
+bindTrackMap (params: any) {
+  return http.request('talk', 'bindTrackMap', params)
+},
+// 第三方博客
+thirdBlog (params: any) {
+  return http.request('talk', 'thirdBlog', params)
+},
+
+// 博客信息
+thirdBlogDetail (params: any) {
+  return http.request('talk', 'thirdBlogDetail', params)
 },
 }
 

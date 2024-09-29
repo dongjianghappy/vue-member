@@ -36,7 +36,6 @@
       </li>
       <li class="li">
         <span class="label">所属分类</span>
-        {{detail.fid}}
         <span class="pr15">{{detail.parent}}</span>
         <v-category name="选择分类" :data="{item: detail, coding: coding}" :isMore="true" type="text"></v-category>
       </li>

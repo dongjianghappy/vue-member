@@ -99,9 +99,9 @@ export default defineComponent({
 .icon-wrap {
   background: #eee;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
   display: inline-block;
 }
 </style>

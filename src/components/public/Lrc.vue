@@ -52,6 +52,7 @@ VueEvent.on("showLrc", (data: any) => {
     .vertical-text {
       width: 100;
       height: 50px;
+      color: var(--color-primary);
     }
   }
 
@@ -71,6 +72,7 @@ VueEvent.on("showLrc", (data: any) => {
       writing-mode: vertical-lr;
       text-align: center;
       letter-spacing: 8px;
+      color: var(--color-primary);
     }
   }
 
@@ -90,6 +92,7 @@ VueEvent.on("showLrc", (data: any) => {
       writing-mode: vertical-lr;
       text-align: center;
       letter-spacing: 8px;
+      color: var(--color-primary);
     }
   }
 }

@@ -54,6 +54,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/u/:id/constellation/', component: () => import('../views/system/constellation.vue')},
       { path: '/verified', component: () => import('../views/verified/index.vue')},
       { path: '/hao', component: () => import('../views/frontend/haosite/index.vue')},
+      { path: '/blog', component: () => import('../views/frontend/thirdBlog/index.vue')},
       { path: '/question', component: () => import('../views/frontend/questions/index.vue')},
       { path: '/upload/', component: () => import('../views/upload/index.vue')},
       { path: '/learning/', component: () => import('../views/frontend/learningCenter/index.vue')},
@@ -75,6 +76,8 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/contribute', component: () => import('../views/service/contribute/index.vue')},
       { path: '/privilege', component: () => import('../views/privilege/index.vue')},
       { path: '/hot', component: () => import('../views/index/hot/index.vue')},
+      { path: '/track', component: () => import('../views/index/track/index.vue')},
+      // { path: '/life', component: () => import('../views/recommend/index.vue')},
     ]
   }
 ]

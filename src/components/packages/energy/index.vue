@@ -2,7 +2,6 @@
 <div id="energy-wrap" style="border: 0px solid red; position: fixed; top: 85px; left: 0; height: 215px; z-index: 100; pointer-events: 3;">
   <div class="fixed" style="left: 10px; top: 70px; color: var(--color-primary);">
     <span @click="handleRouter()" class="mr15" v-if="userInfo.currentUser">能量：{{userInfo.energy || 0}}g</span>
-    <span @click="handleRouter('user')" >产生能量用户</span>
   </div>
   <template v-for="(item, index) in userInfo.energy_ball" :key="index">
     <li class="absolute" :class="{'aa':tabIndex == index}" :style="a(item)" @click.stop="handleSubmit(item, index)">
@@ -87,14 +86,10 @@ const a = computed(() => (param: any) => {
 })
 
 function handleRouter(param: any) {
-    if(param === 'user'){
-      router.push('/energy')
-    }else{
-      router.push(proxy.const.setUrl({
-        uid: userInfo.value.account,
-        query: '/info?mod=energy'
-      }))
-    }
+  router.push(proxy.const.setUrl({
+    uid: userInfo.value.account,
+    query: '/info?mod=energy'
+  }))
 }
 onMounted(() => {
   let el: any = document.getElementById('energy-wrap')

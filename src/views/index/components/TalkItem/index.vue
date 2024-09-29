@@ -27,6 +27,9 @@
                     <li v-if="module.vote">
                       <VoteSetting :data="item" />
                     </li>
+                    <li>
+                      <Trackmap :data="item" />
+                    </li>
                     <template v-if="module.visible">
                       <li @click="handleVisible('public', item)" v-if="item.visible !=='public'">转为公开</li>
                       <li @click="handleVisible('fans', item)" v-if="item.visible !=='fans'">转为粉丝可见</li>
@@ -58,16 +61,30 @@
             <Vote :data="item" />
           </span>
           <span class="ml5 cl-eb7350" v-if="item.istop === '1'">置顶</span>
+          <!-- <span class="ml5 cl-red" @click="handleRouter('trackmap', item)" v-if="item.track_map">
+            轨道示意图
+          </span> -->
           <!-- <span class="ml5 cl-eb7350" v-if="item.pay !== '1'">付费观看</span> -->
         </div>
         <div class="user_text markdown">
+          <div class="ptb15">
+            <span class="cl-red" @click="handleRouter('trackmap', item)" v-if="item.track_map">
+              轨道示意图
+            </span>
+          </div>
           <div class="relative" style="min-height: 30px" v-if="item.summary">
             <span v-if="item.remark">
               <span class="bold" style="color: var(--color-primary);">{{item.remark}}</span><i class="iconfont icon-dot" />
             </span>
             <span v-html="item.summary.replace(/\n/g, '<br/>')"></span>
+            <span class="ml5" v-if="item.description">({{item.description}})</span>
             <v-audio :data="item" :hasMusic="true" v-if="item.background_music" />
             {{item.music_name}}
+            <div class="mt5" v-if="item.type == 'img' && item.display == '1'">
+            <span class="font12 cl-666 pointer" @click="showImg(item, item.image[0])">
+            <i class="iconfont icon-img font12 cl-666 m0" />
+            查看大图</span>
+            </div>
           </div>
           <!--转载渲染-->
           <template v-if="item.list">
@@ -137,6 +154,8 @@ import Graph from '../../../graph/components/button.vue'
 import Vote from './vote/index.vue'
 import VoteSetting from './vote/setting.vue'
 import Detail from './components/detail.vue'
+import Trackmap from './components/trackmap.vue'
+import VueEvent from '@/utils/event'
 
 const props: any = defineProps({
   loading: {
@@ -190,7 +209,11 @@ function handleRouter(type: any, param: any) {
     }).then((res: any) => {
       param.istop = param.istop == '1' ? '0' : '1'
     })
-  } else {
+  }
+  else if (type === 'trackmap') {
+    router.push(`/track?id=${param.track_map}`)
+  }
+  else {
     router.push(`/${type}?id=${param.id}`)
   }
 }
@@ -231,6 +254,16 @@ function setDownload(param: any) {
   }).then(res => {
     param.isdownload = res.result.value
   })
+}
+
+function showImg(data: any, img: any) {
+  VueEvent.emit("layout", {
+    data,
+    img
+  });
+
+  // currentData.value = data
+  // currentImg.value = img
 }
 
 

@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "7121234",
+      "name": "chat",
+      "font_class": "chat",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "6736535",
+      "name": "visit",
+      "font_class": "visit",
+      "unicode": "e734",
+      "unicode_decimal": 59188
+    },
+    {
+      "icon_id": "7108732",
+      "name": "track",
+      "font_class": "track",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
       "icon_id": "3355667",
       "name": "loop-1",
       "font_class": "loop-1",
@@ -18,27 +39,6 @@
       "font_class": "unloop",
       "unicode": "e7c4",
       "unicode_decimal": 59332
-    },
-    {
-      "icon_id": "1100607",
-      "name": "danquxunhuan",
-      "font_class": "danquxunhuan-1",
-      "unicode": "e6af",
-      "unicode_decimal": 59055
-    },
-    {
-      "icon_id": "1956099",
-      "name": "xunhuanbofang",
-      "font_class": "xunhuanbofang",
-      "unicode": "e6b0",
-      "unicode_decimal": 59056
-    },
-    {
-      "icon_id": "8948279",
-      "name": "danquxunhuan-2",
-      "font_class": "danquxunhuan-2",
-      "unicode": "e6b2",
-      "unicode_decimal": 59058
     },
     {
       "icon_id": "34658153",

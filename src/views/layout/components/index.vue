@@ -8,7 +8,7 @@
 <!-- 播放器 -->
 <v-music v-model:isShow="showPlay" v-if="showPlay" />
 <v-lrc />
-<v-messageboard v-if="module.personal_center && module.personal_center.message_board" />
+<!-- <v-messageboard v-if="module.personal_center && module.personal_center.message_board" /> -->
 <v-time v-if="module.personal_center && module.personal_center.time" />
 <v-letter />
 <v-energy />
@@ -21,6 +21,7 @@
 <BirthdayPrompt v-if="loginuser.birthday && module.prompt && module.prompt.birthday" />
 <MessagePrompt v-else-if="module.prompt && module.prompt.message_prompt" />
 <v-theme />
+<v-quicknavigation v-if="module.personal_center && module.personal_center.quick_navigation" />
 </template>
 
 <script setup lang="ts">

@@ -89,7 +89,7 @@ function curPic(e: any) {
 }
 onMounted(() => {
   const div: any = document.querySelectorAll('.img-box')
-  const grids: any = document.querySelectorAll('.img-grid')
+  const grids: any = document.querySelectorAll('.recommend-album')
 
   grids.forEach((item: any) => {
     item.style.height = item.clientWidth+"px"

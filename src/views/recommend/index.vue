@@ -11,6 +11,7 @@
     <Album v-else-if="component==='album'" />
     <Bookmark v-else-if="component==='bookmark'" />
     <Journal v-else-if="component==='journal'" />
+    <CanvasPicture v-else-if="component==='life'" />
     <Recommend ref="recommend" :dataList="channel.recommend" v-else />
   </div>
 </div>
@@ -26,6 +27,10 @@ import {
   watch,
 } from '@/utils'
 
+import { domIsShow } from '@/utils/fn'
+
+
+
 import Aside from './components/aside.vue'
 import Recommend from './recommend.vue'
 import Camera from './camera.vue'
@@ -33,6 +38,7 @@ import Vlog from './vlog.vue'
 import Album from './album.vue'
 import Bookmark from './bookmark.vue'
 import Journal from './journal/index.vue'
+import canvasPicture from '../index/track/canvasPicture.vue'
 
 
 const store = useStore();
@@ -43,6 +49,7 @@ const component: any = computed(() => {
   return arr[arr.length - 1]
 });
 const module = computed(() => store.getters['user/config_talk']);
+const userSetting = computed(() => store.getters['user/userSetting']);
 const recommend: any = ref(null)
 let height: any = ref("")
 
@@ -51,6 +58,8 @@ watch(route, (newValues, prevValues) => {
   let theme: any = document.getElementsByClassName('theme')
   let energy: any = document.getElementById('energy-wrap')
   let themeAlbum: any = document.getElementById('theme-album')
+  let timeClock: any = document.getElementById('time-clock')
+  
   
   let arr = ['/recommend', '/camera', '/vlog', '/album', '/bookmark', '/journal']
   if (arr.indexOf(route.path) > -1) {
@@ -62,25 +71,13 @@ watch(route, (newValues, prevValues) => {
     component.value = arr[arr.length - 1]
     init()
   } else {
-    debugger
-    energy.style.display = "block"
-    themeAlbum.style.display = "block"
-    if (theme.length) {
-      theme[0].style.zIndex = "10000"
-    }
+    domIsShow.showDom(userSetting.value)
     store.commit('talk/setCommentStatus', false)
   }
 })
 
 function init() {
-  let theme: any = document.getElementsByClassName('theme')
-  if (theme.length) {
-    theme[0].style.zIndex = "-1"
-  }
-  let energy: any = document.getElementById('energy-wrap')
-  energy.style.display = "none"
-  let themeAlbum: any = document.getElementById('theme-album')
-  themeAlbum.style.display = "none"
+  domIsShow.hideDom()
 
   let params: any = {
     pagesize: '25',

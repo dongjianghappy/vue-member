@@ -16,6 +16,7 @@
       <Vote v-else-if="component==='vote'" />
       <Download v-else-if="component==='download'" />
       <Share v-else-if="component==='share'" />
+      <Footprint v-else-if="component==='footprint'" />
       <Center ref="talk" v-else />
     </div>
     <!-- 右侧 -->
@@ -45,6 +46,7 @@ import Vote from '../../index/vote/index.vue'
 import RightView from '../../index/components/right_aside.vue'
 import Download from '../../index/download/index.vue'
 import Share from '../../index/share/index.vue'
+import Footprint from '../../index/footprint/index.vue'
 
 const store = useStore();
 const route = useRoute();

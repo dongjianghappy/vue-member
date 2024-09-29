@@ -48,7 +48,7 @@
   </div>
 
   <div class="tab-content" :class="className.con">
-    <div class="tabsbox plr15" style="display: block; line-height: 30px;">
+    <div class="tabsbox" :class="className.box || 'plr15'" style="display: block; line-height: 30px;">
       <div v-if="currentIndex === 0">
         <slot name="content1"></slot>
       </div>

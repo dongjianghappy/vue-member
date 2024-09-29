@@ -375,6 +375,46 @@ const codings: any = {
     cate: 'U0620031',
     system: 'U0620037'
   },
+  module: {
+    vote: {
+      art: 'U0580000',
+      cate: 'U0580001',
+      details: 'U0580003'
+    },
+    thirdBlog: {
+      art: 'U0690007',
+      cate: 'U0690008'
+    },
+    officicalWebsite: {
+      art: 'U0640000',
+      cate: 'U0640001'
+    },
+    code: {
+      art: 'U0520002',
+      cate: 'U0520003'
+    },
+    tougao: {
+      art: 'U0690005',
+      cate: 'U0690006'
+    },
+    file: {
+      art: 'U0550002',
+      cate: 'U0550003',
+      download: 'U0550004'
+    },
+    tool: {
+      art: 'U0690003',
+      cate: 'U0690004'
+    },
+    model: {
+      art: 'U0620053',
+      cate: 'U0620054'
+    },
+    questionBank: {
+      art: 'U0660002',
+      cate: 'U0660003'
+    } 
+  },
   medal: 'U0620045',
   collection: {
     cate: 'U0630000',
@@ -438,6 +478,10 @@ const codings: any = {
   location: 'U0610002',
   tag: 'U0690000',
   theme: 'U0690001',
+  track: {
+    art: 'U0690009',
+    list: 'U0690010'
+  },
   effects: 'U0690002',
   user: {
     list: 'U0700000',

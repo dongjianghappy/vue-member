@@ -808,6 +808,7 @@ img{
 .comment-wrap{
   ::-webkit-scrollbar {
     width: 4px; /* 设置滚动条的宽度 */
+    height: 4px;
     background-color: #222; /* 设置滚动条的背景颜色 */
   }
   ::-webkit-scrollbar-thumb {
@@ -821,6 +822,7 @@ img{
 
 ::-webkit-scrollbar {
   width: 4px;
+  height: 4px;
   /* 设置滚动条的宽度 */
   background-color: var(--module-background);
   /* 设置滚动条的背景颜色 */
@@ -1000,3 +1002,35 @@ img{
 .pendant-box{
   z-index: 1000;
 }
+
+
+
+.highlight {
+  font-weight: bold;
+  /* 这里可以随意加样式 */
+
+  background: var(--default-font)
+      linear-gradient(
+      -135deg,
+      transparent 25%,
+      transparent 40%,
+      rgba(255, 255, 255, 0.3) 40%,/* 这两个值是滑动条的颜色 */
+      rgba(255, 255, 255, 0.3) 60%,/* 默认是绿色 自己更改即可 */
+      transparent 60%,
+      transparent
+      );
+  background-size: 60px 60px;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: scratchy 3s linear infinite;
+  }
+
+  @keyframes scratchy {
+  0% {
+      background-position: -100% 0;
+  }
+  100% {
+      background-position: 130% 0;
+  }
+  }

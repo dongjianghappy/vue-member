@@ -1,6 +1,6 @@
 <template>
 <v-button v-model:show="isShow">
-  <img :src="data.cover" style="width: 250px; height: 150px" />
+  <img :src="data.cover" style="width: 200px; height: 100px" />
 </v-button>
 <v-dialog v-model:show="isShow" ref="form" title="选择图片" :style="{width: 800, height: 650}" @submit="submit">
   <template v-slot:content>

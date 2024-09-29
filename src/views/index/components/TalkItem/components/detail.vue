@@ -15,7 +15,12 @@
       </div>
       <div class="li">
         <span class="label">微博内容</span>
-        <textarea v-model="detail.summary" style="height: 300px" placeholder="请输入微博内容" class="w-full"></textarea>
+        <textarea v-model="detail.summary" style="height: 260px" placeholder="请输入微博内容" class="w-full"></textarea>
+      </div>
+      <div class="li">
+        <span class="label">所在位置</span>
+        <span class="mr10" v-if="detail.location">{{detail.location}}</span>
+        <v-location @onLocaltion="(e)=>detail.location = e" />
       </div>
     </div>
   </template>
@@ -58,7 +63,8 @@ function submit(params: any) {
     id,
     title,
     image,
-    summary
+    summary,
+    location
   } = detail.value
 
   const param: any = {
@@ -66,6 +72,7 @@ function submit(params: any) {
     title,
     image,
     summary,
+    location,
     coding: props.data.coding
   }
 

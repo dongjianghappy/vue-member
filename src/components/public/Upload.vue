@@ -37,7 +37,8 @@ import {
   defineExpose,
   getCurrentInstance,
   ref,
-  watch
+  watch,
+  onMounted
 } from 'vue'
 import {
   useStore
@@ -247,6 +248,16 @@ function handleCover(param: any) {
     }
   })
 }
+
+onMounted(() => {
+props.dataList.map((item: any) => {
+    imgList.value.push({
+      src: item,
+      status: "complete"
+    })
+  })
+  cover.value = props.data.cover
+})
 </script>
 
 <style lang="less" scoped>

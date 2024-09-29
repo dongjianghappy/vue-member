@@ -16,10 +16,10 @@
   <div class="button-group plr10 pb10 flex">
     <div class="flex" style="width: 150px; align-items: center;">
       <div class="mr15 animate animate-paused" :class="{'animate-running': data.currentMusic.isplay}">
-        <img src="http://127.0.0.1/user/110506372/photos/240723105447.png" style="width: 45px; height: 45px; border-radius: 50%">
+        <img src="/images/music.png" style="width: 45px; height: 45px; border-radius: 50%">
       </div>
       <div class="font12" style="flex: 1">
-        <div class="mb5">东江哥</div>
+        <div class="mb5">音乐盒</div>
         <div>
           <marquee>{{data.currentMusic.music_name}}</marquee>
         </div>

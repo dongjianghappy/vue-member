@@ -1,7 +1,7 @@
 <template>
 <div class="collapse">
   <div class="collapse-head ptb10" @click="handleClick">
-    <span :class="{ 'deg90': collapse}" style="display: inline-block;"><i class="iconfont icon-arrow arrow "></i></span>
+    <span :class="{ 'deg90': collapse}" style="display: inline-block;" v-if="hasIcon"><i class="iconfont icon-arrow arrow "></i></span>
     <span>{{title}}</span>
     <span class="align_left">
       <slot name="extra_left"></slot>
@@ -31,6 +31,10 @@ const props: any = defineProps({
   disabled: {
     type: Boolean,
     default: false
+  },
+  hasIcon: {
+    type: Boolean,
+    default: true 
   }
 })
 

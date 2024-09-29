@@ -71,8 +71,7 @@
   </div>
   <div :class="{height: isScreen, minHeight: !isScreen}" style="display: flex; flex-direction: row;">
     <div class="relative" style="width: 50%; border-right: 1px solid var(--default-border);">
-      <perfect-scrollbar>
-
+      <div class="scrollbar">
         <textarea id="editor-desc" v-model="content" @input="handleInput" style="
     left: 0;
     width: 100%;
@@ -81,12 +80,12 @@
     outline: none;
     overflow: hidden;
     resize: none;"></textarea>
-      </perfect-scrollbar>
+      </div>
     </div>
     <div class="markdown" style="width: 50%; " v-show="isview">
-      <perfect-scrollbar>
+      <div class="scrollbar">
         <div class="p10" v-html="marked.parse(contentsss)" @mouseup="handleMouseup"></div>
-      </perfect-scrollbar>
+      </div>
     </div>
   </div>
 </div>
@@ -292,7 +291,7 @@ ${'```'}`
       content.value = editor.value;
       preview.value = marked.parse(editor.value);
 
-      context.emit('update:contentsss', content.value)
+      // context.emit('update:contentsss', content.value)
       setTimeout(() => {
         popoverStatus.value = false
       }, 1000)
@@ -369,8 +368,8 @@ textarea {
   min-height: 240px;
 }
 
-.ps {
-  background: var(--input-background);
+.scrollbar{
   height: 250px;
+  overflow-y: auto;
 }
 </style>

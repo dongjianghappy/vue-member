@@ -254,6 +254,7 @@ export const writeNewStyle = (param: any = "") => {
         primary: primarys.highlight, // 主色
         primary_background: primarys.primary_background, // 主色背景色
         background: primarys.rgb70, // 背景色有: 边框色、表单色、卡片色、标签色、经过高亮色
+        navigation_background: primarys.rgb90, // 主色背景色
         input: primarys.rgb80,
         font: theme.font_color, // 字体色
       } 
@@ -264,6 +265,7 @@ export const writeNewStyle = (param: any = "") => {
         primary: rgb, // 主色
         primary_background: rgb.replace(')', ', 0.2)'), // 主色背景色
         background: rgb.replace(')', ', 0.1)'), // 背景色有: 边框色、表单色、卡片色、标签色、经过高亮色
+        navigation_background: theme.module_background, // 主色背景色
         input: primarys.rgb25, // 表单色
         font: theme.font_color, // 字体色
       }
@@ -275,6 +277,7 @@ export const writeNewStyle = (param: any = "") => {
       '--module-background': color.module, // 模块背景色
       '--input-background': color.input, // 表单色
       '--card-background': color.background, // 卡片色
+      '--navigation_background': color.navigation_background, // 快捷导航色
       '--link-hover-background': color.background, // 鼠标经过高亮背景
       '--label-background': color.input, // 标签背景色
       '--default-border': color.input, // 边框色

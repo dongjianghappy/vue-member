@@ -13,6 +13,7 @@
     <Expression v-else-if="component === 'expression'" />
     <Statistics v-else-if="component === 'statistics'" />
     <Contribution v-else-if="component === 'contribution'" />
+    <Map v-else-if="component === 'map'" />
     <Data v-else />
   </div>
 </div>
@@ -32,6 +33,7 @@ import Mood from './components/mood.vue'
 import Expression from './expression/index.vue'
 import Statistics from './statistics/index.vue'
 import Contribution from './components/contribution.vue'
+import Map from './map/index.vue'
 import Data from './data/index.vue'
 
 const store = useStore();

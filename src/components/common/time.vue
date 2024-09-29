@@ -1,5 +1,5 @@
 <template>
-<div id="message-board" style="position: fixed; left: 20px; bottom: 100px; z-index: 10;">
+<div id="time-clock" style="position: fixed; left: 20px; bottom: 100px; z-index: 10;">
   <div class="align_center">
     <div class="position-r height-150">
       <svg class="background-clock position-a width-max height-max left-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">

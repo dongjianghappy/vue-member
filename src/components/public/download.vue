@@ -62,6 +62,7 @@ function addTextToImage(imageSrc: any, text: any, position: any, x: any, y: any,
 function downloadFile(url: any) {
   const dom = document.createElement('a')
   dom.href = url
+  debugger
   let file = props.data.file.split("/")
   dom.download = file[file.length - 1]
   dom.style.display = 'none'

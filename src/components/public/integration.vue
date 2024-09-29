@@ -1,7 +1,8 @@
 <template>
 <div class="integration-wrap absolute">
   <div class="mb5"><i class="iconfont icon-integral font14" />积分: {{userInfo.integration}} <span class="ml5 font12" @click="handleClick('integration')">查看明细</span></div>
-  <div><i class="iconfont icon-goldcoin font14" />金币: {{userInfo.goldcoin}} <span class="ml5 font12" @click="handleClick('goldcoin')">查看明细</span></div>
+  <div class="mb5"><i class="iconfont icon-goldcoin font14" />金币: {{userInfo.goldcoin}} <span class="ml5 font12" @click="handleClick('goldcoin')">查看明细</span></div>
+  <div><i class="iconfont icon-goldcoin font14" />能量: {{userInfo.energy}} <span class="ml5 font12" @click="handleClick('energy')">查看明细</span></div>
 </div>
 </template>
 

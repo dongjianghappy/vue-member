@@ -1,6 +1,6 @@
 <template>
 <div class="cover inline animate animate-paused" :class="{'animate-running': data.isplay}">
-  <v-img src="http://localhost/source/public/images/music.png" />
+  <v-img src="/images/music.png" />
 </div>
 </template>
 

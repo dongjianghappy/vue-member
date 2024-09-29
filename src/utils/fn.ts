@@ -147,3 +147,36 @@ export const move = (param: any) => {
 
   })
 }
+
+
+// Dom元素显示与隐藏
+export const domIsShow: any = {
+  showDom: (param: any = {}) => {
+    let theme: any = document.getElementsByClassName('theme')
+    let energy: any = document.getElementById('energy-wrap')
+    let themeAlbum: any = document.getElementById('theme-album')
+    let timeClock: any = document.getElementById('time-clock')
+
+    let theme_status = param.theme && param.theme.theme_album == '1'
+    
+    if(energy) energy.style.display = "block"
+    if(themeAlbum && theme_status) themeAlbum.style.display = "block"
+    if(timeClock) timeClock.style.display = "block"
+    if (theme.length) {
+      theme[0].style.zIndex = "10000"
+    }
+  },
+  hideDom: () => {
+    let theme: any = document.getElementsByClassName('theme')
+    let energy: any = document.getElementById('energy-wrap')
+    let themeAlbum: any = document.getElementById('theme-album')
+    let timeClock: any = document.getElementById('time-clock')
+
+    if (theme.length) {
+      theme[0].style.zIndex = "-1"
+    }
+    energy.style.display = "none"
+    if(themeAlbum) themeAlbum.style.display = "none"
+    if(timeClock) timeClock.style.display = "none"
+  }
+}

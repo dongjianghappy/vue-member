@@ -16,7 +16,8 @@
           <p class="mb10 relative">
             <span v-if="item.management_checked === '0'"><i class="iconfont icon-shenhe font18 ml0" style="color: #5bc0de"></i></span>
             <span class="art-title font16 mr5 pointer" @click="handleclick(item)">
-              <i class="iconfont icon-dot"></i> {{item.title}}
+              <!-- <i class="iconfont icon-dot"></i>  -->
+              {{item.title}}
             </span>
             <span v-if="item.summary !== ''">
               <i class="infos demoimg iconfont icon-article"></i>
@@ -50,7 +51,7 @@
       </div>
     </div>
     <div class="w200">
-      <CateList :group="group" :data="data" :render="render" />
+      <CateList :group="group" :data="data" :render="init" />
     </div>
   </div>
 </div>
