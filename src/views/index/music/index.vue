@@ -84,7 +84,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const route = useRoute();
-    const dataList = ref([])
+    const dataList: any = ref([])
     let query: any = computed(() => route.query || "");
     const module = computed(() => store.getters['user/config_talk']);
     const userInfo = computed(() => store.getters['user/loginuser']);

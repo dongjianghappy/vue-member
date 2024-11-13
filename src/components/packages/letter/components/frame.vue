@@ -91,7 +91,7 @@ export default defineComponent({
   emits: ['update:index'],
   setup(props, context) {
     const router = useRouter();
-    let currentIndex = ref(0)
+    let currentIndex: any = ref(0)
     let ball: any = ref(null)
     let isDrag: any = ref(false)
 

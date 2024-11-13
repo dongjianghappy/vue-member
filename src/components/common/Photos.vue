@@ -14,7 +14,8 @@
             <v-concern :userInfo="userInfo" />
           </div>
         </div>
-        <div class="blogmenu">
+        <div class="blogmenu" style="width: 180px">
+          <v-subscribe :data="userInfo" />
           <span id="sendprivateletter" data-uid="754076" data-nickname="√" data-photos="http://www.yunxi10.com//user/754076/photos/754076.png">私信</span>
           <v-concernbutton :data="userInfo" type="user" />
         </div>

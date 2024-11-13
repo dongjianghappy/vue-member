@@ -52,7 +52,7 @@ export default defineComponent({
 emits: ['update:blog'],
 setup(props,context) {
   const {ctx}:any = getCurrentInstance();
-  let isEdit = ref(true)
+  let isEdit: any = ref(true)
   const blogInfo: any = ref(props.blog)
 
   function Edit(){

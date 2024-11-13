@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import Three from './three.vue'
+// import Three from './three.vue'
 const dataList: any = [{
     "id": 0,
     "cameraNear": 0.25,

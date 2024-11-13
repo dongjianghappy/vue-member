@@ -9,7 +9,7 @@ export default class basicInfo{
   endIntention: Array<Object> // 结束话术
   valid?: boolean
   constructor(data: any){
-    let {id, name, description, basicSpeech, objectionIntention, endIntention, type} = data
+    const {id, name, description, basicSpeech, objectionIntention, endIntention, type} = data
     this.id = String(id)
     this.type = type
     this.name = name

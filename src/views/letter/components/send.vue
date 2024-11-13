@@ -43,7 +43,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const store = useStore();
-    let content = ref("");
+    let content: any = ref("");
     const isShow = ref(false)
     const userInfo: any = computed(() => store.getters['user/userInfo']);
 

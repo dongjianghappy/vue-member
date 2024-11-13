@@ -72,7 +72,7 @@ export default defineComponent({
     } = reactive(props.data)
     const userInfo = computed(() => store.getters['user/userInfo']);
     let Input: any = ref(null)
-    const newestList = ref([])
+    const newestList: any = ref([])
     const dataList: any = ref([])
     let summary: any = ref("")
     let loading: any = ref(false)

@@ -138,9 +138,9 @@ export default defineComponent({
       proxy
     }: any = getCurrentInstance();
     const store = useStore();
-    const isShow = ref(false)
+    const isShow: any = ref(false)
     const coding = codings.sign
-    const calendarData = ref([])
+    const calendarData: any = ref([])
     const date: any = new Date()
     const currentData = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
     const today = `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}`
@@ -150,9 +150,9 @@ export default defineComponent({
     const img: any = ref("")
     const cover: any = ref(null)
     const pic: any = ref(null)
-    const filElem = ref("filElem")
+    const filElem: any = ref("filElem")
     const dataUrl: any = ref("")
-    const hideCamera = ref(false)
+    const hideCamera: any = ref(false)
     const currentText: any = ref("")
     const isSelect: any = ref(false)
 

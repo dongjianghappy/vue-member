@@ -71,7 +71,7 @@ export default defineComponent({
       proxy
     }: any = getCurrentInstance();
     const router = useRouter();
-    const showFlag = ref(false)
+    const showFlag: any = ref(false)
 
     function showImg() {
       showFlag.value = !showFlag.value

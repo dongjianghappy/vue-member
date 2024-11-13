@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lint-fix": "eslint --fix ."
   },
   "dependencies": {
     "axios": "^0.24.0",
@@ -20,7 +21,7 @@
     "qs": "^6.10.1",
     "querystring": "^0.2.1",
     "svg-pan-zoom": "^3.6.1",
-    "vue": "^3.2.13",
+    "vue": "^3.1.13",
     "vue-chartist": "^3.0.0",
     "vue-common": "file:../vue-common",
     "vue-custom-scrollbar": "^1.4.4",

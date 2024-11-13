@@ -83,10 +83,10 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store = useStore();
     const isShow = ref(props.showFlag)
-    const filElem = ref("filElem")
+    const filElem: any = ref("filElem")
     let img: any = ref("")
-    const drawCanv = ref(null)
-    const currentIndex = ref("local")
+    const drawCanv: any = ref(null)
+    const currentIndex: any = ref("local")
     const history: any = ref([])
     const system: any = ref([])
 

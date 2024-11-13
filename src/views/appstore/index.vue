@@ -120,7 +120,7 @@ export default defineComponent({
     const appstore = computed(() => store.getters['common/appstore']);
     const brand: any = ref([])
     const menu: any = appMenu
-    const Tabs = ref("0")
+    const Tabs: any = ref("0")
     let mod: any = computed(() => route.query.mod || "");
     const loginuser = computed(() => store.getters['user/loginuser']);
 

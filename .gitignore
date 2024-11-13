@@ -2,7 +2,7 @@
 node_modules
 /dist
 /public
-
+/public/three
 
 # local env files
 .env.local

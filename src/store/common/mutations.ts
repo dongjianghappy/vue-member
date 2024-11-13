@@ -112,7 +112,9 @@ const mutations = {
   setAlbumList: (state: any, params: any) => {
     state.albumList = params
   },   
-  
+  setSeaLook: (state: any, params: any) => {
+    state.isSea = params
+  }, 
   
 }
 

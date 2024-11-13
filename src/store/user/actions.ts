@@ -11,6 +11,10 @@ const actions = {
     const { result }:any = await api.Detect({
       ...params 
     })
+
+    if(!result){
+      return
+    }
     if(result.result.status != '2'){
       sessionStorage.setItem("userInfo", JSON.stringify(result.result.userInfo))
       sessionStorage.setItem("theme", JSON.stringify(result.result.userInfo.theme))

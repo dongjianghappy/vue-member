@@ -154,7 +154,7 @@ function node(ctx: any, x: any, y: any ,type: any = 'circle') {
 function text(ctx: any, x: any, y: any, text: any, size: any = '12', color: any = '#ccc') {
   ctx.fillStyle = color;
   debugger
-  ctx.font = size + "px ''";;
+  ctx.font = size + "px ''";
   ctx.textAlign = "center";
   ctx.fillText(text, x, y + 40);
 }

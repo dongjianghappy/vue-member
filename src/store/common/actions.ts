@@ -8,6 +8,10 @@ const actions = {
       ...data
     })
 
+    if(!result){
+      return
+    }
+
     if(params.state){
       context.commit("setData" , {state: params.state, data: result.result});      
   }    

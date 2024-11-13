@@ -5,27 +5,27 @@ export const image = (a: any, param: any) => {
 
 // 选择表情或话题
 export const chooseTalk = (detail: any, param: any) => {
-  let word_arr = detail.summary.split('#')
-  let arr2 = detail.summary.split('@')
+  const word_arr = detail.summary.split('#')
+  const arr2 = detail.summary.split('@')
 
   if (param[0] === '@' || (param.indexOf("@") > -1 && arr2[arr2.length - 1].indexOf(" ") === -1)) {
     if (detail.summary[detail.summary.length - 1] === '@') {
-      let str = detail.summary.substring(0, detail.summary.length - 1)
+      const str = detail.summary.substring(0, detail.summary.length - 1)
       detail.summary = str + param
     } else if (arr2[arr2.length - 1].indexOf(" ") === -1) {
-      let index = detail.summary.lastIndexOf('@' + arr2[arr2.length - 1])
-      let str = detail.summary.substr(0, index)
+      const index = detail.summary.lastIndexOf('@' + arr2[arr2.length - 1])
+      const str = detail.summary.substr(0, index)
       detail.summary = str + param
     } else {
       detail.summary = detail.summary + param
     }
   } else if (param[0] === '#' || (param.indexOf("#") > -1 && word_arr[word_arr.length - 1].indexOf(" ") === -1)) {
     if (detail.summary[detail.summary.length - 1] === '#') {
-      let str = detail.summary.substring(0, detail.summary.length - 1)
+      const str = detail.summary.substring(0, detail.summary.length - 1)
       detail.summary = str + param
     } else if (word_arr[word_arr.length - 1].indexOf(" ") === -1) {
-      let index = detail.summary.lastIndexOf('#' + word_arr[word_arr.length - 1])
-      let str = detail.summary.substr(0, index)
+      const index = detail.summary.lastIndexOf('#' + word_arr[word_arr.length - 1])
+      const str = detail.summary.substr(0, index)
       detail.summary = str + param
     } else {
       detail.summary = detail.summary + param
@@ -38,7 +38,7 @@ export const chooseTalk = (detail: any, param: any) => {
 // 播报
 export const handleBroadcast = (param: any) => {
   const speakMsg = new SpeechSynthesisUtterance()
-  let speech: any = param
+  const speech: any = param
   speakMsg.text = speech; //文字内容
   speakMsg.lang = "zh-CN"; //使用的语言:中文
   speakMsg.volume = 1;
@@ -58,9 +58,9 @@ export const handleCopy = (e: any, param: any) => {
     // })
     return navigator.clipboard.writeText(param)
   } else {
-    let copy = e.target
-    let divParent = copy.parentNode; //获取该div的父节点
-    let input = document.createElement('input');
+    const copy = e.target
+    const divParent = copy.parentNode; //获取该div的父节点
+    const input = document.createElement('input');
     divParent.insertBefore(input, copy);
     input.focus();
     input.select();
@@ -78,7 +78,7 @@ export const handleCopy = (e: any, param: any) => {
 
 export const downloadBlob = (param: any) => {
   try {
-    let blob = new Blob([param], { type: 'image/jpeg' })
+    const blob = new Blob([param], { type: 'image/jpeg' })
 
     // const fileReader = new FileReader()
     // fileReader.onload = function(event: any){
@@ -121,15 +121,15 @@ export const downloadBlob = (param: any) => {
 // 播报
 export const move = (param: any) => {
   let isDrag: any = false
-  let el: any = document.getElementById('move-music')
+  const el: any = document.getElementById('move-music')
   el.addEventListener('mousedown', (ev: any) => {
-     let els = ev.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
+     const els = ev.currentTarget.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode
     isDrag = true
     ev.preventDefault()
     // ev.stopPropagation()
-    let oevent = ev || event
-    let distanceX = oevent.clientX //鼠标点击位置
-    let distanceY = oevent.clientY //鼠标点击位置
+    const oevent = ev || event
+    const distanceX = oevent.clientX //鼠标点击位置
+    const distanceY = oevent.clientY //鼠标点击位置
 
     document.onmousemove = function (e: any) {
 
@@ -152,12 +152,12 @@ export const move = (param: any) => {
 // Dom元素显示与隐藏
 export const domIsShow: any = {
   showDom: (param: any = {}) => {
-    let theme: any = document.getElementsByClassName('theme')
-    let energy: any = document.getElementById('energy-wrap')
-    let themeAlbum: any = document.getElementById('theme-album')
-    let timeClock: any = document.getElementById('time-clock')
+    const theme: any = document.getElementsByClassName('theme')
+    const energy: any = document.getElementById('energy-wrap')
+    const themeAlbum: any = document.getElementById('theme-album')
+    const timeClock: any = document.getElementById('time-clock')
 
-    let theme_status = param.theme && param.theme.theme_album == '1'
+    const theme_status = param.theme && param.theme.theme_album == '1'
     
     if(energy) energy.style.display = "block"
     if(themeAlbum && theme_status) themeAlbum.style.display = "block"
@@ -167,10 +167,10 @@ export const domIsShow: any = {
     }
   },
   hideDom: () => {
-    let theme: any = document.getElementsByClassName('theme')
-    let energy: any = document.getElementById('energy-wrap')
-    let themeAlbum: any = document.getElementById('theme-album')
-    let timeClock: any = document.getElementById('time-clock')
+    const theme: any = document.getElementsByClassName('theme')
+    const energy: any = document.getElementById('energy-wrap')
+    const themeAlbum: any = document.getElementById('theme-album')
+    const timeClock: any = document.getElementById('time-clock')
 
     if (theme.length) {
       theme[0].style.zIndex = "-1"

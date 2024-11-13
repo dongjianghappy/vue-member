@@ -1,0 +1,58 @@
+@fish1: 55px, 37px, 0.5s, 4, -148px, 55px; // 小黄鱼
+@fish2: 78px, 64px, 0.5s, 4, -256px, 50px; // 小丑鱼
+@fish3: 72px, 56px, 1s, 8, -448px, 55px; // 小红鱼
+@fish4: 77px, 59px, 1s, 8, -472px, 55px; // 小蓝鱼
+@fish5: 107px, 122px, 0.5s, 8, -976px, 50px; // 小绿鱼
+@fish6: 105px, 79px, 1.5s, 8, -632px, 60px; // 海虾
+@fish7: 92px, 151px, 1s, 6, -906px, 32px; // 水母
+@fish8: 174px, 126px, 1s, 8, -1008px, 65px; // 灯笼鱼
+@fish9: 166px, 183px, 1s, 8, -1464px, 45px; // 蝙蝠鱼
+@fish10: 178px, 187px, 1s, 6, -1122px, 45px; // 海龟
+@fish11: 509px, 270px, 1.5s, 12, -3240px, 70px; // 大白鲨
+@fish12: 516px, 273px, 1.5s, 12, -3276px, 70px; // 大金鲨
+
+@all: @fish1, @fish2, @fish3, @fish4, @fish5, @fish6, @fish7, @fish8, @fish9, @fish10, @fish11, @fish12;
+
+// 基本样式
+.fish-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+  @animation:~'animation_fish@{i}';
+  
+  .fish@{i}{
+    background: url("http://localhost/source/public/images/fish/fish@{i}.png") no-repeat 0 0;
+    width: extract(extract(@all, @i),1);
+    height: extract(extract(@all, @i),2);
+    animation: @animation extract(extract(@all,@i),3) steps(extract(extract(@all,@i),4)) infinite
+  }
+  .fish-loop(@list,(@i+1));
+}
+.fish-loop(@all);
+
+// 动画
+.keyframes-loop(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+	@name:~'animation_fish@{i}';
+  @keyframes @name{
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 0 extract(extract(@all, @i), 5);
+    }
+  }
+  .keyframes-loop(@list,(@i+1));
+}
+.keyframes-loop(@all); 
+
+// 基本样式
+.fish-loop-a(@list,@i:1,@val:extract(@list,@i)) when (length(@list)>=@i){
+  @animation:~'animation_fish@{i}';
+  
+  .fish@{i}_a{
+    background: url("http://localhost/source/public/images/fish/fish@{i}.png") no-repeat 0 0;
+    background-size: extract(extract(@all,@i), 6);
+    width: extract(extract(@all, @i), 1);
+    height: extract(extract(@all, @i), 2);
+    // animation: @animation extract(extract(@all,@i),3) steps(extract(extract(@all,@i),4)) infinite
+  }
+  .fish-loop-a(@list,(@i+1));
+}
+.fish-loop-a(@all);

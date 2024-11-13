@@ -57,7 +57,7 @@ export default defineComponent({
     const isShow: any = ref(false)
     const detail: any = ref({})
     const drawer: any = ref(null)
-    const showFlag = ref(false)
+    const showFlag: any = ref(false)
 
     function showImg(param: any, i: any) {
       showFlag.value = !showFlag.value

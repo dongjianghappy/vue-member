@@ -17,9 +17,9 @@ class graphs {
   redoStack: any
   constructor(el: HTMLDivElement) {
     
-    let namespace = joint.shapes;
-    let graph = new joint.dia.Graph({}, { cellNamespace: namespace });
-    let paper:any = new joint.dia.Paper(Object.assign({
+    const namespace = joint.shapes;
+    const graph = new joint.dia.Graph({}, { cellNamespace: namespace });
+    const paper:any = new joint.dia.Paper(Object.assign({
       el: el,
       model: graph,
       width: '100%',
@@ -43,7 +43,7 @@ class graphs {
   this.undoStack = []
   this.redoStack = []
 
-  var paperSmall = new joint.dia.Paper(Object.assign({
+  const paperSmall = new joint.dia.Paper(Object.assign({
     el: document.getElementById('paper-multiple-papers-small'),
     model: graph,
     width: 270,
@@ -54,9 +54,9 @@ class graphs {
   }));
   paperSmall.scale(0.25,0.25,0,0)
 
-  var boundaryTool = new joint.elementTools.Boundary();
-  var removeButton = new joint.elementTools.Remove();
-  var toolsView = new joint.dia.ToolsView({
+  const boundaryTool = new joint.elementTools.Boundary();
+  const removeButton = new joint.elementTools.Remove();
+  const toolsView = new joint.dia.ToolsView({
       tools: [
         boundaryTool,
         removeButton
@@ -80,7 +80,7 @@ class graphs {
   paper.on('element:mouseleave', function(elementView: any) {
       elementView.hideTools();
   });
-  let _this = this
+  const _this = this
   paper.on('element:pointermove', function(elementView: any) {
       _this.currCell = cloneDeep(elementView)
   });
@@ -112,18 +112,18 @@ class graphs {
 
   // 创建线条
   createLink(linkView: any) {
-    let currentLinkModel = linkView.model.attributes
-    let source = linkView.sourceView
-    let target = linkView.targetView
-    let sourceFtype = source.model.attributes.ftype
-    let targetFtype = target ? target.model.attributes.ftype : ''
-    let fontSourceNode = source.model.attributes
-    let fontTargetNode = target ? target.model.attributes : null
-    let ftype = fontSourceNode.ftype === 'start' || fontTargetNode.ftype === 'end' ? "link" : "intentionLink"
+    const currentLinkModel = linkView.model.attributes
+    const source = linkView.sourceView
+    const target = linkView.targetView
+    const sourceFtype = source.model.attributes.ftype
+    const targetFtype = target ? target.model.attributes.ftype : ''
+    const fontSourceNode = source.model.attributes
+    const fontTargetNode = target ? target.model.attributes : null
+    const ftype = fontSourceNode.ftype === 'start' || fontTargetNode.ftype === 'end' ? "link" : "intentionLink"
 
     source && linkView.model.source(source.model)
     target && linkView.model.target(target.model)
-    let linkObj: any = {
+    const linkObj: any = {
       id: linkView.id,
       type: ftype,
       source: fontSourceNode.id,
@@ -132,7 +132,7 @@ class graphs {
     if(ftype === 'intentionLink'){
       linkObj.name = "意图线"
     }
-    let linkData = new dataModel['linkNode'](linkObj)
+    const linkData = new dataModel['linkNode'](linkObj)
     linkView.model.setData(linkData)
 
     // 创建线条后并显示该节点信息
@@ -142,21 +142,21 @@ class graphs {
   }
 
     setLink() {
-      let self = this
+      const self = this
       this.paper.on('link:pointerdblclick', function(linkView: any) {
 
       });
 
     this.paper.on('link:pointerup', function(linkView: any) {
-      let source = linkView.sourceView
-      let target = linkView.targetView
+      const source = linkView.sourceView
+      const target = linkView.targetView
       
     }); 
 
 
     this.paper.on('link:connect', function(linkView: any) {
-      let source = linkView.sourceView
-      let target = linkView.targetView
+      const source = linkView.sourceView
+      const target = linkView.targetView
       
       self.createLink(linkView)
       
@@ -177,34 +177,34 @@ class graphs {
 
   // 允许拖拽
   draggable(e: any, data: any){
-      let ftype: any = data.ftype
-      let text: any = data.text
-      let offsetX: any = Number(data.offsetX)
-      let offsetY: any = Number(data.offsetY)
-      let dropPoint: any = this.paper.pageToLocalPoint(e.pageX, e.pageY)
-      let x: any = dropPoint.x - offsetX
-      let y: any = dropPoint.y - offsetY
+      const ftype: any = data.ftype
+      const text: any = data.text
+      const offsetX: any = Number(data.offsetX)
+      const offsetY: any = Number(data.offsetY)
+      const dropPoint: any = this.paper.pageToLocalPoint(e.pageX, e.pageY)
+      const x: any = dropPoint.x - offsetX
+      const y: any = dropPoint.y - offsetY
       this.createNode(ftype, text, {x, y})
   }
 
   // 更新节点
   updateCells(cells: any, graph: Object){
-    let thisa: any = graph
+    const thisa: any = graph
 
     if(!cells) return
 
-    let cellsList:any = (typeof cells=='string') ? JSON.parse(cells) : cells
+    const cellsList:any = (typeof cells=='string') ? JSON.parse(cells) : cells
     cellsList.cells && cellsList.cells.map((cell: any) => {
 
       if(cell.ftype === 'link' || cell.ftype === 'intentionLink'){
         const {id, ftype, source, target, vertices, data} = cell as dataModel.Link
-        let sourceCell = thisa.getCell(source.id)
-        let targetCell = thisa.getCell(target.id)
-        let sss = new (Elements as any)[ftype]({id}) 
+        const sourceCell = thisa.getCell(source.id)
+        const targetCell = thisa.getCell(target.id)
+        const sss = new (Elements as any)[ftype]({id}) 
         source && sss.source(sourceCell)
         target && sss.target(targetCell)
         vertices && sss.vertices(vertices)
-        let linkData: any = new dataModel['linkNode'](data)
+        const linkData: any = new dataModel['linkNode'](data)
         sss.render({attrs: cell.attrs, data: cell.data})
         sss.addTo(this.graph);    
       }else{
@@ -222,7 +222,7 @@ class graphs {
   // 设置数据
   setGraphData(id: any){
     const cell = this.graph.getCell(id)
-    let data = cell.attributes.data
+    const data = cell.attributes.data
     cell.setData(data)
   }  
 
@@ -281,9 +281,9 @@ class graphs {
 
     // 鼠标经过元素
     this.paper.on('element:mouseenter', function(elementView: any) {
-      var boundaryTool = new joint.elementTools.Boundary();
-      var removeButton = new joint.elementTools.Remove();
-      var toolsView = new joint.dia.ToolsView({
+      const boundaryTool = new joint.elementTools.Boundary();
+      const removeButton = new joint.elementTools.Remove();
+      const toolsView = new joint.dia.ToolsView({
         name: 'basic-tools',
         tools: [boundaryTool, removeButton],
         });
@@ -292,9 +292,9 @@ class graphs {
 
     // 鼠标经过连线
     this.paper.on('link:mouseenter', (linkView: any) => {
-      var boundaryTool = new joint.elementTools.Boundary();
-      var removeButton = new joint.elementTools.Remove();
-      var toolsView = new joint.dia.ToolsView({
+      const boundaryTool = new joint.elementTools.Boundary();
+      const removeButton = new joint.elementTools.Remove();
+      const toolsView = new joint.dia.ToolsView({
         name: 'basic-tools',
         tools: [boundaryTool, removeButton],
     });
@@ -308,8 +308,8 @@ class graphs {
 }
 
   svgPanZooms() {
-    let _this = this
-    let svgZoom = svgPanZoom('#myholder svg', {
+    const _this = this
+    const svgZoom = svgPanZoom('#myholder svg', {
 
       /** 是否可拖拽 */
       panEnabled: true,
@@ -336,7 +336,7 @@ class graphs {
 
     svgZoom.setZoomScaleSensitivity(0.5);
     /** fit:true 元素数量较少时，会引起元素过度放大，当缩放率大于1时，将图像缩小为1；小于等于1时，为体现出边距更显美观，整体缩放至0.9 */
-    let {
+    const {
       sx,
       sy
     } = _this.paper.scale();
@@ -348,8 +348,8 @@ class graphs {
   }
 
   svgPanZooms2() {
-    let _this = this
-    let svgZoom = svgPanZoom('#paper-multiple-papers-small svg', {
+    const _this = this
+    const svgZoom = svgPanZoom('#paper-multiple-papers-small svg', {
 
       /** 是否可拖拽 */
       panEnabled: true,
@@ -376,7 +376,7 @@ class graphs {
 
     svgZoom.setZoomScaleSensitivity(0.5);
     /** fit:true 元素数量较少时，会引起元素过度放大，当缩放率大于1时，将图像缩小为1；小于等于1时，为体现出边距更显美观，整体缩放至0.9 */
-    let {
+    const {
       sx,
       sy
     } = _this.paper.scale();
@@ -407,8 +407,8 @@ class graphs {
       if(cell.type === 'node'){
         this.graph.getCell(cell.data.id).remove()
       }else{
-        let links: any[] = this.graph.getLinks();
-        let cellObj = links.filter((item: any) => {
+        const links: any[] = this.graph.getLinks();
+        const cellObj = links.filter((item: any) => {
           return item.id === cell.data.model.id
         })
         cellObj[0].remove()
@@ -429,19 +429,19 @@ class graphs {
     else if(cell.action === 'move' || cell.action === 'edit'){
       let cellObj = []
       if(cell.type === 'node'){
-        let nodes: any = this.graph.getCells();
+        const nodes: any = this.graph.getCells();
         cellObj = nodes.filter((item: any) => {
           return item.id === cell.data.id
         })
         
       }else{
-        let links: any[] = this.graph.getLinks();
-        let cellObj = links.filter((item: any) => {
+        const links: any[] = this.graph.getLinks();
+        const cellObj = links.filter((item: any) => {
           return item.id === cell.data.model.id
         })
         
       }      
-      let newCell = cloneDeep(cellObj[0])
+      const newCell = cloneDeep(cellObj[0])
         cellObj[0].attributes = cell.data.attributes
         cell.data.attributes = newCell.attributes
     }
@@ -464,8 +464,8 @@ class graphs {
           }
         })
       }else{
-        let links: any[] = this.graph.getLinks();
-        let cellObj = links.filter((item: any) => {
+        const links: any[] = this.graph.getLinks();
+        const cellObj = links.filter((item: any) => {
           return item.id === cell.data.model.id
         })
         cellObj[0].remove()
@@ -474,18 +474,18 @@ class graphs {
     else if(cell.action === 'move' || cell.action === 'edit'){
       let cellObj = []
       if(cell.type === 'node'){
-        let nodes: any = this.graph.getCells();
+        const nodes: any = this.graph.getCells();
         cellObj = nodes.filter((item: any) => {
           return item.id === cell.data.id
         })
         
       }else{
-        let links: any[] = this.graph.getLinks();
-        let cellObj = links.filter((item: any) => {
+        const links: any[] = this.graph.getLinks();
+        const cellObj = links.filter((item: any) => {
           return item.id === cell.data.model.id
         })
       }      
-      let newCell = cloneDeep(cellObj[0])
+      const newCell = cloneDeep(cellObj[0])
       cellObj[0].attributes = cell.data.attributes
       cell.data.attributes = newCell.attributes
     }
@@ -499,7 +499,7 @@ class graphs {
       return
     }
 
-    let cell = this.undoStack.pop()
+    const cell = this.undoStack.pop()
     this.revertCommand(cell)
   }
 
@@ -509,7 +509,7 @@ class graphs {
     return
   }
 
-  let cell = this.redoStack.pop()
+  const cell = this.redoStack.pop()
   this.applyCommand(cell)
 }  
 

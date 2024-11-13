@@ -156,14 +156,14 @@ export const  durationTrans = (duration: any) => {
 
 // 秒转换currentTime
 export const timeToSeconds = (timeStr: any) => {
-  var parts = timeStr.split(':');
+  const parts = timeStr.split(':');
   return parts[0] * 3600 + // 小时数乘以3600秒
          parts[1] * 60 +   // 分钟数乘以60秒
          parseFloat(parts[2]); // 秒数
 }
 
 export const getParent = (current: any, value: any) => {
-  let index = current.findIndex((item: any) => item.value === value)
+  const index = current.findIndex((item: any) => item.value === value)
   return index > -1 ? true : false
 }
 export const showParent = (current: any) => {
@@ -208,7 +208,7 @@ export const writeNewStyle = (param: any = "") => {
   if(theme === null){
     return
   }
-  let mode = localStorage.getItem('mode')
+  const mode = localStorage.getItem('mode')
   let cssProperties: any = {}
   
   if(mode === 'moon'){
@@ -217,9 +217,9 @@ export const writeNewStyle = (param: any = "") => {
      }
   }else{
     // let primary = theme.primary_color
-    let rgb = theme.primary_color
+    const rgb = theme.primary_color
     let color: any = {}
-    let rgb_arrs: any = {
+    const rgb_arrs: any = {
       rgb25: []
     } 
     
@@ -235,8 +235,8 @@ export const writeNewStyle = (param: any = "") => {
       primarys['primary_background'] = `hsl(${h}, calc(${s} * 1%), min(calc(${l} * 1% + 10%), 20%))`
       
     }else{
-      let rgb = colorHex2Rgb(theme.module_background)
-      let rgb_arr = rgb.substring(4, rgb.length-1).split(',')
+      const rgb = colorHex2Rgb(theme.module_background)
+      const rgb_arr = rgb.substring(4, rgb.length-1).split(',')
       
       for(let i = 0; i < rgb_arr.length; i++){
         rgb_arrs.rgb25.push(`calc(${rgb_arr[i]} * (1 + 0.25))`)
@@ -259,7 +259,7 @@ export const writeNewStyle = (param: any = "") => {
         font: theme.font_color, // 字体色
       } 
     }else{
-      let rgb = colorHex2Rgb(theme.primary_color)
+      const rgb = colorHex2Rgb(theme.primary_color)
       color = {
         module: theme.module_background, // 模块背景色
         primary: rgb, // 主色
@@ -296,9 +296,9 @@ export const writeNewStyle = (param: any = "") => {
   
   // 把对象转成css
   const cssString = Object.keys(cssProperties).map((property) => `${property}: ${cssProperties[property]}`).join(';')
-  let aa: any = document.querySelector('#root')
+  const aa: any = document.querySelector('#root')
   // aa.setAttribute('style', cssString)
-  let ddd: any = document.styleSheets;
+  const ddd: any = document.styleSheets;
     if(aa !== null){
       aa.remove()
     }

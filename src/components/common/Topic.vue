@@ -43,7 +43,7 @@ export default defineComponent({
       ctx
     }: any = getCurrentInstance();
     const store = useStore();
-    const dataList = ref([])
+    const dataList: any = ref([])
 
     // 监听路由
     watch(() => props.data, (newValues, prevValues) => {

@@ -121,8 +121,8 @@ export default defineComponent({
 
   setup(props,context) {
     const {ctx}:any = getCurrentInstance();
-    const showThme = ref(false)
-    const style = ref("-685px")
+    const showThme: any = ref(false)
+    const style: any = ref("-685px")
 
 
     function showMusic(){

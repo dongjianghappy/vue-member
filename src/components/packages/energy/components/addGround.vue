@@ -64,7 +64,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const store = useStore();
-    const isShow = ref(false)
+    const isShow: any = ref(false)
     const detail: any = ref({
       id: "",
       name: "",

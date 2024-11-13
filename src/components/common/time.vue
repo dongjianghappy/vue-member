@@ -34,8 +34,8 @@ import {
 } from 'vue'
 export default defineComponent({
   setup() {
-    const today = ref(getToday())
-    const count = ref()
+    const today: any = ref(getToday())
+    const count: any = ref()
 
     count.value = setInterval(() => {
       today.value = getToday()

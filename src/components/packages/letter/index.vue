@@ -58,7 +58,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const store = useStore();
-    const isShow = ref(false)
+    const isShow: any = ref(false)
     const issave = ref(false)
     const dataList: any = ref([])
     const content: any = ref("")

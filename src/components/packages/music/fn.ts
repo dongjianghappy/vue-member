@@ -4,7 +4,7 @@ import VueEvent from '@/utils/event'
 // 歌曲列表添加处理
 export const musicPush = async (param: any, musicList: any) => {
   param.map(((item: any) => {
-    let index = musicList.findIndex((list: any) => list.id === item.music_id)
+    const index = musicList.findIndex((list: any) => list.id === item.music_id)
     if (item.music_file && index === -1) {
       musicList.push({
         id: item.music_id,
@@ -24,17 +24,17 @@ export const currentMusic = async (param: any, setting: any, store: any, isInit:
     return
   }
 
-  let music: any = {}
-  let audio_el = document.getElementById('listen_music')
+  const music: any = {}
+  const audio_el = document.getElementById('listen_music')
   audio_el && audio_el.remove()
 debugger
-  let _audio = document.createElement('audio')
+  const _audio = document.createElement('audio')
   _audio.id = "listen_music"
   _audio.loop = setting.isloop === '0' ? true : false 
   _audio.autoplay = true
   _audio.src = param.file
 
-  let audio_wrap = document.getElementById('audio_wrap')
+  const audio_wrap = document.getElementById('audio_wrap')
   audio_wrap && audio_wrap.appendChild(_audio)
 
   music.id = param.id
@@ -53,7 +53,7 @@ debugger
 
   await canvas(music)
 
-  let el: any = document.getElementById("canvas");
+  const el: any = document.getElementById("canvas");
   if(el){
     animationFrame(music,'canvas')
   }
@@ -61,7 +61,7 @@ debugger
 
 // 播放音乐
 export const playMusic = (param: any, store: any) => {
-  let audio: any = document.getElementById('listen_music')
+  const audio: any = document.getElementById('listen_music')
   param.isplay = !param.isplay
   if (param.isplay) {
     audio.play()
@@ -74,7 +74,7 @@ export const playMusic = (param: any, store: any) => {
 
 // 播放暂停
 export const playStop = (param: any) => {
-  let audio: any = document.getElementById('listen_music')
+  const audio: any = document.getElementById('listen_music')
   param.isplay = !param.isplay
   if (param.isplay) {
     audio.play()
@@ -86,7 +86,7 @@ export const playStop = (param: any) => {
 
 // 上下曲
 export const playPrevNext = (param: any, setting: any, data: any, number: any, store: any) => {
-  let index = param.findIndex((list: any) => list.id === data.id)
+  const index = param.findIndex((list: any) => list.id === data.id)
   let music = ""
   debugger
   if (index == 0 && number == -1) {
@@ -94,7 +94,7 @@ export const playPrevNext = (param: any, setting: any, data: any, number: any, s
   } else if (index === param.length - 1 && number == 1) {
     music = param[0]
   } else {
-    let key = index + number
+    const key = index + number
     music = param[key]
   }
   currentMusic(music, setting, store)
@@ -102,7 +102,7 @@ export const playPrevNext = (param: any, setting: any, data: any, number: any, s
 
 // 循环播放
 export const playLoop = (param: any) => {
-  let audio: any = document.getElementById('listen_music')
+  const audio: any = document.getElementById('listen_music')
   param.isloop = param.isloop === '0' ? '1' : '0'
   audio.loop = param.isloop === '1' ? false : true
 }
@@ -120,12 +120,12 @@ export const musicLrc = (param: any, store: any, props: any) => {
 
 // 音乐盒主题样式
 export const canvas = (param: any) => {
-  let audio: any = document.getElementById('listen_music')
-  let context = new AudioContext();
-  let src = context.createMediaElementSource(audio);
-  let analyser = context.createAnalyser();
+  const audio: any = document.getElementById('listen_music')
+  const context = new AudioContext();
+  const src = context.createMediaElementSource(audio);
+  const analyser = context.createAnalyser();
 
-  let win: any = window
+  const win: any = window
   win.analyser = analyser
   src.connect(analyser);
   analyser.connect(context.destination);
@@ -137,23 +137,23 @@ export const canvas = (param: any) => {
 export const animationFrame = (param: any, el: any) => {
   
   let animationId: any = ""
-  let canvas: any = document.getElementById(el);
+  const canvas: any = document.getElementById(el);
   
   canvas.width = window.innerWidth;
   canvas.height = 300;
-  let ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d");
   
-  let win: any = window
-  let analyser = win.analyser
+  const win: any = window
+  const analyser = win.analyser
 
-  let bufferLength = analyser.frequencyBinCount;
+  const bufferLength = analyser.frequencyBinCount;
 
-  let dataArray = new Uint8Array(bufferLength);
+  const dataArray = new Uint8Array(bufferLength);
 
-  let WIDTH = canvas.width;
-  let HEIGHT = canvas.height;
+  const WIDTH = canvas.width;
+  const HEIGHT = canvas.height;
 
-  let barWidth = (WIDTH / bufferLength) * 1.8;
+  const barWidth = (WIDTH / bufferLength) * 1.8;
   let barHeight;
   let x = 0;
 
@@ -174,11 +174,11 @@ export const animationFrame = (param: any, el: any) => {
     for (let i = 0; i < bufferLength; i++) {
       barHeight = dataArray[i];
 
-      let r = barHeight + (25 * (i / bufferLength));
-      let g = 250 * (i / bufferLength);
-      let b = 50;
+      const r = barHeight + (25 * (i / bufferLength));
+      const g = 250 * (i / bufferLength);
+      const b = 50;
 
-      let root: any = document.querySelector(":root")
+      const root: any = document.querySelector(":root")
       let color: any = getComputedStyle(root).getPropertyValue('--color-primary')
       color = color.split('(')[1]
       color = color.split(')')[0]

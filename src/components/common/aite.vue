@@ -51,7 +51,7 @@ export default defineComponent({
       ctx
     }: any = getCurrentInstance();
     const store = useStore();
-    const dataList = ref([])
+    const dataList: any = ref([])
     const popover: any = ref(null)
 
     // 监听路由

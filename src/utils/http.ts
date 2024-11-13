@@ -79,7 +79,7 @@ export default class http {
     params = params || {}
     params.n = n
     params.m = params.m ? params.m : m
-    let progress: any = params.progress ? params.progress : ()=>{}
+    const progress: any = params.progress ? params.progress : ()=>{}
     const request = this.axios()
     
     this.requestHeaders(request)
@@ -102,7 +102,7 @@ export default class http {
     })
 
     return new Promise((resolve, reject) => {
-      let dir = process.env.NODE_ENV === 'development' ? 'interface_new.php' : 'interface_vue.php'
+      const dir = process.env.NODE_ENV === 'development' ? 'interface_new.php' : 'interface_vue.php'
       const url = params.uploadtype ? `?&type=${params.uploadtype}` : ''
 
       const param: any = {

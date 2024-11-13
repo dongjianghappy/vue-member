@@ -36,7 +36,7 @@ const install = (Vue:any) => {
       }
       
       setTimeout(()=>{
-        let tips = document.getElementsByClassName('tips-wrap')[0]
+        const tips = document.getElementsByClassName('tips-wrap')[0]
         tips.classList.remove('fadeIn')
         tips.classList.add('fadeOut')
         setTimeout(()=>{

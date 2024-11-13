@@ -44,7 +44,7 @@ export default defineComponent({
     }: any = getCurrentInstance();
     const store = useStore();
     const style: any = ref({})
-    const isClick = ref(false)
+    const isClick:any = ref(false)
 
     function handleclick() {
       const param: any = {

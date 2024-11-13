@@ -5,7 +5,7 @@ export default class start extends basicInfo {
   target: any
  
   constructor(_data: any){
-    let data = {
+    const data = {
       source: "",
       target: "",
       name: '',

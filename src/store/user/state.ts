@@ -5,6 +5,7 @@ export interface State {
   blogInfo: any,
   music: any,
   playSetting: any
+  isThree: any;
 }
 
 
@@ -22,7 +23,8 @@ const initState: State = {
     currentMusic: {},
     setting: {}
   },
-  playSetting: {}
+  playSetting: {},
+  isThree: false
 }
 
 export default initState;

@@ -3,9 +3,9 @@ import VueEvent from '@/utils/event'
 const install = (Vue:any) => {
   Vue.config.globalProperties.$pendant = {
     init(){
-      let boxs: any = document.getElementsByClassName("pendant-box")
+      const boxs: any = document.getElementsByClassName("pendant-box")
       for(let i=0; i<boxs.length;i++){
-        let box = boxs[i]
+        const box = boxs[i]
       var deg = 0
       // 当时是否在拖动鼠标
       let isDrag = false
@@ -14,14 +14,14 @@ const install = (Vue:any) => {
       VueEvent.on("saveTheme", (data: any) => {
         isEdit = data
         
-        let pendantBox: any = document.getElementsByClassName("pendant-box")
+        const pendantBox: any = document.getElementsByClassName("pendant-box")
         for(let i = 0; i < pendantBox.length; i++){
           if(isEdit){
             pendantBox[i].style.zIndex = "101"
           }else{
             pendantBox[i].style.zIndex = "9"
           }
-        };
+        }
         
         console.log(isEdit);
         
@@ -41,8 +41,8 @@ const install = (Vue:any) => {
           if(!isDrag){
             return
           }
-          let dashed: any = document.querySelector(".dashed")
-          let side = Math.sqrt(
+          const dashed: any = document.querySelector(".dashed")
+          const side = Math.sqrt(
             Math.pow(box.clientWidth, 2) + Math.pow(box.clientHeight, 2)
           )
 
@@ -66,14 +66,14 @@ const install = (Vue:any) => {
         }
         box.style.cursor = 'move'
         if(document.querySelector(".dashed") !== null){
-          let dashed: any = document.querySelector(".dashed")
+          const dashed: any = document.querySelector(".dashed")
           dashed.remove()
         }
         
-        let side = Math.sqrt(
+        const side = Math.sqrt(
           Math.pow(box.clientWidth, 2) + Math.pow(box.clientHeight, 2)
         )
-        let dashed = document.createElement('div')
+        const dashed = document.createElement('div')
         dashed.classList.add('dashed')
         dashed.style.position = box.style.position
         dashed.style.width = side + 'px'
@@ -96,17 +96,17 @@ const install = (Vue:any) => {
           dashed.remove()
         })
 
-        let alphaDesc = dashed.children[0].children[0]
-        let alphaAsc = dashed.children[0].children[1]        
-        let rotateLeft = dashed.children[0].children[2]
-        let rotateRight = dashed.children[0].children[3]
-        let min = dashed.children[0].children[4]
-        let max = dashed.children[0].children[5]
-        let positioning = dashed.children[0].children[6]
-        let deletes = dashed.children[0].children[7]
+        const alphaDesc = dashed.children[0].children[0]
+        const alphaAsc = dashed.children[0].children[1]        
+        const rotateLeft = dashed.children[0].children[2]
+        const rotateRight = dashed.children[0].children[3]
+        const min = dashed.children[0].children[4]
+        const max = dashed.children[0].children[5]
+        const positioning = dashed.children[0].children[6]
+        const deletes = dashed.children[0].children[7]
 
         alphaAsc.addEventListener('click', () => {
-          let opacity = box.children[0].style.opacity
+          const opacity = box.children[0].style.opacity
           if(opacity === 1 || opacity === ""){
             return
           }
@@ -130,11 +130,11 @@ const install = (Vue:any) => {
           box.style.transform = `rotate(${deg}deg)`
         })
         max.addEventListener('click', () => {
-          let width = box.children[0].clientWidth
+          const width = box.children[0].clientWidth
           box.children[0].style.width = `${width / 0.75}px`
         })
         min.addEventListener('click', () => {
-          let width = box.children[0].clientWidth
+          const width = box.children[0].clientWidth
           if(width <= 75){
             return
           }

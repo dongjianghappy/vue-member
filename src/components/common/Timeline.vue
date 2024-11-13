@@ -37,7 +37,7 @@ export default defineComponent({
   setup(props,context) {
     const {ctx}:any = getCurrentInstance();
     const store = useStore();
-    const dataList = ref([])
+    const dataList: any = ref([])
     function handleclick(){
       context.emit('onClick')
     }

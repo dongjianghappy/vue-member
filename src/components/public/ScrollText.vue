@@ -30,7 +30,7 @@ const props: any = defineProps({
   }
 })
 const router = useRouter()
-let timer: number = 0;
+let timer = 0;
 let animate: any = ref(false)
 
 function showMarquee() {

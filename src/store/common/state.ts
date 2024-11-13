@@ -21,6 +21,7 @@ export interface State {
   concernList: any,
   albumList: any,
   slideshow: any,
+  isSea: any;
 }
 
 
@@ -54,7 +55,8 @@ const initState: State = {
   },
   concernList: [],
   albumList: [],
-  slideshow: []
+  slideshow: [],
+  isSea: false
 }
 
 export default initState;

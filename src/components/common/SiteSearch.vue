@@ -65,9 +65,6 @@ export default defineComponent({
       default: false
     }
   },
-  mounted() {
-    document.addEventListener("click", this.close);
-  },
   emits: ['update:search'],
   setup(props, context) {
     const router = useRouter();
@@ -163,6 +160,7 @@ export default defineComponent({
       VueEvent.on("search", (param) => {
         handleSearch(param)
       })
+      document.addEventListener("click", close);
     })
 
     return {

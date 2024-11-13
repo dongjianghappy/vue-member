@@ -103,7 +103,7 @@ import {
 } from '@/utils'
 import citys from '@/assets/cityData'
 import UserInfoHead from './components/UserInfoHead.vue'
-import Aside from './components/aside.vue'
+import Aside from './components/Aside.vue'
 
 const store: any = useStore()
 const userInfo: any = ref({});

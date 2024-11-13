@@ -112,7 +112,7 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter()
     const siteInfo = computed(() => store.getters['user/siteInfo']);
-    const isShow = ref(false)
+    const isShow: any = ref(false)
     const detail: any = ref({
       id: "",
       name: "",

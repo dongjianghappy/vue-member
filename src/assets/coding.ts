@@ -478,6 +478,16 @@ const codings: any = {
   location: 'U0610002',
   tag: 'U0690000',
   theme: 'U0690001',
+  three: {
+    scene: 'U0690011',
+    config: 'U0690012',
+    config_type: 'U0690013',
+    cate: 'U0690015',
+    model: 'U0690014',
+    road_line: 'U0690016',
+    item: 'U0690017',
+    scene_item: 'U0690018'
+  },
   track: {
     art: 'U0690009',
     list: 'U0690010'

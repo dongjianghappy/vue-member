@@ -1,15 +1,22 @@
 <template>
-<div class="relative" v-if="isComplete">
-  <Header />
-  <div id="main" class="talk-main">
-    <div class="mask-background"></div>
-    <div class="relative" style="z-index: 9;">
-      <router-view />
+  <template v-if="isThree === 'true'">
+    <Three />
+  </template>
+  
+  <template v-else>
+  <div class="relative" v-if="isComplete">
+    <Header />
+    <div id="main" class="talk-main">
+      <div class="mask-background"></div>
+      <div class="relative" style="z-index: 9;">
+        <router-view />
+      </div>
     </div>
+    <Index />
+    <Fish v-if="!isSea" />
   </div>
-  <Index />
-</div>
-<div class="p15" v-else>正在加载...</div>
+  <div class="p15" v-else>正在加载...</div>
+</template>
 </template>
 
 <script setup lang="ts">
@@ -23,6 +30,8 @@ import {
 } from '@/utils'
 import Header from './components/header/index.vue'
 import Index from './components/index.vue'
+import Three from './components/three.vue'
+import Fish from '../application/fish/index.vue'
 
 const {
   proxy
@@ -40,7 +49,11 @@ if (route.query.token) {
 
 const module: any = computed(() => store.getters['user/config_talk'].personal_center);
 const loginuser = computed(() => store.getters['user/loginuser']);
+const isSea = computed(() => store.getters['common/isSea']);
+const isThree: any = computed(() => store.getters['user/isThree']);
 const isComplete: any = ref(false)
+
+
 
 
 store.dispatch('user/Detect').then((res) => {

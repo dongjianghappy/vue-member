@@ -62,8 +62,8 @@ export default defineComponent({
       ctx
     }: any = getCurrentInstance();
     const store = useStore();
-    const isShow = ref(props.showFlag)
-    const data = ref([])
+    const isShow: any = ref(props.showFlag)
+    const data: any = ref([])
     const {
       coding,
       api

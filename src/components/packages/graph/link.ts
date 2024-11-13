@@ -96,7 +96,7 @@ export const basicLink = joint.shapes.standard.Link.define('custom.basicLink', {
     },    
 
   setText(text: string){
-    let setting = {}
+    const setting = {}
     
   }
 })

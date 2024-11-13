@@ -5,7 +5,7 @@ export default class start extends basicInfo {
   name: any;
  
   constructor(_data: any){
-    let data = {
+    const data = {
       id: "",
       name: '',
       ..._data

@@ -33,6 +33,8 @@ VueMarkdownEditor.use(vuepressTheme, {
 
 
 const Vue = createApp(App)
+Vue.config.errorHandler = () => null
+Vue.config.warnHandler = () => null
 views(Vue)
 publics(Vue)
 packages(Vue)
@@ -46,6 +48,8 @@ form(Vue)
 hljs(Vue)
 Vue.use(PerfectScrollbar)
 Vue.use(chartist)
+
+
 
 // Vue.config.globalProperties.$aabb = hlj
 Vue.use(store).use(router).use(VueMarkdownEditor).mount('#app')

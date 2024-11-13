@@ -157,7 +157,7 @@ function text(ctx: any, x: any, y: any, text: any, size: any = '12', color: any 
   }
 
   ctx.fillStyle = _color;
-  ctx.font = _size + "px ''";;
+  ctx.font = _size + "px ''";
   ctx.textAlign = "center";
   ctx.fillText(text, x, y + 40);
 

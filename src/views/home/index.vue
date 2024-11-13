@@ -34,7 +34,7 @@ import {
 
 import UserInfoHead from './components/UserInfoHead.vue'
 import Center from '../index/center/home.vue'
-import Aside from './components/aside.vue'
+import Aside from './components/Aside.vue'
 import RightView from './components/right_view.vue'
 
 const store = useStore();

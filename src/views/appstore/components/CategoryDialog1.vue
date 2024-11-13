@@ -71,8 +71,8 @@ emits: ['cancel', 'submit', 'getValue', 'update:showFlag'],
 setup(props,context) {
     const {ctx}:any = getCurrentInstance();
     const store = useStore();
-    const isShow = ref(props.showFlag)
-    const data = ref([])
+    const isShow: any = ref(props.showFlag)
+    const data: any = ref([])
 watch([isShow], (newValues, prevValues) => {
     context.emit('update:showFlag', false)
   })

@@ -34,6 +34,10 @@ const mutations = {
   },    
   setPlaySetting: (state: any, params: any) => {
     state.music.setting[params.name] = params.value
+  },
+  setIsThree: (state: any, params: any) => {
+    state.isThree = params
+    sessionStorage.setItem("isThree", params)
   },       
 }
 

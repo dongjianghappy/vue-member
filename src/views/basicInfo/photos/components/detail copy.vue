@@ -124,11 +124,11 @@ export default defineComponent({
       proxy
     }: any = getCurrentInstance();
     const store = useStore();
-    const filElem = ref("filElem")
-    const isShow = ref(false)
+    const filElem: any = ref("filElem")
+    const isShow: any = ref(false)
     let img: any = ref("")
-    const drawCanv = ref(null)
-    const currentIndex = ref("local")
+    const drawCanv: any = ref(null)
+    const currentIndex: any = ref("local")
 
     function getFile() {
       let _obj: any = document.getElementById(filElem.value);

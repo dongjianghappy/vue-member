@@ -73,7 +73,7 @@ export default defineComponent({
   },
   setup(props, context) {
     const store = useStore();
-    const isShow = ref(false)
+    const isShow: any = ref(false)
     let src: any = ref("")
     const aaaaaaaaa: any = ref(null)
 

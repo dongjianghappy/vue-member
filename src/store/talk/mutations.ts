@@ -3,7 +3,7 @@ const mutations = {
     state[params.state] = params.data
   }, 
   setComprehensiveList: (state: any, params: any) => {
-    let data = params.data
+    const data = params.data
     if(data.page == '1'){
       state.channel[params.state] = data.list
     }else{
@@ -15,7 +15,7 @@ const mutations = {
     // state.talkList = params
   },  
   setRecommendTalk: (state: any, params: any) => {
-    let data = params.data
+    const data = params.data
     state.channel[params.state] = data.list
     state.channel.page = data.page
     state.channel.pages = data.pages
@@ -25,7 +25,7 @@ const mutations = {
     state.archive = params
   }, 
   setSearchList: (state: any, params: any) => {
-    let data = params.data
+    const data = params.data
     if(data.page == '1'){
       state.search[params.state] = data.list
     }else{
@@ -82,7 +82,7 @@ const mutations = {
     state.wordsList = params
   },
   setQuestionsCate: (state: any, params: any) => {
-    let index = {id: '', name: "综合", icon: 'home'}
+    const index = {id: '', name: "综合", icon: 'home'}
     params.unshift(index)
     state.questionCate = params
   },

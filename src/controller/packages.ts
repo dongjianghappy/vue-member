@@ -7,7 +7,7 @@ const component = require.context(
 
 const install = (Vue:any) => {
 
-  let arr: any = []
+  const arr: any = []
   component.keys().map(item=>{
     if(item.match("./*/index.vue") && item.split("/").length-1 === 2){
       arr.push(item)

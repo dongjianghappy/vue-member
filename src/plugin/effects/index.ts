@@ -13,7 +13,7 @@ const install = (Vue:any) => {
     }
     
     // 挂件装饰
-    let pendant_box: any = document.querySelectorAll('.pendant-box')
+    const pendant_box: any = document.querySelectorAll('.pendant-box')
     for(let i=0; i<pendant_box.length; i++){
       pendant_box[i].remove()
     }
@@ -66,18 +66,18 @@ const install = (Vue:any) => {
   } 
 
   function createPendant(obj: any){
-    let box = JSON.parse(obj)
+    const box = JSON.parse(obj)
     
     for(let i=0; i< box.length; i++){
       // 创建图片
-      var img: any = document.createElement('img') //创建ul节点
+      const img: any = document.createElement('img') //创建ul节点
       img.style = box[i].img.style
       img.src = box[i].img.src
       img.title = box[i].img.title
-      let arrs = box[i].style.split(';')
-      let style = []
+      const arrs = box[i].style.split(';')
+      const style = []
       for(let i=0; i<arrs.length; i++){
-        let arr = arrs[i].split(':')
+        const arr = arrs[i].split(':')
         if(arr[0].trim() == 'left'){
           style.push(`${arr[0]}: ${window.innerWidth/2-parseInt(arr[1])}px`)
         }else{
@@ -86,7 +86,7 @@ const install = (Vue:any) => {
       }
 
       // box[i].style
-      var container: any = document.createElement('div') //创建ul节点
+      const container: any = document.createElement('div') //创建ul节点
         container.style = style.join(';') //box[i].style
         container.draggable = true
         container.classList.add(box[i].class)
@@ -106,18 +106,18 @@ const install = (Vue:any) => {
   function render(obj: any, i: any){
 
     // 移除style样式
-    let styleObj = document.querySelectorAll('.effects_style_'+i)
+    const styleObj = document.querySelectorAll('.effects_style_'+i)
     styleObj.length > 0 && styleObj[0].remove()
     
     // 移除css样式
-    let cssObj: any = document.querySelectorAll('.effects_css_'+i)
+    const cssObj: any = document.querySelectorAll('.effects_css_'+i)
     
     for(let i=0; i<cssObj.length; i++){
       cssObj[i].remove()
     }
 
     // 移除js文件
-    let jsObj: any = document.querySelectorAll('.effects_js_'+i)
+    const jsObj: any = document.querySelectorAll('.effects_js_'+i)
     
     for(let i=0; i<jsObj.length; i++){
       jsObj[i].remove()

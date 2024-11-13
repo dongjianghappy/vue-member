@@ -110,7 +110,7 @@ export default defineComponent({
     const store = useStore();
     const loginuser = computed(() => store.getters['user/loginuser']);
     const userInfo = computed(() => store.getters['user/userInfo']);
-    const isshow = ref(false)
+    const isshow: any = ref(false)
     const graphid: any = ref('')
 
     function handleclick(param: any) {

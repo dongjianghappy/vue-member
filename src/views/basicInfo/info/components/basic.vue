@@ -23,6 +23,7 @@
         <label>空间名称</label>
         <div class="con" v-if="isEdit">{{basicInfo.space_name}}</div>
         <textarea v-model="userInfo.space_name" v-else></textarea>
+        <SpaceName v-if="!isEdit" :data="userInfo.space_name" @choose="(e) => userInfo.space_name = e" />
       </li>
       <li>
         <label>签名</label>
@@ -105,6 +106,7 @@ import {
   computed
 } from 'vue'
 import citys from '@/assets/cityData'
+import SpaceName from '../components/spaceName.vue'
 
 const props: any = defineProps({
   basicInfo: {

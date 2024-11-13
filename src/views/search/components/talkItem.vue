@@ -95,9 +95,9 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const loginuser = computed(() => store.getters['user/loginuser']);
-    const showFlag = ref(false)
-    const currentData = ref()
-    const currentImg = ref()
+    const showFlag: any = ref(false)
+    const currentData: any = ref()
+    const currentImg: any = ref()
 
     function showImg(data: any, img: any) {
       currentData.value = data

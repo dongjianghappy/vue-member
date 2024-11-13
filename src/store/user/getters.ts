@@ -23,6 +23,13 @@ const getters = {
   siteInfo: (state: any) => state.user.login.siteInfo || state.user.basic.siteInfo || {},
   music: (state: any) => state.music || {},
   playSetting: (state: any) => state.playSetting || {},
+  isThree: (state: any) => {
+      let sessionThree: any = state.isThree
+      if(sessionStorage.getItem('isThree')){
+        sessionThree = sessionStorage.getItem('isThree')
+      }
+      return sessionThree
+  }
 }
 
 export default getters;

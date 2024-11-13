@@ -64,9 +64,9 @@ export default defineComponent({
       proxy
     }: any = getCurrentInstance();
     const store = useStore();
-    const isShow = ref(false)
-    const img = ref("")
-    const imgNum = ref(0)
+    const isShow: any = ref(false)
+    const img: any = ref("")
+    const imgNum: any = ref(0)
     const detail: any = ref({})
 
     const checkField = [{

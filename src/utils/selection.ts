@@ -1,17 +1,17 @@
 // 更新保存
  const selection = {
   mouseup: function (e: any, wordsList: any){
-    let Objiect = this.getSelectionContent(e)
-      let con = Objiect.selectedText
-      let i = Objiect.rangePos
-      let o: any = this.calculateStr(con)
+    const Objiect = this.getSelectionContent(e)
+      const con = Objiect.selectedText
+      const i = Objiect.rangePos
+      const o: any = this.calculateStr(con)
       if (76 >= o) {
         this.selectSearchShow(con, i, e.target, wordsList)
       }
   },
   getSelectionContent: function(e: any){
     let Obj: any = {}
-    let text = window.getSelection()
+    const text = window.getSelection()
     let ob: any = {}
     let i = "";
 
@@ -38,7 +38,7 @@
 
     let str = 0
     for (let i = 0; i < con.length; i++) {
-      let text = con.charAt(i);
+      const text = con.charAt(i);
       if (null !== text.match(/[^\x00-\xff]/gi)) {
         str = str + 2
 

@@ -1037,6 +1037,56 @@ thirdBlog (params: any) {
 thirdBlogDetail (params: any) {
   return http.request('talk', 'thirdBlogDetail', params)
 },
+
+// 物种列表
+seaFish (params: any) {
+  return http.request('talk', 'seaFish', params)
+},
+
+// 海底养鱼更新
+updateSeaFish (params: any) {
+  return http.request('talk', 'updateSeaFish', params)
+},
+
+// 已放养的鱼
+seaFishList (params: any) {
+  return http.request('talk', 'seaFishList', params)
+},
+
+// 空间名称列表
+getSpaceName (params: any) {
+  return http.request('common', 'getSpaceName', params)
+},
+
+// 订阅
+subscribe (params: any) {
+  return http.request('user', 'subscribe', params)
+},
+
+// 我的订阅
+subscribeList (params: any) {
+  return http.request('user', 'subscribeList', params)
+},
+
+// 订阅消息发布
+sendSubscribeMessage (params: any) {
+  return http.request('user', 'sendSubscribeMessage', params)
+},
+
+// three 配置信息
+threeConfig (params: any) {
+  return http.request('three', 'threeConfig', params)
+},
+
+// 保存节点
+saveThreeItem (params: any) {
+  return http.request('three', 'saveThreeItem', params)
+},
+
+// 渲染节点
+renderThreeItem (params: any) {
+  return http.request('three', 'renderThreeItem', params)
+},
 }
 
   

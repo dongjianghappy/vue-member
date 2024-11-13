@@ -4,7 +4,7 @@ import { basicLink } from './link'
 
 import config from './config'
 
-let shapes = joint.shapes as any
+const shapes = joint.shapes as any
 shapes.custom = {}
 const defaultLink = {
   attrs: {
@@ -53,7 +53,7 @@ export const basicNode = joint.dia.Element.define('custom.basic.Node', {
     },
 
     // 获取节点数据
-    getData(key?: String): any {
+    getData(key?: string): any {
 
     },
 
@@ -65,7 +65,7 @@ export const basicNode = joint.dia.Element.define('custom.basic.Node', {
     },    
 
     setText(text: string){
-      let setting = {}
+      const setting = {}
       
     }
   }

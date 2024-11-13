@@ -3,6 +3,7 @@ import common from './common'
 import talk from './talk'
 import user from './user'
 import graph from './graph'
+import three from './three'
 
 export default createStore({
   state: {
@@ -15,6 +16,7 @@ export default createStore({
     common,
     talk,
     user,
-    graph
+    graph,
+    three
   }
 })

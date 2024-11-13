@@ -23,8 +23,8 @@ const getters = {
   concernList: (state: any) => state.concernList || [], 
   albumList: (state: any) => state.albumList || [], 
   announcement: (state: any) => state.announcement || [],
-  slideshow: (state: any) => state.slideshow || []
-  
+  slideshow: (state: any) => state.slideshow || [],
+  isSea: (state: any) => state.isSea
 
 }
 

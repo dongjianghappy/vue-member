@@ -1,7 +1,7 @@
 module.exports = {
     // outputDir: 'dist',   //build输出目录
     // assetsDir: 'assets', //静态资源目录（js, css, img）
-    // lintOnSave: false, //是否开启eslint
+    lintOnSave: true, //是否开启eslint
     // publicPath: process.env.NODE_ENV === 'production' ? '/app/' : './', // 页面报vue Cannot GET错误信息，先注释，配置信息重启生效
     lintOnSave: process.env.NODE_ENV === 'development',
     productionSourceMap: false,

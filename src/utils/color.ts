@@ -1,8 +1,8 @@
 function Color(color: any) {
     let rgb: any = []
-    let hex: any = []
+    const hex: any = []
     let hsl: any = []
-    var match = null
+    let match = null
     if (/^\D*(\d{1,3})[^°\d]+(\d{1,3})[^%\d]+(\d{1,3})\D*$/.test(color)) {
       for (var i = 0; i < 3; i++) {
         if (i == 0) {
@@ -24,11 +24,11 @@ function Color(color: any) {
         }
       }
     } else if (match = /^\s*#?([0-9a-f]{3}([0-9a-f]{3})?)\s*$/i.exec(color)) {
-      var hex2 = match[1]
-      var len = hex2.length / 3
-      var index
+      const hex2 = match[1]
+      const len = hex2.length / 3
+      let index
       for (var i = 0; i < hex2.length; i += len) {
-        var block = hex2.substr(i, len)
+        let block = hex2.substr(i, len)
         if (len == 1) block += block
         index = i / len
         hex[index] = block
@@ -46,25 +46,25 @@ function Color(color: any) {
   
   
   
-      var H: any = index
-      var S: any = index2
-      var L: any = index4
+      let H: any = index
+      let S: any = index2
+      let L: any = index4
       if (H <= 360 && S <= 100 && L <= 100) {
         hsl = [H, S, L]
         H /= 360,
           S /= 100,
           L /= 100
         if (S == 0) {
-          var r: any = Math.ceil(L * 255)
-          var g: any = Math.ceil(L * 255)
-          var b: any = Math.ceil(L * 255)
+          const r: any = Math.ceil(L * 255)
+          const g: any = Math.ceil(L * 255)
+          const b: any = Math.ceil(L * 255)
           rgb = [r, g, b]
         } else {
-          var t2 = L >= 0.5 ? L + S - L * S : L * (1 + S)
-          var t1 = 2 * L - t2
-          var tempRGB = [1 / 3, 0, -1 / 3]
+          const t2 = L >= 0.5 ? L + S - L * S : L * (1 + S)
+          const t1 = 2 * L - t2
+          const tempRGB = [1 / 3, 0, -1 / 3]
           for (var i = 0; i < 3; i++) {
-            var t = H + tempRGB[i]
+            let t = H + tempRGB[i]
             if (t < 0) t += 1
             if (t > 1) t -= 1
             if (6 * t < 1) {
@@ -91,16 +91,16 @@ function Color(color: any) {
   }
   
   const toString = function (obj: any, style: any) {
-    let rgb = obj.rgb;
+    const rgb = obj.rgb;
     let hsl = obj.hsl;
-    let hex = obj.obj;
-    var str = ''
+    const hex = obj.obj;
+    let str = ''
     if (style) style = style.toLowerCase()
     switch (style) {
       case 'hex':
         if (hex.length != 3 && rgb.length == 3) {
-          for (var i = 0; i < rgb.length; i++) {
-            var ch = rgb[i].toString(16)
+          for (let i = 0; i < rgb.length; i++) {
+            let ch = rgb[i].toString(16)
             if (ch.length == 1) ch = '0' + ch
             hex[i] = ch
           }
@@ -110,14 +110,14 @@ function Color(color: any) {
       case 'hsl':
   
         if (hsl.length != 3 && rgb.length == 3) {
-          var H, S, L
-          var r = rgb[0] / 255
-          var g = rgb[1] / 255
-          var b = rgb[2] / 255
-          var max = Math.max(r, g, b)
-          var min = Math.min(r, g, b)
+          let H, S, L
+          const r = rgb[0] / 255
+          const g = rgb[1] / 255
+          const b = rgb[2] / 255
+          const max = Math.max(r, g, b)
+          const min = Math.min(r, g, b)
           L = (max + min) / 2
-          var diff = max - min
+          const diff = max - min
           S = diff == 0 ? 0 : diff / (1 - Math.abs(2 * L - 1))
           if (S == 0) {
             H = 0
@@ -157,10 +157,10 @@ function Color(color: any) {
   
     if (getColor != null) {
       function convertColor(id: any) {
-        var str = id
-        var color: any = Color(str)
+        const str = id
+        const color: any = Color(str)
         return toString(color, 'rgb')
-      };
+      }
       function rgbFn(rgb: any) {
         const val = rgb.split(',')
         return val
@@ -178,11 +178,11 @@ function Color(color: any) {
   
     if (getColor != null) {
       function convertColor(id: any) {
-        let str = id
-        let color = Color(str)
+        const str = id
+        const color = Color(str)
   
         return toString(color, 'hsl')
-      };
+      }
   
       function hslFn(hsl: any) {
   
@@ -203,13 +203,13 @@ function Color(color: any) {
   
   export const setColor = (colors: any) => {
     
-    let color = isValidRgbColor(colors) ? colors : '#000'
+    const color = isValidRgbColor(colors) ? colors : '#000'
 
     // 主题颜色处理成rgb格式
     const rgb = set_rgb(color)
     const hsl = set_hsl(color)
 
-    let domRootHtml = document.getElementsByTagName('html')[0]
+    const domRootHtml = document.getElementsByTagName('html')[0]
     if (domRootHtml) {
         if (rgb2gray(rgb?.r, rgb?.g, rgb?.b) < 29) {
         domRootHtml.className = "intelligent themecolor-toodark";
@@ -230,12 +230,12 @@ function Color(color: any) {
   
 
 export const colorHex2Rgb = (color: any) => {
-  var reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
-  var sColor = color.toLowerCase();
+  const reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+  let sColor = color.toLowerCase();
 
   if(sColor && reg.test(sColor)){
       if(sColor.length === 4){
-          var sColorNew = "#";
+          let sColorNew = "#";
           
           for(var i=1; i<4; i+=1){
               sColorNew += sColor.slice(i,i+1).concat(sColor.slice(i,i+1));    
@@ -244,7 +244,7 @@ export const colorHex2Rgb = (color: any) => {
           sColor = sColorNew;
       }
       
-      var sColorChange = [];
+      const sColorChange = [];
       
       for(var i=1; i<7; i+=2){
           sColorChange.push(parseInt("0x"+sColor.slice(i,i+2)));    
@@ -257,15 +257,15 @@ export const colorHex2Rgb = (color: any) => {
 };
 
 export const colorRgb2Hex = (color: any) => {
-  var reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
-  var that = color;
+  const reg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+  const that = color;
   
   if(/^(rgb|RGB)/.test(that)){
-      var aColor = that.replace(/(?:\(|\)|rgb|RGB)*/g,"").split(",");
-      var strHex = "#";
+      const aColor = that.replace(/(?:\(|\)|rgb|RGB)*/g,"").split(",");
+      let strHex = "#";
       
       for(var i=0; i<aColor.length; i++){
-          var hex = Number(aColor[i]).toString(16);
+          let hex = Number(aColor[i]).toString(16);
       
           if(hex === "0"){
               hex += hex;    
@@ -280,12 +280,12 @@ export const colorRgb2Hex = (color: any) => {
       
       return strHex.toUpperCase();
   }else if(reg.test(that)){
-      var aNum = that.replace(/#/,"").split("");
+      const aNum = that.replace(/#/,"").split("");
       
       if(aNum.length === 6){
           return that;    
       }else if(aNum.length === 3){
-          var numHex = "#";
+          let numHex = "#";
       
           for(var i=0; i<aNum.length; i+=1){
               numHex += (aNum[i]+aNum[i]);
