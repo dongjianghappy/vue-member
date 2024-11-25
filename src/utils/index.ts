@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, computed, ref, watch, watchEffect, reactive, defineProps, defineEmits, defineExpose } from 'vue'
+import { defineComponent, getCurrentInstance, computed, ref, watch, watchEffect, reactive, defineProps, defineEmits, defineExpose, provide, inject } from 'vue'
 import {useStore} from 'vuex'
 import {useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { onMounted, onUnmounted, onBeforeUnmount } from '@vue/runtime-core';
@@ -11,6 +11,8 @@ export {
   defineProps,
   defineEmits,
   defineExpose,
+  provide,
+  inject,
   getCurrentInstance,
   computed,
   useStore,

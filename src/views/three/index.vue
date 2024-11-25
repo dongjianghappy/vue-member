@@ -1,36 +1,40 @@
 <template>
-<div class="absolute" style="top: 10px; right: 10px">
-  <span @click="handleExit">退出星球空间</span>
-  <span class="ml10" @click="hadnleEdit">进入编辑模式</span>
-</div>
-  <!-- <MoveInfo /> -->
-  <Info :data="{ scene }" />
-  <Item :data="{ THREE, scene, camera, renderer, DragControls }" />
-  <CarInfo :data="currentCar" />
-  <Screen :data="{THREE, scene, camera, ThreeFn, store, DRACOLoader, GLTFLoader, RGBELoader, CSS2DObject, CSS2DRenderer}" />
+  <Index :data="{ THREE, scene, camera, renderer, DragControls, ThreeFn, lightType, store, DRACOLoader, GLTFLoader, RGBELoader, CSS2DObject, CSS2DRenderer, createText, RectAreaLightHelper }" />
 </template>
 
 <script setup lang="ts">
 import {
-  defineProps,
-  defineEmits,
   onMounted,
   computed,
   ref,
+  provide,
   useStore,
+  codings,
 } from '@/utils'
 
+import { lightType } from '@/assets/const'
 
-import * as THREE from '../../../public/three/build/three.module';
-import { OrbitControls } from '../../../public/three/jsm/controls/OrbitControls.js';
-import { SVGLoader } from '../../../public/three/jsm/loaders/SVGLoader.js';
-import { FontLoader } from '../../../public/three/jsm/loaders/FontLoader.js'
-import { createText } from '../../../public/three/jsm/webxr/Text2D.js';
-import { GLTFLoader } from '../../../public/three/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from '../../../public/three/jsm/loaders/DRACOLoader.js';
-import { CSS2DRenderer, CSS2DObject } from '../../../public/three/jsm/renderers/CSS2DRenderer.js';
-import { DragControls } from '../../../public/three/jsm/controls/DragControls';
-// import { RGBELoader } from '../../../public/three/jsm/loaders/RGBELoader.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { createText } from 'three/examples/jsm/webxr/Text2D.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+import { DragControls } from 'three/examples/jsm/controls/DragControls';
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
+
+// import * as THREE from 'three/examples/build/three.module';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+// import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
+// import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+// import { createText } from 'three/examples/jsm/webxr/Text2D.js';
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+// import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+// import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+// import { DragControls } from 'three/examples/jsm/controls/DragControls';
+// import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 
 // import { control, gridHelper, starKay, userStar, light, plane, glassFn, geometryEvent } from './utils/utils'
@@ -40,24 +44,20 @@ import { DragControls } from '../../../public/three/jsm/controls/DragControls';
 import { handleBroadcast } from '../../utils/fn'
 import ThreeFn from './utils/index'
 
-
+import Index from './components/index.vue'
+import NavList from './components/navList.vue'
 import Screen from './components/screen.vue'
 import MoveInfo from './components/moveInfo.vue'
-import Info from './components/Info.vue'
-import Item from './components/item.vue'
-import CarInfo from './components/carInfo.vue'
+import Info from './attributes/index.vue'
+import Item from './aside/item.vue'
 
+const coding = codings.three
 const currentScene = computed(() => store.getters['three/config'].home);
 const modelType = computed(() => store.getters['three/modelType']);
 const carList = computed(() => store.getters['three/carList']);
 const currentCar = computed(() => store.getters['three/currentCar']);
 const keys = computed(() => store.getters['three/keys']);
 const stars = computed(() => store.getters['three/stars']);
-
-console.log(ThreeFn);
-
-let win: any = window
-win.THREE = THREE
 
 
 let scene: any, camera: any, renderer: any, labelRenderer: any
@@ -70,6 +70,23 @@ camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight,
 renderer = new THREE.WebGLRenderer({ antialias: true });
 let _control: any = ref("")
 
+let win: any = window
+win.THREE = THREE
+win.scene = scene
+win.ThreeFn = ThreeFn
+win.createText = createText
+win.lightType = lightType
+win.store = store
+
+// 深层组件传递
+provide('parentsData', {
+  THREE,
+  scene,
+  ThreeFn,
+  GLTFLoader,
+  DRACOLoader,
+  CSS2DObject
+})
 
 function init(){
   
@@ -118,10 +135,10 @@ function init(){
     config: currentScene.value
   })
 
-  ThreeFn.light({
-    THREE,
-    scene,
-  })
+  // ThreeFn.light({
+  //   THREE,
+  //   scene,
+  // })
 
   // ThreeFn.testplane({
   //   THREE,
@@ -168,7 +185,9 @@ function init(){
     THREE,
     scene,
     camera,
+    store,
     handleBroadcast,
+    createText,
     // 前往用户星球
     goUserStar: () => {
       // closeUpAnimate()
@@ -226,52 +245,102 @@ var animate = function () {
   for(let i = 0 ; i < carList.value.length; i++){
     
     let car: any = carList.value[i]
-    if(car.progress >= 1 - car.velocity){
-      car.progress = 0
+    let roadLine = car.userData.roadLine
+    if(roadLine.progress >= 1 - roadLine.velocity){
+      roadLine.progress = 0
     }
+    
+      if(roadLine.isRun == '1'){
+        const point = car.roadLine.getPointAt(roadLine.progress); //获取样条曲线指定点坐标
+        const pointBox = car.roadLine.getPointAt(roadLine.progress + roadLine.velocity); //获取样条曲线指定点坐标
+        
+        if(car.closeUp){
+          ThreeFn.closeUps({
+            camera,
+            currentCar: {
+              value: carList.value[i]
+            },
+            point,
+            pointBox
+          })
+          // camera.position.set(pointBox.x, 25, pointBox.z)
+          // camera.lookAt(point.x, point.y, point.z)
+        }else{
+          camera.lookAt(point.x, point.y, point.z)
+          _control.target.set(pointBox.x, pointBox.y, pointBox.z)
+        }
 
-    if (car.isRun && car.roadLine != null && car.progress <= 1) {
-      const point = car.roadLine.getPointAt(car.progress); //获取样条曲线指定点坐标
-      const pointBox = car.roadLine.getPointAt(car.progress + car.velocity); //获取样条曲线指定点坐标
-      
-      if(car.closeUp){
-        closeUps({
-          camera,
-          currentCar: {
-            value: carList.value[i]
-          },
-          point,
-          pointBox
-        })
-        // camera.position.set(pointBox.x, 25, pointBox.z)
-        // camera.lookAt(point.x, point.y, point.z)
-      }else{
-        camera.lookAt(point.x, point.y, point.z)
-        _control.target.set(pointBox.x, pointBox.y, pointBox.z)
+        car.position.set(point.x, point.y, point.z);
+        roadLine.progress += roadLine.velocity;
+
+        var mtx = new THREE.Matrix4()  //创建一个4维矩阵
+
+        mtx.lookAt(car.position, pointBox, car.up) //设置朝向
+
+        mtx.multiply(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(0, 0, 0)))
+
+        var toRot = new THREE.Quaternion().setFromRotationMatrix(mtx)  //计算出需要进行旋转的四元数值
+
+        car.quaternion.slerp(toRot, 0.6)
       }
-
-
-      // console.log("Loading")
-      car.position.set(point.x, point.y, point.z);
-      car.progress += car.velocity;
-
-      var mtx = new THREE.Matrix4()  //创建一个4维矩阵
-
-      mtx.lookAt(car.position, pointBox, car.up) //设置朝向
-
-      mtx.multiply(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(0, 0, 0)))
-
-      var toRot = new THREE.Quaternion().setFromRotationMatrix(mtx)  //计算出需要进行旋转的四元数值
-
-      car.quaternion.slerp(toRot, 0.6)
-      
-    }
   }
 
+  // 轨道动画
+  
+  let wx = scene.children.filter((item: any) => item.kind == 'wuti' && item.userData && item.userData.roadLine && item.userData.roadLine.isRun == '1')
+
+
+  wx.forEach((item: any) => {
+    let roadLine = item.userData.roadLine
+    
+    if(roadLine.progress >= 1 - roadLine.velocity){
+      roadLine.progress = 0
+    }
+
+    const point = item.roadLine.getPointAt(roadLine.progress); //获取样条曲线指定点坐标
+    const pointBox = item.roadLine.getPointAt(roadLine.progress + roadLine.velocity); //获取样条曲线指定点坐标
+  
+    // camera.lookAt(point.x, point.y, point.z)
+    // _control.target.set(pointBox.x, pointBox.y, pointBox.z)
+
+    item.position.set(point.x, point.y, point.z);
+    roadLine.progress += roadLine.velocity;
+
+    var mtx = new THREE.Matrix4()  //创建一个4维矩阵
+
+    mtx.lookAt(item.position, pointBox, item.up) //设置朝向
+
+    mtx.multiply(new THREE.Matrix4().makeRotationFromEuler(new THREE.Euler(0, 0, 0)))
+
+    var toRot = new THREE.Quaternion().setFromRotationMatrix(mtx)  //计算出需要进行旋转的四元数值
+
+    item.quaternion.slerp(toRot, 0.6)
+
+  })
+  
+
+  // 星球动画旋转
   stars.value.forEach((item: any) => {
     item.rotation.y += 0.01
   });
   cube.rotation.y += 0.01
+
+  // 自定义物体动画设置
+  const bbb = scene.children.filter((item: any) => item.userData.fid)
+  bbb.forEach((item: any) => {
+    if(item.userData.content){
+      const con = item.userData.content.animation
+      if(con && con.x){
+        item.rotation.x += 0.01
+      }
+      if(con && con.y){
+        item.rotation.y += 0.01
+      }
+      if(con && con.z){
+        item.rotation.z += 0.01
+      }
+    }
+  });
   
   renderer.render(scene, camera);
 };
@@ -458,28 +527,33 @@ function sendDoor(){
   })
 }
 
-function handleExit(){
-  store.commit("user/setIsThree", 'false')
-}
 
-function hadnleEdit(){
-  camera.position.set(0, 1000, 0)
-  camera.lookAt(0, 0, 0)
-}
+
+
 
 function threeConfig() {
+  store.dispatch('three/config', {
+    data: {
+      type: 'home'
+    }
+  }).finally(() => {
+    init()
+  })
   if(!sessionStorage.getItem('threeConfig')){
-    store.dispatch('three/config', {
-      data: {
-        type: 'home'
-      }
-    }).finally(() => {
-      init()
-    })
+    // store.dispatch('three/config', {
+    //   data: {
+    //     type: 'home'
+    //   }
+    // }).finally(() => {
+    //   init()
+    // })
   }else{
     let config: any = sessionStorage.getItem('threeConfig')
     store.commit("three/setConfig", JSON.parse(config))
     init()
+    setTimeout(() => {
+      handleBroadcast("hi，您好，欢迎来到我的星球世界，开始我的太空旅行")
+    }, 3000)
     getUser()
   }
 }
@@ -503,6 +577,15 @@ function getUser(param: any = {}) {
   })
 }
 
+// 路线
+function getTrackLine(param: any = {}) {
+  store.dispatch('three/trackLine', {
+    data: {
+      coding: coding.road_line,
+    }
+  })
+}
+
 function getSceneItem(){
 store.dispatch('common/Fetch', {
     api: 'renderThreeItem'
@@ -515,16 +598,18 @@ store.dispatch('common/Fetch', {
         camera,
         renderer,
         DragControls,
+        createText,
         store,
         ThreeFn,
+        lightType,
         position: {
           x: 0,
           z: 0
         },
         widthSegments: 3,
         number: 1,
-        width: item.content.parameters.width,
-        height: item.content.parameters.height,
+        // width: item.content.parameters.width,
+        // height: item.content.parameters.height,
         data: item,
         actionType: 'render'
       })
@@ -534,6 +619,7 @@ store.dispatch('common/Fetch', {
 
 onMounted(() => {
   threeConfig()
+  getTrackLine()
   getSceneItem()  
 })
 </script>

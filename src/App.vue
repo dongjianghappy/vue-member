@@ -5,6 +5,7 @@
 <style lang="less">
 @import "./components/public/less/index.less";
 @import "./components/public/less/fish.less";
+@import "./components/public/less/three.less";
 @import "./assets/iconfont/iconfont.css";
 @import "./components/public/less/animate.less";
 

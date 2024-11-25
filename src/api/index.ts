@@ -1087,6 +1087,13 @@ saveThreeItem (params: any) {
 renderThreeItem (params: any) {
   return http.request('three', 'renderThreeItem', params)
 },
+// 保存路线
+saveRoadLine (params: any) {
+  return http.request('three', 'saveRoadLine', params)
+},
+getBasicItem (params: any) {
+  return http.request('three', 'getBasicItem', params)
+},
 }
 
   

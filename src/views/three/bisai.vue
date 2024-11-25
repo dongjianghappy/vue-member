@@ -10,8 +10,6 @@
 
 <script setup lang="ts">
 import {
-  defineProps,
-  defineEmits,
   onMounted,
   computed,
   ref,
@@ -19,16 +17,16 @@ import {
 } from '@/utils'
 
 
-import * as THREE from '../../../public/three/build/three.module';
-import { OrbitControls } from '../../../public/three/jsm/controls/OrbitControls.js';
-import { SVGLoader } from '../../../public/three/jsm/loaders/SVGLoader.js';
-import { FontLoader } from '../../../public/three/jsm/loaders/FontLoader.js'
-import { createText } from '../../../public/three/jsm/webxr/Text2D.js';
-import { GLTFLoader } from '../../../public/three/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from '../../../public/three/jsm/loaders/DRACOLoader.js';
-import { CSS2DRenderer, CSS2DObject } from '../../../public/three/jsm/renderers/CSS2DRenderer.js';
-import { DragControls } from '../../../public/three/jsm/controls/DragControls';
-// import { RGBELoader } from '../../../public/three/jsm/loaders/RGBELoader.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { createText } from 'three/examples/jsm/webxr/Text2D.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
+import { DragControls } from 'three/examples/jsm/controls/DragControls';
+// import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
 
 import { control, gridHelper, starKay, userStar, light, plane, glassFn, geometryEvent } from './utils/utils'

@@ -1,7 +1,7 @@
 <template>
 <div class="drawer-wrap" :class="{'drawer-open': show}" :style="`top: ${style.top || 64}px`">
   <v-mask v-show="show" v-model:isShow="isShow" v-if="mask" />
-  <div class="drawer align_left" :style="{width: `${style.width || 700}px`, right: show ? '0px' : `-${style.width || 700}px`}">
+  <div class="drawer align_left" :style="{width: `${style.width || 700}px`, height: `calc(100% - ${style.top || 64}px)`, right: show ? '0px' : `-${style.width || 700}px`}">
     <div class="module-wrap relative" :style="`height:${style.height || '100%'}`">
       <div class="module-head" v-if="title">{{title}}
         <span class="right">

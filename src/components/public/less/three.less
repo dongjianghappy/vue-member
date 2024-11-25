@@ -1,0 +1,139 @@
+.three-wrap{
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+
+  .three-list{
+    padding: 10px;
+    li{
+      position: relative;
+      padding-left: 60px;
+      line-height: 30px;
+      .label{
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+  .three-head{
+    background: var(--module-background);
+    border-bottom: 1px solid var(--default-border);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0 15px;
+    height: 45px;
+    line-height: 45px;
+    pointer-events: visible;
+  }
+  .three-left{
+    background: var(--module-background);
+    flex-direction: column;
+    position: absolute;
+    top: 45px;
+    left: 0;
+    bottom: 0;
+    width: 200px;
+    pointer-events: visible;
+  }
+
+  .three-right{
+    background: var(--module-background);
+    flex-direction: column;
+    position: absolute;
+    top: 45px;
+    right: 0;
+    bottom: 0;
+    width: 300px;
+    pointer-events: visible;
+  }
+
+  .tabs{
+    .nav-tabs{
+      height: 40px;
+      line-height: 40px;
+      .tabs-list{
+        color: #999;
+      }
+    }
+    .tab-content{
+      padding: 0;
+      .tabsbox{
+        padding: 5px !important;
+      }
+    }
+  }
+
+  .collapse{
+    margin-bottom: 1px;
+    .collapse-head{
+      background: var(--module-background);
+      border-bottom: 1px solid var(--default-border);
+      padding: 5px;
+    }
+    .collapse-list{
+      background: #333;
+    }
+  }
+
+  .current-layer{
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  .screen-wrap{
+    background: rgba(0, 0, 0, 0.45);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    width: 300px;
+    pointer-events: visible;
+    .car-wrap{
+      padding: 10px;
+      width: 250px;
+      height: 150px;
+      color: #fff;
+      z-index: 100;
+      .car-list{
+        display: flex;
+        .cell{
+          flex: 1;
+          &.close-up{
+            color: #f00;
+          }
+        }
+      }
+    }
+
+    .modle-wrap{
+      padding: 10px;
+      .car-img{
+        display: flex;
+        margin-right: 25px;
+        width: 50%;
+        .prev, .next{
+          padding-top: 83px;
+          width: 25px;
+          i{
+            font-size: 24px !important;
+            cursor: pointer;
+            &.gay{
+              color: #333 !important;
+            }
+          }
+        }
+        .img-box{
+          text-align: center;
+          flex: 1;
+        }
+      }
+      .car-info{
+        flex: 1
+      }
+    }
+  }
+}

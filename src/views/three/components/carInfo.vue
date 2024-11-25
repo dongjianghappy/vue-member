@@ -1,12 +1,17 @@
 <template>
-  <div class="console-wrap">
-    <div class="module-wrap nobg">
-      <div class="module-head bd-0 p0"> 当前车辆：{{data.name}} </div>
-      <div class="module-content">
-        <div class="mb5">x坐标：<span class="position-x"></span></div>
-        <div class="mb5">y坐标：<span class="position-y"></span></div>
-        <div>z坐标：<span class="position-z"></span></div>
+  <div class="module-wrap m0" style="background: rgba(0, 0, 0, 0.15)">
+    <div class="module-head bd-0 pb0"> 当前车辆：{{data.name}} </div>
+    <div class="module-content plr15">
+      <div class="mb5 flex">坐标：
+        <div class="flex" style="flex: 1;">
+          <div style="flex: 1">x: {{currentInfo.x || 0}}</div>
+          <div style="flex: 1">y: {{currentInfo.y || 0}}</div>
+          <div style="flex: 1">z: {{currentInfo.z || 0}}</div>
+        </div>
       </div>
+      <div class="mb5 flex">特写：{{modelType[currentCar.modelType]}}</div>
+      <div class="mb5 flex">路线：</div>
+      <div class="mb5 flex">行驶类型：{{currentCar.isHand ? '手动' : '自动'}}</div>
     </div>
   </div>
 </template>
@@ -14,7 +19,6 @@
 <script setup lang="ts">
 import {
   defineProps,
-  defineEmits,
   ref,
   computed,
   useStore
@@ -32,7 +36,17 @@ const props: any = defineProps({
 
 const store = useStore()
 const carList: any = computed(() => store.getters['three/carList']);
+const modelType = computed(() => store.getters['three/modelType']);
 const currentCar: any = computed(() => store.getters['three/currentCar']);
+
+const currentInfo = computed(() => {
+  let car = currentCar.value || {}
+  return {
+    x: parseInt(car.position && car.position.x),
+    y: parseInt(car.position && car.position.z),
+    z: parseInt(car.position && car.position.z)
+  }
+})
 
 // 行驶
 function handleRun(param: any){

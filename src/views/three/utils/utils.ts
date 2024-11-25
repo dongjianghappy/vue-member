@@ -17,13 +17,13 @@ export const starKay = (params: any = {}) => {
   const vertices = [];
 
   for ( let i = 0; i < stars; i ++ ) {
-    let x = THREE.MathUtils.randFloatSpread( 2000 );
-    let y = THREE.MathUtils.randFloatSpread( 2000 );
-    let z = THREE.MathUtils.randFloatSpread( 2000 );
+    const x = THREE.MathUtils.randFloatSpread( 25000 );
+    const y = THREE.MathUtils.randFloatSpread( 25000 );
+    const z = THREE.MathUtils.randFloatSpread( 25000 );
   
-    let x1 = x > -500 && x < 500
-    let y1 = y > -500 && y < 500
-    let z1 = z > -800 && z < 800
+    const x1 = x > -500 && x < 500
+    const y1 = y > -500 && y < 500
+    const z1 = z > -800 && z < 800
 
     if(!(x1 && y1 && z1)){
       vertices.push( x, y, z );
@@ -47,19 +47,19 @@ export const userStar = (params: any = {}) => {
   for (let i = 0; i < planets; i++) {
 		// const material = new THREE.MeshPhongMaterial( { color: 0xffffff } );
 		
-    let material = new THREE.MeshPhongMaterial({ map: new THREE.TextureLoader().load('/images/1.jpg') , side: THREE.DoubleSide, color: planet.color || '#fff'})
+    const material = new THREE.MeshPhongMaterial({ map: new THREE.TextureLoader().load('/images/three/1.jpg') , side: THREE.DoubleSide, color: planet.color || '#fff'})
     const sphere = new THREE.Mesh( geometry, material );
     sphere.material.map.wrapS = THREE.RepeatWrapping;
     sphere.material.map.wrapT = THREE.RepeatWrapping;
     sphere.material.map.encoding = THREE.sRGBEncoding;
     
-    let x = THREE.MathUtils.randFloatSpread(2000)
-    let y = THREE.MathUtils.randFloatSpread(2000)
-    let z = THREE.MathUtils.randFloatSpread(2000)
+    const x = THREE.MathUtils.randFloatSpread(2000)
+    const y = THREE.MathUtils.randFloatSpread(2000)
+    const z = THREE.MathUtils.randFloatSpread(2000)
 
-    let x1 = x > -500 && x < 500
-    let y1 = y > -500 && y < 500
-    let z1 = z > -800 && z < 800
+    const x1 = x > -500 && x < 500
+    const y1 = y > -500 && y < 500
+    const z1 = z > -800 && z < 800
 
     if(!(x1 && y1 && z1)){
       sphere.position.set(x, y, z);
@@ -87,7 +87,7 @@ export const plane = (params: any = {}) => {
   const { config, THREE, scene, size = 1200, divisions = 1500 } = params
   const geometry = new THREE.PlaneGeometry( size, divisions );
   // const material = new THREE.MeshPhongMaterial( {color: 0x999999, side: THREE.DoubleSide} );
-  const material = new THREE.MeshPhongMaterial({ map: new THREE.TextureLoader().load('/images/2.jpg') , side: THREE.DoubleSide, color:'#fff'})
+  const material = new THREE.MeshPhongMaterial({ map: new THREE.TextureLoader().load('/images/three/2.jpg') , side: THREE.DoubleSide, color:'#fff'})
   const plane = new THREE.Mesh( geometry, material );
   plane.material.map.wrapS = THREE.RepeatWrapping;
   plane.material.map.wrapT = THREE.RepeatWrapping;
@@ -110,7 +110,7 @@ export const light = (params: any = {}) => {
 
   // 平行光
 // 从上方照射的白色平行光，强度为 0.5。
-  const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+  const directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
   scene.add( directionalLight );
 
   // 聚光灯
@@ -125,24 +125,38 @@ export const spaceName = (params: any = {}) => {
   const {config, THREE, scene, createText} = params
   const exitButtonText2 = createText(config.name, 120);
   exitButtonText2.position.set(0, 250, -800);
-  exitButtonText2.material.color = {
-    r: 255,
-    g: 255,
-    b: 0
-  }
+  exitButtonText2.material.color = new THREE.Color(config.color || "#ff0000")
+  exitButtonText2.kind="spaceName"
   scene.add(exitButtonText2);
 }
 
 // 物体点击事件方法
 export const geometryEvent = (params: any) => {
-  const { THREE, scene, camera, handleBroadcast } = params
+  const { THREE, scene, camera, store, handleBroadcast } = params
   const raycaster = new THREE.Raycaster()
   // 鼠标控制对象
   const mouse = new THREE.Vector2();
   const arrGroup: any = []
 
   function aaa(event: any){
+
+    const { ThreeFn }: any = window
+
     event.preventDefault();
+
+    if(store.state.three.currentTool === 'text'){
+      document.body.style.cursor = 'default'
+      store.commit('three/setCurrentTool', false)
+      // store.commit('three/setSceneLayer')
+      // store.commit('three/setGeometryInfo', item)
+      ThreeFn.textTool(params)
+      return
+    }    
+
+    // 编辑状态不能点击
+    if(store.state.three.isEdit){
+      return
+    }
 
     // 得到鼠标相对于容器的坐标
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -153,8 +167,6 @@ export const geometryEvent = (params: any) => {
     const intersects = raycaster.intersectObjects(scene.children, true)
     // const intersects = raycaster.intersectObjects(scene.children)
     // 射线涉及到的物体集合
-    console.log('intersects:', intersects)
-
     if (intersects.length > 0) {
         const obj = intersects[0].object
         if(obj.userData.kind === 'star'){
@@ -168,6 +180,10 @@ export const geometryEvent = (params: any) => {
         if(obj.userData.kind === 'home'){
           handleBroadcast("正在前往星球家园")
           params.goHomeScene()
+        }
+        if(obj.userData.content && obj.userData.content.event.status == 1){
+          // alert(obj.userData.content.event.target)
+          window.open(obj.userData.content.event.target)
         }
     }
   }

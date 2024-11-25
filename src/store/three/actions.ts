@@ -16,7 +16,14 @@ const actions = {
     sessionStorage.setItem('threeConfig', JSON.stringify(result.result))
     return result
   },    
-  
+  trackLine: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const data = params.data || {}
+    const { result }:any = await api.select({
+      ...data 
+    })
+    context.commit("setTrackLine" , result.result);
+    return result
+  },
   
 }
 

@@ -1,6 +1,6 @@
 // 轿车
 export const car = (params: any = {}) => {
-  const {THREE, scene, createText, GLTFLoader, DRACOLoader, CSS2DObject, store, config} = params
+  const {THREE, scene, createText, GLTFLoader, DRACOLoader, CSS2DObject, ThreeFn, store, roadLine, config} = params
 
   const bodyMaterial = new THREE.MeshPhysicalMaterial( {
     color: config.car_color || 0xff0000, metalness: 1.0, roughness: 0.5, clearcoat: 1.0, clearcoatRoughness: 0.03
@@ -60,7 +60,7 @@ export const car = (params: any = {}) => {
 
     // 
 
-    let span: any = document.createElement('div')
+    const span: any = document.createElement('div')
     span.classList = "userName"
     span.textContent = carModel.userData.name
     span.style.display = "inline-block"
@@ -89,14 +89,14 @@ export const car = (params: any = {}) => {
     carModel.position.y = 1
 
     // 自定义参数
-    carModel.progress = 0 // 里程
-    carModel.velocity = 0.001 // 速度
-
+    carModel.userData.roadLine = roadLine
+    
     scene.add( carModel );
-
-    carLine({
-      ...params,
-      carModel
+    ThreeFn.roadLine({
+      THREE,
+      scene,
+      model: carModel,
+      ...roadLine,
     })
   });
 }
@@ -108,7 +108,7 @@ export const closeUp = (params: any = {}) => {
   document.addEventListener('keydown', (e: any) => {
     const  car = currentCar.value
     if(e.keyCode === 81){
-      let index = modelType.indexOf(car.modelType)
+      const index = modelType.indexOf(car.modelType)
       if(index === 5){
         car.modelType = modelType[0]
       }else{
@@ -211,15 +211,15 @@ export const closeUps = (params: any = {}) => {
   console.log("汽车坐标"+JSON.stringify(car.position));
   console.log("目标坐标"+JSON.stringify(pointBox));
 
-  // 斜率
-  let k = (pointBox.z-car.position.z)/(pointBox.x-car.position.x)
-  // console.log("斜率"+k)
+  // // 斜率
+  // let k = (pointBox.z-car.position.z)/(pointBox.x-car.position.x)
+  // // console.log("斜率"+k)
 
-  // 目标与车的距离
-  let b = pointBox.z-k*pointBox.x
+  // // 目标与车的距离
+  // let b = pointBox.z-k*pointBox.x
 
-  let y = k*car.position.x+100
-  console.log("Y坐标"+y)
+  // let y = k*car.position.x+100
+  // console.log("Y坐标"+y)
 
   switch(car.modelType){
     // 默认
@@ -291,36 +291,9 @@ export const closeUpAnimate = (params: any = {}) => {
 
 
   if (parseInt(camera.position.x) == obj.end.x && parseInt(camera.position.y) == obj.end.y && parseInt(camera.position.z) == obj.end.z) {
-    
-    
+    // 注释
   } else {
     requestAnimationFrame(closeUpAnimate.bind(null, params));
   }
   camera.lookAt(obj.end.x, 0, 0)
-}
-
-// 车行驶路线
-export const carLine = (params: any = {}) => {
-  const { THREE, scene, carModel, config: {road_line, direction} } = params
-  const line: any = []
-  road_line.points.forEach((item: any) => {
-    line.push(new THREE.Vector3( parseInt(item.x), parseInt(item.y), parseInt(item.z)))
-  });
-  
-  // 反向行驶
-  if(direction == 2){
-    line.reverse()
-  }
-
-  const curve = new THREE.CatmullRomCurve3( line );
-
-  const points = curve.getPoints( 50 );
-  const geometry = new THREE.BufferGeometry().setFromPoints( points );
-  
-  const material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-  const curveObject = new THREE.Line( geometry, material );
-
-  // scene.add(curveObject)
-
-  carModel.roadLine = curve
 }

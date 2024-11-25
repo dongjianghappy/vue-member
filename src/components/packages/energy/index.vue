@@ -37,7 +37,8 @@ const userInfo = computed(() => {
   let login = store.getters['user/loginuser']
   let baisc = store.getters['user/userInfo']
   let info = baisc
-  if(login.currentUser){
+  debugger
+  if(login.currentUser || login.currentUser === undefined){
     info = login
   }
   return info

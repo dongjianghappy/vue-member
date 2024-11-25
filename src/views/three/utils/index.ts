@@ -9,7 +9,10 @@ import {
   geometryEvent,
 } from './utils'
 
-import { 
+import {
+  createText,
+  roadLine,
+  weixingGeometry,
   glassFn
 } from './item'
 
@@ -19,7 +22,6 @@ import {
   carRun,
   closeUps,
   closeUpAnimate,
-  carLine
 } from './car'
 
 import { 
@@ -35,8 +37,38 @@ import {
 
 import { 
   dragItem,
-  customizeItem
+  customizeItem,
+  setMaterialColor
 } from './fn'
+
+import {
+  BoxGeometry, 
+  CircleGeometry,
+  ConeGeometry,
+  CylinderGeometry,
+  PlaneGeometry,
+  SphereGeometry
+} from './geometry'
+
+import { 
+  AmbientLight,
+  DirectionalLight,
+  HemisphereLight,
+  LightProbe,
+  PointLight,
+  RectAreaLight,
+  SpotLight
+} from './light'
+
+import {
+  GridHelper,
+  AxesHelper,
+  BoxHelper
+} from './helper'
+
+import {
+  textTool
+} from '../utils/Tool'
 
 const aaa: any = {
   control,
@@ -48,6 +80,15 @@ const aaa: any = {
   spaceName,
   geometryEvent,
   
+  BoxGeometry,
+  CircleGeometry,
+  ConeGeometry,
+  CylinderGeometry,
+  PlaneGeometry,
+  SphereGeometry,
+  createText,
+  roadLine,
+  weixingGeometry,
   glassFn,
 
   car,
@@ -55,7 +96,6 @@ const aaa: any = {
   carRun,
   closeUps,
   closeUpAnimate,
-  carLine,
 
   lineRoad,
   roundRoad,
@@ -65,7 +105,21 @@ const aaa: any = {
   testplane,
 
   dragItem,
-  customizeItem
+  customizeItem,
+  setMaterialColor,
+
+  AmbientLight,
+  DirectionalLight,
+  HemisphereLight,
+  LightProbe,
+  PointLight,
+  RectAreaLight,
+  SpotLight,
+
+  GridHelper,
+  AxesHelper,
+  BoxHelper,
+  textTool
 }
 
 export default aaa

@@ -440,3 +440,32 @@ export const tripShape = [
 	{name: "圆形", value: 'circle'}
 ]
 
+export const threeItem = {
+	'BoxGeometry': '立方',
+	'CircleGeometry': '圆形',
+	'ConeGeometry': '圆锥',
+	'CylinderGeometry': '圆柱',
+	'PlaneGeometry': '平面',
+	'SphereGeometry': '球体'
+}
+
+// 几何类型
+export const geometryType = [
+	'BoxGeometry',
+	'CircleGeometry',
+	'ConeGeometry',
+	'CylinderGeometry',
+	'PlaneGeometry',
+	'SphereGeometry'
+]
+
+// 灯光类型
+export const lightType = [
+	'AmbientLight',
+	'DirectionalLight',
+	'HemisphereLight',
+	'LightProbe',
+	'PointLight',
+	'RectAreaLight',
+	'SpotLight'
+]

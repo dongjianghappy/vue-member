@@ -20,8 +20,8 @@ import '@kangc/v-md-editor/lib/style/base-editor.css';
 import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
 import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 
-import PerfectScrollbar from 'vue3-perfect-scrollbar'
-import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
+// import PerfectScrollbar from 'vue3-perfect-scrollbar'
+// import 'vue3-perfect-scrollbar/dist/vue3-perfect-scrollbar.css'
 // Prism
 import Prism from 'prismjs';
 // highlight code
@@ -33,8 +33,8 @@ VueMarkdownEditor.use(vuepressTheme, {
 
 
 const Vue = createApp(App)
-Vue.config.errorHandler = () => null
-Vue.config.warnHandler = () => null
+// Vue.config.errorHandler = () => null
+// Vue.config.warnHandler = () => null
 views(Vue)
 publics(Vue)
 packages(Vue)
@@ -46,7 +46,7 @@ move(Vue)
 cons(Vue)
 form(Vue)
 hljs(Vue)
-Vue.use(PerfectScrollbar)
+// Vue.use(PerfectScrollbar)
 Vue.use(chartist)
 
 

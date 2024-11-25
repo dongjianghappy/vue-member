@@ -3,14 +3,13 @@
 </template>
 
 <script setup lang="ts">
-import * as THREE from '../../../../public/three/build/three.module';
-import { OrbitControls } from '../../../../public/three/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from '../../../../public/three/jsm/loaders/GLTFLoader.js';
-import { DRACOLoader } from '../../../../public/three/jsm/loaders/DRACOLoader.js';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 import {
   defineProps,
-  defineEmits,
   ref,
   computed,
   useStore,
