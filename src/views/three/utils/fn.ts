@@ -1,4 +1,5 @@
 import { geometryType, three3DType } from "@/assets/threeConst"
+import { geometryInfo, textInfo } from "@/views/three/utils/data/geometry";
 
 // 拓展物体事件
 export const dragItem = (params: any = {}) => {
@@ -33,65 +34,58 @@ dragControls.addEventListener( 'dragstart', function ( event: any ) {
 
 // 自定义物体元素
 export const customizeItem = (params: any = {}, item: any) => {
-  // const { THREE, scene, ThreeFn, lightType, store } = params
+  const { data, actionType = 'insert' } = params
   const { THREE, scene, ThreeFn, store }: any = window
 
   if(ThreeFn){ 
-
-    // 渲染
-    if(params.actionType === 'render'){
-      item.userData = {...params.data.content}
-      item.uuid = params.data.content.uuid
-      item.name = params.data.content.name
-
-      item.position.x = params.data.content.position.x
-      item.position.y = params.data.content.position.y
-      item.position.z = params.data.content.position.z
-
-      item.rotation.x = params.data.content.rotation.x
-      item.rotation.y = params.data.content.rotation.y
-      item.rotation.z = params.data.content.rotation.z
-      item.visible = params.data.content.visible
+    if(actionType === 'render'){
+      item.uuid = data.uuid
+      item.name = data.name
+      item.visible = data.visible
     }
-    // 复制
-    else if(params.actionType === 'copy'){
+    else if(actionType === 'copy'){
       item.userData = params.data.content
       item.name = "副本-"+ params.data.content.name
     }
-    // 新建
     else{
-      item.name = "新建图层"
-      
+      item.name = item.userData.name
+      item.userData.uuid = item.uuid
     }
-    debugger
+    
     // 灯光
     if(three3DType['light'].indexOf(item.type) !== -1){
-      if(params.actionType !== 'render'){
-        item.userData = store.state.three.lightInfo
-        item.userData.fid = params.data.id
+      if(actionType === 'insert'){
+        item.userData.type = item.type
       }
-      store.commit('three/setSceneLayer')
-      store.commit('three/setGeometryInfo', item)
+      store.commit('three/setLightInfo', item.userData)
     }
     // 辅助
     else if(three3DType['helper'].indexOf(item.type) !== -1){
-      if(params.actionType !== 'render'){
-        item.userData = { ...store.state.three.helperInfo, ...item.userData}
-        item.userData.fid = params.data.id
+      if(actionType !== 'render'){
+        debugger
+        item.userData.type = item.type
       }
-      store.commit('three/setSceneLayer')
-    }else{
-      item.kind = 'wuti'
-      if(params.actionType === 'render'){
+      store.commit('three/setHelperInfo', item)
+    }
+    // 文本设置
+    else if(item.kind === 'text'){
+      if(actionType === 'insert'){
+        item.userData = params.data
+        store.commit('three/setTextInfo', item.userData)
+      }
+    }    
+    else{
+      item.kind = 'geometry'
+      if(actionType === 'render'){
         ThreeFn.createText(params, item)
-      }else{
-        item.userData = store.state.three.geometryInfo
-        item.userData.fid = params.data.id
       }
-      store.commit('three/setSceneLayer')
       store.commit('three/setGeometryInfo', item)
     }
- 
+
+    item.position.set(data.position.x, data.position.y, data.position.z)
+    item.rotation.set(data.rotation.x, data.rotation.y, data.rotation.z)
+    
+    store.commit('three/setSceneLayer')
     return
     // 灯光
     // if(lightType.indexOf(item.type) !== -1){

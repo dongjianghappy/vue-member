@@ -13,7 +13,7 @@
               <div class="col-md-4 pb20 plr10" v-for="(item, index) in dataList" :key="index">
                 <div style="border: 1px solid #f0f0f0;">
                   <div class="bg-f7f8fa align_center" style="height: 150px;" @click="handleClick(item)">
-                    <img :src="item.image" style="width: 100%; height: 150px;" /></div>
+                    <img :src="item.image" onerror="this.src='/images/default.jpg'" style="width: 100%; height: 150px;" /></div>
                   <div class="p5 font12 relative">
                     <span class="absolute" style="left: 5px; bottom: 32px">
                       <span class="font28 bold">{{monthAbbr}} / </span>

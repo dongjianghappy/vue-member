@@ -1,6 +1,6 @@
 <template>
   <v-collapse title="几何元素" :iscollapse="true" >
-    <v-tabs :tabs="[{name: '元素',value: 'photos'},{name: '几何',value: 'background'},{name: '工具',value: 'tool'}]">
+    <v-tabs :tabs="[{name: '元素',value: 'photos'},{name: '几何',value: 'background'}]">
       <template v-slot:content1>
         <div style="height: 150px; overflow-y: auto">
           <div v-for="(item, index) in dataList.filter((item) => item.type === '0')" :key="index">
@@ -28,15 +28,6 @@
             </div>
           </div>
       </div>
-      </template>
-      <template v-slot:content3>
-        <div style="height: 150px; overflow-y: auto">
-          <div class="col-md-4 p10" v-for="(item, index) in toolList" :key="index">
-            <div class="bg-666 radius-4 align_center" style="height: 40px; line-height: 40px;" :title="item.name" @click.stop="handleTool(item.value)" >
-              <i class="iconfont icon-img" />
-            </div>
-          </div>
-        </div>
       </template>
     </v-tabs>
   </v-collapse>
@@ -66,15 +57,6 @@ const props: any = defineProps({
 const store = useStore()
 const coding = codings.three.item
 const dataList: any = ref([])
-const toolList: any = ref([{
-  value: 'text',
-  name: '文本'
-}])
-
-function handleTool(param: any){
-  document.body.style.cursor = param
-  store.commit('three/setCurrentTool', param)
-}
 
 function handleDragEnd(e: any, item: any) {
   const { THREE, scene, camera, renderer, DragControls } = props.data

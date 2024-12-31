@@ -25,6 +25,14 @@ import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRe
 import { DragControls } from 'three/examples/jsm/controls/DragControls';
 import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
 
+import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare.js';
+
+			import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+			import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+			import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+			import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+      import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass';
+
 // import * as THREE from 'three/examples/build/three.module';
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 // import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
@@ -60,7 +68,7 @@ const keys = computed(() => store.getters['three/keys']);
 const stars = computed(() => store.getters['three/stars']);
 
 
-let scene: any, camera: any, renderer: any, labelRenderer: any
+let scene: any, camera: any, renderer: any, labelRenderer: any, composer: any
 let cube: any, animateName: any
 let dragDoor: any
 console.log(THREE);
@@ -69,6 +77,7 @@ scene = new THREE.Scene();
 camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
 renderer = new THREE.WebGLRenderer({ antialias: true });
 let _control: any = ref("")
+
 
 let win: any = window
 win.THREE = THREE
@@ -135,6 +144,102 @@ function init(){
     config: currentScene.value
   })
 
+
+
+
+
+
+
+    // lights
+
+    const dirLight = new THREE.DirectionalLight( 0xffffff, 0.15 );
+    dirLight.position.set( 0, - 1, 0 ).normalize();
+    dirLight.color.setHSL( 0.1, 0.7, 0.5 );
+    scene.add( dirLight );
+
+    // lensflares
+    // const textureLoader = new THREE.TextureLoader();
+
+    // const textureFlare0 = textureLoader.load( '/three/textures/lensflare/lensflare0.png' );
+    // const textureFlare3 = textureLoader.load( '/three/textures/lensflare/lensflare3.png' );
+
+    // addLight( 0.55, 0.9, 0.5, 5000, 0, - 1000 );
+    // addLight( 0.08, 0.8, 0.5, 0, 0, - 1000 );
+    // addLight( 0.995, 0.5, 0.9, 5000, 5000, - 1000 );
+
+    // function addLight( h: any, s: any, l: any, x: any, y: any, z: any ) {
+
+    // const light = new THREE.PointLight( 0xffffff, 1.5, 2000, 0 );
+    // light.color.setHSL( h, s, l );
+    // light.position.set( x, y, z );
+    // scene.add( light );
+
+    // const lensflare = new Lensflare();
+    // lensflare.addElement( new LensflareElement( textureFlare0, 700, 0, light.color ) );
+    // lensflare.addElement( new LensflareElement( textureFlare3, 60, 0.6 ) );
+    // lensflare.addElement( new LensflareElement( textureFlare3, 70, 0.7 ) );
+    // lensflare.addElement( new LensflareElement( textureFlare3, 120, 0.9 ) );
+    // lensflare.addElement( new LensflareElement( textureFlare3, 70, 1 ) );
+    // light.add( lensflare );
+
+    // }
+
+			const params = {
+				threshold: 0,
+				strength: 1,
+				radius: 0,
+				exposure: 1
+			};
+
+	// const renderScene = new RenderPass( scene, camera );
+
+	// 			const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+	// 			bloomPass.threshold = params.threshold;
+	// 			bloomPass.strength = params.strength;
+	// 			bloomPass.radius = params.radius;
+
+	// 			const outputPass = new OutputPass();
+
+	// 			composer = new EffectComposer( renderer );
+	// 			composer.addPass( renderScene );
+	// 			composer.addPass( bloomPass );
+	// 			composer.addPass( outputPass );
+
+
+        composer = new EffectComposer( renderer );
+        const renderScene = new RenderPass( scene, camera );
+
+				const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+				bloomPass.threshold = params.threshold;
+				bloomPass.strength = params.strength;
+				bloomPass.radius = params.radius;
+
+        const v2 = new THREE.Vector2( window.innerWidth, window.innerHeight )
+        const outlinePass = new OutlinePass(v2, scene, camera)
+
+        win.outlinePass = outlinePass
+
+        outlinePass.edgeGlow = .5 // 发光强度
+        outlinePass.usePatternTextture = false // 是否使用纹理图案
+        outlinePass.edgeThickness = 1 // 边缘浓度
+        outlinePass.edgeStrength = 5 // 边缘的强度,值越高边范围越大
+        outlinePass.pulsePeriod = 1 // 闪烁频率,值越大频率越低
+        outlinePass.visibleEdgeColor.set('#ffff00') // 呼吸显示的颜色
+        outlinePass.hiddenEdgeColor.set('#ff0000') // 不可见边缘的颜色
+
+
+
+        outlinePass.selectedObjects = []
+debugger
+				const outputPass = new OutputPass();
+
+
+				composer.addPass( renderScene );
+				// composer.addPass( bloomPass );
+        // composer.addPass( outlinePass );
+				// composer.addPass( outputPass );
+
+
   // ThreeFn.light({
   //   THREE,
   //   scene,
@@ -185,6 +290,7 @@ function init(){
     THREE,
     scene,
     camera,
+    ThreeFn,
     store,
     handleBroadcast,
     createText,
@@ -287,7 +393,7 @@ var animate = function () {
 
   // 轨道动画
   
-  let wx = scene.children.filter((item: any) => item.kind == 'wuti' && item.userData && item.userData.roadLine && item.userData.roadLine.isRun == '1')
+  let wx = scene.children.filter((item: any) => item.kind == 'geometry' && item.userData && item.userData.roadLine && item.userData.roadLine.isRun == '1')
 
 
   wx.forEach((item: any) => {
@@ -328,21 +434,22 @@ var animate = function () {
   // 自定义物体动画设置
   const bbb = scene.children.filter((item: any) => item.userData.fid)
   bbb.forEach((item: any) => {
-    if(item.userData.content){
-      const con = item.userData.content.animation
+    if(item.userData.animation){
+      const con = item.userData.animation
       if(con && con.x){
-        item.rotation.x += 0.01
+        item.rotation.x += parseFloat(con.x)
       }
       if(con && con.y){
-        item.rotation.y += 0.01
+        item.rotation.y += parseFloat(con.y)
       }
       if(con && con.z){
-        item.rotation.z += 0.01
+        item.rotation.z += parseFloat(con.z)
       }
     }
   });
-  
-  renderer.render(scene, camera);
+
+  composer.render()
+  // renderer.render(scene, camera);
 };
 
 // 道路
@@ -592,6 +699,7 @@ store.dispatch('common/Fetch', {
   }).then((res) => {
     
     res.result && res.result.forEach((item: any) => {
+      debugger
       ThreeFn[item.value]({
         THREE,
         scene,
@@ -610,7 +718,7 @@ store.dispatch('common/Fetch', {
         number: 1,
         // width: item.content.parameters.width,
         // height: item.content.parameters.height,
-        data: item,
+        data: item.content,
         actionType: 'render'
       })
     })

@@ -1,55 +1,58 @@
-import { threeConfig } from "@/assets/threeConst";
+import { geometryInfo } from "@/views/three/utils/data/geometry";
 
 // 正方体
 export const BoxGeometry = (params: any = {}) => {
-  const {THREE, scene, ThreeFn, position, widthSegments, number, rotateY} = params
+  const {THREE, scene, ThreeFn } = params
+  let boxMaterial
   
-  const config = threeConfig.BoxGeometry
-  let width = config.width
-  let height = config.height
-  let depth = config.depth
-  let color: any = config.color
-  let image: any = ""
-  let isMorePlane = '0'
-  let map: any = []
-  let material
-
-  if(params.data && params.data.content){
-    const { parameters, material } = params.data.content
-    width = parameters.width
-    height = parameters.height
-    depth = parameters.depth
-    isMorePlane = material.isMorePlane
-    color = material.color
-    image = material.image
-    map = material.map
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...geometryInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      width: 200,
+      height: 200,
+      depth: 200,
+    }
+    params.data = initData
   }
-
-  const geometry = new THREE.BoxGeometry( width, height, depth ); 
   
-  if(map.length && isMorePlane == '1'){
+  const { parameters, material } = params.data
+  const geometry = new THREE.BoxGeometry( parameters.width, parameters.height, parameters.depth ); 
+  
+  if(material.map.length && material.isMorePlane == '1'){
     const materialArray: any = []
     for(let i = 0; i < 6; i++){
-      let _image = map[i] ? map[i].image : ''
-      let _color = map[i] ? map[i].color : color
       let _material = ""
+      let _image = material.map[i] ? material.map[i].image : ''
+      let _color = material.map[i] ? material.map[i].color : material.color
 
       if(_image){
-        _material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( _image ), side: THREE.DoubleSide, _color})
+        _material = new THREE[material.materialType]({ map: new THREE.TextureLoader().load( _image ), side: THREE[material.side], _color})
       }else{
-        _material = new THREE.MeshBasicMaterial( { _color } ); 
+        _material = new THREE[material.materialType]( { side: THREE[material.side], _color } ); 
       }
       materialArray.push(_material)
     }
-    material = materialArray
+    boxMaterial = materialArray
   }else{
-    if(image){
-      material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load( image ), side: THREE.DoubleSide, color})
+    if(material.image){
+      boxMaterial = new THREE[material.materialType]({ 
+        map: new THREE.TextureLoader().load( material.image ),
+        side: THREE[material.side], 
+        color: material.color,
+        emissive: material.emissive,
+        emissiveIntensity: material.emissiveIntensity,
+        sepcular: material.sepcular
+      })
     }else{
-      material = new THREE.MeshBasicMaterial( { color } ); 
+      boxMaterial = new THREE[material.materialType]( {
+        side: THREE[material.side],
+        color: material.color 
+      } ); 
     }
   }
-  const cube = new THREE.Mesh( geometry, material); 
+  const cube = new THREE.Mesh( geometry, boxMaterial); 
   
   if(cube.material.map){
     cube.material.map.wrapS = THREE.RepeatWrapping;
@@ -57,7 +60,12 @@ export const BoxGeometry = (params: any = {}) => {
     cube.material.map.encoding = THREE.sRGBEncoding;
     cube.material.map.flipY = false
   }
-  
+
+  // cube.material.emissive.set(0xff0000) // 白色发光
+  // cube.material.emissiveIntensity =.1 // 设置材质的发光强度
+  // cube.material.sepcular =0x000000 // 设置材质的反射颜色
+
+  cube.userData = params.data
   scene.add( cube );
   ThreeFn && ThreeFn.customizeItem(params, cube)
 }
@@ -65,30 +73,28 @@ export const BoxGeometry = (params: any = {}) => {
 // 圆形缓冲几何体
 export const CircleGeometry = (params: any = {}) => {
   const {THREE, scene, ThreeFn } = params
-  
-  const config = threeConfig.CircleGeometry
-  let radius = config.radius
-  let segments = config.segments
-  let color: any = config.color
-  let image: any = ""
-  let material
-  
-  if(params.data && params.data.content){
-    const { parameters, material } = params.data.content
-    radius = parameters.radius
-    segments = parameters.segments
-    color = material.color
-    image = material.image
-  }  
+  let circleMaterial
 
-  const geometry = new THREE.CircleGeometry( radius, segments ); 
-  if(image){
-    material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(image) , side: THREE.DoubleSide, color })
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...geometryInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      radius: 250,
+      segments: 100
+    }
+    params.data = initData
+  }
+  
+  const { parameters, material } = params.data
+  const geometry = new THREE.CircleGeometry( parameters.radius, parameters.segments ); 
+  if(material.image){
+    circleMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(material.image) , side: THREE.DoubleSide, color: material.color })
   }else{
-    material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color } ); 
+    circleMaterial = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color: material.color } ); 
   }
 
-  const cube = new THREE.Mesh( geometry, material ); 
+  const cube = new THREE.Mesh( geometry, circleMaterial ); 
 
   if(cube.material.map){
     cube.material.map.wrapS = THREE.RepeatWrapping;
@@ -96,7 +102,8 @@ export const CircleGeometry = (params: any = {}) => {
     cube.material.map.encoding = THREE.sRGBEncoding;
     cube.material.map.flipY = false
   }
-  debugger
+  
+  cube.userData = params.data
   scene.add( cube );
   ThreeFn && ThreeFn.customizeItem(params, cube)
 }
@@ -104,31 +111,28 @@ export const CircleGeometry = (params: any = {}) => {
 // 圆锥缓冲几何体
 export const ConeGeometry = (params: any = {}) => {
   const {THREE, scene, ThreeFn } = params
-  
-  const config = threeConfig.ConeGeometry
-  let radius = config.radius
-  let height = config.height
-  let radialSegments = config.radialSegments
-  let color: any = config.color
-  let image: any = ""
-  let material
-  
-  if(params.data && params.data.content){
-    const { parameters, material } = params.data.content
-    radius = parameters.radius
-    height = parameters.height
-    radialSegments = parameters.radialSegments
-    color = material.color
-    image = material.image
+  let coneMaterial
+
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...geometryInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      radius: 100,
+      height: 100,
+      radialSegments: 100
+    }
+    params.data = initData
   }
 
-  const geometry = new THREE.ConeGeometry( radius, height, radialSegments ); 
-  if(image){
-    material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(image) , side: THREE.DoubleSide, color })
+  const { parameters, material } = params.data
+  const geometry = new THREE.ConeGeometry( parameters.radius, parameters.height, parameters.radialSegments ); 
+  if(material.image){
+    coneMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(material.image) , side: THREE.DoubleSide, color: material.color })
   }else{
-    material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color } ); 
+    coneMaterial = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color: material.color } ); 
   }
-  const cube = new THREE.Mesh( geometry, material ); 
+  const cube = new THREE.Mesh( geometry, coneMaterial ); 
 
   if(cube.material.map){
     cube.material.map.wrapS = THREE.RepeatWrapping;
@@ -137,6 +141,7 @@ export const ConeGeometry = (params: any = {}) => {
     cube.material.map.flipY = false
   }
   
+  cube.userData = params.data
   scene.add( cube );
   ThreeFn && ThreeFn.customizeItem(params, cube)
 }
@@ -144,34 +149,30 @@ export const ConeGeometry = (params: any = {}) => {
 // 圆柱缓冲几何体
 export const CylinderGeometry = (params: any = {}) => {
   const {THREE, scene, ThreeFn } = params
-  
-  const config = threeConfig.CylinderGeometry
-  let radiusTop = config.radiusTop
-  let radiusBottom = config.radiusBottom
-  let height = config.height
-  let radialSegments = config.radialSegments
-  let color: any = config.color
-  let image: any = ""
-  let material
-  
-  if(params.data && params.data.content){
-    const { parameters, material } = params.data.content
-    radiusTop = parameters.radiusTop
-    radiusBottom = parameters.radiusBottom
-    height = parameters.height
-    radialSegments = parameters.radialSegments
-    color = material.color
-    image = material.image
-  }
+  let cylinderMaterial
 
-  const geometry = new THREE.CylinderGeometry( radiusTop, radiusBottom, height, radialSegments ); 
-  if(image){
-    material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(image) , side: THREE.DoubleSide, color })
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...geometryInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      radiusTop: 100,
+      radiusBottom: 100,
+      height: 100,
+      radialSegments: 100
+    }
+    params.data = initData
+  }
+  
+  const { parameters, material } = params.data
+  const geometry = new THREE.CylinderGeometry( parameters.radiusTop, parameters.radiusBottom, parameters.height, parameters.radialSegments ); 
+  if(material.image){
+    cylinderMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(material.image) , side: THREE.DoubleSide, color: material.color })
   }else{
-    material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color } ); 
+    cylinderMaterial = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color: material.color } ); 
   }
 
-  const cube = new THREE.Mesh( geometry, material ); 
+  const cube = new THREE.Mesh( geometry, cylinderMaterial ); 
 
   if(cube.material.map){
     cube.material.map.wrapS = THREE.RepeatWrapping;
@@ -180,6 +181,7 @@ export const CylinderGeometry = (params: any = {}) => {
     cube.material.map.flipY = false
   }
   
+  cube.userData = params.data
   scene.add( cube );
   ThreeFn && ThreeFn.customizeItem(params, cube)
 }
@@ -187,30 +189,29 @@ export const CylinderGeometry = (params: any = {}) => {
 // 平面缓冲几何体
 export const PlaneGeometry = (params: any = {}) => {
   const { THREE, scene, ThreeFn } = params
-  
-  const config = threeConfig.PlaneGeometry
-  let width = config.width
-  let height = config.height
-  let color: any = config.color
-  let image: any = ""
-  let material
-  
-  if(params.data && params.data.content){
-    const { parameters, material } = params.data.content
-    width = parameters.width
-    height = parameters.height
-    color = material.color
-    image = material.image
+  let planeMaterial
+
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...geometryInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      width: 300,
+      height: 300
+    }
+    params.data = initData
   }
   
-  const geometry = new THREE.PlaneGeometry( width, height );
-  if(image){
-    material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(image) , side: THREE.DoubleSide, color })
+  const { parameters, material } = params.data
+  const geometry = new THREE.PlaneGeometry( parameters.width, parameters.height );
+  
+  if(material.image){
+    planeMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(material.image) , side: THREE.DoubleSide, color: material.color })
   }else{
-    material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color } ); 
+    planeMaterial = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color: material.color } ); 
   }
   
-  const plane = new THREE.Mesh( geometry, material ); 
+  const plane = new THREE.Mesh( geometry, planeMaterial ); 
 
   if(plane.material.map){
     plane.material.map.wrapS = THREE.RepeatWrapping;
@@ -219,6 +220,7 @@ export const PlaneGeometry = (params: any = {}) => {
     plane.material.map.flipY = false
   }
   
+  plane.userData = params.data
   scene.add( plane );
   ThreeFn && ThreeFn.customizeItem(params, plane)
 }
@@ -226,32 +228,30 @@ export const PlaneGeometry = (params: any = {}) => {
 // 球缓冲几何体
 export const SphereGeometry = (params: any = {}) => {
   const { THREE, scene, ThreeFn } = params
-  
-  const config = threeConfig.SphereGeometry
-  let radius = config.radius
-  let widthSegments = config.widthSegments
-  let heightSegments = config.heightSegments
-  let color: any = config.color
-  let image: any = ""
-  let material
-  
-  if(params.data && params.data.content){
-    const { parameters, material } = params.data.content
-    radius = parameters.radius
-    widthSegments = parameters.widthSegments
-    heightSegments = parameters.heightSegments
-    color = material.color
-    image = material.image
+  let sphereMaterial
+
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...geometryInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      radius: 100,
+      widthSegments: 100,
+      heightSegments: 100
+    }
+    params.data = initData
   }
+
+  const { parameters, material } = params.data
+  const geometry = new THREE.SphereGeometry( parameters.radius, parameters.widthSegments, parameters.heightSegments ); 
   
-  const geometry = new THREE.SphereGeometry( radius, widthSegments, heightSegments ); 
-  if(image){
-    material = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(image) , side: THREE.DoubleSide, color })
+  if(material.image){
+    sphereMaterial = new THREE.MeshBasicMaterial({ map: new THREE.TextureLoader().load(material.image) , side: THREE.DoubleSide, color: material.color })
   }else{
-    material = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color } ); 
+    sphereMaterial = new THREE.MeshBasicMaterial( { side: THREE.DoubleSide, color: material.color } ); 
   } 
   
-  const plane = new THREE.Mesh( geometry, material ); 
+  const plane = new THREE.Mesh( geometry, sphereMaterial ); 
 
   if(plane.material.map){
     plane.material.map.wrapS = THREE.RepeatWrapping;
@@ -260,6 +260,7 @@ export const SphereGeometry = (params: any = {}) => {
     plane.material.map.flipY = false
   }
   
+  plane.userData = params.data
   scene.add( plane );
   ThreeFn && ThreeFn.customizeItem(params, plane)
 }

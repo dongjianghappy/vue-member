@@ -49,11 +49,17 @@ function hanleClick(param: any) {
   current.value = param
   if(param.type.indexOf('Helper') > -1){
     store.commit('three/setCurrentEdit', 'helper')
-    
-  }else{
-    store.commit('three/setCurrentEdit', 'item')
+    store.commit('three/setHelperInfo', param)
   }
-  store.commit('three/setGeometryInfo', param)
+  else if(param.kind.indexOf('text') > -1){
+    store.commit('three/setCurrentEdit', 'text')
+    store.commit('three/setTextInfo', param.userData)
+    return
+  }
+  else{
+    store.commit('three/setCurrentEdit', 'item')
+    store.commit('three/setGeometryInfo', param)
+  }
 }
 
 function handleIsHide(param: any){

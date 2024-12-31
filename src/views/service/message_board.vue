@@ -4,6 +4,7 @@
     <div class="module-head p25">在线留言</div>
     <div class="module-content p25" style="min-height: 650px;">
       <Form :render="init" :data="{coding: coding.list}" :placeholder="'给博主留言'" />
+      <div class="p10 align_center" style="color: #808080" v-if="dataList.checked_num" @click="handelClick">您有{{dataList.checked_num}}条留言博主待查看。</div>
       <List :data="{coding: coding.reply}" :dataList="dataList" :isTome="false" :render="init" />
     </div>
   </div>

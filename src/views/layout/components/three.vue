@@ -1,6 +1,6 @@
 <template>
   <!-- <template v-if="scene"> -->
-  <ThreeCangpin v-if="currentScene == 'cangpin'"  />
+  <ThreeCangpin v-if="scene === 'cangpin'" />
   <ThreeHome v-else />
   <!-- </template> -->
 </template>

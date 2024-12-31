@@ -1,19 +1,25 @@
+import { helperInfo } from "@/views/three/utils/data/geometry";
+
 // 坐标格辅助
 export const GridHelper = (params: any = {}) => {
   const { THREE, scene, ThreeFn }: any = params
 
-  let size = 10, divisions = 10
-  if(params.data && params.data.content){
-    size = params.data.content.parameters.size
-    divisions = params.data.content.parameters.divisions
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...helperInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      size: 1000,
+      divisions: 10
+    }
+    params.data = initData
   }
-
-  const gridHelper = new THREE.GridHelper( size, divisions );
+  
+  const { parameters } = params.data
+  const gridHelper = new THREE.GridHelper( parameters.size, parameters.divisions );
+  
+  gridHelper.userData = params.data
   scene.add( gridHelper );
-  gridHelper.userData.parameters = {
-    size,
-    divisions
-  }
   ThreeFn && ThreeFn.customizeItem(params, gridHelper)
 }
 
@@ -21,16 +27,20 @@ export const GridHelper = (params: any = {}) => {
 export const AxesHelper = (params: any = {}) => {
   const { THREE, scene, ThreeFn }: any = params
 
-  let size = 250
-  if(params.data && params.data.content){
-    size = params.data.content.parameters.size
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...helperInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      size: 1000
+    }
+    params.data = initData
   }
-
-  const axesHelper = new THREE.AxesHelper( size );
+  
+  const { parameters } = params.data
+  const axesHelper = new THREE.AxesHelper( parameters.size );
+  axesHelper.userData = params.data
   scene.add( axesHelper );
-  axesHelper.userData.parameters = {
-    size
-  }
   ThreeFn && ThreeFn.customizeItem(params, axesHelper)
 }
 
@@ -38,18 +48,23 @@ export const AxesHelper = (params: any = {}) => {
 export const BoxHelper = (params: any = {}) => {
   const { THREE, scene, ThreeFn }: any = params
 
-  let size = 250
-  if(params.data && params.data.content){
-    size = params.data.content.parameters.size
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...helperInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      size: 1000
+    }
+    params.data = initData
   }
+  
+  const { parameters } = params.data
 
   const sphere = new THREE.SphereGeometry();
   const object = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( 0xff0000 ) );
   const box = new THREE.BoxHelper( object, 0xffff00 );
-  scene.add( box );
 
-  box.userData.parameters = {
-    size
-  }
+  box.userData = params.data
+  scene.add( box );
   ThreeFn && ThreeFn.customizeItem(params, box)
 }

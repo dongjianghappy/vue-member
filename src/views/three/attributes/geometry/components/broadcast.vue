@@ -1,6 +1,6 @@
 <template>
   <ul class="three-list">
-    <li class="flex mb10">
+    <li>
       <span class="label">音频</span>
       <div style="display: flex">
         <div style="flex: 1;">文件名: 
@@ -11,11 +11,11 @@
         <div class="cl-red pointer" style=" width: 60px; text-align: right" >重新上传</div>
       </div>
     </li>
-    <li class="flex mb10">
+    <li>
       <span class="label">播报</span>
         <input type="checkbox" :value="geometry.voice.broadcast" :checked="geometry.voice.broadcast == '1' ? true: false" @change="handleChange($event, geometry)" />
     </li>
-    <li class="flex mb10">
+    <li>
       <span class="label">话术</span>
       <textarea v-model="geometry.voice.speech" placeholder="请输入话术" class="w-full"></textarea>
     </li>

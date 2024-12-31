@@ -289,35 +289,17 @@ export const SphereGeometry = (params: any = {}) => {
 
 // 文本
 export const createText = (params: any = {}, item: any) => {
+  const { ThreeFn, THREE, scene, data: { material: { text } } } = params
 
-  const { ThreeFn, THREE, scene} = params
+  if(!text.content){
+    return
+  }
 
-  let text = "文本"
-  let color = '#ffff00'
-  let size = 24
-  let position: any = {
-    x: 0,
-    y: 0,
-    z: 0
-  }
-  if(params.data.content && params.data.content.material.text && params.data.content.material.text.content){
-    text = params.data.content.material.text.content
-    color = params.data.content.material.text.color
-    size = params.data.content.material.text.size
-    position = params.data.content.material.text.position
-  }
-  
-  const exitButtonText2 = params.createText(text, size);
-  exitButtonText2.position.set(parseInt(position.x), parseInt(position.y), parseInt(position.z));
+  const exitButtonText2 = params.createText(text.content, text.size);
+  exitButtonText2.position.set(parseInt(text.position.x), parseInt(text.position.y), parseInt(text.position.z));
 
-  exitButtonText2.material.color = new THREE.Color(color)
-  if(params.data.value === 'createText'){
-    scene.add(exitButtonText2);
-    ThreeFn && ThreeFn.customizeItem(params, exitButtonText2)
-  }else{
-    item.add(exitButtonText2);
-  }
-  
+  exitButtonText2.material.color = new THREE.Color(text.color)
+  item.add(exitButtonText2);
 }
 
 // 路线

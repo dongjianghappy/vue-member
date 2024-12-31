@@ -9,6 +9,7 @@
       <p>{{item.times}}
         <span class="ml5">
           <Reply :data="{...item, ...data}" /></span>
+          <span class="right pr10"><v-like :data="item" /></span>
       </p>
       <p v-html="item.content"></p>
       <div class="reply_info p10" style="background: var(--card-background)" v-for="(list, i) in item.reply" :key="i">
@@ -17,7 +18,9 @@
         </div>
         <p class="m0">{{list.from_nickname || '游客'}} 回复 {{list.nickname || '游客'}}: </p>
         <p>{{list.times}} <span class="ml5">
-            <Reply :data="{...list, ...data}" method="reply" /></span></p>
+            <Reply :data="{...list, ...data}" method="reply" /></span>
+            <span class="right"><v-like :data="item" /></span>    
+        </p>
         <p>
           {{list.content}}
         </p>

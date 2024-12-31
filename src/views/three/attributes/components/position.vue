@@ -1,14 +1,14 @@
 <template>
   <ul class="three-list">
-    <li class="flex mb10">
+    <li>
       <span class="label">x轴</span>
       <input type="text" v-model="data.position.x" class="input-sm input-full" />
     </li>
-    <li class="flex mb10">
+    <li>
       <span class="label">y轴</span>
       <input type="text" v-model="data.position.y" class="input-sm input-full" />
     </li>
-    <li class="flex mb10">
+    <li>
       <span class="label">z轴</span>
       <input type="text" v-model="data.position.z" class="input-sm input-full" />
     </li>

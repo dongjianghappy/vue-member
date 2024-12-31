@@ -19,7 +19,7 @@ export default defineComponent({
       // documentElement 属性以一个元素对象返回一个文档的文档元素
       const el: any = document.documentElement;
       el.requestFullscreen || el.mozRequestFullScreen || el.webkitRequestFullscreen || el.msRequestFullScreen ?
-        el.requestFullscreen() || el.mozRequestFullScreen() || el.webkitRequestFullscreen() || el.msRequestFullscreen() : null;
+      el.requestFullscreen() || el.mozRequestFullScreen() || el.webkitRequestFullscreen() || el.msRequestFullscreen() : null;
 
     }
     return {

@@ -53,7 +53,7 @@ debugger
 function hanleClick(param: any) {
   debugger
   current.value = param
-  store.commit('three/setGeometryInfo', param)
+  store.commit('three/setLightInfo', param)
   store.commit('three/setCurrentEdit', "light")
 }
 

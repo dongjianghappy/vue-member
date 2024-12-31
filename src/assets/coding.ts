@@ -487,7 +487,8 @@ const codings: any = {
     road_line: 'U0690016',
     item: 'U0690017',
     item_group: 'U0690018',
-    scene_item: 'U0690019'
+    scene_item: 'U0690019',
+    tool: 'U0690020'
   },
   track: {
     art: 'U0690009',

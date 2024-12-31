@@ -1,6 +1,6 @@
 <template>
   <ul class="three-list">
-    <template v-if="helper.type === 'GridHelper'">
+    {{helper}}
     <li>
       <span class="label">尺寸</span>
       <input type="text" v-model="helper.parameters.size" class="input-sm input-full" />
@@ -9,13 +9,6 @@
       <span class="label">细分</span>
       <input type="text" v-model="helper.parameters.divisions" class="input-sm input-full" />
     </li>
-    </template>
-    <template v-if="helper.type === 'AxesHelper'">
-    <li>
-      <span class="label">尺寸</span>
-      <input type="text" v-model="helper.parameters.size" class="input-sm input-full" />
-    </li>
-    </template>
   </ul>
 </template>
 

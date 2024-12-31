@@ -1,14 +1,24 @@
+import { lightInfo } from "@/views/three/utils/data/geometry";
+
 // 环境光
 export const AmbientLight = (params: any = {}) => {
   const { THREE, scene, ThreeFn, data }: any = params
   
-  debugger
-  let color: any = data.color || 0x404040
-  if(data.content) {
-    color = data.content.parameters.color
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...lightInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      color: 0x404040,
+      intensity: 1
+    }
+    params.data = initData
   }
   
-  const light = new THREE.AmbientLight( color ); // 柔和的白光
+  const { parameters } = params.data
+  const light = new THREE.AmbientLight( parameters.color, parameters.intensity ); // 柔和的白光
+  
+  light.userData = params.data
   scene.add( light );
   ThreeFn && ThreeFn.customizeItem(params, light)
 }
@@ -17,13 +27,21 @@ export const AmbientLight = (params: any = {}) => {
 export const DirectionalLight = (params: any = {}) => {
   const { THREE, scene, ThreeFn, data }: any = params
 
-  let color: any = data.color || 0xffffff
-  if(data.content) {
-    color = data.content.parameters.color
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...lightInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      color: 0xffffff,
+      intensity: 0.5
+    }
+    params.data = initData
   }
   
-  // 从上方照射的白色平行光，强度为 0.5。
-  const directionalLight = new THREE.DirectionalLight( color, 0.5 );
+  const { parameters } = params.data
+  const directionalLight = new THREE.DirectionalLight( parameters.color, parameters.intensity );
+  
+  directionalLight.userData = params.data
   scene.add( directionalLight );
   ThreeFn && ThreeFn.customizeItem(params, directionalLight)
 }
@@ -32,14 +50,22 @@ export const DirectionalLight = (params: any = {}) => {
 export const HemisphereLight = (params: any = {}) => {
   const { THREE, scene, ThreeFn, data }: any = params
   
-  let color: any = data.color || 0xffffbb
-  let groundColor: any = data.groundColor || 0x080820
-  if(data.content) {
-    color = data.content.parameters.color
-    groundColor = data.content.parameters.groundColor
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...lightInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      color: 0xffffbb,
+      groundColor: 0x080820,
+      intensity: 1
+    }
+    params.data = initData
   }
-
-  const light = new THREE.HemisphereLight( color, groundColor, 1 );
+  
+  const { parameters } = params.data
+  const light = new THREE.HemisphereLight( parameters.color, parameters.groundColor, parameters.intensity );
+  
+  light.userData = params.data
   scene.add( light );
   ThreeFn && ThreeFn.customizeItem(params, light)
 }
@@ -48,13 +74,21 @@ export const HemisphereLight = (params: any = {}) => {
 export const LightProbe = (params: any = {}) => {
   const { THREE, scene, ThreeFn, data }: any = params
   
-  debugger
-  let color: any = data.color || 0xffffff
-  if(data.content) {
-    color = data.content.parameters.color
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...lightInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      color: 0xffffff,
+      intensity: 0.5
+    }
+    params.data = initData
   }
+
+  const { parameters } = params.data
+  const directionalLight = new THREE.LightProbe( parameters.color, parameters.intensity );
   
-  const directionalLight = new THREE.LightProbe( color, 0.5 );
+  directionalLight.userData = params.data
   scene.add( directionalLight );
   ThreeFn && ThreeFn.customizeItem(params, directionalLight)
 }
@@ -63,20 +97,24 @@ export const LightProbe = (params: any = {}) => {
 export const PointLight = (params: any = {}) => {
   const { THREE, scene, ThreeFn, data }: any = params
   
-  let color: any = data.color || 0xff0000
-  let intensity: any = data.intensity || 1
-  let distance: any = data.distance || 0
-  let decay: any = data.decay || 2
-
-  if(data.content) {
-    color = data.content.parameters.color
-    intensity = data.content.parameters.intensity
-    distance = data.content.parameters.distance
-    decay = data.content.parameters.decay
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...lightInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      color: 0xffffff,
+      intensity: 0.5,
+      distance: 0,
+      decay: 0
+    }
+    params.data = initData
   }
 
-  const light = new THREE.PointLight( color, intensity, distance, decay );
+  const { parameters } = params.data
+  const light = new THREE.PointLight( parameters.color, parameters.intensity, parameters.distance, parameters.decay );
   light.position.set( 50, 50, 50 );
+
+  light.userData = params.data
   scene.add( light );
   ThreeFn && ThreeFn.customizeItem(params, light)
 }
@@ -85,21 +123,24 @@ export const PointLight = (params: any = {}) => {
 export const RectAreaLight = (params: any = {}) => {
   const { THREE, scene, ThreeFn, RectAreaLightHelper, data }: any = params
   
-  let color: any = data.color || 0xff0000
-  let intensity: any = data.intensity || 1
-  let width: any = data.width || 150
-  let height: any = data.height || 150
-  
-  if(data.content) {
-    color = data.content.parameters.color
-    intensity = data.content.parameters.intensity
-    width = data.content.parameters.width
-    height = data.content.parameters.height
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...lightInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      color: 0xff0000,
+      intensity: 0.5,
+      width: 250,
+      height: 250
+    }
+    params.data = initData
   }
-  
-  const rectLight = new THREE.RectAreaLight( color, intensity,  width, height );
+
+  const { parameters } = params.data
+  const rectLight = new THREE.RectAreaLight( parameters.color, parameters.intensity,  parameters.width, parameters.height );
   rectLight.position.set( 5, 5, 0 );
   rectLight.lookAt( 0, 0, 0 );
+  rectLight.userData = params.data
   scene.add( rectLight )
   
   // const rectLightHelper = new RectAreaLightHelper( rectLight );
@@ -110,36 +151,37 @@ export const RectAreaLight = (params: any = {}) => {
 // 聚光灯
 export const SpotLight = (params: any = {}) => {
   const { THREE, scene, ThreeFn, data }: any = params
-  debugger
-  let color: any = data.color || 0xff0000
-  let intensity: any = data.intensity || 1
-  let distance: any = data.distance || 0
-  let angle: any = data.angle || Math.PI/3
-  let penumbra: any = data.penumbra || 0
-  let decay: any = data.decay || 2
   
-  if(data.content) {
-    color = data.content.parameters.color
-    intensity = data.content.parameters.intensity
-    distance = data.content.parameters.distance
-    angle = data.content.parameters.angle
-    penumbra = data.content.parameters.penumbra
-    decay = data.content.parameters.decay
+  // 新增时，设置userData数据
+  if(!params.actionType){
+    const initData = { ...lightInfo }
+    initData.fid = params.data.id
+    initData.parameters = {
+      color: 0xff0000,
+      intensity: 0.5,
+      distance: 0,
+      angle: Math.PI/3,
+      penumbra: 0,
+      decay: 100
+    }
+    params.data = initData
   }
+debugger
+  const { parameters } = params.data
+  const spotLight = new THREE.SpotLight( parameters.color, parameters.intensity, parameters.distance, parameters.angle, parameters.decay );
+  spotLight.position.set( 100, 1000, 100 );
+  // spotLight.map = new THREE.TextureLoader().load( url );
 
-const spotLight = new THREE.SpotLight( color, intensity, distance, angle, decay );
-spotLight.position.set( 100, 1000, 100 );
-// spotLight.map = new THREE.TextureLoader().load( url );
+  spotLight.castShadow = true;
 
-spotLight.castShadow = true;
+  spotLight.shadow.mapSize.width = 1024;
+  spotLight.shadow.mapSize.height = 1024;
 
-spotLight.shadow.mapSize.width = 1024;
-spotLight.shadow.mapSize.height = 1024;
+  spotLight.shadow.camera.near = 500;
+  spotLight.shadow.camera.far = 4000;
+  spotLight.shadow.camera.fov = 30;
 
-spotLight.shadow.camera.near = 500;
-spotLight.shadow.camera.far = 4000;
-spotLight.shadow.camera.fov = 30;
-
-scene.add( spotLight );
-ThreeFn && ThreeFn.customizeItem(params, spotLight)
+  spotLight.userData = params.data
+  scene.add( spotLight );
+  ThreeFn && ThreeFn.customizeItem(params, spotLight)
 }

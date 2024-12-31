@@ -26,7 +26,7 @@ const light = computed(() => store.getters['three/lightInfo']);
 
 // 监听弹窗变量
 watch(light, (newValues, prevValues) => {
-  store.commit('three/setGeometry', light.value)
+  store.commit('three/updateLightItem')
 }, {
   deep: true
 })

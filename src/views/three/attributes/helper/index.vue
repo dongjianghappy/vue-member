@@ -26,7 +26,7 @@ const helper = computed(() => store.getters['three/helperInfo']);
 
 // 监听弹窗变量
 watch(helper, (newValues, prevValues) => {
-  store.commit('three/setGeometry', helper.value)
+  store.commit('three/updateHelperItem', helper.value)
 }, {
   deep: true
 })

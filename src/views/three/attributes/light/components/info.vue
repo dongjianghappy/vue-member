@@ -1,6 +1,6 @@
 <template>
   <ul class="three-list">
-    <li class="flex mb10">
+    <li>
       <span class="label">名称</span>
       <input type="text" v-model="light.name" class="input-sm input-full" />
     </li>

@@ -144,12 +144,15 @@ export const geometryEvent = (params: any) => {
 
     event.preventDefault();
 
-    if(store.state.three.currentTool === 'text'){
+    if(store.state.three.currentTool.cursor_type === 'text'){
+      ThreeFn.textTool({
+        data: {
+          id: store.state.three.currentTool.id
+        },
+        ...params
+      })
       document.body.style.cursor = 'default'
-      store.commit('three/setCurrentTool', false)
-      // store.commit('three/setSceneLayer')
-      // store.commit('three/setGeometryInfo', item)
-      ThreeFn.textTool(params)
+      store.commit('three/setCurrentTool', {})
       return
     }    
 

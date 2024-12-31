@@ -2,6 +2,7 @@
   <div class="module-wrap three-left m0">
     <div class="module-content p0">
       <Item :data="data" />
+      <Tool :data="data" />
       <Layer :data="data" />
     </div>
   </div>
@@ -17,6 +18,7 @@ import {
 
 
 import Item from './item.vue'
+import Tool from './tool.vue'
 import Layer from './layer/index.vue'
 
 const props: any = defineProps({

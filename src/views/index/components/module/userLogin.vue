@@ -3,7 +3,7 @@
   <div class="module-content user-photos p0">
     <div class="user-head" :style="`background: url(${userInfo.head_background}) no-repeat; background-size: cover`">
       <div class="photos ">
-        <img src="http://www.yunxi10.com/source/public/images/head_normal_100.png" />
+        <img src="/images/head_normal_100.png" />
       </div>
     </div>
     <div class="user-info">

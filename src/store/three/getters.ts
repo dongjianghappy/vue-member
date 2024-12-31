@@ -10,6 +10,7 @@ const getters = {
   currentCar: (state: any) => state.currentCar || {},
   keys: (state: any) => state.keys,
   stars: (state: any) => state.stars || [],
+  textInfo: (state: any) => state.textInfo || {},
   currentEdit: (state: any) => state.currentEdit,
   roadLoadList: (state: any) => state.roadLoadList || [],
   roadLoad: (state: any) => state.roadLoad || {},

@@ -1,19 +1,19 @@
 <template>
   <v-collapse title="路线设置" :iscollapse="true" >
     <ul class="three-list">
-      <li class="flex mb10">
+      <li>
         <span class="label">名称</span>
         <input v-model="roadLoad.name" class="input-full" />
       </li>
-      <li class="flex mb10">
+      <li>
         <span class="label">类型</span>
           <v-select :enums="[{name: '汽车', value: 'car'}, {name: '星球', value: 'planet'}]" v-model:value="roadLoad.type" :defaultValue="roadLoad.type = roadLoad.type ? roadLoad.type : 'car'" />
       </li>
-      <li class="flex mb10">
+      <li>
         <span class="label">描述</span>
           <textarea v-model="roadLoad.description" placeholder="请输入描述" class="w-full"></textarea>
       </li>
-      <li class="flex mb10">
+      <li>
         <span class="label">坐标</span>
         <div class="p15" style="background: #f8f8fa; width: 100%;">
           <div class="flex align_center">

@@ -4,7 +4,7 @@
     <span class="ml10" @click="hadnleCancel" v-if="isEdit">取消</span>
     <span class="ml10" @click="handleExit">退出星球空间</span>
     <span class="right"><BasicInfo /></span>
-    <span class="right mr10">场景复原</span>
+    <span class="right mr10" @click="handleHuanyuan">场景复原</span>
   </div>
 </template>
 
@@ -39,6 +39,12 @@ const geometry = computed(() => store.getters['three/geometryInfo']);
 const geometryList = computed(() => store.getters['three/geometryList']);
 const lightList = computed(() => store.getters['three/lightList']);
 const helperList = computed(() => store.getters['three/helperList']);
+
+function handleHuanyuan(){
+  const { camera } = props.data
+  camera.position.set(0, 250, 635)
+  camera.lookAt(0, 0, 0)
+}
 
 function handleExit(){
   store.commit("user/setIsThree", 'false')

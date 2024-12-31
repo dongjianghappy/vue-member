@@ -22,7 +22,7 @@ import {
   week
 } from '@/assets/const'
 
-import qiandao from './qiandao.vue'
+import qiandao from '../../sign/index.vue'
 
 const {
   proxy

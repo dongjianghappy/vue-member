@@ -1,16 +1,15 @@
 <template>
   <v-collapse title="光源设置" :iscollapse="true" >
-    {{lightInfo}}
     <ul class="three-list">
-      <li class="flex mb10">
+      <li>
         <span class="label">名称</span>
         <input v-model="lightInfo.name" class="input-full" />
       </li>
-      <li class="flex mb10">
+      <li>
         <span class="label">颜色</span>
         <input v-model="lightInfo.parameters.color" class="input-full" />
       </li>
-      <li class="flex mb10">
+      <li>
         <span class="label">强度</span>
         <input v-model="lightInfo.parameters.intensity" class="input-full" />
       </li>
