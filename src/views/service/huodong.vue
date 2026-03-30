@@ -45,6 +45,7 @@ function handelClick() {
 }
 
 function init() {
+  window.scrollTo(0, 0)
   store.dispatch('common/Fetch', {
     api: 'huodong',
     data: {

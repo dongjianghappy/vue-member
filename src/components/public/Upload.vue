@@ -2,7 +2,7 @@
 <div>
   <div class="ablumimg" :class="('talk' && imgList.length > 0  || file !== 'talk') ? 'p15' : 'p0'">
     <!-- 图片上传 -->
-    <ul v-if="file === 'image' || (file === 'talk' && imgList.length)">
+    <ul v-if="showUpload || file === 'image' || (file === 'talk' && imgList.length)">
       <li v-for="(item, index) in imgList" :key="index" class="upload-album-wrap relative" :style="style" draggable="true" @dragend="handleDragEnd($event, item)" @dragstart="handleDragStart($event, item)" @dragenter="handleDragEnter($event, item)" @dragover.prevent="handleDragOver($event, item)">
         <!-- <img draggable="true" :src="item.src" v-if="item.status ==='complete'" /> -->
         <v-img draggable="true" :src="item.src" v-if="item.status ==='complete'" />
@@ -17,7 +17,7 @@
           <span><i class="iconfont icon-mail" title="设置封面" @click="handleCover(item.src)"></i></span>
           <span><i class="iconfont icon-recycle" title="删除" @click="remove(index)"></i></span></div>
       </li>
-      <li class="upfile" :style="style" @click="handleclick" v-if="imgList.length < maxLength"><i class="iconfont icon-add"></i></li>
+      <li class="upfile" :style="style" @click="handleclick" v-if="showUpload || imgList.length < maxLength"><i class="iconfont icon-add"></i></li>
     </ul>
     <!-- 音视频上传 -->
     <div class="inline" v-else-if="file === 'music' || file === 'vidoe'">
@@ -75,6 +75,10 @@ const props: any = defineProps({
     default: "50"
   },
   mask: {
+    type: Boolean,
+    default: false
+  },
+  showUpload: {
     type: Boolean,
     default: false
   }

@@ -21,7 +21,8 @@
                 <ul class="font14">
                   <template v-if="loginuser.account === item.uid">
                     <li v-if="module.edit">
-                      <Detail :data="item" />
+                      <span @click="handleEdit(item)" v-if="item.type === 'video'">编辑</span>
+                      <Detail :data="item" v-else />
                     </li>
                     <li @click="handleRouter('istop', item)" v-if="module.istop">{{item.istop === '1' ? '取消置顶' : '置顶'}}</li>
                     <li v-if="module.vote">
@@ -73,9 +74,11 @@
             </span>
           </div>
           <div class="relative" style="min-height: 30px" v-if="item.summary">
-            <span v-if="item.remark">
-              <span class="bold" style="color: var(--color-primary);">{{item.remark}}</span><i class="iconfont icon-dot" />
-            </span>
+            <div v-if="item.remark">
+              <span class="bold" style="color: var(--color-primary);">{{item.remark}}</span>
+              <i class="iconfont icon-dot" />
+              <span class="bold" style="color: var(--color-primary);">{{item.schedule_name}}</span>
+            </div>
             <span v-html="item.summary.replace(/\n/g, '<br/>')"></span>
             <span class="ml5" v-if="item.description">({{item.description}})</span>
             <v-audio :data="item" :hasMusic="true" v-if="item.background_music" />
@@ -228,6 +231,10 @@ function handleVisible(type: any, param: any) {
   }).then(res => {
     param.visible = res.result
   })
+}
+
+function handleEdit(param: any){
+  router.push(`/upload?id=${param.short_url_id}`)
 }
 
 function setPay(param: any) {

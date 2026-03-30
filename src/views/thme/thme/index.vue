@@ -4,8 +4,9 @@
 </div>
 <div class="theme-wrap">
   <div class="theme-list left" v-for="(item, index) in currentCate" :key="index">
-    <div class="relative" style="width: 100%; height: 80px" :style="`background: ${item.background_color}`" @click="chooseTheme('theme', item)">
-      <img :src="item.image" style="width: 100%; height: 80px" v-if="item.image">
+    <div class="relative" style="width: 100%; height: 80px" @click="chooseTheme('theme', item)">
+      <!-- :style="`background: ${item.background_color}`" -->
+      <img :src="item.image" onerror="this.src='/images/noimage.png'" style="width: 100%; height: 80px" v-if="item.image">
       <i class="iconfont icon-checkbox checkbox" v-if="currentData.theme.indexOf(item.id) > -1"></i>
     </div>
     <div class="theme-name ptb10 font12">{{item.name}}

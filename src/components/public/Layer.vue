@@ -5,12 +5,12 @@
     <template v-if="type==='image'">
       <div id="wwwwwwwwwww" :class="{'screen1': commentStatus, 'screen2': !commentStatus}" style=" height: -webkit-fill-available;">
         <div class="background-mask">
-          <img :src="data.cover || data.image && data.image[0]" />
+          <img :src="data.cover || data.image && data.image[0]" onerror="this.src='/images/noimage.png'" />
         </div>
         <div class="layer-wraps" style=" width: -webkit-fill-available; height: -webkit-fill-available;">
           <div class="layer-content relative" style=" width: -webkit-fill-available; height: -webkit-fill-available;">
             <div class="layer-box" style=" width: -webkit-fill-available; height: -webkit-fill-available;">
-              <img ref="pic" :src="currentImg.replace(/thumb/g, 'view')" @load="curPic($event)" @mousedown="onmousedown" @mouseenter="onmouseenter" @click.stop />
+              <img ref="pic" :src="currentImg.replace(/thumb/g, 'view')" onerror="this.src='/images/noimage.png'" @load="curPic($event)" @mousedown="onmousedown" @mouseenter="onmouseenter" @click.stop />
             </div>
 
             <div class="layer-tool">

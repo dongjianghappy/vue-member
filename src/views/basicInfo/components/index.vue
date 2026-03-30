@@ -9,7 +9,7 @@
   <Sign v-else-if="type==='sign'" />
   <Integration v-else-if="type==='integration'" />
   <Goldcoin v-else-if="type==='goldcoin'" />
-  <Energy v-else-if="type==='energy'" />
+  <!-- <Energy v-else-if="type==='energy'" /> -->
   <Medal v-else-if="type==='medal'" />
   <Blacklist v-else-if="type==='blacklist'" />
   <Photos v-else />

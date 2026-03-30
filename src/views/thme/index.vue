@@ -88,7 +88,9 @@ const currentData: any = ref({
 const usertheme: any = computed(() => {
 
   let aa = store.getters['user/loginuser'].theme
-  aa.pendant = JSON.parse(aa.pendant)
+  if(typeof aa.pendant === 'string'){
+    aa.pendant = JSON.parse(aa.pendant)
+  }
 
   let cc = aa.pendant && aa.pendant.map((item: any) => {
     return {
@@ -217,3 +219,16 @@ onMounted(() => {
   savass()
 })
 </script>
+
+<style scoped>
+.theme {
+  background-image: url(/public/images/theme.png);
+  background-repeat: no-repeat;
+  position: fixed;
+  top: 60px;
+  right: 0px;
+  width: 40px;
+  height: 40px;
+  z-index: 1000000000;
+}
+</style>

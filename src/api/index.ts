@@ -122,6 +122,11 @@ talkAlbum (params: any) {
 updateStatus(params: any) {
   return http.request('common', 'updateStatus', params)
 },
+
+// 审核内推
+checkContent(params: any) {
+  return http.request('common', 'checkContent', params)
+},
   
 
  // 评论
@@ -167,6 +172,14 @@ hotSearch (params: any) {
 // 热门话题
 HotTalk (params: any) {
   return http.request('talk', 'hotTalk', params)
+},  
+// 站内搜索
+siteSearch (params: any) {
+  return http.request('common', 'siteSearch', params)
+},  
+// 热门头条
+headlinesArticleList (params: any) {
+  return http.request('common', 'headlinesArticleList', params)
 },  
 // 最新访客
 LastestVisitor (params: any) {
@@ -1093,6 +1106,22 @@ saveRoadLine (params: any) {
 },
 getBasicItem (params: any) {
   return http.request('three', 'getBasicItem', params)
+},
+// 亲密好友
+closeFriend (params: any) {
+  return http.request('user', 'closeFriend', params)
+},
+// 亲密好友记忆碎片
+closeFriendContent (params: any) {
+  return http.request('user', 'closeFriendContent', params)
+},
+// 亲密好友基本内容
+closeFriendContentDetails (params: any) {
+  return http.request('user', 'closeFriendContentDetails', params)
+},
+// 亲密还有记忆碎片详情
+closeFriendContentDetail (params: any) {
+  return http.request('user', 'closeFriendContentDetail', params)
 },
 }
 

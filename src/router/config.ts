@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
-  { path: '/login', component: () => import('../views/login/index.vue')},
+  // { path: '/login', component: () => import('../views/login/index.vue')},
   { path: '/open', component: () => import('../views/login/open.vue')},
   { path: '/site', component: () => import('../views/login/site.vue')},
   { path: '/b/:id', component: () => import('../views/login/ban.vue')},
@@ -79,9 +79,14 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/privilege', component: () => import('../views/privilege/index.vue')},
       { path: '/hot', component: () => import('../views/index/hot/index.vue')},
       { path: '/track', component: () => import('../views/index/track/index.vue')},
+      { path: '/u/:id/close_friend', component: () => import('../views/close_friend/index.vue')},
       // { path: '/life', component: () => import('../views/recommend/index.vue')},
     ]
-  }
+  },
+
+  { path: '/answer', component: () => import('../views/frontend/form/answer.vue')},
+  { path: '/ask', component: () => import('../views/frontend/form/ask.vue')},
+  { path: '/blog_search', component: () => import('../views/frontend/form/search/index.vue')},
 ]
 
 export default routes

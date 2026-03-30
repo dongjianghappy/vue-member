@@ -28,10 +28,12 @@ const actions = {
     const { result }:any = await api.OtherUserInfo({
       ...params 
     })
+    if(result.result){
     // sessionStorage.setItem("otherUser", JSON.stringify(result.result.userInfo))
     sessionStorage.setItem("userInfo", JSON.stringify(result.result.userInfo))
     sessionStorage.setItem("theme", JSON.stringify(result.result.userInfo.theme))    
     writeNewStyle(result.result.userInfo.theme.theme[0])
+  }
     context.commit("setOtherUser" , result.result);
     VueEvent.emit("setTheme")   
     return result.result

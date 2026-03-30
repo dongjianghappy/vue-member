@@ -11,7 +11,7 @@
         <span class="font12">{{item.time}}</span>
       </span>
       <span class="energy font12">
-        {{item.status ? '可收获' : item.name}}
+        {{item.status ? '可收获111' : item.name}}
       </span>
     </li>
   </template>

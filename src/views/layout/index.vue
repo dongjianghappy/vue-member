@@ -13,7 +13,7 @@
       </div>
     </div>
     <Index />
-    <Fish v-if="!isSea" />
+    <Fish v-if="module.fishEffects && !isSea" />
   </div>
   <div class="p15" v-else>正在加载...</div>
 </template>
@@ -64,8 +64,9 @@ store.dispatch('user/Detect').then((res) => {
       router.push(`/b/${res.account}`)
       return
     }
+    // 未开通博客
     if (userInfo.weibo !== "1") {
-      // router.push(`/open`)
+      router.push(`/open`)
     } else if (config.talk === undefined) {
       router.push(`/site`)
     }else{

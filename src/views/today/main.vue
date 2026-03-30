@@ -10,13 +10,13 @@
     <v-slideshow :data="slideshow" />
   </div>
   
-  <TalkTabs ref="talktabs" field="category" :data="[{name: '全部', value: ''}, {name: '2023', value: '2023'}, {name: '2022', value: '2022'}, {name: '2021', value: '2021'}, {name: '2020', value: '2020'}]" :render="init" :query="{tab: 'mod', value: route.query.mod || ''}" />
+  <TalkTabs ref="talktabs" field="category" :data="yaerArray" :render="init" :query="{tab: 'mod', value: route.query.mod || ''}" />
   <TalkItem :sourceData="channel.talk" :deleteTalk="deleteTalk" :render="init" />
   <!-- <v-loding v-if="!loading" /> -->
   <div class="con-list" v-if="channel.talk.length === 0">
     <div class="con-wrap" style=" padding-top:100px; height:350px; text-align: center;">
-      <p>你还没有收藏任何作品呢！</p>
-      <p style="font-size: 12px; color: #999;">当你发现有意思的、有价值的作品时，赶紧收藏下来哦！</p>
+      <p v-if="route.query.mod">暂时还没有{{route.query.mod}}年的记忆呢，先看看其他年份吧~</p>
+      <p v-else>暂时还没有记忆~</p>
     </div>
   </div>
 </div>
@@ -48,6 +48,19 @@ const channel: any = computed(() => store.getters['talk/channel']);
 const talktabs: any = ref(null)
 const loading: any = ref(false)
 const query: any = ref(route.query)
+const currentYear: any = new Date().getFullYear()
+const yaerArray: any = ref([
+  {name: '全部', value: ''}
+])
+
+console.log("vvvvvvvvv");
+
+for(let i = 1; i < 7; i ++){
+  yaerArray.value.push({
+    name: currentYear - i,
+    value: currentYear - i
+  })
+}
 
 // 监听弹窗变量
 watch(route, (newValues, prevValues) => {

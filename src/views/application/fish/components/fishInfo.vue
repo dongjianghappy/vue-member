@@ -3,8 +3,10 @@
   <div class="module-head">
     收集能量球开始养鱼
     <span class="right"><i class="iconfont icon-more1" @click="handleClick"></i></span>
+    <span class="right"><i class="iconfont icon-list" @click="handleExtend"></i></span>
   </div>
   <div class="module-content plr15 font12 align_center">
+    <template v-if="extend">
     <div class="flex" style="flex-wrap: wrap; justify-content: center;">
       <div class="ptb10" style="width: 33.3333%;" v-for="(item, index) in dataList" :key="index">
         <div class="pt5" :class="`${item.image}_a`" style="width: 100%; height: 40px;"></div>
@@ -14,6 +16,15 @@
     <div class="mt25">
       <div>当前正在饲养 39 尾</div>
     </div>
+    </template>
+    <template v-else>
+      <div class="flex" style="flex-wrap: wrap; justify-content: center;">
+      <div class="ptb10" style="width: 33.3333%;" v-for="(item, index) in dataList.slice(0, 3)" :key="index">
+        <div class="pt5" :class="`${item.image}_a`" style="width: 100%; height: 40px;"></div>
+        <div>{{item.name}}</div>
+      </div>
+      </div>
+    </template>
   </div>
   <div class="module-foot p15 font12 flex" style="justify-content: space-around;">
     <div style="background: var(--input-background); border-radius: 30px; color: var(--button-font); width: 65px; height: 32px; line-height: 32px; text-align: center;">
@@ -47,6 +58,7 @@ const store = useStore();
 const router = useRouter()
 const dataList: any = ref([])
 let current: any = ref(0)
+const extend: any = ref(false)
 
 function init() {
   store.dispatch('common/Fetch', {
@@ -64,6 +76,10 @@ function handleClick(){
     uid: getUid(),
     query: `/fish`
   }))
+}
+
+function handleExtend(){
+  extend.value = !extend.value
 }
 
 onMounted(init)

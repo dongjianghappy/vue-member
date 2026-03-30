@@ -24,7 +24,8 @@ const getters = {
   albumList: (state: any) => state.albumList || [], 
   announcement: (state: any) => state.announcement || [],
   slideshow: (state: any) => state.slideshow || [],
-  isSea: (state: any) => state.isSea
+  isSea: (state: any) => state.isSea,
+  headlines: (state: any) => state.headlines || [], 
 
 }
 

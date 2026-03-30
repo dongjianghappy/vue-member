@@ -1,5 +1,5 @@
 <template>
-<img ref="img" :src="src" @load="curPic($event)">
+<img ref="img" :src="src" onerror="this.src='/images/noimage.png'" @load="curPic($event)">
 <!-- @load="curPic($event)" -->
 </template>
 

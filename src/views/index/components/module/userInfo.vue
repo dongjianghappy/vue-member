@@ -37,6 +37,9 @@
           <span>{{address.province}}</span>
         </li>
         <li><i class="iconfont icon-mood mr5" />
+          <span @click="handleFriend">亲密好友</span>
+        </li>
+        <li><i class="iconfont icon-mood mr5" />
           【{{userInfo.mood}}】
           {{userInfo.mood_description}}
           <span>
@@ -45,6 +48,9 @@
         <li class="font16 align_center">
           <v-share title="分享主页" :data="userInfo.homeUrl" />
         </li>
+        <!-- <li class="font16 align_center" @click="handleClick">
+          打卡乐园
+        </li> -->
       </ul>
     </div>
   </div>
@@ -90,6 +96,14 @@ function handleVerified() {
 
 function handlePrivilege(){
   router.push('/privilege')
+}
+
+function handleClick(){
+  router.push('/h5')
+}
+
+function handleFriend(){
+  router.push(`/u/${userInfo.value.account}/close_friend`)
 }
 
 function handleRouter(param: any) {

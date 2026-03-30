@@ -82,7 +82,7 @@ function handleSearch() {
       ...params
     }
   }).then(res => {
-    dataList.value = res.result || []
+    dataList.value = res.result.list || []
   })
 }
 

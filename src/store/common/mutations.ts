@@ -53,6 +53,13 @@ const mutations = {
     } 
     state.hotTalk = result
     state.ranking = params.ranking
+  }, 
+  setHeadlines: (state: any, params: any) => {
+    const result = [];
+    for(let i=0,len=params.length;i<len;i+=8){
+      result.push(params.slice(i,i+8));
+    } 
+    state.headlines = result
   },  
   setLastestVisitor: (state: any, params: any) => {
     params.list = params.list || []

@@ -132,12 +132,12 @@ const install = (Vue:any) => {
     const js = obj.js.split(",")
     const css = obj.css.split(",")
     for(let i=0; i< css.length; i++){
-      css[i] && createCss(css[i], i)
+      css[i] && createCss(obj.serve+css[i], i)
     }
 
     createHtml(obj)
     for(let i=0; i< js.length; i++){
-      js[i] && createJS(js[i], i)
+      js[i] && createJS(obj.serve+js[i], i)
     }
   }
 

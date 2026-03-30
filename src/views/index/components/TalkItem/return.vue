@@ -8,8 +8,9 @@
           <v-photos :sourceData="item" v-else />
         </div>
         <div class="user_info pb5"><span class="username">
-            {{item.nickname}}
+            {{item.nickname}} ui偶哦
           </span>
+          <span class="right" @click="handleCheck(item)">审核</span>
           <span class="right span-icon" v-if="item.model === 'member_talk' && loginuser.account && item.management_checked === '-1'">
             <v-popover content="<i class='iconfont icon-down font18 icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-${item.id}`">
               <div style="width: 150px">
@@ -66,7 +67,7 @@
         <div class="photos">
           <v-photos :sourceData="item" />
         </div>
-        <div class="user_info pb5"><span class="username">{{item.nickname}}</span>
+        <div class="user_info pb5"><span class="username">{{item.nickname}}2323</span>
           <span class="right span-icon">
 
           </span>
@@ -151,6 +152,21 @@ function handleRouter(type: any, param: any) {
   } else {
     router.push(`/${type}?id=${param.id}`)
   }
+}
+
+function handleCheck(param: any){
+  store.dispatch('common/Fetch', {
+    api: 'checkContent',
+    data: {
+      coding: param.coding,
+      id: param.id,
+    }
+  }).then(res => {
+    proxy.$hlj.message({
+      type: 'info',
+      msg: "审核成功"
+    })
+  })
 }
 
 function handleVisible(type: any, param: any) {

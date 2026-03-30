@@ -20,7 +20,7 @@
 // @import "http://dongblog.com/style/css/member_play.css";
 // @import "http://www.yunxi10.com/source/plugin/slide/bannerscroll3/css/css.css";
 
-@import "./assets/chartist/chartist.min.css";
+// @import "./assets/chartist/chartist.min.css";
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

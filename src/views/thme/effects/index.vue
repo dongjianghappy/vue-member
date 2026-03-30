@@ -5,7 +5,7 @@
 <div class="theme-wrap">
   <div class="theme-list left" v-for="(item, index) in currentCate" :key="index" @click="chooseTheme('effects', item)">
     <div class="relative p10">
-      <img :src="item.image" style="height: 80px">
+      <img :src="item.image" onerror="this.src='/images/noimage.png'" style="height: 80px">
       <i class="iconfont icon-checkbox checkbox" v-if="currentData.effects.indexOf(item.id) > -1"></i>
     </div>
     <div class="theme-name ptb10 font12">{{item.name}}</div>

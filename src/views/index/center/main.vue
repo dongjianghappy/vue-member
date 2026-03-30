@@ -4,6 +4,7 @@
   <div class="p10 align_center" style="color: #808080" v-if="channel.checked_num" @click="handelClick">您有{{channel.checked_num}}条微博内容待审核。</div>
   <TalkItem :loading="loading" :sourceData="channel[query.mod]" :deleteTalk="deleteTalk" :render="init" v-if="query.mod" />
   <TalkItem :loading="loading" :sourceData="channel.all" :deleteTalk="deleteTalk" :render="init" v-else />
+  <div class="con-list ptb15 align_center" @click="handelLoad" v-if="loading && (channel.page < channel.pages)">点击加载</div>
   <v-loding v-if="!loading" />
 </div>
 </template>
@@ -142,13 +143,21 @@ function handelClick(){
   }))
 }
 
-onMounted(() => {
-  window.addEventListener("scroll", function (e: any): void {
-    let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
-    if (document.documentElement.scrollTop > scrollHeight - window.innerHeight && channel.value.page < channel.value.pages) {
-      loadData()
-    }
+function handelLoad(){
+  init({
+    type: query.value.mod,
+    page: parseInt(channel.value.page) + 1,
+    key: route.query.q,
   })
+}
+
+onMounted(() => {
+  // window.addEventListener("scroll", function (e: any): void {
+  //   let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+  //   if (document.documentElement.scrollTop > scrollHeight - window.innerHeight && channel.value.page < channel.value.pages) {
+  //     loadData()
+  //   }
+  // })
 
   // 在没有置顶页面时，初始化页面进入到默认tabs项中
   if (!query.value.mod) {

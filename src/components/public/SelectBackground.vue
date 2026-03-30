@@ -2,14 +2,14 @@
 <v-button v-model:show="isShow">
   <div class="zhejiao"><i class="iconfont icon-zhejiao" /></div>
 </v-button>
-<v-dialog ref="dialog" v-model:show="isShow" :style="style" :data="data" :confirm="true" :cancel="true" @submit="submit">
+<v-dialog ref="dialog" v-model:show="isShow" :style="style" :data="data" :confirm="true" :hasfooter="index === 0" :cancel="true" @submit="submit">
   <template v-slot:content>
-    <v-tabs :tabs="[{name: '本地上传',value: 'photos'},{name: '相册',value: 'background'}]" :isEmit="true">
+    <v-tabs :tabs="[{name: '本地上传',value: 'photos'},{name: '相册',value: 'background'}]" v-model:index="index" :isEmit="true">
       <template v-slot:content1>
         <v-listsss ref="aaaaaaaaa" :kind="kind" :image="img" :size="size" :mask="mask" />
       </template>
       <template v-slot:content2>
-        <List :kind="kind" />
+        <List :kind="kind" type="history" />
       </template>
     </v-tabs>
 
@@ -72,6 +72,7 @@ const props: any = defineProps({
     }
   }
 })
+const index: any = ref(0)
 const store = useStore();
 const aaaaaaaaa: any = ref(null)
 const isShow = ref(false)

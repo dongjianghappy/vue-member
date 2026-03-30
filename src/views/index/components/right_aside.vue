@@ -4,7 +4,7 @@
   <UserLogin v-else />
   <Sign v-if="loginuser.account && module.sign" />
   <Three />
-  <FishInfo />
+  <FishInfo v-if="module.sea" />
   <Calendar v-if="module.calendar" :render="render" />
   <CreatorCenter v-if="loginuser.account && module.creator" />
   <Hot v-if="module.hot_search" />

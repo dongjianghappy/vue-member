@@ -5,7 +5,7 @@
 <div class="theme-wrap">
   <div class="theme-list left" v-for="(item, index) in currentCate" :key="index" @click="chooseTheme(item)">
     <div :id="`pendant_${index}`" style="cursor: move;" draggable="true" @dragstart="(e, fType, style)=>dragstart(e, `pendant_${index}`, item.style)">
-      <img :src="item.image" :title="item.name" style="height: 80px">
+      <img :src="item.image" onerror="this.src='/images/noimage.png'" :title="item.name" style="height: 80px">
       <i class="iconfont icon-checkbox checkbox" v-if="currentData.pendants.indexOf(item.image) > -1"></i>
     </div>
     <div class="theme-name ptb10 font12">

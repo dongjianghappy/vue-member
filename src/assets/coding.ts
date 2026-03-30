@@ -542,7 +542,12 @@ const codings: any = {
     },
     privilege: 'U0700043',
     blacklist: "U0700044",
-    play_setting: 'U0700046'
+    play_setting: 'U0700046',
+    close_friend: {
+      list: "U0700052",
+      content: "U0700053",
+      detail: "U0700054"
+    }
   }
 };
 

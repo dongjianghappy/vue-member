@@ -11,7 +11,7 @@
 <!-- <v-messageboard v-if="module.personal_center && module.personal_center.message_board" /> -->
 <v-time v-if="module.personal_center && module.personal_center.time" />
 <v-letter />
-<v-energy />
+<v-energy v-if="module.personal_center && module.personal_center.energy" />
 <!-- 主题 -->
 <Thme v-if="loginuser.currentUser && module.personal_center && module.personal_center.theme" />
 <v-layer v-model:isShow="showFlag" :data="currentData.data" :currentImg="currentData.img" v-if="showFlag" type="image" :hasInfo="currentData.hasInfo || true" :hasComment="false" />

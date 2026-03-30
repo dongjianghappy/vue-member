@@ -96,7 +96,7 @@ const photo = computed(() => {
   if(!props.nickname){
 
   
-  ph = `<div class="relative" :style="style"><img src='${props.sourceData.photos}' width='${props.style.width}' height='${props.style.height}' style="border-radius: ${props.style.radius};">`
+  ph = `<div class="relative" :style="style"><img src='${props.sourceData.photos}' onerror="this.src='/images/head_normal_100.png'" width='${props.style.width}' height='${props.style.height}' style="border-radius: ${props.style.radius};">`
 
   if(props.sub === 'online'){
     ph += `<span class="online ${props.sourceData.online_status ==='1' ? 'isonline' : ''}"></span>`

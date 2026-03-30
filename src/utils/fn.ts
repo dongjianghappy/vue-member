@@ -175,7 +175,7 @@ export const domIsShow: any = {
     if (theme.length) {
       theme[0].style.zIndex = "-1"
     }
-    energy.style.display = "none"
+    if(energy) energy.style.display = "none"
     if(themeAlbum) themeAlbum.style.display = "none"
     if(timeClock) timeClock.style.display = "none"
   }

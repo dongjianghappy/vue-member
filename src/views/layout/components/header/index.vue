@@ -118,7 +118,7 @@ function init() {
   })
 
   let a = true
-  if (route.path !== '/home') {
+  if (route.path !== '/home' && getUid()) {
     store.dispatch('user/OtherUserInfo', {
       uid: getUid()
     }).then((res: any) => {

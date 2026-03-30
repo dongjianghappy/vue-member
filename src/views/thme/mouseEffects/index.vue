@@ -2,7 +2,7 @@
 <div class="theme-wrap pt15">
   <div class="theme-list left align_center" v-for="(item, index) in themeList" :key="index" @click="chooseTheme('mouse_effects', item)">
     <div class="relative p15" style="height: 50px">
-      <img :src="item.file">
+      <img :src="item.file" onerror="this.src='/images/noimage.png'">
       <i class="iconfont icon-checkbox checkbox" v-if="item.id === currentData.mouse_effects || item.file === currentData.mouse_effects"></i>
     </div>
     <div class="theme-name ptb10 font12">{{item.name}}</div>

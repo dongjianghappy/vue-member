@@ -20,7 +20,8 @@ export default class http {
   constructor (options?: any) {
     if (!options) {
       this.baseConfig = {
-        baseURL: process.env.NODE_ENV === 'development' ? '/api/' : 'http://www.dongblog.com/api/', // 设置跨域代理接口统一的前置地址  http://www.dongblog.com
+        // baseURL: process.env.NODE_ENV === 'development' ? '/api/' : 'http://www.dongblog.com/api/', dongblog服务器
+        baseURL: process.env.NODE_ENV === 'development' ? '/api/' : 'http://www.yunxi10.com/api/', // 设置跨域代理接口统一的前置地址  http://www.dongblog.com
         timeout: 300000,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -102,7 +103,8 @@ export default class http {
     })
 
     return new Promise((resolve, reject) => {
-      const dir = process.env.NODE_ENV === 'development' ? 'interface_new.php' : 'interface_vue.php'
+      // const dir = process.env.NODE_ENV === 'development' ? 'interface_new.php' : 'interface_vue.php' // dongblog服务器
+      const dir = process.env.NODE_ENV === 'development' ? 'interface_new.php' : 'interface_new.php' // 素材网服务器
       const url = params.uploadtype ? `?&type=${params.uploadtype}` : ''
 
       const param: any = {

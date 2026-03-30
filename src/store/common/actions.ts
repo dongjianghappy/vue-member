@@ -74,6 +74,13 @@ const actions = {
     context.commit("setHotTalk" , result.result);
     return result
   },  
+  Headlines: async (context: { commit: Commit; state: any}, params: any = {}) => {
+    const { result }:any = await api.headlinesArticleList({
+      ...params 
+    })
+    context.commit("setHeadlines" , result.result);
+    return result
+  }, 
   LastestVisitor: async (context: { commit: Commit; state: any}, params: any = {}) => {
     const data = params.data || {}
     const { result }:any = await api.LastestVisitor({

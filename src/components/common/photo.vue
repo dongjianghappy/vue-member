@@ -1,6 +1,6 @@
 <template>
 <div class="relative inline">
-  <img :src="data.photos" style="position: inherit;" @click="handleClick(data)">
+  <img :src="data.photos" onerror="this.src='/images/head_normal_100.png'" style="position: inherit;" @click="handleClick(data)">
   <span class="online" :class="{isonline: data.online_status ==='1'}" v-if="sub === 'online'"></span>
   <v-concernbutton :data="data" type="icon" v-else-if="sub === 'concern'" />
   <span class="verified" v-else-if="v && data.verified === '1'">

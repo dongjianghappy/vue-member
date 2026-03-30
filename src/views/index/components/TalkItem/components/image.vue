@@ -6,10 +6,10 @@
   <div v-else>
     <div v-if="data.image.length === 1">
       <div style="margin-top: 25px; margin-right: 25px;" v-if="data.type === 'sign'">
-        <img :src="data.image[0]" class="showimg" @click="showImg(data, data.image[0])" style=" width: 100%; height: auto; cursor: zoom-in;" />
+        <img :src="data.image[0]" onerror="this.src='/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style=" width: 100%; height: auto; cursor: zoom-in;" />
       </div>
-      <img :src="data.image[0]" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 4px; width: 125px; height: 125px; cursor: zoom-in;" v-else-if="kind=='comment'" />
-      <img :src="data.image[0].replace(/thumb/g, 'view')" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 8px;width: 400px; height: auto; cursor: zoom-in;" v-else />
+      <img :src="data.image[0]" onerror="this.src='/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 4px; width: 125px; height: 125px; cursor: zoom-in;" v-else-if="kind=='comment'" />
+      <img :src="data.image[0].replace(/thumb/g, 'view')" onerror="this.src='/images/noimage.png'" class="showimg" @click="showImg(data, data.image[0])" style="border-radius: 8px;width: 400px; height: auto; cursor: zoom-in;" v-else />
     </div>
 
     <ul v-else class="img-grid smallimg-wrap clearfix">
