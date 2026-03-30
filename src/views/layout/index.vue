@@ -66,7 +66,7 @@ store.dispatch('user/Detect').then((res) => {
     }
     // 未开通博客
     if (userInfo.weibo !== "1") {
-      router.push(`/open`)
+      // router.push(`/open`)
     } else if (config.talk === undefined) {
       router.push(`/site`)
     }else{
