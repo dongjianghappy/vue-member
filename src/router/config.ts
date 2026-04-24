@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const routes: Array<RouteRecordRaw> = [
-  // { path: '/login', component: () => import('../views/login/index.vue')},
+  { path: '/login', component: () => import('../views/login/index.vue')},
+  { path: '/default', component: () => import('../views/default/index.vue')},
   { path: '/open', component: () => import('../views/login/open.vue')},
   { path: '/site', component: () => import('../views/login/site.vue')},
   { path: '/b/:id', component: () => import('../views/login/ban.vue')},
@@ -73,6 +74,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/vlog', component: () => import('../views/recommend/index.vue')},
       { path: '/journal', component: () => import('../views/recommend/index.vue')},
       { path: '/bookmark', component: () => import('../views/recommend/index.vue')},
+      { path: '/chapter', component: () => import('../views/recommend/index.vue')},
       { path: '/:id/:id/', component: () => import('../views/index/page/talkDetail.vue')},
       { path: '/huodong', component: () => import('../views/service/huodong.vue')},
       { path: '/contribute', component: () => import('../views/service/contribute/index.vue')},
@@ -80,6 +82,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/hot', component: () => import('../views/index/hot/index.vue')},
       { path: '/track', component: () => import('../views/index/track/index.vue')},
       { path: '/u/:id/close_friend', component: () => import('../views/close_friend/index.vue')},
+      { path: '/memory', component: () => import('../views/close_friend/memory/index.vue')},
       // { path: '/life', component: () => import('../views/recommend/index.vue')},
     ]
   },

@@ -1,75 +1,47 @@
 <template>
-    <div class="container w1100 clearfix">
-        <div class="w180 left">
+    <div class="container w1100 relative clearfix">
+        <!-- 侧边菜单 -->
+        <div class="left-sidebar left">
             <v-aside title="亲密好友">
-                <!--  v-if="loginuser.currentUser" -->
                 <template v-slot:button>
                     <Detail :data="{coding: coding.list}" :render="init" />
                 </template>
                 <template v-slot:aside>
-                    <ul>
-                        <li v-for="(item, index) in friendList" :key="index" @click="handleclick(`/close_friend?id=${item.id}`)" class="aside">
-                            <i class="iconfont icon-dot font20"></i> {{item.name}}
-                        </li>
-                    </ul>
+                    <div style="height: 400px; overflow-y: scroll;">
+                        <ul>
+                            <li v-for="(item, index) in friendList" :key="index" @click="handleclick(item)" class="aside" style="height: 60px;">
+                                <img :src="item.photo" onerror="this.src='/images/head_normal_100.png'" style="width: 50px; height: 50px; border-radius: 50px;"> {{item.name}}
+                            </li>
+                        </ul>
+                    </div>
                 </template>
             </v-aside>
         </div>
-        <div class="w280 right">
-            <RightView :render="init" />
-        </div>
-        <div class="main-center right">
-            <div class="module-wrap">
-                <div class="module-head">
-                    <span class="pointer" :class="{'opacity': tabIndex == 1}" @click="handleTabs(0)">全部记忆</span>
-                    <span class="ml15 pointer" :class="{'opacity': tabIndex == 0}" @click="handleTabs(1)">好友记忆</span>
-                    <span class="right">
+        <!-- 主内容 -->
+        <div class="main-center left" style="width: 620px;">
+            <Info :data="{...currentFriend, coding: coding.list}" :render="init" v-if="route.query.id" />
+            <BaiscInfo v-else />
+            <TalkTabs :mod="mod" :data="[{name: '全部记忆', value: ''}, {name: '今天记忆', value: 'today'}]" :render="initContent" :query="{tab: 'item', value: route.query.item}">
+                <template v-slot:extra>
+                    <span class="absolute" style="top: 12px; right: 15px">
+                      <v-space>
+                      <span @click="handleAll" v-if="route.query.id">全部好友</span>
                         <Detail2 :data="{...currentFriend, coding: coding.content}" :render="initContent" />
+                        </v-space>
                     </span>
-                </div>
-
-                <div class="module-content plr15" style="min-height: 650px;">
-                    <Info :data="{...currentFriend, coding: coding.list}" v-if="tabIndex === 1" :render="init" />
-
-                    <div class="mb5 p15" style="background: var(--card-background);" v-for="(item, index) in dataList" :key="index">
-                        <div>
-                        <div class="flex item-thum-wrap" style=" align-items: center;">
-                            <div style="width: 100px">
-                                {{item.times}}
-                            </div>
-                            <div style="width: 120px">
-                                {{item.name}}
-                            </div>
-                            <div style="flex: 1">
-                                {{item.content}}
-                            </div>
-                            <div class="font14 align_center" style="width: 100px">
-                                <Detail3 :data="{id: item.id, coding}" :render="initContent" />
-                            </div>
-                            <div class="font14 align_right" style="width: 50px">
-                                    <Detail2 action="edit" :data="{user: item.user, id: item.id,coding: coding.content}" :render="initContent" />
-                            </div>
-                        </div>
-
-                        <div class="flex">
-                            <div style="flex: 1">
-                                <div class="left relative align_center" style="width: 60px;" v-for="(list, i) in item.user" :key="i" @click="handleclick(`/close_friend?id=${list.id}`)">
-                                    <img :src="list.photo" onerror="this.src='/images/head_normal_100.png'" class="photos p5" style="width: 50px; height: 50px; border-radius: 50%;">
-                                    <div class="font12 nowrap">{{`${list.name}`}}</div>
-                                </div>
-
-                            </div>
-                        </div>
-                        </div>
-                        <div class="mt15">
-                          <List :data="{id: item.id, list: item.list, coding}" :render="initContent" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </template>
+            </TalkTabs>
+            <ItemList :sourceData="dataList || []" :data="{coding}" :render="initContent" @chooseUser="handleclick " />
+            <div class="con-list ptb15 align_center" @click="handelLoad" v-if="loading && (result.page < result.pages)">点击加载</div>
+            <v-loding v-if="!loading" />
+        </div>
+        <!-- 右侧 -->
+        <div class="w280 right">
+            <RightView :module="module.personal_center" :userInfo="userInfo" :render="init" />
         </div>
     </div>
 </template>
+
 
 <script setup lang="ts">
 import {
@@ -87,12 +59,13 @@ import {
 import Detail from './components/detail.vue'
 import Detail2 from './components/detail2.vue'
 import Detail3 from './components/detail3.vue'
+import BaiscInfo from './components/baiscInfo.vue'
 import Info from './components/info.vue'
-import List from './components/list.vue'
 
-import Card from './components/card.vue'
+import ItemList from './components/item.vue'
 import TalkTabs from '../index/components/module/TalkTabs.vue'
-import RightView from '../module/right_aside.vue'
+
+import RightView from '../index/components/right_aside.vue'
 
 
 const {
@@ -102,36 +75,14 @@ const coding: any = codings.user.close_friend
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
-const userGroup = ref([])
+const mod: any = ref({})
 const loginuser = computed(() => store.getters['user/loginuser']);
 const module = computed(() => store.getters['user/config_talk']);
 const friendList: any = ref({})
-const dataList: any = ref({})
-const tabIndex: any = ref(0)
+const result: any = ref({})
+const dataList: any = ref([])
 const currentFriend: any = ref({})
-module.value.concern.map((item: any) => {
-  item.path = `/concern${item.value}`
-  item.num = item.value.indexOf('myconcern') > -1 ? loginuser.value.myconcern : loginuser.value.concernmy
-})
-
-
-
-const currentAside = computed(() => {
-  let arr = module.value.concern.filter((item: any) => item.path.indexOf(route.query.mod) > -1)
-  if(route.query.mod == 'myconcern' && route.query.ground !== undefined){
-    arr = userGroup.value.filter((item: any) => item.id === route.query.ground)
-  }
-  return arr[0] || {}
-});
-
-const mod = computed(() => route.query.mod);
-const concern = computed(() => store.getters['common/concernList']);
-
-function handleTabs(index: any) {
-  tabIndex.value = index
-  init()
-  initContent()
-}
+const loading: any = ref(false)
 
 function init(param: any = {}) {
   const params: any = {
@@ -156,17 +107,23 @@ function init(param: any = {}) {
 }
 
 function initContent(param: any = {}) {
+  loading.value = false
   const params: any = {
     page: 1,
-    pagesize: 20
+    pagesize: 10
   }
 
   Object.assign(params, param)
 
-  if(tabIndex.value !==0 && route.query.id){
-    params.id = route.query.id
+
+  if(params.page === 1){
+    dataList.value = []
   }
 
+  if(route.query.id){
+    params.id = route.query.id
+  }
+  
   store.dispatch('common/Fetch', {
     api: 'closeFriendContent',
     data: {
@@ -174,31 +131,56 @@ function initContent(param: any = {}) {
       ...params
     }
   }).then((res: any) => {
-    dataList.value = res.result
+    loading.value = true
+    result.value = res.result
+    
+    dataList.value.push(...(res.result.list || []))
   })
 }
 
+function handleAll(){
+    router.push(proxy.const.setUrl({
+      uid: loginuser.value.account,
+      query: `/close_friend`
+    }))
 
+    mod.value = {}
+    document.documentElement.scrollTop = 0
+    setTimeout(() => {
+      initContent({
+        page: 1
+      })
+    }, 100)
+}
 
 function handleclick(param: any) {
   router.push(proxy.const.setUrl({
     uid: loginuser.value.account,
-    query: param
+    query: `/close_friend?id=${param.id}`
   }))
-
-  tabIndex.value = 1
-
+  mod.value = {tab: 'id', value: param.id}
+  document.documentElement.scrollTop = 0
   setTimeout(() => {
      let arr = friendList.value.filter((item:any) => item.id === route.query.id)
      if(arr.length > 0){
       currentFriend.value = arr[0];
      }
-    initContent()
+    initContent({
+      page: 1
+    })
   }, 100)
+}
+
+function handelLoad(){
+  initContent({
+    page: parseInt(result.value.page) + 1
+  })
 }
 
 onMounted(() => {
   init()
-  initContent()
+  initContent({
+    page: 1
+  })
 })
 </script>

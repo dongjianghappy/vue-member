@@ -1,12 +1,13 @@
 <template>
 <v-button v-model:show="isShow">
-  <img :src="data.cover" :style="style" />
+  选择封面
+  <!-- <img :src="isEmit ? value : data.cover" onerror="this.src='/images/noimage.png'" :style="style" /> -->
 </v-button>
-<v-dialog v-model:show="isShow" ref="form" title="选择图片" :style="{width: 800, height: 650}" @submit="submit">
+<v-dialog v-model:show="isShow" ref="form" title="选择图片" :style="{width: 600, height: 500}" @submit="submit">
   <template v-slot:content>
     <div>
-      <div class="album-list col-md-4 pb20 plr10" :class="{current: item === currentImage }" v-for="(item, index) in data.image" :key="index">
-        <img :src="item" style="width: 100%; height: 200px" @click="handleClick(item)" />
+      <div class="album-list col-md-4 pb20 plr10" :class="{current: item === cover }" v-for="(item, index) in data" :key="index">
+        <img :src="item" onerror="this.src='/images/noimage.png'" style="width: 100%; height: 200px" @click="handleClick(item)" />
       </div>
     </div>
   </template>
@@ -27,6 +28,14 @@ const props: any = defineProps({
       return {}
     }
   },
+  value: {
+    type: String,
+    default: ""
+  },
+  isEmit: {
+    type: Boolean,
+    default: false
+  },
   style: {
     type: Object,
     default: () => {
@@ -37,19 +46,24 @@ const props: any = defineProps({
     }
   }
 })
-
+const emit: any = defineEmits(['update:value'])
 const isShow = ref(false)
 
-props.data.cover = (props.data.cover.indexOf(".png") > -1 || props.data.cover.indexOf(".jpg") > -1) ? props.data.cover : "/images/noimage.png";
-
-const currentImage: any = ref(props.data.cover)
+const cover: any = ref(props.value)
 
 function handleClick(param: any) {
-  currentImage.value = param
+  cover.value = param
 }
 
 function submit() {
-  props.data.cover = currentImage.value
+  emit('update:value', cover.value)
+  // if (props.isEmit === true) {
+  //   emit('update:value', cover.value)
+  // }else{
+  //   props.data.cover = cover.value
+  // }
+  console.log("sssssssddddddddddd");
+  
   isShow.value = false
 }
 </script>

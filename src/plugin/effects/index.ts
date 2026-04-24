@@ -104,6 +104,7 @@ const install = (Vue:any) => {
   }
 
   function render(obj: any, i: any){
+    return;
 
     // 移除style样式
     const styleObj = document.querySelectorAll('.effects_style_'+i)

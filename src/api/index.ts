@@ -343,6 +343,9 @@ announcement (params: any) {
     return http.request('talk', 'updateTalk', params)
   },    
 
+  updateTalkSchedule (params: any) {
+    return http.request('talk', 'updateTalkSchedule', params)
+  },    
   // 推荐话题
   RecommendActivity (params: any) {
     return http.request('talk', 'recommendActivity', params)
@@ -530,7 +533,15 @@ announcement (params: any) {
   // 获取心情
   GetMoodList (params: any) {
     return http.request('common', 'mood', params)
-  } ,     
+  } ,  
+  // 勋章列表
+  medalList (params: any) {
+    return http.request('common', 'medal', params)
+  } ,  
+  // 佩戴勋章
+  wearMedal (params: any) {
+    return http.request('common', 'wearMedal', params)
+  } ,  
   // 保存
   SaveMood (params: any) {
     return http.request('user', 'saveMood', params)
@@ -842,6 +853,15 @@ ranking (params: any) {
 schedule (params: any) {
   return http.request('talk', 'schedule', params)
 },
+scheduleDetail (params: any) {
+  return http.request('talk', 'scheduleDetail', params)
+},
+scheduleList (params: any) {
+  return http.request('talk', 'scheduleList', params)
+},
+getForm (params: any) {
+  return http.request('common', 'getForm', params)
+},
 updateSchedule (params: any) {
   return http.request('talk', 'updateSchedule', params)
 },
@@ -1110,6 +1130,9 @@ getBasicItem (params: any) {
 // 亲密好友
 closeFriend (params: any) {
   return http.request('user', 'closeFriend', params)
+},
+closeFriendDetail (params: any) {
+  return http.request('user', 'closeFriendDetail', params)
 },
 // 亲密好友记忆碎片
 closeFriendContent (params: any) {

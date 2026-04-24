@@ -1,6 +1,7 @@
 const getters = {
   loginuser: (state: any) => state.user.login.userInfo || {},
   userInfo: (state: any) => state.user.basic.userInfo || {},
+  userAuth: (state: any) => state.user.login.privacy_setting || {},
   config: (state: any) => state.user.login.config || {},
   config_talk: (state: any) => state.user.login.config && state.user.login.config.talk || {},
   currentUser: (state: any) => {

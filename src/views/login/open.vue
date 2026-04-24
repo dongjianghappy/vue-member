@@ -5,10 +5,13 @@
       记录点滴，这里开始！
     </div>
     <div class="open-con p25 align_center">
-      <div class="font24">东江博客</div>
-      <div class="pt15 pb25 font14 cl-666">点击以下头像以开通博客。</div>
+      <div class="font24">{{siteInfo.talk_site_name}}</div>
+      <div class="pt15 pb25 font14 cl-666">
+        <span v-if="blog.close_blog === '0'">亲，欢迎回来，点击头像进入博客</span>
+        <span v-else>点击以下头像以开通博客。</span>
+      </div>
       <div>
-        <img :src="userInfo.photos" class="radius-4" style="width: 85px; height: 85px" @click="handleOpen" />
+        <img :src="userInfo.photos" onerror="this.src='/images/head_normal_100.png'" class="radius-4" style="width: 85px; height: 85px" @click="handleOpen" />
         <div class="pt10">{{userInfo.nickname}}</div>
       </div>
       <div class="mt15 cl-red">{{msg}}</div>
@@ -20,19 +23,26 @@
 <script setup lang="ts">
 import {
   ref,
-  useStore
+  useStore,
+  computed
 } from '@/utils'
 
 const store = useStore();
+const siteInfo = computed(() => store.getters['user/siteInfo']);
 const userInfo: any = ref({})
+const blog: any = ref({})
 const msg: any = ref("")
 
-store.dispatch('user/Detect').then((res) => {
+store.dispatch('user/Detect').then((result) => {
+  let res = result.result
+  console.log("vvvvvvvvv");
+  
   if (res) {
-    if (res.userInfo.weibo == '1') {
+    if (res.userInfo && res.userInfo.weibo == '1' && res.privacy_setting && res.privacy_setting.blog.close_blog == '1') {
       window.location.href = window.location.origin + `/u/${res.userInfo.account}`
     }
     userInfo.value = res.userInfo
+    blog.value = res.privacy_setting && res.privacy_setting.blog || {}
   }
 })
 
@@ -40,7 +50,7 @@ function handleOpen() {
   store.dispatch('common/Fetch', {
     api: 'openWeibo'
   }).then((res) => {
-    if (res.ifSuccess === 1) {
+    if (res.result && res.result.status === "1") {
       setTimeout(() => {
         window.location.href = window.location.origin + `/u/${userInfo.value.account}`
       }, 1000)
@@ -54,7 +64,7 @@ function handleOpen() {
 
 <style lang="less" scoped>
 .bg-img {
-  background: url(http://www.yunxi10.com/source/public/images/20171122191532_f2975b.jpg) no-repeat;
+  background: url(/public/images/default.jpg) no-repeat;
   background-size: cover;
   position: fixed;
   top: 0;

@@ -1,20 +1,21 @@
 <template>
-<ul class="tab_ul relative">
-  <li v-for="(item, index) in (data.length >5 ? data.slice(0, 7) : data)" :key="index" :style="style" :class="{current: (query.value || '') == item.value}">
-    <span @click="handelClick(item)">{{item.name}}
-    <v-flag :data="item" v-if="item.flag" />
-    </span>
-  </li>
-  <span class="span-icon absolute" style="top: 12px; right: 15px">
-    <v-popover v-if="data.length > 7" content="<i class='iconfont icon-more icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-more`">
-      <div style="width: 100px; height: auto">
-        <ul class="font14" style="display: block">
-          <li v-for="(item, index) in data.slice(7, data.length)" :key="index" @click="handelClick(item)">{{item.name}}</li>
-        </ul>
-      </div>
-    </v-popover>
-  </span>
-</ul>
+    <ul class="tab_ul relative">
+        <li v-for="(item, index) in (data.length >5 ? data.slice(0, 7) : data)" :key="index" :style="style" :class="{current: (query.value || '') == item.value}">
+            <span @click="handelClick(item)">{{item.name}}
+                <v-flag :data="item" v-if="item.flag" />
+            </span>
+        </li>
+        <span class="span-icon absolute" style="top: 12px; right: 15px">
+            <v-popover v-if="data.length > 7" content="<i class='iconfont icon-more icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-more`">
+                <div style="width: 100px; height: auto">
+                    <ul class="font14" style="display: block">
+                        <li v-for="(item, index) in data.slice(7, data.length)" :key="index" @click="handelClick(item)">{{item.name}}</li>
+                    </ul>
+                </div>
+            </v-popover>
+        </span>
+        <slot name="extra"></slot>
+    </ul>
 </template>
 
 <script setup lang="ts">
@@ -80,7 +81,6 @@ const coding: any = codings
 
 function handelClick(param: any) {
   let query = ""
-
   if (param.value === 'huodong') {
     router.push(`/${param.value}`)
     return
@@ -98,7 +98,6 @@ function handelClick(param: any) {
         query = `?${props.param.tab}=${props.param.value}`
       }
     }
-
   } else {
     if (props.mod.tab) {
       query = `?${props.mod.tab}=${props.mod.value}`
@@ -114,26 +113,5 @@ function handelClick(param: any) {
     params[props.field] = param.value
   }
   props.render(params)
-  Archive(params)
-}
-
-// 时间归档
-function Archive(param: any) {
-  let params: any = {}
-  let module_arr = ['talk', 'source', 'article', 'picture', 'tech', 'funny', 'notes', 'questions', 'website', "words"]
-  let date: any = new Date()
-  if (module_arr.indexOf(param.type) > -1) {
-    params.coding = coding[param.type].art
-  }
-
-  store.dispatch(`talk/Archive`, {
-    data: {
-      uid: getUid(),
-      type: 'archive',
-      year: date.getFullYear(),
-      month: date.getMonth() + 1,
-      ...params
-    }
-  })
 }
 </script>

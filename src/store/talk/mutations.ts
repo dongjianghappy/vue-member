@@ -3,6 +3,8 @@ const mutations = {
     state[params.state] = params.data
   }, 
   setComprehensiveList: (state: any, params: any) => {
+    console.log("vvvvvvvvvvvvvvvvvvv");
+    
     const data = params.data
     if(data.page == '1'){
       state.channel[params.state] = data.list

@@ -4,7 +4,7 @@
     <template v-if="dataList.length">
       <div class="module-wrap">
         <div class="module-content plr15 clearfix" style="height: 205px; overflow-y: auto;">
-          <div class="left align_center relative" style="width: 120px;" v-for="(item, index) in dataList" :key="index" @click="handleChoose(item)">
+          <div class="left align_center relative" style="width: 120px; height: 120px;" v-for="(item, index) in dataList" :key="index" @click="handleChoose(item)">
             <v-righticon v-if="imageList.indexOf(item) > -1" />
             <img :src="item" onerror="this.src='/images/head_normal_100.png'" class="photos p5" style="width: 120px; height: 120px;">
           </div>

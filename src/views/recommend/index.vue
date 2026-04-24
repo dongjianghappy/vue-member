@@ -10,6 +10,7 @@
     <Vlog :dataList="channel.vlog" v-else-if="component==='vlog'" />
     <Album v-else-if="component==='album'" />
     <Bookmark v-else-if="component==='bookmark'" />
+    <Chapter v-else-if="component==='chapter'" />
     <Journal v-else-if="component==='journal'" />
     <CanvasPicture v-else-if="component==='life'" />
     <Recommend ref="recommend" :dataList="channel.recommend" v-else />
@@ -37,6 +38,7 @@ import Camera from './camera.vue'
 import Vlog from './vlog.vue'
 import Album from './album.vue'
 import Bookmark from './bookmark.vue'
+import Chapter from './chapter.vue'
 import Journal from './journal/index.vue'
 import canvasPicture from '../index/track/canvasPicture.vue'
 

@@ -3,7 +3,8 @@
   <div class="module-content send_info p0" style="overflow: inherit;">
     <slot>
       <div class="sendtitle mb5">
-        <v-scrolltext :dataList="announcement" />
+        <!-- 这里需要模块控制，暂时先注释 -->
+        <v-scrolltext />
       </div>
     </slot>
     <div class="send-input ptb0 p15">
@@ -85,7 +86,6 @@ const store = useStore();
 const route = useRoute()
 const router = useRouter()
 const module = computed(() => store.getters['user/config_talk'].talk_send_tool || []);
-const announcement = computed(() => store.getters['common/announcement']);
 const isCommit = computed(() => {
   return data.summary || data.img
 });

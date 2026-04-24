@@ -1,6 +1,6 @@
 <template>
 <v-button @click="handleclick">
-  {{action == 'add' ? '新增记忆' : '编辑'}}
+  {{action == 'edit' ? '编辑记忆' : '新增记忆'}}
 </v-button>
 <v-dialog v-model:show="isShow" ref="dialog" title="新增记忆" :action="action" width="950px" :style="{width: 650, height: 550}" api="closeFriendContentDetails" :data="{...data}" :hasfooter="detail.management_checked !== '1'" @submit="submit">
   <template v-slot:content v-if="isShow">
@@ -9,10 +9,12 @@
         <div class="li">
           <span class="label">亲密好友</span>
           <div class="flex">
-            <div style="flex: 1">
-              <div class="left align_center relative" style="width: 60px;" v-for="(item, index) in userList" :key="index">
+            <div class="flex" style="flex: 1; flex-wrap: wrap;">
+              <div class="relative p5 align_center" style="width: 70px; height: 80px" v-for="(item, index) in userList" :key="index">
                 <v-deleteicon :dataList="userList" field="id" :data="{id: item.id}" />
-                <img :src="item.photo" onerror="this.src='/images/head_normal_100.png'" class="photos p5" style="width: 50px; height: 50px; border-radius: 50%;">
+                <div>
+                <img :src="item.photo" onerror="this.src='/images/head_normal_100.png'" style="width: 50px; height: 50px; border-radius: 50%;">
+                </div>
                 <div class="font12 nowrap">{{`${item.name}`}}</div>
               </div>
               
@@ -24,15 +26,19 @@
           <div @click="handleClear">全部清除</div>
         </div>
         <div class="li">
+          <span class="label">名称</span>
+          <input v-model="detail.name" type="text" placeholder="记忆名称" class="input-sm input-full" />
+        </div>
+        <div class="li">
           <span class="label">记忆描述</span>
           <textarea placeholder="请输入记忆内容" v-model="detail.content" class="w-full"></textarea>
         </div>
-        <div class="li">
+        <!-- <div class="li">
           <span class="label">时间</span>
             <input v-model="detail.times" type="text" placeholder="时间" class="input-sm input-100" />
             <v-timepicker :data="detail" attr="date" />
-        </div>
-                <div class="li">
+        </div> -->
+        <div class="li">
           <span class="label">图片</span>
           <v-upload ref="upload" :data="{id: detail.id}" :dataList="detail.image || []" uploadtype="friend" @imgList="image" :style="'width: 135px'" />
         </div>
@@ -127,6 +133,7 @@ function handleClear(){
 function submit(params: any) {
   const {
     id,
+    name,
     content
   } = detail.value
 
@@ -136,6 +143,7 @@ function submit(params: any) {
   }
   
   const param: any = {
+    name,
     content,
     fid: fids.length > 0 ? `|${fids.join("|")}|` : "",
     img: img.value,

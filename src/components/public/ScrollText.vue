@@ -14,30 +14,27 @@
 
 <script setup lang="ts">
 import {
-  defineProps,
   onMounted,
   ref,
   onBeforeUnmount,
-} from 'vue'
-import {
-  useRouter
-} from 'vue-router';
+  useStore,
+  useRouter,
+  computed
+} from '@/utils'
 
-const props: any = defineProps({
-  dataList: {
-    type: Array,
-    default: []
-  }
-})
+
+const store = useStore();
 const router = useRouter()
 let timer = 0;
 let animate: any = ref(false)
 
+const dataList = computed(() => store.getters['common/announcement']);
+
 function showMarquee() {
   animate.value = true;
   setTimeout(() => {
-    props.dataList.push(props.dataList[0]);
-    props.dataList.shift();
+    dataList.value.push(dataList.value[0]);
+    dataList.value.shift();
     animate.value = false;
   }, 500)
 }
@@ -47,6 +44,10 @@ function handleClick(param: any) {
 }
 
 onMounted(() => {
+  store.dispatch('common/Fetch', {
+    api: "announcement",
+    state: "announcement"
+  })
   timer = setInterval(showMarquee, 5000)
 })
 

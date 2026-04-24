@@ -2,24 +2,18 @@
 <div class="module-wrap">
   <div class="module-head">勋章墙</div>
   <div class="module-content p10" style="padding-bottom: 25px !important; height:auto">
-    <v-tabs :tabs="[{name: '已获得',value: 'image'},{name: '记录表达',value: 'talk'},{name: '亲密无间',value: 'photos'},{name: '聊天印记',value: 'picture'}]" :isEmit="true" v-model:index="index">
-      <template v-slot:content1>
-        <div class="col-md-3 align_center" v-for="(item, index) in dataList" :key="index">
+    <v-tabs :tabs="tabs" :isEmit="true" v-model:index="index">
+      
+      <template v-slot:[name]="slotName" v-for="name in slotName" :key="name">
+        <div class="col-md-3 align_center" v-for="(item, i) in list" :key="i">
           <div>
-            <img :src="item.image" />
+            <Detail :data="item" :render="init" />
           </div>
-          {{item.name}}
+          <div class="mt15 font16">{{item.name}}</div>
+          <div class="font12">{{item.earned === '1' ? "已获得" : "未获得"}}</div>
         </div>
       </template>
-      <template v-slot:content2>
-        222
-      </template>
-      <template v-slot:content3>
-        333
-      </template>
-      <template v-slot:content4>
-        444
-      </template>
+      
     </v-tabs>
   </div>
 </div>
@@ -28,22 +22,46 @@
 <script setup lang="ts">
 import {
   codings,
+  computed,
   onMounted,
   ref,
   useStore
 } from '@/utils'
+import detailVue from '@/views/content/visitor/components/detail.vue';
+
+import Detail from "./detail.vue"
 
 const coding = codings
 const store = useStore();
-const dataList = ref({});
+const index: any = ref(0)
+const tabs: any = ref([])
+const dataList: any = ref([]);
+const slotName: any = ref([])
+
+const list: any = computed((item: any) => {
+  console.log("ssssssssssss");
+  let list = []
+  if(dataList.value.length > 0){
+    list = dataList.value[index.value].list
+  }
+  // dataList.value && dataList.value[index].list
+  return list
+})
 
 function init() {
   store.dispatch('common/Fetch', {
-    data: {
-      coding: coding.medal
-    }
+    api: "medalList"
   }).then(res => {
     dataList.value = res.result
+    tabs.value = []
+    slotName.value = []
+    res.result.map((item: any, index: any) => {
+      tabs.value.push({
+        name: item.name,
+        value: item.id
+      })
+      slotName.value.push('content'+(parseInt(index)+1))
+    })
   })
 }
 

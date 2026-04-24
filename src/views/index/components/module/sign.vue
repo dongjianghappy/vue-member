@@ -14,8 +14,6 @@
 
 <script setup lang="ts">
 import {
-  getCurrentInstance,
-  useStore,
   ref,
 } from '@/utils'
 import {
@@ -24,10 +22,6 @@ import {
 
 import qiandao from '../../sign/index.vue'
 
-const {
-  proxy
-}: any = getCurrentInstance();
-const store = useStore();
 const date = new Date();
 const datetime: any = ref({
   year: date.getFullYear(),
@@ -35,14 +29,4 @@ const datetime: any = ref({
   day: date.getDate(),
   week: week[date.getDay()]
 })
-
-function sign() {
-  store.dispatch('common/Fetch', {
-    api: 'Sign'
-  }).then(res => {
-    proxy.$hlj.message({
-      msg: res.result.msg
-    })
-  })
-}
 </script>

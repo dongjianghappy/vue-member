@@ -1,12 +1,12 @@
 <template>
-<div class="home">
-  <TalkTabs ref="talktabs" :data="tabs" :render="init" :query="{tab: 'mod', value: query.mod || ''}" v-if="query.mod !== 'friend' && query.mod !== 'concern'" />
-  <div class="p10 align_center" style="color: #808080" v-if="channel.checked_num" @click="handelClick">您有{{channel.checked_num}}条微博内容待审核。</div>
-  <TalkItem :loading="loading" :sourceData="channel[query.mod]" :deleteTalk="deleteTalk" :render="init" v-if="query.mod" />
-  <TalkItem :loading="loading" :sourceData="channel.all" :deleteTalk="deleteTalk" :render="init" v-else />
-  <div class="con-list ptb15 align_center" @click="handelLoad" v-if="loading && (channel.page < channel.pages)">点击加载</div>
-  <v-loding v-if="!loading" />
-</div>
+    <div class="home">
+        <TalkTabs ref="talktabs" :data="tabs" :render="init" :query="{tab: 'mod', value: query.mod || ''}" v-if="query.mod !== 'friend' && query.mod !== 'concern'" />
+        <div class="p10 align_center" style="color: #808080" v-if="query.mod === 'talk' && channel.checked_num" @click="handelClick">您有{{channel.checked_num}}条微博内容待审核。</div>
+        <v-slidertext :data="{coding: coding.user.schedule.cate}" @onClick="handleSchedule" :dataList="cateList" v-if="query.mod === 'schedule'" />
+        <TalkItem :loading="loading" :sourceData="query.mod ? channel[query.mod] : channel.all" :deleteTalk="deleteTalk" :render="init" />
+        <div class="con-list ptb15 align_center" @click="handelLoad" v-if="loading && (channel.page < channel.pages)">点击加载</div>
+        <v-loding v-if="!loading" />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -25,6 +25,7 @@ import {
 } from '@/utils'
 import TalkTabs from '../components/module/TalkTabs.vue'
 import TalkItem from '../components/TalkItem/index.vue'
+import ScheduleInfo from '../components/module/scheduleInfo.vue'
 
 defineExpose({
   init
@@ -44,6 +45,7 @@ const channel: any = computed(() => store.getters['talk/channel']);
 const talktabs: any = ref(null)
 const loading: any = ref(false)
 const query: any = ref(route.query)
+const cateList: any = ref([])
 
 // 监听弹窗变量
 watch(route, (newValues, prevValues) => {
@@ -62,7 +64,7 @@ watch(route, (newValues, prevValues) => {
 function init(param: any) {
   loading.value = false
   let module_arr = ['talk', 'source', 'article', 'picture', 'tech', 'funny', 'notes', 'questions', 'website', "words"]
-  let other_arr = ['download', 'blog', 'hanyu']
+  let other_arr = ['download', 'blog', 'hanyu', 'schedule']
   let dispatch = 'Talk'
   let obj: any = {}
 
@@ -81,6 +83,7 @@ function init(param: any) {
     if (param.type === 'hanyu') {
       dispatch = 'commonSenseQuotes'
     } else {
+      obj.state = param.type
       dispatch = param.type
     }
   }
@@ -109,20 +112,31 @@ function init(param: any) {
   }).then((res) => {
     loading.value = true
   })
+
+  // if(param.type !== "schedule" || (param.type === "schedule" &&  param.schedule_id !== undefined)){
+  //   return
+  // }
+
+
 }
 
-function loadData() {
-  if (loading.value === true) {
-    loading.value = false
-    setTimeout(() => {
-      init({
-        type: query.value.mod,
-        page: parseInt(channel.value.page) + 1,
-        key: route.query.q,
-      })
-    }, 1000)
-  }
+function getSchedule(){
+    store.dispatch('common/Fetch', {
+    api: "scheduleList"
+  }).then(res => {
+    let cateArray = [{
+      id: '-1',
+      name: "打卡",
+      style: "background: var(--color-primary) !important; color: #fff !important;"
+    },
+    {
+      name: "全部"
+    }]
+    cateList.value = [...cateArray, ...res.result.system]
+  })
 }
+
+
 
 function deleteTalk(id: any) {
   store.dispatch('common/Fetch', {
@@ -151,14 +165,22 @@ function handelLoad(){
   })
 }
 
-onMounted(() => {
-  // window.addEventListener("scroll", function (e: any): void {
-  //   let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
-  //   if (document.documentElement.scrollTop > scrollHeight - window.innerHeight && channel.value.page < channel.value.pages) {
-  //     loadData()
-  //   }
-  // })
+function handleSchedule(param: any){
+  if(param.id === "-1"){
+    router.push(proxy.const.setUrl({
+      uid: getUid(),
+      query: "/schedule?mod=myschedule"
+    }))
+  }else{
+    init({
+      type: "schedule",
+      schedule_id: param.id,
+      page: 1
+    })
+  }
+}
 
+onMounted(() => {
   // 在没有置顶页面时，初始化页面进入到默认tabs项中
   if (!query.value.mod) {
     const defaultTab = tabs.value ? tabs.value.filter((item: any) => item.default === '1') : []
@@ -166,5 +188,7 @@ onMounted(() => {
       talktabs.value.handelClick(defaultTab[0].value)
     }
   }
+  getSchedule()
 })
 </script>
+

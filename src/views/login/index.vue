@@ -1,6 +1,5 @@
 <template>
-<div>
-  <section style="position:fixed; top:0; left:0; right:0; bottom:0;">
+  <section class="bg" style="position:fixed; top:0; left:0; right:0; bottom:0;">
     <div id="detail" class="login-con box-shadow clearfix" style="left: 50%; top: 50%; margin-left: -300px; margin-top: -150px;">
       <div id="userinfo" class="login-left left">
         <div class="photos"><i class="iconfont icon-user" style="font-size:64px !important;"></i></div>
@@ -11,7 +10,7 @@
         <ul>
           <li><i class="iconfont icon-magnifier"></i><input id="username" v-model="username" type="text" placeholder="用户名/账号/邮箱" class="input-sm"></li>
           <li><i class="iconfont icon-dot-more"></i><input id="password" v-model="password" type="password" placeholder="密码" class="input-sm"></li>
-          <li>
+          <li class="mt25">
             <v-button @onClick="login">登录</v-button>
           </li>
           <li class="cl-red">{{msg}}</li>
@@ -21,10 +20,9 @@
       </div>
     </div>
   </section>
-</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
   defineComponent,
   getCurrentInstance,
@@ -37,16 +35,6 @@ import {
   useRouter
 } from 'vue-router'
 
-export default defineComponent({
-  name: 'HomeViewbbb',
-  data() {
-    return {
-      username: '',
-      password: '',
-    };
-  },
-
-  setup(props, context) {
     const {
       ctx
     }: any = getCurrentInstance();
@@ -82,10 +70,11 @@ export default defineComponent({
       });
 
     }
-    return {
-      login,
-      msg
-    }
-  }
-})
 </script>
+
+<style lang="less" scoped>
+.bg{
+  background: url(/public/images/bg2.jpg) no-repeat;
+
+}
+</style>

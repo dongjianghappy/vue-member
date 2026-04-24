@@ -1,63 +1,74 @@
 <template>
-<v-button @click="handleclick">
-  {{action == 'edit' ? '编辑' : '新增碎片'}}
-</v-button>
-<v-dialog v-model:show="isShow" ref="dialog" title="记忆碎片" :action="action" width="950px" :style="{width: 650, height: 550}" :data="{...data, coding: data.coding.detail}" @submit="submit">
-  <template v-slot:content v-if="isShow">
-    <div style="height: 400px; overflow: auto;">
-      <ul class="form-wrap-box">
-        <li class="li">
-          <span class="label">记忆</span>
-          <input v-model="detail.name" type="text" placeholder="记忆碎片" class="input-sm input-full" />
-        </li>
-        <li class="li">
-          <span class="label">名称</span>
-          <input v-model="detail.name" type="text" placeholder="记忆碎片" class="input-sm input-full" />
-        </li>
-        <li class="li">
-          <span class="label">时间</span>
-          <div class="flex">
-          <div class="w150">
-            <input v-model="detail.date" type="text" placeholder="请输入开始时间" class="input-sm input-100" />
-            <v-timepicker :data="detail" attr="date" />
-          </div>
-          <div class="w80 mr10">
-            <input v-model="detail.time" type="text" placeholder="12" class="input-sm w50" />时
-          </div>
-          <div style="flex: 1">
-            <input v-model="detail.time_specification" type="text" placeholder="请输入时长说明" class="input-sm w-full" />
-          </div>
-          </div>
-          <!-- <input v-model="detail.start_time" type="text" placeholder="开始时间" class="input-sm input-150" />
+    <v-button @click="handleclick">
+        <i class="iconfont icon-edit" v-if="action == 'edit'"></i>
+        <span v-else>新增碎片</span>
+    </v-button>
+    <v-dialog v-model:show="isShow" ref="dialog" title="记忆碎片" :action="action" width="950px" :style="{width: 600, height: 500}" :data="{...data, coding: data.coding.detail}" @submit="submit">
+        <template v-slot:content v-if="isShow">
+            <div style="height: 350px; overflow: auto;">
+                <div class="edit-list">
+                    <div class="li">
+                        <div class="label">名称</div>
+                        <input v-model="detail.name" type="text" placeholder="记忆碎片" class="input-sm input-full" />
+                    </div>
+                    <div class="li mtb10">
+                        <div class="flex mb15">
+                            <div class="mr10" style="flex: 1">
+                                <div>日期</div>
+                                <div class="relative">
+                                  <input v-model="detail.date" type="text" placeholder="请输入日" class="input-sm w-full" />
+                                  <span class="absolute" style="top: 5px; right: 0px;"><v-timepicker :data="detail" attr="date" /></span>
+                                </div>
+                            </div>
+                            <div style="flex: 1">
+                                <div>时段</div>
+                                <v-select :enums="period" v-model:value="detail.period" :defaultValue="'0'" />
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="mr10" style="flex: 1">
+                                <div>时间(24小时制)</div>
+                                <input v-model="detail.time" type="text" placeholder="请输入间" class="input-sm w-full" />
+                            </div>
+                            <div style="flex: 1">
+                                <div>时长(分钟)</div>
+                                <input v-model="detail.time_specification" type="text" placeholder="请输入时长" class="input-sm w-full" />
+                            </div>
+                        </div>
+                        <!-- <input v-model="detail.start_time" type="text" placeholder="开始时间" class="input-sm input-150" />
           至
           <input v-model="detail.last_time" type="text" placeholder="结束时间" class="input-sm input-150" /> -->
-        </li>
-        <li class="li">
-          <span class="label">地点</span>
-          <input v-model="detail.address" type="text" placeholder="请输入投票名称" class="input-sm input-full" />
-        </li>
-        <li class="li">
-          <span class="label">说明</span>
-          <textarea placeholder="请输入投票说明" v-model="detail.content" class="w-full"></textarea>
-        </li>
-        <li class="li">
-          <span class="label">图片</span>
-          <div class="relative" style="padding-right: 100px">
-            <div class="flex">
-          <div class="align_center relative" style="width: 33%;" v-for="(item, index) in imageList" :key="index">
-            <v-deleteicon :dataList="imageList" field="src" :data="{src: item}" />
-            <img :src="item" onerror="this.src='/images/head_normal_100.png'" class="photos p5" style="width: 100%; height: 150px;">
-          </div>
+                    </div>
+                    <div class="li mtb10">
+                        <div class="label">内容</div>
+                        <textarea placeholder="请输入内容" v-model="detail.content" class="w-full"></textarea>
+                    </div>
+                    <div class="li mtb10" style="height: auto">
+                        <div class="label">图片
+
+                            <div class="right" style="z-index: 100">
+                                <ChooseImage :data="{id: detail.fid, coding: data.coding.content}" :imageList="imageList" @choose="choose" />
+                            </div>
+                        </div>
+                        <div class="relative" style="padding-right: 100px">
+                            <div class="flex">
+                                <div class="align_center relative" style="width: 33%; height: 150px;" v-for="(item, index) in imageList" :key="index">
+                                    <v-deleteicon :dataList="imageList" field="src" :data="{src: item}" />
+                                    <img :src="item" onerror="this.src='/images/head_normal_100.png'" class="photos p5" style="width: 100%; height: 150px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="li mt25">
+                        <span class="label">地点</span>
+                        <span class="mr10" v-if="detail.address">{{detail.address}}</span>
+                        <v-location @onLocaltion="(e)=>detail.address = e" />
+                        <!-- <input v-model="detail.address" type="text" placeholder="请输入投票名称" class="input-sm input-full" /> -->
+                    </div>
+                </div>
             </div>
-          <div class="plr15 absolute" style="width:100px; top: 0; right: 0; z-index: 100">
-            <ChooseImage :data="{id: detail.fid, coding: data.coding.content}" :imageList="imageList"  @choose="choose" />
-            </div>
-            </div>
-        </li>
-      </ul>
-    </div>
-  </template>
-</v-dialog>
+        </template>
+    </v-dialog>
 </template>
 
 <script setup lang="ts">
@@ -68,6 +79,9 @@ import {
   useStore,
   watch
 } from '@/utils'
+import {
+  PERIOD
+} from '@/assets/const'
 import ChooseImage from './chooseImage.vue'
 const props: any = defineProps({
   action: {
@@ -96,6 +110,7 @@ const {
   proxy
 }: any = getCurrentInstance();
 const store = useStore();
+const period: any = PERIOD
 const element: any = document.getElementsByTagName('html');
 const dialog: any = ref(null)
 const detail: any = ref({})
@@ -145,6 +160,7 @@ function submit(params: any) {
     name,
     content,
     date,
+    period,
     time,
     time_specification,
     address
@@ -162,6 +178,7 @@ function submit(params: any) {
     name,
     content,
     date,
+    period,
     time,
     time_specification,
     address,

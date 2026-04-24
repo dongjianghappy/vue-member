@@ -1,6 +1,6 @@
 <template>
 <v-button v-model:show="isShow">
-  <i class="iconfont icon-edit" />日程管理
+  <i class="iconfont icon-edit" />设置
 </v-button>
 <v-dialog v-model:show="isShow" ref="dialog" action="edit" title="日程管理" :style="{width: 750, height: 500}" :hasfooter="false">
   <template v-slot:content>

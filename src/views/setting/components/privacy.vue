@@ -38,7 +38,8 @@ import {
 import {
   visibleTimeRange,
   online,
-  commentUser
+  commentUser,
+  auth
 } from '@/assets/const'
 
 const store = useStore();
@@ -81,6 +82,8 @@ function getEnum(param: any) {
     enums = online
   } else if (param === 'comment_user') {
     enums = commentUser
+  } else if (param === 'visit') {
+    enums = auth
   }
   return enums
 }

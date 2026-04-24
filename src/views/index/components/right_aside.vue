@@ -1,18 +1,18 @@
 <template>
-<div id="aside-box" style="width: 280px">
-  <UserInfo v-if="loginuser.account" />
-  <UserLogin v-else />
-  <Sign v-if="loginuser.account && module.sign" />
-  <Three />
-  <FishInfo v-if="module.sea" />
-  <Calendar v-if="module.calendar" :render="render" />
-  <CreatorCenter v-if="loginuser.account && module.creator" />
-  <Hot v-if="module.hot_search" />
-  <RecommendUser v-if="module.recommended_users" />
-  <HotTalk v-if="module.hot_topic" />
-  <Visitor :userInfo="loginuser" v-if="loginuser.account && module.recent_visitors" />
-  <Footer id="ranking" v-if="module.footer" />
-</div>
+    <div id="aside-box" style="width: 280px">
+        <UserInfo v-if="loginuser.account" />
+        <UserLogin v-else />
+        <Sign v-if="loginuser.account && module.sign" />
+        <Three v-if="module.three" />
+        <FishInfo v-if="module.sea" />
+        <Calendar v-if="module.calendar" :render="render" />
+        <!-- <CreatorCenter v-if="loginuser.account && module.creator" /> -->
+        <Hot v-if="module.hot_search" />
+        <RecommendUser v-if="module.recommended_users" />
+        <HotTalk v-if="module.hot_topic" />
+        <Visitor :userInfo="loginuser" v-if="loginuser.account && module.recent_visitors" />
+        <Footer id="ranking" v-if="module.footer" />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -29,7 +29,7 @@ import Sign from './module/sign.vue'
 import Three from '../../three/components/module.vue'
 import FishInfo from '../../application/fish/components/fishInfo.vue'
 import Calendar from './module/calendar.vue'
-import CreatorCenter from './module/creatorCenter.vue'
+// import CreatorCenter from './module/creatorCenter.vue'
 import Hot from '@/views/module/hot.vue'
 import RecommendUser from './module/recommendUser.vue'
 import HotTalk from './module/hotTalk.vue'

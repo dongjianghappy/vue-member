@@ -8,7 +8,6 @@
     <ul class="visit-list clearfix">
       <li v-for="(item, index) in visitor.list[current]" :key="index">
         <div class="imgbox" style=" position: static;">
-          <!-- <img :src="item.photos"> -->
           <v-photos :sourceData="{...item, uid: item.visitor}" :style="{width: 80, height: 80, radius: '4px'}" />
         </div>
         <div class=" relative ptb10 align_center">

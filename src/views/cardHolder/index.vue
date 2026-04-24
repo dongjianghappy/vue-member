@@ -32,6 +32,8 @@ import Card1 from './components/card1.vue'
 const store: any = useStore()
 const dataList: any = ref([])
 
+document.documentElement.scrollTop = 0
+
 function init() {
   store.dispatch('common/Fetch', {
     api: 'cardHolder',

@@ -99,6 +99,7 @@ const cover: any = ref("")
 
 // 监听路由
 watch(() => props.dataList, (newValues, prevValues) => {
+  imgList.value = []
   props.dataList.map((item: any) => {
     imgList.value.push({
       src: item,

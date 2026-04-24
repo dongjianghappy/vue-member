@@ -332,6 +332,13 @@ export const commentUser = {
 	2: '我的粉丝'
 }
 
+export const auth = {
+	0: '所有人访问',
+	1: '仅好友访问',
+	2: '不可访问',
+	3: '申请访问'
+}
+
 
 
 export const messageNotification = {
@@ -468,4 +475,13 @@ export const lightType = [
 	'PointLight',
 	'RectAreaLight',
 	'SpotLight'
+]
+
+// 时段
+export const PERIOD = [
+	{name: "上午", value: '0'},
+	{name: "中午", value: '1'},
+	{name: "下午", value: '2'},
+	{name: "晚上", value: '3'},
+	{name: "深夜", value: '4'},
 ]

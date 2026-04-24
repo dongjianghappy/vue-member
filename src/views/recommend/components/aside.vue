@@ -4,6 +4,7 @@
     <ul v-if="data.length">
       <li v-for="(item, index) in data" :key="index" @click="handleClick(item.path || item.value)" class="aside">
         <i class="iconfont" :class="`icon-${item.icon || 'dot'}`" v-if="hasIcon" /> {{item.name}} <span v-if="item.num">({{item.num}})</span>
+        <v-flag :data="item" v-if="item.flag" />
       </li>
     </ul>
     <slot name="aside"></slot>

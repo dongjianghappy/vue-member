@@ -1,27 +1,30 @@
 <template>
-<!-- 登录框 -->
-<v-login :displayButton="false" />
-<!-- 欢迎消息 -->
-<v-welcome v-if="loginMessage == 'true'" />
-<!-- 聊天窗口 -->
-<!-- <v-chat /> -->
-<!-- 播放器 -->
-<v-music v-model:isShow="showPlay" v-if="showPlay" />
-<v-lrc />
-<!-- <v-messageboard v-if="module.personal_center && module.personal_center.message_board" /> -->
-<v-time v-if="module.personal_center && module.personal_center.time" />
-<v-letter />
-<v-energy v-if="module.personal_center && module.personal_center.energy" />
-<!-- 主题 -->
-<Thme v-if="loginuser.currentUser && module.personal_center && module.personal_center.theme" />
-<v-layer v-model:isShow="showFlag" :data="currentData.data" :currentImg="currentData.img" v-if="showFlag" type="image" :hasInfo="currentData.hasInfo || true" :hasComment="false" />
-<v-layer1 v-model:isShow="displayScreen" :dataList="[{...currentData.data}]" v-if="displayScreen" />
-<Graph v-model:show="displayGraph" :data="currentData" v-if="displayGraph" />
-<v-gotop />
-<BirthdayPrompt v-if="loginuser.birthday && module.prompt && module.prompt.birthday" />
-<MessagePrompt v-else-if="module.prompt && module.prompt.message_prompt" />
-<v-theme />
-<v-quicknavigation v-if="module.personal_center && module.personal_center.quick_navigation" />
+    <!-- 登录框 -->
+    <v-login :displayButton="false" />
+    <!-- 欢迎消息 -->
+    <v-welcome v-if="loginMessage == 'true'" />
+    <!-- 聊天窗口 -->
+    <!-- <v-chat /> -->
+    <!-- 播放器 -->
+    <v-music v-model:isShow="showPlay" v-if="showPlay" />
+    <!-- 歌词 -->
+    <v-lrc />
+    <!-- <v-messageboard v-if="module.personal_center && module.personal_center.message_board" /> -->
+    <!-- 时间 -->
+    <v-time v-if="module.personal_center && module.personal_center.time" />
+    <v-letter />
+    <!-- 能量 -->
+    <v-energy v-if="module.personal_center && module.personal_center.energy" />
+    <!-- 主题 -->
+    <Thme v-if="loginuser.currentUser && module.personal_center && module.personal_center.theme" />
+    <v-layer v-model:isShow="showFlag" :data="currentData.data" :currentImg="currentData.img" v-if="showFlag" type="image" :hasInfo="currentData.hasInfo || true" :hasComment="false" />
+    <v-layer1 v-model:isShow="displayScreen" :dataList="[{...currentData.data}]" v-if="displayScreen" />
+    <Graph v-model:show="displayGraph" :data="currentData" v-if="displayGraph" />
+    <v-gotop />
+    <BirthdayPrompt v-if="loginuser.birthday && module.prompt && module.prompt.birthday" />
+    <MessagePrompt v-else-if="module.prompt && module.prompt.message_prompt" />
+    <v-theme />
+    <v-quicknavigation v-if="module.personal_center && module.personal_center.quick_navigation" />
 </template>
 
 <script setup lang="ts">

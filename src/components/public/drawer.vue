@@ -1,7 +1,7 @@
 <template>
-<div class="drawer-wrap" :class="{'drawer-open': show}" :style="`top: ${style.top || 64}px`">
+<div class="drawer-wrap" :class="{'drawer-open': show, 'drawer-left': isLeft}" :style="{top: `${style.top || 64}px`, ...drawerLeft}">
   <v-mask v-show="show" v-model:isShow="isShow" v-if="mask" />
-  <div class="drawer align_left" :style="{width: `${style.width || 700}px`, height: `calc(100% - ${style.top || 64}px)`, right: show ? '0px' : `-${style.width || 700}px`}">
+  <div class="drawer align_left" :class="{'drawer-left': isLeft}" :style="{width: `${style.width || 700}px`, height: `calc(100% - ${style.top || 64}px)`, ...drawerLeft2}">
     <div class="module-wrap relative" :style="`height:${style.height || '100%'}`">
       <div class="module-head" v-if="title">{{title}}
         <span class="right">
@@ -34,7 +34,8 @@ import {
   getCurrentInstance,
   watch,
   ref,
-  useStore
+  useStore,
+  computed
 } from '@/utils'
 
 const props: any = defineProps({
@@ -67,6 +68,10 @@ const props: any = defineProps({
   hasfooter: {
     type: Boolean,
     default: true
+  },
+  isLeft: {
+    type: Boolean,
+    default: false
   },
   param: {
     type: Object,
@@ -104,6 +109,24 @@ const {
 }: any = getCurrentInstance();
 const store = useStore();
 const isShow = ref(props.show)
+
+const drawerLeft: any = computed(() => {
+  let style: any = {right: '0px'}
+  if(props.isLeft){
+    style = {left: `-${props.style.width}px`}
+    if(props.show){
+      style = {left: '0px'}
+    }
+  }
+  return style
+})
+const drawerLeft2: any = computed(() => {
+  let style: any = {right: props.show ? '0px' : `-${props.style.width || 700}px`}
+  if(props.isLeft){
+    style = {left: props.show ? '0px' : `-${props.style.width || 700}px`}
+  }
+  return style
+})
 
 watch([isShow], (newValues, prevValues) => {
   emit('update:show', false)

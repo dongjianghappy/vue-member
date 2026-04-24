@@ -1,53 +1,59 @@
 <template>
-<div class="module-content basic-info" style="background: var(--card-background);">
-          <div class="flex">
-            <div style="flex: 1">
-              <div class="mb15">
-                <div class="font12">
-                  <!-- <span class="mr15">性别：{{data.sex === '1' ? '男' : '女'}}</span> -->
-                  <span class="mr25">生日: {{data.year}} - {{data.month}} - {{data.day}}</span>
+    <div class="module-wrap mb10">
+        <!-- <div class="module-head">好友信息</div> -->
+        <div class="module-content basic-info">
+            <div class="flex">
+                <div style="flex: 1">
+                    <div class="mb15">
+                        <div class="font12">
+                            <!-- <span class="mr15">性别：{{data.sex === '1' ? '男' : '女'}}</span> -->
+                            <span class="mr25">生日: {{data.year}} - {{data.month}} - {{data.day}}</span>
 
-                </div>
-                <div class="mt10 font12">
-                  <span class="mr15">职业: {{data.unit}}</span>
-                  <span class="mr15">{{data.industry}}</span>
-                </div>
-                                <div class="mt10 font12">
-                  <span class="mr15">微信: {{data.weixin}} </span>
-                  <span class="mr15">电话: {{data.phone}}</span>
-                  <span class="mr15">qq: {{data.qq}}</span>
-                </div>
-                <div class="mt10 font12">
-                  <span class="mr15">家乡: {{address.province}} {{address.city}} </span>
-                  
-                </div>
-                                               
-                <div class="mt10 font12">
-                  <span class="mr15">住址: {{data.address}}</span>
-                </div>
+                        </div>
+                        <div class="mt10 font12">
+                            <span class="mr15">职业: {{data.unit}}</span>
+                            <span class="mr15">{{data.industry}}</span>
+                        </div>
+                        <div class="mt10 font12">
+                            <span class="mr15">微信: {{data.weixin}} </span>
+                            <span class="mr15">电话: {{data.phone}}</span>
+                            <span class="mr15">qq: {{data.qq}}</span>
+                        </div>
+                        <div class="mt10 font12">
+                            <span class="mr15">家乡: {{address.province}} {{address.city}} </span>
 
-                                <div class="mt10 font12">
-                  <span class="mr15">时间：{{data.know_time}}</span>
+                        </div>
+
+                        <div class="mt10 font12">
+                            <span class="mr15">住址: {{data.address}}</span>
+                        </div>
+
+                        <div class="mt10 font12">
+                            <span class="mr15">时间：{{data.know_time}}</span>
+                        </div>
+                        <div class="mt10 font12">
+                            <span class="mr15">说明：{{data.introduction}}</span>
+                        </div>
+                        <div class="mt10 font12">
+                            <span class="mr15">地点：{{data.know_address}}</span>
+                        </div>
+                    </div>
                 </div>
-                                <div class="mt10 font12">
-                  <span class="mr15">说明：{{data.introduction}}</span>
+                <div class="plr15" style="width:150px">
+                    <div class="align_center">
+                        <img class="radius-4" :src="data.photo" onerror="this.src='/images/head_normal_100.png'" style="width: 100%;" />
+                        <div class="mt5">
+                            {{data.name}}
+                        </div>
+                        <div class="m25">
+                          <Detail action="edit" :data="{id: data.id, coding: data.coding}" :render="render" />
+                        </div>
+                        <div @click="handleClick(data)">时间线</div>
+                    </div>
                 </div>
-                                <div class="mt10 font12">
-                  <span class="mr15">地点：{{data.know_address}}</span>
-                </div>
-              </div>
             </div>
-            <div class="plr15" style="width:150px">
-              <div class="align_center">
-                <img class="radius-4" :src="data.photo" onerror="this.src='/images/head_normal_100.png'"  style="width: 100%;" />
-                <div class="mt5">
-                  {{data.name}}
-                </div>
-                <div class="m25"><Detail action="edit" :data="{id: data.id, coding: data.coding}" :render="render" /></div>
-              </div>
-            </div>
-          </div>
         </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -58,7 +64,8 @@ import {
   useStore,
   watch,
   computed,
-  reactive
+  reactive,
+  useRouter
 } from '@/utils'
 import citys from '@/assets/cityData'
 import Detail from './detail.vue'
@@ -76,6 +83,10 @@ const props: any = defineProps({
     }
   }
 })
+const {
+  proxy
+}: any = getCurrentInstance();
+const router = useRouter();
 const cityData: any = reactive(citys)
 const address = computed(() => addressInit());
 
@@ -101,5 +112,9 @@ function addressInit() {
     city,
     area
   }
+}
+
+function handleClick(param: any){
+  router.push(`/memory?id=${param.id}`)
 }
 </script>

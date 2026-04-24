@@ -48,6 +48,7 @@ const initState: State = {
     recommend: [],
     camera: [],
     vlog: [],
+    schedule: [],
     checked_num: 0,
     page: 1,
     pages: 0

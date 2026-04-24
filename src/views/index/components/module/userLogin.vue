@@ -27,8 +27,4 @@ const store = useStore()
 const router = useRouter()
 const userInfo = computed(() => store.getters['user/loginuser']);
 const siteInfo = computed(() => store.getters['user/siteInfo']);
-
-function handleClick() {
-  router.push('/login')
-}
 </script>

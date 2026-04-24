@@ -157,7 +157,8 @@ const codings: any = {
     background_music: 'U0620048',
     watch_history: "U0620050",
     content_collect: "U0620055",
-    download: "U0620056"
+    download: "U0620056",
+    extend: "U0620058"
   },
   questions: {
     name: "questions",
