@@ -23,6 +23,10 @@ const api:any =  {
   signOut (params: any) {
     return http.request('user', 'signOut', params)
   },
+  // 时实检测当天常识提示通知
+  websocketMessage (params?: any) {
+    return http.request('common', 'websocketMessage', params)
+  },
   // 查询
   select(params: any) {
     return http.request('common', 'select', params)
@@ -853,17 +857,8 @@ ranking (params: any) {
 schedule (params: any) {
   return http.request('talk', 'schedule', params)
 },
-scheduleDetail (params: any) {
-  return http.request('talk', 'scheduleDetail', params)
-},
-scheduleList (params: any) {
-  return http.request('talk', 'scheduleList', params)
-},
 getForm (params: any) {
   return http.request('common', 'getForm', params)
-},
-updateSchedule (params: any) {
-  return http.request('talk', 'updateSchedule', params)
 },
 // 收获能量
 getEnergy (params: any) {
@@ -1142,9 +1137,72 @@ closeFriendContent (params: any) {
 closeFriendContentDetails (params: any) {
   return http.request('user', 'closeFriendContentDetails', params)
 },
-// 亲密还有记忆碎片详情
+// 亲密好友记忆碎片详情
 closeFriendContentDetail (params: any) {
   return http.request('user', 'closeFriendContentDetail', params)
+},
+// 单个亲密好友记忆碎片详情
+getCloseFrienddetail (params: any) {
+  return http.request('user', 'getCloseFrienddetail', params)
+},
+// 关联查询
+relationSelect(params: any) {
+  return http.request('common', 'relationSelect', params)
+},
+
+
+// 日程
+// 系统日程
+systemSchedule (params: any) {
+  return http.request('schedule', 'systemSchedule', params)
+},
+// 我的日程
+scheduleList (params: any) {
+  return http.request('schedule', 'scheduleList', params)
+},
+// 日程详情
+scheduleDetailInfo (params: any) {
+  return http.request('schedule', 'scheduleDetailInfo', params)
+},
+// 日程记录
+scheduleRecord (params: any) {
+  return http.request('schedule', 'scheduleRecord', params)
+},
+// 以日期形式查看日程
+scheduleMonth (params: any) {
+  return http.request('schedule', 'scheduleMonth', params)
+},
+// 日程基本信息统计
+scheduleStatistics (params: any) {
+  return http.request('schedule', 'scheduleStatistics', params)
+},
+// 日程成员管理
+scheduleBindRoster(params: any) {
+  return http.request('schedule', 'scheduleBindRoster', params)
+},
+// 查询绑定成员
+bindUser(params: any) {
+  return http.request('schedule', 'bindUser', params)
+},
+// 确认绑定成员
+confirmBindUser(params: any) {
+  return http.request('schedule', 'confirmBindUser', params)
+},
+// 日程数据统计
+scheduleDataStatistics(params: any) {
+  return http.request('schedule', 'scheduleDataStatistics', params)
+},
+// 查询用户日程
+userSchedule (params: any) {
+  return http.request('schedule', 'userSchedule', params)
+},
+// 日程打卡详情
+scheduleDetail (params: any) {
+  return http.request('schedule', 'scheduleDetail', params)
+},
+// 日程打卡
+updateSchedule (params: any) {
+  return http.request('schedule', 'updateSchedule', params)
 },
 }
 

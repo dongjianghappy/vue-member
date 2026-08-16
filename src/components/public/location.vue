@@ -2,7 +2,7 @@
 <v-button v-model:show="isShow">
   <i class="iconfont icon-position font12">所在位置</i>
 </v-button>
-<v-dialog v-model:show="isShow" ref="form" title="所在位置" :style="{width: 450, height: 550}" :confirm="true" @submit="submit">
+<v-dialog v-model:show="isShow" ref="form" title="所在位置" :style="{width: 450, height: 500}" :confirm="true" @submit="submit">
   <template v-slot:content>
     <div>
       <div class="talk-search">

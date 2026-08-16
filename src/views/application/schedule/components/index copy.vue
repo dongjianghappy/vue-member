@@ -8,11 +8,12 @@
       </template>
     </v-aside>
   </div>
-  <div class="m0 right" style="width: 910px">
+  <div class="m0 main-center right" style="width: 910px">
     <Dynamics v-if="component === 'dynamics'" />
     <Ranking v-else-if="component === 'ranking'" />
+    <Record v-else-if="component === 'record'" />
+    <Month v-else-if="component === 'month'" />
     <MySchedule v-else-if="component === 'myschedule'" />
-    <Detail v-else-if="component === 'detail'" />
     <Main v-else />
   </div>
 </div>
@@ -24,12 +25,13 @@ import {
   useStore,
   useRoute
 } from '@/utils'
-import Banner from './components/banner.vue'
-import Main from './components/main.vue'
-import Dynamics from './components/dynamics.vue'
-import MySchedule from './components/mySchedule.vue'
-import Ranking from './components/ranking.vue'
-import Detail from './item/index.vue'
+import Banner from './banner.vue'
+import Main from './main.vue'
+import Dynamics from './dynamics.vue'
+import MySchedule from './mySchedule.vue'
+import Ranking from './ranking.vue'
+import Record from './record.vue'
+import Month from '../calendar/month.vue'
 
 const store = useStore();
 const route = useRoute();
@@ -41,20 +43,5 @@ const module: any = computed(() => {
   return site
 });
 const component = computed(() => route.query.mod);
-
-function getScheduleDetail() {
-  store.dispatch('common/Fetch', {
-    api: 'scheduleDetail',
-    data: {
-      id: 7
-    }
-  }).then((res) => {
-    console.log("sssssssssssssss");
-    console.log(res);
-  })
-}
-
-
-
-getScheduleDetail()
+document.documentElement.scrollTop = 0
 </script>

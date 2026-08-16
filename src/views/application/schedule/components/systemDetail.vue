@@ -127,7 +127,7 @@ async function handleEdit(){
   store.dispatch('common/Fetch', {
     api: "editUserInfo",
     data: {
-      schedule: current.value.join(',') || "",
+      schedule: `|${current.value.join('|')}|`,
     }
   }).then(res => {
     props.render()

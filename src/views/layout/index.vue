@@ -40,6 +40,7 @@ import Index from './components/index.vue'
 import Three from './components/three.vue'
 import Fish from '../application/fish/index.vue'
 import Auth from '../login/authority‌.vue'
+import VueEvent from '@/utils/event'
 
 const {
   proxy
@@ -103,6 +104,24 @@ async function init(){
               }
             })
           }, 60000)
+
+
+          let timers: any = ""
+          const promptType = ['dialog', 'window', 'message']
+
+          store.dispatch('common/Fetch', {
+            api: "websocketMessage"
+          }).then((res: any) => {
+            res.result && res.result.map((item: any) => {
+              if(promptType.indexOf(item.prompt_type) > -1){
+                VueEvent.emit("commonSense", item);
+              }
+            })
+          })
+
+          // timers = setInterval(() => {
+
+          // }, 3000)
         }
       }
       

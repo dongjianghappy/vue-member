@@ -3,10 +3,16 @@
         <i class="iconfont icon-edit" v-if="action == 'edit'"></i>
         <span v-else>新增碎片</span>
     </v-button>
-    <v-dialog v-model:show="isShow" ref="dialog" title="记忆碎片" :action="action" width="950px" :style="{width: 600, height: 500}" :data="{...data, coding: data.coding.detail}" @submit="submit">
+    <v-dialog v-model:show="isShow" ref="dialog" title="记忆碎片" :action="action" width="950px" :style="{width: 600, height: 500}" api="getCloseFrienddetail" :data="{...data, coding: data.coding.detail}" @submit="submit">
         <template v-slot:content v-if="isShow">
             <div style="height: 350px; overflow: auto;">
                 <div class="edit-list">
+                    <div class="li mb25">
+                        <div class="label mb5">关联标题
+                          <v-relation :data="{coding: data.coding.content}" @choose="chooseRelation" />
+                        </div>
+                        {{detail.title}}
+                    </div>
                     <div class="li">
                         <div class="label">名称</div>
                         <input v-model="detail.name" type="text" placeholder="记忆碎片" class="input-sm input-full" />
@@ -127,6 +133,11 @@ watch([isShow], async (newValues, prevValues) => {
     
   }
 })
+
+function chooseRelation(param: any){
+  detail.value.title = param.name
+  detail.value.fid = param.id
+}
 
 function init(param: any = "") {
   store.dispatch('common/Fetch', {

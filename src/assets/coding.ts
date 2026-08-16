@@ -539,7 +539,10 @@ const codings: any = {
     expression: 'U0700041',
     schedule: {
       cate: 'U0700032',
-      list: 'U0700033'
+      list: 'U0700033',
+      config: 'U0700051',
+      content: 'U0700055',
+      setting: "U0700057"
     },
     privilege: 'U0700043',
     blacklist: "U0700044",
@@ -547,7 +550,8 @@ const codings: any = {
     close_friend: {
       list: "U0700052",
       content: "U0700053",
-      detail: "U0700054"
+      detail: "U0700054",
+      application: "U0700056"
     }
   }
 };

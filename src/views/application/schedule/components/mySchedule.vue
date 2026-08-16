@@ -1,23 +1,41 @@
 <template>
+<div class="container w1100 clearfix">
+  <div class="w220 left">
+    <Aside :data="{mod: 'person'}" />
+  </div>
+  <div class="m0 main-center right" style="width: 870px">
 <div class="module-wrap">
-  <div class="module-head">系统日程
+  <div class="module-head">已选择的
     <span class="right"><SystemDetail :data="{schedule_id, coding}" :render="init" /></span>
   </div>
   <div class="module-content p15">
-        <template v-for="(item, index) in systemList.system" :key="index">
+        <template v-for="(item, index) in systemList.selected" :key="index">
       <ItemList :data="item" />
     </template>
   </div>
 </div>
 
 <div class="module-wrap">
-  <div class="module-head">我的日程
+  <div class="module-head">我创建的
     <span class="right"><Detail :data="{coding}" /></span>
   </div>
   <div class="module-content p15">
         <template v-for="(item, index) in systemList.customize" :key="index">
-      <ItemList :data="item" />
+      <ItemList :data="item" type="custom" />
     </template>
+  </div>
+</div>
+
+<div class="module-wrap">
+  <div class="module-head">我加入的
+    <span class="right"><Search :data="{coding}" :dataList="systemList.join" :render="init" /></span>
+  </div>
+  <div class="module-content p15">
+        <template v-for="(item, index) in systemList.join" :key="index">
+      <ItemList :data="item" type="custom" />
+    </template>
+  </div>
+</div>
   </div>
 </div>
 </template>
@@ -32,9 +50,11 @@ import {
   useRouter,
   getUid
 } from '@/utils'
+import Aside from './aside.vue'
 import SystemDetail from './systemDetail.vue'
-import ItemList from '../detail/itemList.vue'
+import ItemList from './itemList.vue'
 import Detail from './detail.vue'
+import Search from '../detail/components/search.vue'
 const props: any = defineProps({
   dataList: {
     type: Array,

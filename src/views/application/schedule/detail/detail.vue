@@ -1,8 +1,8 @@
 <template>
     <v-button v-model:show="isShow">
-        打卡
+        打卡12
     </v-button>
-    <v-dialog v-model:show="isShow" ref="dialog" title="" :data="data" api="talkDetail" :style="{width: 600, height: 500}" :contentStyle="{height: '400px', overflow: 'auto'}" @submit="submit">
+    <v-dialog v-model:show="isShow" ref="dialog" title="" :data="data" api="talkDetail" :style="{width: 600, height: 500}" :contentStyle="{height: '440px', overflow: 'auto'}" @submit="submit">
         <template v-slot:content>
             <div class="edit-list">
                 <div class="li mb15">

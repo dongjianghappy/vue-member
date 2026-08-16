@@ -132,7 +132,7 @@ function getSchedule(){
     {
       name: "全部"
     }]
-    cateList.value = [...cateArray, ...res.result.system]
+    cateList.value = [...cateArray, ...res.result.selected]
   })
 }
 

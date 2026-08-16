@@ -83,6 +83,8 @@ const routes: Array<RouteRecordRaw> = [
       { path: '/track', component: () => import('../views/index/track/index.vue')},
       { path: '/u/:id/close_friend', component: () => import('../views/close_friend/index.vue')},
       { path: '/memory', component: () => import('../views/close_friend/memory/index.vue')},
+      { path: '/schedule_timeline', component: () => import('../views/application/schedule/timeline/index.vue')},
+      { path: '/common_sense', component: () => import('../views/commonSense/index.vue')},
       // { path: '/life', component: () => import('../views/recommend/index.vue')},
     ]
   },

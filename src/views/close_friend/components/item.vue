@@ -12,8 +12,8 @@
                     <v-popover content="<i class='iconfont icon-down font18 icon-btn'></i>" arrow="tb" offset="right" :move="-50" :keys="`popover-${item.id}`">
                         <div style="width: 150px">
                             <ul class="font14">
-                              <li><Detail2 action="edit" :data="{user: item.user, id: item.id,coding: data.coding.content}" :render="initContent" /></li>
-                              <li><Detail3 :data="{id: item.id, ...data}" :render="initContent" /></li>
+                              <li><Detail2 action="edit" :data="{user: item.user, id: item.id,coding: data.coding.content}" :render="render" /></li>
+                              <li><Detail3 :data="{id: item.id, ...data}" :render="render" /></li>
                             </ul>
                         </div>
                     </v-popover>
@@ -31,7 +31,7 @@
                 </div>
                 <div v-for="(list, i) in item.list" :key="i" class="mb5 p10 radius-4" style="background: var(--color-primary-background);">
                     <span class="right">
-                        <Detail3 action="edit" :data="{id: list.id,coding: data.coding}" :render="render" />
+                        <Detail3 action="edit" :data="{id: list.id,coding: data.coding}" />
                     </span>
                     <div class="mb5">{{list.name}}</div>
                     <div class="mb5">{{list.date}} {{list.period}} {{list.time}}:00</div>

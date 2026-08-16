@@ -1,12 +1,15 @@
 <template>
-<Head :data="{...detail, coding}" :render="init" />
+<Head :data="{...detail, coding}" :render="getScheduleDetail" />
   <div class="w180 left">
-    <Aside />
+    <Aside :data="detail.system === '1' ? module.schedule : module.schedule_custom" title="" :isFixed="false" :query="`&id=${route.query.id}`" />
   </div>
   <div class="m0 main-center right" style="width: 910px">
-  <TalkTabs ref="[{name: '项目榜', value: 'item'}, {name: '用户榜', value: 'user'}, {name: '热值榜', value: 'hot'}]" :data="tabs" :render="init" />
-  <TalkItem :loading="loading" :sourceData="channel['schedule']" :render="init" />
-  <v-loding v-if="!loading" />
+    <Dynamics v-if="route.query.item === 'talk'" />
+    <UserList v-else-if="route.query.item === 'user'" />
+    <Data :data="detail" v-else-if="route.query.item === 'data'" />
+    <!-- <Month :data="{path: '/schedule?mod=custom&item=record', type: 'custom'}" v-else-if="route.query.item === 'month'" /> -->
+    <Day v-else-if="route.query.item === 'day'" />
+    <Record :data="detail" v-else />
   </div>
 </template>
 
@@ -20,12 +23,13 @@ import {
   computed,
   getUid
 } from '@/utils'
-import Head from './head.vue'
-import Aside from '../components/aside.vue'
-import TalkTabs from '../../../index/components/TalkItem'
-import TalkItem from '../../../index/components/TalkItem/index.vue'
-import SystemDetail from './systemDetail.vue'
-import Detail from './detail.vue'
+import Head from '../components/head.vue'
+import Aside from './components/Aside.vue'
+import Dynamics from '../components/dynamics.vue'
+import Record from './record/index.vue'
+import UserList from './user/index.vue'
+import Data from './data/index.vue'
+import Day from '../calendar/day.vue'
 
 const store = useStore()
 const route = useRoute();
@@ -33,13 +37,14 @@ const coding: any = codings.user.schedule.cate
 const detail: any = ref({})
 const dataList: any = ref([])
 const loading: any = ref(false)
+const module = computed(() => store.getters['user/config_talk']);
 const channel: any = computed(() => store.getters['talk/channel']);
 
 document.documentElement.scrollTop = 0
 
 function getScheduleDetail() {
   store.dispatch('common/Fetch', {
-    api: 'detail',
+    api: 'scheduleDetailInfo',
     data: {
       id: route.query.id,
       coding

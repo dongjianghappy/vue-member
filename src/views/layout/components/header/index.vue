@@ -10,8 +10,8 @@
             </div>
             <!-- 导航 -->
             <div class="header-content">
-                <ul class="left" style="width: 550px;">
-                    <template v-for="(item, index) in module" :key="index">
+                <ul class="left" style="max-width: 550px;">
+                    <template v-for="(item, index) in navigation" :key="index">
                         <li class="pointer ptb10" @click="handleClick(item.value)">
                             <div class="nav-box">
                                 <i class="iconfont" :class="`icon-${item.icon}`"></i>{{item.name}}
@@ -19,7 +19,7 @@
                             </div>
                         </li>
                     </template>
-                    <li class="ptb10 secondary relative" @mouseenter="()=>isMore = true" @mouseleave="()=>isMore = false">
+                    <li class="ptb10 secondary relative" @mouseenter="()=>isMore = true" @mouseleave="()=>isMore = false" v-if="module.more">
                         <div class="nav-box">
                             <i class="iconfont icon-app" />
                             <v-more :style="{background: 'bg-red',color: 'cl-red', top: '60px'}" v-if="isMore" />
@@ -30,7 +30,7 @@
                     <li class="relative ptb10" :class="{'search-active': isSearch}" style=" line-height:0">
                         <v-sitesearch v-model:search="isSearch" />
                     </li>
-                    <li class="plr15" style="width: 100px; line-height: 60px;">
+                    <li class="plr15" style="width: 100px; line-height: 60px;" v-if="module.music">
                         <v-play :userInfo="loginuser" :style="{background: 'bg-red',color: 'cl-red', top: '60px'}" />
                     </li>
                     <li class="relative user-login-btn plr0" v-if="loginuser.account">
@@ -101,7 +101,8 @@ const loginuser = computed(() => store.getters['user/loginuser']);
 const userInfo = computed(() => store.getters['user/userInfo']);
 const messgeData: any = ref({})
 const isSearch: any = ref(false)
-const module = computed(() => store.getters['user/config_talk'].navigation);
+const navigation = computed(() => store.getters['user/config_talk'].navigation);
+const module: any = computed(() => store.getters['user/config_talk'].personal_center);
 const setting = computed(() => store.getters['user/config_talk'].setting);
 const mode = computed(() => store.getters['common/mode']);
 const editPendant: any = ref(false)

@@ -1,9 +1,7 @@
 <template>
-<div class="home">
-  <TalkTabs ref="[{name: '项目榜', value: 'item'}, {name: '用户榜', value: 'user'}, {name: '热值榜', value: 'hot'}]" :data="tabs" :render="init" />
-  <TalkItem :loading="loading" :sourceData="channel['schedule']" :render="init" />
-  <v-loding v-if="!loading" />
-</div>
+<TalkTabs ref="[{name: '项目榜', value: 'item'}, {name: '用户榜', value: 'user'}, {name: '热值榜', value: 'hot'}]" :data="tabs" :render="init" />
+<TalkItem :loading="loading" :sourceData="channel['schedule']" :render="init" />
+<v-loding v-if="!loading" />
 </template>
 
 <script setup lang="ts">
@@ -15,10 +13,9 @@ import {
   computed,
   getUid
 } from '@/utils'
+import Aside from './aside.vue'
 import TalkTabs from '../../../index/components/TalkItem'
 import TalkItem from '../../../index/components/TalkItem/index.vue'
-import SystemDetail from './systemDetail.vue'
-import Detail from './detail.vue'
 
 const store = useStore()
 const coding: any = codings.user.schedule.cate

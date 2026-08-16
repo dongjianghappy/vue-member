@@ -1,5 +1,5 @@
 <template>
-<v-popover content="<i class='iconfont icon-calendar' />" arrow="tb" offset="right" :move="-150" keys="calendar">
+<v-popover :content="title" arrow="tb" offset="right" :move="move" keys="calendar">
   <div style="width: 350px; height: 350px;">
     <v-calendar @changeMonth="changeMonth" @changeDay="changeDay">
       <template v-slot:default="row">
@@ -37,9 +37,21 @@ const props: any = defineProps({
   attr: {
     type: String,
     default: ""
-  }
+  },
+  title: {
+    type: String,
+    default: "<i class='iconfont icon-calendar' />"
+  },
+  move: {
+    type: Number,
+    default: -150
+  },
+  isEmit: {
+    type: Boolean,
+    default: false
+  },
 })
-const emit: any = defineEmits(['color'])
+const emit: any = defineEmits(['onClick'])
 const {
   proxy
 }: any = getCurrentInstance();
@@ -47,6 +59,12 @@ const {
 function changeDay(data: any) {
   let date: any = `${data.fullYear}-${data.month}-${data.day}`
   let currentTime = new Date(date)
+  console.log("qqqqqqqqqqq");
+  
+  if (props.isEmit === true) {
+    emit('onClick', date)
+    return
+  }
 
   if(!data){
     return

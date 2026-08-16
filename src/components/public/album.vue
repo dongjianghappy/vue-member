@@ -57,13 +57,6 @@ function handleClick(param: any) {
 
 function submit() {
   emit('update:value', cover.value)
-  // if (props.isEmit === true) {
-  //   emit('update:value', cover.value)
-  // }else{
-  //   props.data.cover = cover.value
-  // }
-  console.log("sssssssddddddddddd");
-  
   isShow.value = false
 }
 </script>
